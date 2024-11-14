@@ -42,10 +42,8 @@
 
 <div class="page-wrapper">
     <div class="content">
-
         <div class="card">
             <div class="card-body">
-
                 <div class="page-header">
                     <div class="">
                         <h4 class="h2" style="font-size: 25px">Crear Compra <i class="fas fa-shopping-cart" style="color: #5645ED"></i></h4>
@@ -54,22 +52,15 @@
                         <a href="listaCompras" class="btn btn-added"><i class="fas fa-eye me-2"></i>Ver compras</a>
                     </div>
                 </div>
-
-
                 <div class="row">
                     <div class="col-md-12">
                         <!--======================================
                         FORMULARIO DE COMPRA DE PRODUCTO
                         ======================================-->
                         <form id="form_compra_producto">
-
                             <!-- INGRESO DE ID DEL USUARIO -->
                             <input type="hidden" id="id_usuario_egreso" value="<?php echo $_SESSION["id_usuario"] ?>">
-
-
                             <div class="row">
-
-
                                 <!-- INGRESO DE CLIENTE -->
                                 <div class="col-md-5">
                                     <div class="form-group">
@@ -95,14 +86,12 @@
                                         <small id="error_egreso_proveedor"></small>
                                     </div>
                                 </div>
-
                                 <!-- BOTON PARA AGREGAR CLIENTE -->
                                 <div class="col-md-2">
                                     <div class="form-group">
                                         <a href="#" class="btn btn-sm btn-adds mt-4" id="btn_add_cliente" data-bs-toggle="modal" data-bs-target="#modalNuevoProveedor"><i class="fa fa-user-plus me-2"></i></a>
                                     </div>
                                 </div>
-
                                 <!-- INGRESO DE LA FECHA -->
                                 <div class="col-md-5">
                                     <div class="form-group">
@@ -111,10 +100,8 @@
                                         <small id="error_egreso_fecha"></small>
                                     </div>
                                 </div>
-
                             </div>
                             <div class="row">
-
                                 <!-- INGRESO DE TIPO DE COMPROBANTE -->
                                 <div class="col-md-4">
                                     <label for="tipo_comprobante" class="form-label">Tipo de comprobante(<span class="text-danger">*</span>):</label>
@@ -125,7 +112,6 @@
                                     </select>
                                     <small id="error_compra_comprobante"></small>
                                 </div>
-
                                 <!-- INGRESO DE LA SERIE -->
                                 <div class="col-md-3">
                                     <div class="form-group">
@@ -133,7 +119,6 @@
                                         <input type="text" id="serie_comprobante" name="serie_comprobante" placeholder="Ingrese la serie" readonly>
                                     </div>
                                 </div>
-
                                 <!-- INGRESO DE NÚMERO -->
                                 <div class="col-md-3">
                                     <div class="form-group">
@@ -141,7 +126,6 @@
                                         <input type="text" id="num_comprobante" name="num_comprobante" placeholder="Ingrese el número" readonly>
                                     </div>
                                 </div>
-
                                 <!-- INGRESO EL INPUESTO -->
                                 <div class="col-md-2">
                                     <div class="form-group">
@@ -149,16 +133,12 @@
                                         <input type="text" id="impuesto_egreso" name="impuesto" value="0" min="0" placeholder="Ingrese el impuesto">
                                     </div>
                                 </div>
-
-
                             </div>
                             <div class="text-center mb-5">
                                 <a href="#" class="btn btn-primary btn-add-category" data-bs-toggle="modal" data-bs-target="#modalAddProductCompra">
                                     <i class="bi bi-plus me-2"></i> Agregar producto
                                 </a>
                             </div>
-
-
                             <div class="row">
                                 <div class="table-responsive">
                                     <table class="table" width="100%">
@@ -180,14 +160,10 @@
                                     </table>
                                 </div>
                             </div>
-
                             <div class="row">
-                                <div class="col-md-6">
-
-                                </div>
+                                <div class="col-md-6"></div>
                                 <div class="col-md-6">
                                     <div class="pt-3 pb-2">
-
                                         <div class="flex-container">
                                             <ul>
                                                 <li>
@@ -204,7 +180,6 @@
                                                 </li>
                                             </ul>
                                         </div>
-
                                         <!-- SECTION DE VENTA AL CONTADO O AL CRÉDITO -->
                                         <div class="row mb-3">
                                             <div class="col">
@@ -224,7 +199,6 @@
                                                 </div>
                                             </div>
                                         </div>
-
                                         <!-- SECCION DE PAGO AL CONTADO -->
                                         <div id="venta_al_contado">
                                             <div class="setvaluecash">
@@ -248,29 +222,20 @@
                                                         </a>
                                                     </li>
                                                 </ul>
-
                                             </div>
                                         </div>
-
-
                                         <!-- SECCION DE CREAR VENTA -->
                                         <div class="row mb-3">
                                             <button type="button" id="btn_crear_venta" class="btn btn-block" style="background:#7367F0; color:white">
                                                 <h5><i class="fa fa-plus fa-lg text-white me-2"></i> Crear compra</h5>
                                             </button>
                                         </div>
-
-
-
                                     </div>
                                 </div>
                             </div>
                         </form>
                     </div>
-
-
                 </div>
-
             </div>
         </div>
 
@@ -320,28 +285,19 @@
                 <h5 class="modal-title">Crear nuevo proveedor</h5>
                 <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
             </div>
-
-
             <form enctype="multipart/form-data" id="nuevoProveedor">
-
-
                 <div class="modal-body">
-
                     <!-- INGRESO TIPO DE PROVEEDOR -->
                     <div class="form-group">
                         <input type="hidden" id="tipo_persona_proveedor" value="proveedor">
                     </div>
-
                     <!-- INGRESO DE RAZÓN SOCIAL -->
                     <div class="form-group">
                         <label class="form-label">Ingrese la razón social (<span class="text-danger">*</span>)</label>
                         <input type="text" id="razon_social_proveedor" placeholder="Ingrese la razon social">
                         <small id="validate_razon_social_proveedor"></small>
                     </div>
-
-
                     <div class="row">
-
                         <!-- INGRESO DE TIPO DE DOCUMENTOS -->
                         <div class="col-md-6">
                             <label class="form-label">Selecione el tipo de documento (<span class="text-danger">*</span>)</label>
@@ -360,10 +316,8 @@
                                 }
                                 ?>
                             </select>
-
                             <small id="validate_tipo_documento_proveedor"></small>
                         </div>
-
                         <!-- INGRESO DE NUMERO DE DOCUMENTO -->
                         <div class="col-md-6">
                             <div class="form-group">
@@ -371,13 +325,9 @@
                                 <input type="text" id="numero_documento_proveedor" placeholder="Ingrese el número de documento">
                                 <small id="validate_numero_documento_proveedor"></small>
                             </div>
-
                         </div>
-
                     </div>
-
                     <div class="row">
-
                         <!-- INGRESE LA DIRECCIÓN -->
                         <div class="col-md-6">
                             <div class="form-group">
@@ -385,7 +335,6 @@
                                 <input type="text" id="direccion_proveedor" placeholder="Ingrese la dirección">
                             </div>
                         </div>
-
                         <!-- INGRESE LA CIUDAD -->
                         <div class="col-md-6">
                             <div class="form-group">
@@ -393,12 +342,9 @@
                                 <input type="text" id="ciudad_proveedor" placeholder="Ingrese la ciudad">
                                 <small id="validate_ciudad_proveedor"></small>
                             </div>
-
                         </div>
                     </div>
-
                     <div class="row">
-
                         <!-- INGRESO DE CODIGO POSTAL -->
                         <div class="col-md-6">
                             <div class="form-group">
@@ -407,7 +353,6 @@
                                 <small id="validate_codigo_postal_proveedor"></small>
                             </div>
                         </div>
-
                         <!-- INGRESO DE TELEFONO -->
                         <div class="col-md-6">
                             <div class="form-group">
@@ -415,10 +360,8 @@
                                 <input type="text" id="telefono_proveedor" placeholder="Ingrese el teléfono">
                                 <small id="validate_telefono_proveedor"></small>
                             </div>
-
                         </div>
                     </div>
-
                     <!-- INGRESO DEL CORREO ELECTRÓNICO -->
                     <div class="form-group">
                         <label for="correo" class="form-label">Ingrese el correo electrónico (<span class="text-danger">*</span>)</label>
@@ -427,15 +370,12 @@
                             <small id="validate_correo_proveedor"></small>
                         </div>
                     </div>
-
                     <div class="form-group">
                         <label for="sitio_web" class="form-label">Ingrese el sitio web</label>
                         <input type="text" id="sitio_web_proveedor" placeholder="Ingrese el link del sitio web">
                         <small id="validate_sitio_web_proveedor"></small>
                     </div>
-
                     <div class="row">
-
                         <!-- INGRESO TIPO DE BANCO -->
                         <div class="col-md-6">
                             <div class="form-group">
@@ -462,12 +402,9 @@
                                 <input type="text" id="numero_cuenta_proveedor" placeholder="Ingrese el numero de cuenta bancaria">
                                 <small id="validate_numero_bancaria_proveedor"></small>
                             </div>
-
                         </div>
                     </div>
-
                 </div>
-
                 <div class="text-end mx-4 mb-2">
                     <button type="button" id="guardar_proveedor" class="btn btn-primary mx-2"><i class="fa fa-save"></i> Guardar</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
