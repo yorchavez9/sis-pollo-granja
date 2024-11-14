@@ -1,6 +1,29 @@
 $(document).ready(function () {
 
   seleccionFecha();
+  
+  function actualizarReloj() {
+    var ahora = new Date();
+    var horas = ahora.getHours();
+    var minutos = String(ahora.getMinutes()).padStart(2, '0');  // Minutos con 2 dígitos
+    var segundos = String(ahora.getSeconds()).padStart(2, '0');  // Segundos con 2 dígitos
+
+    var ampm = horas >= 12 ? 'PM' : 'AM';  // Determina si es AM o PM
+    horas = horas % 12;  // Convierte de 24h a 12h
+    horas = horas ? horas : 12;  // El "0" de la medianoche se muestra como 12
+    var horaFormateada = String(horas).padStart(2, '0') + ":" + minutos + ":" + segundos + " " + ampm;
+
+    // Mostrar la hora en el campo de entrada
+    document.getElementById('hora_egreso').value = horaFormateada;
+  }
+
+  // Actualizar la hora cada 1000 milisegundos (1 segundo)
+  setInterval(actualizarReloj, 1000);
+
+  // Inicializar la hora en el campo de texto cuando la página carga
+  actualizarReloj();
+
+
   /* ===================================
   SELECCION DE TIPO DE PAGO
   =================================== */
@@ -163,72 +186,119 @@ $(document).ready(function () {
         respuesta.imagen_producto = respuesta.imagen_producto.substring(3);
 
         var nuevaFila = `
-              <tr>
-                  
-                    <input type="hidden" class="id_producto_egreso" value="${respuesta.id_producto}">
-                  
-                  <th class="text-center align-middle d-none d-md-table-cell">
-                      <a href="#" class="me-3 confirm-text btnEliminarAddProducto" idAddProducto="${respuesta.id_producto}" fotoUsuario="${respuesta.imagen_producto}">
-                          <i class="fa fa-trash fa-lg" style="color: #F1666D"></i>
-                      </a>
-                  </th>
-                  <td>
-                      <img src="${respuesta.imagen_producto}" alt="Imagen de un pollo" width="50">
-                  </td>
-                  <td>${respuesta.nombre_producto}</td>
-                  <td>
-                      <input type="number" class="form-control form-control-sm cantidad_u" value="0">
-                  </td>
-                  <td>
-                      <input type="number" class="form-control form-control-sm cantidad_kg" value="0">
-                  </td>
-                  <td>
-                      <input type="number" class="form-control form-control-sm precio_compra" value="0">
-                  </td>
-                  <td>
-                      <input type="number" class="form-control form-control-sm precio_venta" value="0">
-                  </td>
-                  <td style="text-align: right;">
-                      <p class="price">S/ <span class="precio_sub_total">0.00</span></p>
-                  </td>
-              </tr>`;
+            <tr>
+                <input type="hidden" class="id_producto_egreso" value="${respuesta.id_producto}">
+                <th class="text-center align-middle d-none d-md-table-cell">
+                    <a href="#" class="me-3 confirm-text btnEliminarAddProducto" idAddProducto="${respuesta.id_producto}" fotoUsuario="${respuesta.imagen_producto}">
+                        <i class="fa fa-trash fa-lg" style="color: #F1666D"></i>
+                    </a>
+                </th>
+                <td>
+                    <img src="${respuesta.imagen_producto}" alt="Imagen de un pollo" width="80">
+                </td>
+                <td>${respuesta.nombre_producto}</td>
+                <td>
+                    <input type="number" class="form-control form-control-sm numero_javas" value="0">
+                </td>
+                <td>
+                    <input type="number" class="form-control form-control-sm numero_aves" value="0">
+                </td>
+                <td>
+                    <input type="number" class="form-control form-control-sm peso_promedio" value="0.00">
+                </td>
+                <td>
+                    <input type="number" class="form-control form-control-sm peso_bruto" readonly value="0.00">
+                </td>
+                <td>
+                    <input type="number" class="form-control form-control-sm peso_tara" value="0.00" style="width: 60px;">
+                </td>
+                <td>
+                    <input type="number" class="form-control form-control-sm peso_merma" value="0.00" style="width: 60px;">
+                </td>
+                <td>
+                    <input type="number" class="form-control form-control-sm peso_neto" readonly value="0.00">
+                </td>
+                <td>
+                    <input type="number" class="form-control form-control-sm precio_compra" value="0.00">
+                </td>
+                <td>
+                    <input type="number" class="form-control form-control-sm precio_venta" value="0.00">
+                </td>
+                <td class="text-end">
+                    <span style="font-weight: bold;">S/</span>
+                    <input type="text" class="form-control form-control-sm precio_sub_total" value="0.00" readonly style="width: 100px; display: inline-block; text-align: right; font-weight: bold;">
+                </td>
+            </tr>`;
 
         $("#detalle_egreso_producto").append(nuevaFila);
 
-        // Agregar evento para calcular el subtotal al cambiar la cantidad_kg o el precio_compra
-        $(".cantidad_kg, .precio_compra").on("input", function () {
+        // Agregar el evento 'focus' para borrar el valor predeterminado
+        $("input").on("focus", function () {
+          if ($(this).val() === "0" || $(this).val() === "0.00") {
+            $(this).val(""); // Borra el valor cuando se hace focus
+          }
+        });
+
+        // Agregar evento para calcular el subtotal al cambiar la cantidad_aves o peso_promedio
+        $(".numero_aves, .peso_promedio, .peso_tara, .peso_merma, .precio_compra, #impuesto_egreso").on("input", function () {
           var fila = $(this).closest("tr");
 
-          var cantidad_kg = parseFloat(fila.find(".cantidad_kg").val());
-
+          var numero_aves = parseFloat(fila.find(".numero_aves").val());
+          var peso_promedio = parseFloat(fila.find(".peso_promedio").val());
+          var peso_tara = parseFloat(fila.find(".peso_tara").val());
+          var peso_merma = parseFloat(fila.find(".peso_merma").val());
           var precio_compra = parseFloat(fila.find(".precio_compra").val());
+          let impuesto_egreso = $("#impuesto_egreso").val();
 
-          // Verificar si cantidad_kg o precio_compra son NaN y asignar 0 en su lugar
-          if (isNaN(cantidad_kg)) {
-            cantidad_kg = 0;
+          // Verificar si numero_aves o peso_promedio son NaN y asignar 0 en su lugar
+          if (isNaN(numero_aves)) {
+            numero_aves = 0;
+          }
+          if (isNaN(peso_promedio)) {
+            peso_promedio = 0;
+          }
+          if (isNaN(peso_tara)) {
+            peso_tara = 0;
+          }
+          if (isNaN(peso_merma)) {
+            peso_merma = 0;
           }
           if (isNaN(precio_compra)) {
             precio_compra = 0;
           }
+          if (isNaN(impuesto_egreso)) {
+            impuesto_egreso = 0;
+          }
 
-          var subtotal = cantidad_kg * precio_compra;
+          // Calcular peso_bruto
+          var peso_bruto = peso_promedio * numero_aves;
+          let peso_neto = peso_bruto - peso_tara - peso_merma;
+          let precio_sub_total = peso_neto * precio_compra;
+          // Formatear peso_bruto
+          var format_peso_bruto = formateoPrecio(peso_bruto.toFixed(2));
+          var format_peso_neto = formateoPrecio(peso_neto.toFixed(2));
+          var format_precio_sub_total = formateoPrecio(precio_sub_total.toFixed(2));
 
-          var formateadoSubTotal = formateoPrecio(subtotal.toFixed(2));
-
-          fila.find(".precio_sub_total").text(formateadoSubTotal);
+          // Actualizar el valor de peso_bruto en el input
+          fila.find(".peso_bruto").val(format_peso_bruto);
+          fila.find(".peso_neto").val(format_peso_neto);
+          fila.find(".peso_neto").val(format_peso_neto);
+          fila.find(".precio_sub_total").val(format_precio_sub_total);
 
           // Calcular y mostrar el total
-          calcularTotal();
+          calcularTotal(impuesto_egreso);
         });
       },
     });
 
+    // Llamada inicial para calcular el total
     calcularTotal();
 
     $(document).ready(function () {
       calcularTotal();
     });
   });
+
 
   /* =============================================
   ELIMINAR EL PRODUCTO AGREGADO DE LA LISTA
@@ -266,31 +336,32 @@ $(document).ready(function () {
     return numero.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
 
-  function calcularTotal() {
+  function calcularTotal(impuesto) {
     var subtotalTotal = 0;
-
-    var impuesto = parseFloat($("#impuesto_egreso").val());
 
     // Recorrer todas las filas para sumar los subtotales
     $("#detalle_egreso_producto tr").each(function () {
-      var subtotalString = $(this)
-        .find(".precio_sub_total")
-        .text()
-        .replace("S/ ", "")
-        .replace(",", "");
+      var precio_sub_total = $(this).find(".precio_sub_total").val();
 
-      var subtotal = parseFloat(subtotalString);
+      // Eliminar las comas antes de convertir a número
+      precio_sub_total = precio_sub_total.replace(/,/g, '');
+
+      var subtotal = parseFloat(precio_sub_total);
 
       // Si subtotal no es un número válido, asignar 0
       if (isNaN(subtotal)) {
         subtotal = 0;
       }
-
       subtotalTotal += subtotal;
     });
 
+    if (isNaN(impuesto)) {
+      impuesto = 0;
+    }
+
+    let igv = 0;
     // Calcular el impuesto
-    var igv = subtotalTotal * (impuesto / 100);
+    igv = subtotalTotal * (impuesto / 100);
 
     // Calcular el total
     var total = subtotalTotal + igv;
@@ -310,6 +381,7 @@ $(document).ready(function () {
     $("#igv_egreso").text(igvFormateado);
     $("#total_precio_egreso").text(totalFormateado);
   }
+
 
   /* ===========================================
   CREAR VENTA EGRESO

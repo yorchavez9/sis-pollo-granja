@@ -37,6 +37,10 @@
         transform: scale(1.2);
         /* Aumenta el tamaño en un 20% */
     }
+
+    #hora_egreso {
+        font-weight: bold;
+    }
 </style>
 
 
@@ -62,13 +66,12 @@
                             <input type="hidden" id="id_usuario_egreso" value="<?php echo $_SESSION["id_usuario"] ?>">
                             <div class="row">
                                 <!-- INGRESO DE CLIENTE -->
-                                <div class="col-md-5">
+                                <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="id_cliente" class="form-label">Selecione el proveedor(<span class="text-danger">*</span>):</label>
                                         <?php
                                         $item = null;
                                         $valor = null;
-
                                         $proveedores = ControladorProveedores::ctrMostrarProveedor($item, $valor);
                                         ?>
                                         <select name="" id="id_proveedor_egreso" class="form-select small-select">
@@ -93,13 +96,23 @@
                                     </div>
                                 </div>
                                 <!-- INGRESO DE LA FECHA -->
-                                <div class="col-md-5">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="fecha_egre" class="form-label">Selecione la fecha(<span class="text-danger">*</span>):</label>
                                         <input type="date" id="fecha_egreso" class="form-control" name="fecha_egre" placeholder="Ingrese la fecha">
                                         <small id="error_egreso_fecha"></small>
                                     </div>
                                 </div>
+                                <!-- INGRESO DE LA HORA -->
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="hora_egreso" class="form-label">Seleccione la hora (<span class="text-danger">*</span>):</label>
+                                        <input type="text" id="hora_egreso" class="form-control" name="hora_egreso" placeholder="Hora en formato HH:mm:ss AM/PM" readonly>
+                                        <small id="error_egreso_hora"></small>
+                                    </div>
+                                </div>
+
+
                             </div>
                             <div class="row">
                                 <!-- INGRESO DE TIPO DE COMPROBANTE -->
@@ -144,20 +157,26 @@
                                     <table class="table" width="100%">
                                         <thead>
                                             <tr style="background: #28C76F;">
-                                                <th scope="col" class="text-white">Opciones</th>
-                                                <th scope="col" class="text-white">Imagen</th>
-                                                <th scope="col" class="text-white">Producto</th>
-                                                <th scope="col" class="text-white">Cantidad U.</th>
-                                                <th scope="col" class="text-white">Cantidad KG.</th>
-                                                <th scope="col" class="text-white">Precio compra</th>
-                                                <th scope="col" class="text-white">Precio venta.</th>
-                                                <th scope="col" class="text-white">Sub total</th>
+                                                <th scope="col" class="text-white">Acc.</th>
+                                                <th scope="col" class="text-white">Img.</th>
+                                                <th scope="col" class="text-white">Prod.</th>
+                                                <th scope="col" class="text-white">N° Javas</th>
+                                                <th scope="col" class="text-white">N° Aves</th>
+                                                <th scope="col" class="text-white">Peso Prom.</th>
+                                                <th scope="col" class="text-white">Peso Bruto</th>
+                                                <th scope="col" class="text-white">Peso Tara</th>
+                                                <th scope="col" class="text-white">Merma</th>
+                                                <th scope="col" class="text-white">Peso Neto</th>
+                                                <th scope="col" class="text-white">P. Compra</th>
+                                                <th scope="col" class="text-white">P. Venta</th>
+                                                <th scope="col" class="text-white">Total</th>
                                             </tr>
                                         </thead>
                                         <tbody id="detalle_egreso_producto">
-
+                                            <!-- Aquí se insertarán las filas de datos -->
                                         </tbody>
                                     </table>
+
                                 </div>
                             </div>
                             <div class="row">
