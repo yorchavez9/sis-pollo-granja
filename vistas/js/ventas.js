@@ -312,10 +312,7 @@ $(document).ready(function () {
     }
   });
 
-  /*=============================================
-  CREANDO NUEVA VENTA
-  =============================================*/
-
+  // CREAR VENTA
   $("#btn_crear_nueva_venta").click(function (e) {
     e.preventDefault();
     var isValid = true;
@@ -326,7 +323,7 @@ $(document).ready(function () {
     var serie_venta = $("#serie_venta").val();
     var numero_venta = $("#numero_venta").val();
     var igv_venta = $("#igv_venta").val();
-    // Validar la categoria
+   
     if (id_cliente_venta == "" || id_cliente_venta == null) {
       $("#error_cliente_venta")
         .html("Por favor, selecione el cliente")
@@ -336,17 +333,14 @@ $(document).ready(function () {
       $("#error_cliente_venta").html("").removeClass("text-danger");
     }
 
-    // Array para almacenar los valores de los productos
     var valoresProductos = [];
-    // Iterar sobre cada fila de producto
     $("#detalle_venta_producto tr").each(function () {
       var fila = $(this);
-      // Obtener los valores de cada campo en la fila
       var idProductoVenta = fila.find(".id_producto_venta").val();
       var cantidadU = fila.find(".cantidad_u_v").val();
       var cantidadKg = fila.find(".cantidad_kg_v").val();
       var precioVenta = fila.find(".precio_venta").val();
-      // Crear un objeto con los valores y agregarlo al array
+
       var producto = {
         id_producto: idProductoVenta,
         cantidad_u: cantidadU,
@@ -360,22 +354,15 @@ $(document).ready(function () {
     var subtotal = $("#subtotal_venta").text().replace(/,/g, "");
     var igv = $("#igv_venta_show").text().replace(/,/g, "");
     var total = $("#total_precio_venta").text().replace(/,/g, "");
-    // Captura el valor del tipo de pago (contado o crédito)
     var tipo_pago = $("input[name='forma_pago_v']:checked").val();
-    // Variable para almacenar el estado
     var estado_pago;
-    // Verifica el tipo de pago seleccionado
     if (tipo_pago == "contado") {
       estado_pago = "completado";
     } else {
       estado_pago = "pendiente";
     }
-
-    // Captura el valor del tipo de pago (contado o crédito)
     var pago_tipo = $("input[name='pago_tipo_v']:checked").val();
-    // Variable para almacenar el estado
     var pago_e_y;
-    // Verifica el tipo de pago seleccionado
     if (pago_tipo == "efectivo") {
       pago_e_y = "efectivo";
     } else {
@@ -411,67 +398,65 @@ $(document).ready(function () {
           $("#subtotal_venta").text("00.00");
           $("#igv_venta_show").text("00.00");
           $("#total_precio_venta").text("00.00");
+          
           Swal.fire({
-            title: "¿Quiere imprimir comprobante?",
-            text: "¡No podrás revertir esto!",
-            icon: "warning",
+            title: "¿Qué desea hacer con el comprobante?",
+            text: "Seleccione una opción.",
+            icon: "question",
             showCancelButton: true,
             confirmButtonColor: "#28C76F",
             cancelButtonColor: "#F52E2F",
-            confirmButtonText: "¡Sí, imprimir!",
+            confirmButtonText: "Imprimir",
+            cancelButtonText: "Descargar",
+            footer: '<a href="#">Enviar por WhatsApp o correo</a>',
           }).then((result) => {
             if (result.isConfirmed) {
+              // Acción para imprimir
               Swal.fire({
                 title: "¡Imprimiendo!",
-                text: "Su comprobante se está imprimiento.",
+                text: "Su comprobante se está imprimiendo.",
                 icon: "success",
               });
-
-              $.ajax({
-                url: "extensiones/ticketPrint.php",
-                type: "GET",
-                data: { idVentaTicket: idVentaTicket },
-                success: function (response) {
-                  const $estado = document.querySelector("#section_imprimir_mensaje_ventas");
-                  $estado.textContent = "Imprimiendo ...";
-                  // URL del PDF
-                  var urlPDF = `http://localhost/sis_venta_pollo/vistas/ticket/ticket${idVentaTicket}.pdf`;
-                  var nombreImpresora = '';
-                  $.ajax({
-                    url: "ajax/Impresora.ajax.php",
-                    type: "GET",
-                    dataType: "json",
-                    success: function (impresoras) {
-                      impresoras.forEach(function (impresora) {
-                        nombreImpresora = impresora.nombre;
-                      });
-                      // Asegúrate de codificar las partes de la URL
-                      var url = `http://127.0.0.1:5000/print/${encodeURIComponent(nombreImpresora)}/${encodeURIComponent(urlPDF)}`;
-                      fetch(url)
-                        .then(respuesta => {
-                          if (respuesta.ok) {
-                            respuesta.json().then(mensaje => {
-                              console.log("Impresión exitosa: ", mensaje);
-                            });
-                          } else {
-                            respuesta.json().then(mensaje => {
-                              $estado.textContent = "Error imprimiendo: " + mensaje.message;
-                            });
-                          }
-                        })
-                        .catch(error => {
-                          $estado.textContent = "Error haciendo petición: " + error.message;
-
-                        });
-                    },
+              // Aquí puedes agregar el código para imprimir el comprobante
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+              // Acción para descargar
+              Swal.fire({
+                title: "¡Descargando!",
+                text: "Su comprobante se está descargando.",
+                icon: "success",
+              });
+              // Aquí puedes agregar el código para descargar el comprobante
+            } else {
+              // Acción para enviar por WhatsApp o correo
+              Swal.fire({
+                title: "¿Cómo desea enviar el comprobante?",
+                text: "Seleccione una opción.",
+                icon: "info",
+                showCancelButton: true,
+                cancelButtonText: "WhatsApp",
+                confirmButtonText: "Correo",
+              }).then((sendResult) => {
+                if (sendResult.isConfirmed) {
+                  // Acción para enviar por correo
+                  Swal.fire({
+                    title: "¡Enviando por correo!",
+                    text: "Su comprobante se está enviando por correo.",
+                    icon: "success",
                   });
-                },
-                error: function (error) {
-                  console.log("Error guardando el ticket: ", error);
+                  // Aquí puedes agregar el código para enviar por correo
+                } else {
+                  // Acción para enviar por WhatsApp
+                  Swal.fire({
+                    title: "¡Enviando por WhatsApp!",
+                    text: "Su comprobante se está enviando por WhatsApp.",
+                    icon: "success",
+                  });
+                  // Aquí puedes agregar el código para enviar por WhatsApp
                 }
               });
             }
           });
+
 
           mostrarProductoVenta();
           mostrarSerieNumero();

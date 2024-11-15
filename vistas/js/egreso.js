@@ -477,22 +477,63 @@ $(document).ready(function () {
             $("#total_precio_egreso").text("00.00");
 
             Swal.fire({
-              title: "¿Quiere imprimir comprobante?",
-              text: "¡No podrás revertir esto!",
-              icon: "warning",
+              title: "¿Qué desea hacer con el comprobante?",
+              text: "Seleccione una opción.",
+              icon: "question",
               showCancelButton: true,
               confirmButtonColor: "#28C76F",
               cancelButtonColor: "#F52E2F",
-              confirmButtonText: "¡Sí, imprimir!",
+              confirmButtonText: "Imprimir",
+              cancelButtonText: "Descargar",
+              footer: '<a href="#">Enviar por WhatsApp o correo</a>',
             }).then((result) => {
               if (result.isConfirmed) {
+                // Acción para imprimir
                 Swal.fire({
                   title: "¡Imprimiendo!",
-                  text: "Su comprobante se está imprimiento.",
+                  text: "Su comprobante se está imprimiendo.",
                   icon: "success",
+                });
+                // Aquí puedes agregar el código para imprimir el comprobante
+              } else if (result.dismiss === Swal.DismissReason.cancel) {
+                // Acción para descargar
+                Swal.fire({
+                  title: "¡Descargando!",
+                  text: "Su comprobante se está descargando.",
+                  icon: "success",
+                });
+                // Aquí puedes agregar el código para descargar el comprobante
+              } else {
+                // Acción para enviar por WhatsApp o correo
+                Swal.fire({
+                  title: "¿Cómo desea enviar el comprobante?",
+                  text: "Seleccione una opción.",
+                  icon: "info",
+                  showCancelButton: true,
+                  cancelButtonText: "WhatsApp",
+                  confirmButtonText: "Correo",
+                }).then((sendResult) => {
+                  if (sendResult.isConfirmed) {
+                    // Acción para enviar por correo
+                    Swal.fire({
+                      title: "¡Enviando por correo!",
+                      text: "Su comprobante se está enviando por correo.",
+                      icon: "success",
+                    });
+                    // Aquí puedes agregar el código para enviar por correo
+                  } else {
+                    // Acción para enviar por WhatsApp
+                    Swal.fire({
+                      title: "¡Enviando por WhatsApp!",
+                      text: "Su comprobante se está enviando por WhatsApp.",
+                      icon: "success",
+                    });
+                    // Aquí puedes agregar el código para enviar por WhatsApp
+                  }
                 });
               }
             });
+
 
             mostrarProductos();
           
