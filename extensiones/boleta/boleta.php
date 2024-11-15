@@ -1,5 +1,6 @@
 <?php
 
+
 require('../fpdf/fpdf.php');
 
 class PDF extends FPDF
@@ -127,9 +128,10 @@ $pdf->Cell(150, 10, 'Total:', 'TB', 0, 'R'); // Borde superior e inferior en la 
 $pdf->Cell(40, 10, 'S/ ' . number_format($totalCompra, 2), 'TB', 1, 'R'); // Borde superior e inferior en la celda del total
 
 
-
-
-
-
-// Salida del PDF
-$pdf->Output();
+if (isset($_GET['accion']) && $_GET['accion'] === 'descargar') {
+    // Descargar el PDF
+    $pdf->Output('D', 'boleta.pdf'); // 'D' fuerza la descarga con el nombre 'boleta.pdf'
+} else {
+    // Mostrar el PDF en el navegador (imprimir)
+    $pdf->Output(); // Muestra el archivo en el navegador
+}

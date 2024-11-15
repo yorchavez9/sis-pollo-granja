@@ -145,7 +145,9 @@ class ControladorCompra
 		if ($respuestaDatos == "ok") {
             $response = array(
                 "mensaje" => "Producto guardado correctamente",
-                "estado" => "ok"
+                "estado" => "ok",
+				"id_egreso" => $id_egreso_ultimo,
+				"tipo_documento" => $_POST["tipo_comprobante_egreso"]
             );
             echo json_encode($response);
         } else {

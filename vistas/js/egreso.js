@@ -488,23 +488,49 @@ $(document).ready(function () {
               footer: '<a href="#">Enviar por WhatsApp o correo</a>',
             }).then((result) => {
               if (result.isConfirmed) {
-                // Acción para imprimir
                 Swal.fire({
                   title: "¡Imprimiendo!",
                   text: "Su comprobante se está imprimiendo.",
                   icon: "success",
                 });
-                // Aquí puedes agregar el código para imprimir el comprobante
+
+                // Redirigir según el tipo de comprobante
+                if (res.tipo_documento === 'factura') {
+                  var ventana = window.open('extensiones/factura/factura.php?id_egreso=' + res.id_egreso, '_blank');
+                  ventana.onload = function () {
+                    ventana.print();
+                  };
+                } else if (res.tipo_documento === 'boleta') {
+                  var ventana = window.open('extensiones/boleta/boleta.php?id_egreso=' + res.id_egreso, '_blank');
+                  ventana.onload = function () {
+                    ventana.print();
+                  };
+                } else if (res.tipo_documento === 'ticket') {
+                  var ventana = window.open('extensiones/ticket/ticket.php?id_egreso=' + res.id_egreso, '_blank');
+                  ventana.onload = function () {
+                    ventana.print();
+                  };
+                }
+
+
               } else if (result.dismiss === Swal.DismissReason.cancel) {
-                // Acción para descargar
                 Swal.fire({
                   title: "¡Descargando!",
                   text: "Su comprobante se está descargando.",
                   icon: "success",
                 });
-                // Aquí puedes agregar el código para descargar el comprobante
+
+                // Lógica para descargar el comprobante (dependiendo del tipo de documento)
+                if (res.tipo_documento === 'factura') {
+                  window.location.href = 'extensiones/factura/factura.php?id_egreso=' + res.id_egreso + '&accion=descargar';
+                } else if (res.tipo_documento === 'boleta') {
+                  window.location.href = 'extensiones/boleta/boleta.php?id_egreso=' + res.id_egreso + '&accion=descargar';
+                } else if (res.tipo_documento === 'ticket') {
+                  window.location.href = 'extensiones/ticket/ticket.php?id_egreso=' + res.id_egreso + '&accion=descargar';
+                }
+
               } else {
-                // Acción para enviar por WhatsApp o correo
+                // Opción para enviar por WhatsApp o correo
                 Swal.fire({
                   title: "¿Cómo desea enviar el comprobante?",
                   text: "Seleccione una opción.",
@@ -514,30 +540,32 @@ $(document).ready(function () {
                   confirmButtonText: "Correo",
                 }).then((sendResult) => {
                   if (sendResult.isConfirmed) {
-                    // Acción para enviar por correo
                     Swal.fire({
                       title: "¡Enviando por correo!",
                       text: "Su comprobante se está enviando por correo.",
                       icon: "success",
                     });
-                    // Aquí puedes agregar el código para enviar por correo
+
+                    // Lógica para enviar el comprobante por correo (puedes usar un enlace para enviar el comprobante por correo)
+                    // Aquí puedes agregar la lógica para enviar por correo, utilizando una API o método de backend.
+
                   } else {
-                    // Acción para enviar por WhatsApp
                     Swal.fire({
                       title: "¡Enviando por WhatsApp!",
                       text: "Su comprobante se está enviando por WhatsApp.",
                       icon: "success",
                     });
-                    // Aquí puedes agregar el código para enviar por WhatsApp
+
+                    // Lógica para enviar por WhatsApp (también puedes usar un enlace para esto)
+                    // Aquí puedes agregar la lógica para enviar por WhatsApp, usando el número de teléfono y el comprobante.
                   }
                 });
               }
             });
 
-
             mostrarProductos();
-          
             mostrarSerieNumero();
+
           } else {
             Swal.fire({
               title: "¡Error!",
@@ -552,6 +580,7 @@ $(document).ready(function () {
           console.error(error);
         },
       });
+
     }
   });
 
