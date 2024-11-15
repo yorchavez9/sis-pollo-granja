@@ -1,52 +1,39 @@
 $(document).ready(function () {
 
   function setDateToToday(inputId) {
-    let today = new Date(); 
-    let formattedDate = today.toISOString().split('T')[0]; 
-    $(`#${inputId}`).val(formattedDate); 
+    const today = new Date();
+    const formattedDate = today.toISOString().split('T')[0]; 
+    $(`#${inputId}`).val(formattedDate);
   }
+
   setDateToToday('fecha_egreso');
 
   function actualizarReloj() {
-    var ahora = new Date();
-    var horas = ahora.getHours();
-    var minutos = String(ahora.getMinutes()).padStart(2, '0');
-    var segundos = String(ahora.getSeconds()).padStart(2, '0');
-
-    var ampm = horas >= 12 ? 'PM' : 'AM';
+    const ahora = new Date();
+    let horas = ahora.getHours();
+    const minutos = String(ahora.getMinutes()).padStart(2, '0');
+    const segundos = String(ahora.getSeconds()).padStart(2, '0');
+    const ampm = horas >= 12 ? 'PM' : 'AM';
     horas = horas % 12;
-    horas = horas ? horas : 12;
-    var horaFormateada = String(horas).padStart(2, '0') + ":" + minutos + ":" + segundos + " " + ampm;
+    horas = horas ? horas : 12; 
 
-    $('#hora_egreso').value = horaFormateada;
+    const horaFormateada = `${String(horas).padStart(2, '0')}:${minutos}:${segundos} ${ampm}`;
+
+    $('#hora_egreso').val(horaFormateada);
   }
-
 
   setInterval(actualizarReloj, 1000);
 
-  /* ===================================
-  SELECCION DE FECHA AUTOMATICA
-  =================================== */
   actualizarReloj();
 
 
-  /* ===================================
-  SELECCION DE TIPO DE PAGO
-  =================================== */
   function tipoPago() {
-    // Obtener todos los elementos <a> con la clase "paymentmethod"
+
     var paymentMethodLinks = document.querySelectorAll("a.paymentmethod");
-
-    // Iterar sobre cada elemento <a>
     paymentMethodLinks.forEach(function (link) {
-      // Añadir un evento de clic a cada elemento <a>
       link.addEventListener("click", function () {
-        // Obtener el radio button dentro del elemento <a> actual
         var radioButton = this.querySelector(".tipo_pago_egreso");
-
-        // Verificar si el radio button no está marcado
         if (!radioButton.checked) {
-          // Marcar el radio button
           radioButton.checked = true;
         }
       });
@@ -65,37 +52,37 @@ $(document).ready(function () {
       type: "GET",
       dataType: "json",
       success: function (productos) {
-        var tbody = $("#data_productos_detalle");
+        const tbody = $("#data_productos_detalle");
 
+        // Limpiar contenido previo del tbody
         tbody.empty();
 
-        productos.forEach(function (producto, index) {
-          producto.imagen_producto = producto.imagen_producto.substring(3);
-
-          var fila = `
-                      <tr>
-                         
-                          <td class="text-center">
-                              <a href="#" id="btnAddProducto" class=" hover_img_a btnAddProducto" idProductoAdd="${producto.id_producto
-            }">
-                                  <img class="hover_img" src="${producto.imagen_producto
-            }" alt="${producto.imagen_producto}">
-                              </a>
-                          </td>
-                          <td>${producto.nombre_categoria}</td>
-                          <td>${producto.nombre_producto}</td>
-                          <td class="text-center"><button type="button" class="btn btn-sm" style="${getButtonStyles(
-              producto.stock_producto
-            )}">${producto.stock_producto}</button></td>
-
-                      </tr>`;
-
+        // Generar las filas dinámicamente
+        productos.forEach((producto) => {
+          const imagen = producto.imagen_producto.substring(3);
+          const fila = `
+                    <tr>
+                        <td class="text-center">
+                            <a href="#" class="hover_img_a btnAddProducto" idProductoAdd="${producto.id_producto}">
+                                <img class="hover_img" src="${imagen}" alt="${producto.imagen_producto}">
+                            </a>
+                        </td>
+                        <td>${producto.nombre_categoria}</td>
+                        <td>${producto.nombre_producto}</td>
+                        <td class="text-center">
+                            <button type="button" class="btn btn-sm" style="${getButtonStyles(producto.stock_producto)}">
+                                ${producto.stock_producto}
+                            </button>
+                        </td>
+                    </tr>`;
           tbody.append(fila);
-          $("#tabla_add_producto").DataTable();
         });
+
+        // Inicializar o actualizar DataTable
+        $("#tabla_add_producto").DataTable();
       },
       error: function (xhr, status, error) {
-        console.error("Error al recuperar los usuarios:", error.mensaje);
+        console.error("Error al recuperar los productos:", error);
       },
     });
   }
@@ -490,12 +477,6 @@ $(document).ready(function () {
       datos.append("estado_pago", estado_pago);
       datos.append("pago_e_y", pago_e_y);
 
-      datos.forEach(element => {
-        console.log(element);
-      });
-
-      return;
-
       $.ajax({
         url: "ajax/Compra.ajax.php",
         method: "POST",
@@ -504,6 +485,10 @@ $(document).ready(function () {
         contentType: false,
         processData: false,
         success: function (respuesta) {
+
+          console.log(respuesta);
+          return;
+
           var res = JSON.parse(respuesta);
 
           if (res.estado === "ok") {

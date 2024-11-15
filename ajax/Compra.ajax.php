@@ -21,9 +21,7 @@ class AjaxProductoAdd
 
         $item = "id_producto";
         $valor = $this->idProductoAdd;
-
         $respuesta = ControladorProducto::ctrMostrarProductos($item, $valor);
-
         echo json_encode($respuesta);
     }
     
@@ -122,7 +120,3 @@ else{
     
     echo json_encode($tablaProductos);
 }
-
-
-?>
-

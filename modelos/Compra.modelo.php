@@ -123,7 +123,8 @@ class ModeloCompra{
 		$stmt = Conexion::conectar()->prepare("INSERT INTO $tabla(
                                                                 id_persona,
                                                                 id_usuario, 
-                                                                fecha_egre, 
+                                                                fecha_egre,
+																hora_egreso, 
                                                                 tipo_comprobante, 
                                                                 serie_comprobante, 
                                                                 num_comprobante, 
@@ -139,6 +140,7 @@ class ModeloCompra{
                                                                 :id_persona, 
                                                                 :id_usuario, 
                                                                 :fecha_egre, 
+                                                                :hora_egreso, 
                                                                 :tipo_comprobante, 
                                                                 :serie_comprobante, 
                                                                 :num_comprobante, 
@@ -154,6 +156,7 @@ class ModeloCompra{
 		$stmt->bindParam(":id_persona", $datos["id_persona"], PDO::PARAM_INT);
 		$stmt->bindParam(":id_usuario", $datos["id_usuario"], PDO::PARAM_INT);
 		$stmt->bindParam(":fecha_egre", $datos["fecha_egre"], PDO::PARAM_STR);
+		$stmt->bindParam(":hora_egreso", $datos["hora_egreso"], PDO::PARAM_STR);
 		$stmt->bindParam(":tipo_comprobante", $datos["tipo_comprobante"], PDO::PARAM_STR);
 		$stmt->bindParam(":serie_comprobante", $datos["serie_comprobante"], PDO::PARAM_STR);
 		$stmt->bindParam(":num_comprobante", $datos["num_comprobante"], PDO::PARAM_STR);
@@ -187,27 +190,49 @@ class ModeloCompra{
 
 	static public function mdlIngresarDetalleCompra($tabla, $datos){
 
+		// Consulta de inserción con el orden deseado
 		$stmt = Conexion::conectar()->prepare("INSERT INTO $tabla(
-                                                                id_egreso,
-                                                                id_producto, 
-                                                                precio_compra, 
-                                                                precio_venta, 
-                                                                cantidad_u, 
-                                                                cantidad_kg) 
-                                                                VALUES (
-                                                                :id_egreso, 
-                                                                :id_producto, 
-                                                                :precio_compra, 
-                                                                :precio_venta, 
-                                                                :cantidad_u, 
-                                                                :cantidad_kg)");
+                                                id_egreso,
+                                                id_producto, 
+                                                numero_javas, 
+                                                numero_aves, 
+                                                peso_promedio, 
+                                                peso_bruto, 
+                                                peso_tara, 
+                                                peso_merma, 
+                                                peso_neto,
+                                                precio_compra, 
+                                                precio_venta) 
+                                          VALUES (
+                                                :id_egreso, 
+                                                :id_producto, 
+                                                :numero_javas, 
+                                                :numero_aves, 
+                                                :peso_promedio, 
+                                                :peso_bruto, 
+                                                :peso_tara, 
+                                                :peso_merma, 
+                                                :peso_neto,
+                                                :precio_compra, 
+                                                :precio_venta)");
 
+		// Vinculando los parámetros con los valores del array en el orden solicitado
 		$stmt->bindParam(":id_egreso", $datos["id_egreso"], PDO::PARAM_INT);
 		$stmt->bindParam(":id_producto", $datos["id_producto"], PDO::PARAM_INT);
+		$stmt->bindParam(":numero_javas", $datos["numero_javas"], PDO::PARAM_INT);
+		$stmt->bindParam(":numero_aves", $datos["numero_aves"], PDO::PARAM_INT);
+		$stmt->bindParam(":peso_promedio", $datos["peso_promedio"], PDO::PARAM_STR);
+		$stmt->bindParam(":peso_bruto", $datos["peso_bruto"], PDO::PARAM_STR);
+		$stmt->bindParam(":peso_tara", $datos["peso_tara"], PDO::PARAM_STR);
+		$stmt->bindParam(":peso_merma", $datos["peso_merma"], PDO::PARAM_STR);
+		$stmt->bindParam(":peso_neto", $datos["peso_neto"], PDO::PARAM_STR);
 		$stmt->bindParam(":precio_compra", $datos["precio_compra"], PDO::PARAM_STR);
 		$stmt->bindParam(":precio_venta", $datos["precio_venta"], PDO::PARAM_STR);
-		$stmt->bindParam(":cantidad_u", $datos["cantidad_u"], PDO::PARAM_STR);
-		$stmt->bindParam(":cantidad_kg", $datos["cantidad_kg"], PDO::PARAM_STR);
+
+
+		// Ejecutando la consulta
+		$stmt->execute();
+
 
 		if($stmt->execute()){
 

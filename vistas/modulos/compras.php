@@ -109,7 +109,7 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="hora_egreso" class="form-label">Seleccione la hora (<span class="text-danger">*</span>):</label>
-                                        <input type="text" id="hora_egreso" class="form-control" name="hora_egreso" placeholder="Hora en formato HH:mm:ss AM/PM" readonly>
+                                        <input type="text" id="hora_egreso" class="form-control" name="hora_egreso" readonly>
                                         <small id="error_egreso_hora"></small>
                                     </div>
                                 </div>

@@ -85,27 +85,19 @@ class ControladorCompra
 	static public function ctrCrearCompra()
 	{
 
-
-
 		$tabla = "egresos";
-
 		$pago_total = 0;
-
 		if($_POST["tipo_pago"] == "contado"){
-
 			$pago_total = $_POST["total"];
-
 		}else{
 			$pago_total = 0;
 		}
-
-		
-
 
 		$datos = array(
 			"id_persona" => $_POST["id_proveedor_egreso"],
 			"id_usuario" => $_POST["id_usuario_egreso"],
 			"fecha_egre" => $_POST["fecha_egreso"],
+			"hora_egreso" => $_POST["hora_egreso"],
 			"tipo_comprobante" => $_POST["tipo_comprobante_egreso"],
 			"serie_comprobante" => $_POST["serie_comprobante"],
 			"num_comprobante" => $_POST["num_comprobante"],
@@ -119,49 +111,41 @@ class ControladorCompra
 			"pago_e_y" => $_POST["pago_e_y"]
 		);
 
-
-		$respuesta = ModeloCompra::mdlIngresarCompra($tabla, $datos);
-
+		ModeloCompra::mdlIngresarCompra($tabla, $datos);
 
 		/* MOSTRANDO EL ULTIMO ID INGRESADO */
-
 		$tabla = "egresos";
-
 		$item = null;
-
 		$valor = null;
-
 		$respuestaDetalleEgreso = ModeloCompra::mdlMostrarEgreso($tabla, $item, $valor);
-
 		foreach ($respuestaDetalleEgreso as $value) {
-
 			$id_egreso_ultimo = $value["id_egreso"];
 		}
-
-
 
 		/* ==========================================
 		INGRESO DE DATOS AL DETALLE EGRESO
 		========================================== */
 		$tablaDetalleEgreso = "detalle_egreso";
-
 		$productos = json_decode($_POST["productoAddEgreso"], true);
-
 		$datos = array();
 
 		foreach ($productos as $dato) {
 			$nuevo_dato = array(
 				'id_egreso' => $id_egreso_ultimo,
 				'id_producto' => $dato['idProductoEgreso'],
+				'numero_javas' => $dato['numero_javas'],
+				'numero_aves' => $dato['numero_aves'],
+				'peso_promedio' => $dato['peso_promedio'],
+				'peso_bruto' => $dato['peso_bruto'],
+				'peso_tara' => $dato['peso_tara'],
+				'peso_merma' => $dato['peso_merma'],
+				'peso_neto' => $dato['peso_neto'],
 				'precio_compra' => $dato['precio_compra'],
-				'precio_venta' => $dato['precio_venta'],
-				'cantidad_u' => $dato['cantidad_u'],
-				'cantidad_kg' => $dato['cantidad_kg']
+				'precio_venta' => $dato['precio_venta']
 			);
 
 			$datos[] = $nuevo_dato;
-
-			 $respuestaDatos = ModeloCompra::mdlIngresarDetalleCompra($tablaDetalleEgreso, $nuevo_dato);
+			$respuestaDatos = ModeloCompra::mdlIngresarDetalleCompra($tablaDetalleEgreso, $nuevo_dato);
 
 		}
 
@@ -170,45 +154,30 @@ class ControladorCompra
 		========================================== */
 
 		$tblProducto = "productos";
-
 		$stocks = json_decode($_POST["productoAddEgreso"], true);
 
 		foreach ($stocks as $value) {
-			
 			$idProducto = $value['idProductoEgreso'];
-			$cantidad = $value['cantidad_u'];
+			$cantidad = $value['numero_aves'];
 			$precio = $value['precio_venta'];
 
 			// Actualizar el stock del producto
-			$respStock = ModeloCompra::mdlActualizarStockProducto($tblProducto, $idProducto, $cantidad, $precio);
+			ModeloCompra::mdlActualizarStockProducto($tblProducto, $idProducto, $cantidad, $precio);
 		}
 
-
-
-
-		
 		if ($respuestaDatos == "ok") {
-
             $response = array(
                 "mensaje" => "Producto guardado correctamente",
                 "estado" => "ok"
             );
-
             echo json_encode($response);
-
         } else {
-
             $response = array(
                 "mensaje" => "Error al guardar el producto",
                 "estado" => "error"
             );
-
             echo json_encode($response);
-
         }
-
-
-		
 	}
 
 	/*=============================================
