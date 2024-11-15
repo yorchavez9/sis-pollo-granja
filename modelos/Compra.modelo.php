@@ -343,24 +343,14 @@ class ModeloCompra{
 
 	static public function mdlBorrarCompra($tabla, $datos){
 
-		$stmt = Conexion::conectar()->prepare("DELETE FROM $tabla WHERE id_producto = :id_producto");
-
-		$stmt -> bindParam(":id_producto", $datos, PDO::PARAM_INT);
-
+		$stmt = Conexion::conectar()->prepare("DELETE FROM $tabla WHERE id_egreso = :id_egreso");
+		$stmt -> bindParam(":id_egreso", $datos, PDO::PARAM_INT);
 		if($stmt -> execute()){
-
 			return "ok";
-		
 		}else{
-
 			return "error";	
-
 		}
-
-
 		$stmt = null;
-
-
 	}
 
 }

@@ -1,13 +1,14 @@
 $(document).ready(function () {
 
+  //SELECCIONAR LA FECHA AUTOMATICAMENTE
   function setDateToToday(inputId) {
     const today = new Date();
     const formattedDate = today.toISOString().split('T')[0]; 
     $(`#${inputId}`).val(formattedDate);
   }
-
   setDateToToday('fecha_egreso');
 
+  //RELOJ AUTOMATICO
   function actualizarReloj() {
     const ahora = new Date();
     let horas = ahora.getHours();
@@ -21,12 +22,10 @@ $(document).ready(function () {
 
     $('#hora_egreso').val(horaFormateada);
   }
-
   setInterval(actualizarReloj, 1000);
-
   actualizarReloj();
 
-
+  //SELECION DE TIPO DE PAGO YAPE O EFECTIVO 
   function tipoPago() {
 
     var paymentMethodLinks = document.querySelectorAll("a.paymentmethod");
@@ -39,13 +38,9 @@ $(document).ready(function () {
       });
     });
   }
-
   tipoPago();
 
-
-  /*=============================================
-  MOSTRAR PRODUCTOS
-  =============================================*/
+  //MOSTRAR PRODUCTOS PARA LA COMPRA
   function mostrarProductos() {
     $.ajax({
       url: "ajax/Producto.ajax.php",
@@ -87,6 +82,7 @@ $(document).ready(function () {
     });
   }
 
+  //MOSTRAR ESTILOS DE BOTONES DEL STOCK DE PRODUCTOS
   function getButtonStyles(stock) {
     if (stock > 20) {
       return "background-color: #28C76F; color: white; border: none;";
@@ -97,10 +93,7 @@ $(document).ready(function () {
     }
   }
 
-  /* ============================================
-  MOSTRAR SERIE Y NUMERO DE VENTA 
-  ============================================ */
-
+  //MOMSTRAR NUMERO DE SERIE Y VENTA AUTOMATICAMENTE
   function mostrarSerieNumero() {
     $.ajax({
       url: "ajax/SerieNumero.ajax.php",
@@ -139,10 +132,7 @@ $(document).ready(function () {
     });
   }
 
-  /* ====================================
-  AGREGAR PRODUCTO A LA TABLA DETALLE
-  ===================================== */
-
+  //AGREGAR PRODUCTOS A LA TABLA DETALLE DE LA COMPRA
   $("#tabla_add_producto").on("click", ".btnAddProducto", function (e) {
     e.preventDefault();
 
@@ -276,11 +266,7 @@ $(document).ready(function () {
     });
   });
 
-
-  /* =============================================
-  ELIMINAR EL PRODUCTO AGREGADO DE LA LISTA
-  ============================================= */
-
+  //ELIMINAR EL PRODUCTO AGREGADO A LA TABLA DETALLE
   $(document).on("click", ".btnEliminarAddProducto", function (e) {
     e.preventDefault();
 
@@ -305,14 +291,12 @@ $(document).ready(function () {
       });
   });
 
-  /*============================================
-  FORMATEAR LOS PRECIOS
-  ============================================ */
-
+  //FORMATEO DE PRECIOS
   function formateoPrecio(numero) {
     return numero.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
 
+  //CALCULAR EL TOTAL
   function calcularTotal(impuesto) {
     var subtotalTotal = 0;
 
@@ -359,10 +343,7 @@ $(document).ready(function () {
     $("#total_precio_egreso").text(totalFormateado);
   }
 
-
-  /* ===========================================
-  CREAR VENTA EGRESO
-  =========================================== */
+  //CREAR COMPRA
   $("#btn_crear_compra").click(function (e) {
     e.preventDefault();
 
@@ -533,9 +514,7 @@ $(document).ready(function () {
     }
   });
 
-  /* ==========================================
-  LIMPIAR MODALES
-  ========================================== */
+  //LIMPIAR LOS MODALES
   function limpiarModales() {
 
     $(".btn_modal_ver_close_usuario").click(function () {
@@ -557,10 +536,6 @@ $(document).ready(function () {
   }
 
   limpiarModales();
-
-  /* =====================================
-  MSOTRANDO DATOS
-  ===================================== */
   mostrarProductos();
   mostrarSerieNumero();
 });

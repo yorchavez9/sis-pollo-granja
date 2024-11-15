@@ -2,142 +2,25 @@
 
 require_once "../controladores/Lista.compra.controlador.php";
 require_once "../modelos/Lista.compra.modelo.php";
-
-class AjaxListaEgreso
-{
-
-    
-    /*=============================================
-	EDITAR EGRESO
-	=============================================*/
-
-    public $idProducto;
-
-    public function ajaxEditarProducto()
-    {
-
-        $item = "id_producto";
-        $valor = $this->idProducto;
-
-        $respuesta = ControladorProducto::ctrMostrarProductos($item, $valor);
-
-        echo json_encode($respuesta);
-    }
-    
-    /*=============================================
-	MOSTRAR DETALLE EGRESO
-	=============================================*/
-
-    public $idProductoVer;
-
-    public function ajaxVerProducto()
-    {
-
-        $item = "id_producto";
-        $valor = $this->idProductoVer;
-
-        $respuesta = ControladorProducto::ctrMostrarProductos($item, $valor);
-
-        echo json_encode($respuesta);
-    }
-
-    /*=============================================
-	ACTIVAR EGRESO
-	=============================================*/
-
-    public $activarProducto;
-    public $activarId;
+require_once "../controladores/Compra.controlador.php";
+require_once "../modelos/Compra.modelo.php";
 
 
-    public function ajaxActivarProducto()
-    {
+//BORRAR COMPRA 
+if(isset($_POST["idEgresoDelete"])){
 
-        $tabla = "productos";
-
-        $item1 = "estado_producto";
-        $valor1 = $this->activarProducto;
-
-        $item2 = "id_producto";
-        $valor2 = $this->activarId;
-
-        $respuesta = ModeloProducto::mdlActualizarProducto($tabla, $item1, $valor1, $item2, $valor2);
-    }
-
+    $borrarCompra = new ControladorCompra();
+    $borrarCompra->ctrBorrarCompra();
 
 }
 
-/*=============================================
-EDITAR PRODUCTO
-=============================================*/
-if (isset($_POST["idProducto"])) {
-
-    $editar = new AjaxListaEgreso();
-    $editar->idProducto = $_POST["idProducto"];
-    $editar->ajaxEditarProducto();
-
-}
-
-/* VER DETALLE PRODUCTO */
-elseif (isset($_POST["idProductoVer"])) {
-
-    $verDetalle = new AjaxListaEgreso();
-    $verDetalle->idProductoVer = $_POST["idProductoVer"];
-    $verDetalle->ajaxVerProducto();
-}
-
-/* ACTIVAR PRODUCTO */
-elseif (isset($_POST["activarProducto"])) {
-
-    $activarProducto = new AjaxListaEgreso();
-    $activarProducto->activarProducto = $_POST["activarProducto"];
-    $activarProducto->activarId = $_POST["activarId"];
-    $activarProducto->ajaxActivarProducto();
-
-}
-
-
-/* GUARDAR PRODUCTO */
-elseif (isset($_POST["id_categoria_P"])) {
-
-    $crearProducto = new ControladorProducto();
-    $crearProducto->ctrCrearProducto();
-
-}
-
-
-/* ACTUALIZAR PAGO DEUDA */
-elseif (isset($_POST["id_egreso_pagar"])) {
-
-    $pagoEgreso = new ControladorListaCompra();
-    $pagoEgreso->ctrActualizarDeudaEgreso();
-
-}
-
-/* ACTUALIZAR PRODUCTO */
-elseif(isset($_POST["edit_id_producto"])){
-
-    $editProducto = new ControladorProducto();
-    $editProducto->ctrEditarProducto();
-
-}
-
-/* BORRAR PRODUCTO */
-elseif(isset($_POST["idProductoDelete"])){
-
-    $borrarProducto = new ControladorProducto();
-    $borrarProducto->ctrBorrarProducto();
-
-}
-
-/* MOSTRAR PRODUCTOS EN LA TABLA */
+//MOSTRAR COMPRA EN LA TABLA
 else{
 
     $item = null;
     $valor = null;
     $mostrarEgresos = ControladorListaCompra::ctrMostrarListaEgreso($item, $valor);
-    
     $tblEgreso = array();
-    
     foreach ($mostrarEgresos as $key => $egreso) {
         
         $fila = array(
