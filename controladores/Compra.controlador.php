@@ -10,9 +10,25 @@ class ControladorCompra
 	{
 		$tablaE = "egresos";
 		$tablaDE = "detalle_egreso";
-		$respuesta = ModeloCompra::mdlMostrarCompra($tablaE, $tablaDE, $item, $valor);
+		$tablaP = "personas";
+		$respuesta = ModeloCompra::mdlMostrarCompra($tablaE, $tablaDE, $tablaP, $item, $valor);
 		return $respuesta;
 	}
+
+	/*=============================================
+    MOSTRAR DETALLE COMPRA
+    =============================================*/
+	static public function ctrMostrarDetalleCompra($item, $valor)
+	{
+
+		$tablaDE = "detalle_egreso";
+		$tablaP = "productos";
+
+		$respuesta = ModeloCompra::mdlMostrarListaDetalleCompra($tablaDE, $tablaP, $item, $valor);
+
+		return $respuesta;
+	}
+
 
 	/*=============================================
 	MOSTRAR TOTAL DE COMPRAS

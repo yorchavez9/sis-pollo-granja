@@ -148,37 +148,47 @@ $(document).ready(function () {
             let formateadoPagoRestante = formateoPrecio(restantePago);
 
             var fila = `
-                  <tr>
-                      <td>${index + 1}</td>
-                      <td>${fechaFormateada}</td>
-                      <td>${egreso.razon_social}</td>
-                      <td>${egreso.serie_comprobante}</td>
-                      <td>${egreso.num_comprobante}</td>
-                      <td>${egreso.tipo_pago}</td>
-                      <td>S/ ${totalCompra}</td>
-                      <td>S/ ${formateadoPagoRestante}</td>
-                      <td class="text-center">
-                          ${restantePago == '0.00' ? '<button class="btn btn-sm rounded" style="background: #28C76F; color:white;">Completado</button>'
-                            : '<button class="btn btn-sm rounded" style="background: #FF4D4D; color:white;">Pendiente</button>'
-                          }
-                      </td>
-                      
-                      <td class="text-center">
+                        <tr>
+                            <td>${index + 1}</td>
+                            <td>${fechaFormateada}</td>
+                            <td>${egreso.razon_social}</td>
+                            <td>${egreso.serie_comprobante}</td>
+                            <td>${egreso.num_comprobante}</td>
+                            <td>${egreso.tipo_pago}</td>
+                            <td>S/ ${totalCompra}</td>
+                            <td>S/ ${formateadoPagoRestante}</td>
+                            <td class="text-center">
+                                ${restantePago == '0.00' ?
+                                    '<button class="btn btn-sm rounded" style="background: #28C76F; color:white;">Completado</button>' :
+                                    '<button class="btn btn-sm rounded" style="background: #FF4D4D; color:white;">Pendiente</button>'}
+                            </td>
+                            <td class="text-center">
+                                <a href="#" class="me-3 btnPagarCompra" 
+                                  idEgreso="${egreso.id_egreso}" 
+                                  totalCompraEgreso="${totalCompra}" 
+                                  pagoRestanteEgreso="${formateadoPagoRestante}" 
+                                  data-bs-toggle="modal" 
+                                  data-bs-target="#modalPagarCompra">
+                                    <i class="fas fa-money-bill-alt fa-lg" style="color: #28C76F"></i>
+                                </a>
+                                <a href="#" 
+                                  class="me-3 btnImprimir" 
+                                  idEgreso="${egreso.id_egreso}" 
+                                  tipoComprobante="${egreso.tipo_comprobante}">
+                                    <i class="fa fa-print fa-lg" style="color: #0084FF"></i>
+                                </a>
+                                <a href="#" class="me-3 btnDescargar" 
+                                  idEgreso="${egreso.id_egreso}">
+                                    <i class="fa fa-download fa-lg" style="color: #28C76F"></i>
+                                </a>
+                                <a href="#" class="me-3 confirm-text btnEliminarCompra" 
+                                  idEgreso="${egreso.id_egreso}" 
+                                  imagenProducto="${egreso.imagen_producto}">
+                                    <i class="fa fa-trash fa-lg" style="color: #FF4D4D"></i>
+                                </a>
+                            </td>
+                        </tr>`;
 
-                          <a href="#" class="me-3 btnPagarCompra" idEgreso="${egreso.id_egreso}" totalCompraEgreso=${totalCompra} pagoRestanteEgreso=${formateadoPagoRestante} data-bs-toggle="modal" data-bs-target="#modalPagarCompra">
-                              <i class="fas fa-money-bill-alt fa-lg" style="color: #28C76F"></i>
-                          </a>
-                          <a href="#" class="me-3 btnVerProducto" idEgreso="${egreso.id_egreso}" data-bs-toggle="modal" data-bs-target="#modalVerProducto">
-                              <i class="fa fa-print fa-lg" style="color: #0084FF"></i>
-                          </a>
-                          <a href="#" class="me-3 btnVerProducto" idEgreso="${egreso.id_egreso}" data-bs-toggle="modal" data-bs-target="#modalVerProducto">
-                              <i class="fa fa-download fa-lg" style="color: #28C76F"></i>
-                          </a>
-                          <a href="#" class="me-3 confirm-text btnEliminarCompra" idEgreso="${egreso.id_egreso}" imagenProducto="${egreso.imagen_producto}">
-                              <i class="fa fa-trash fa-lg" style="color: #FF4D4D"></i>
-                          </a>
-                      </td>
-                  </tr>`;
 
             // Agregar la fila al tbody
             tbody.append(fila);
@@ -196,6 +206,33 @@ $(document).ready(function () {
       },
     });
   }
+
+  //BOTON PARRA IMPRIMIR LAS COMPRAS
+
+  // Escucha el evento click en los elementos con la clase btnImprimir
+  $(document).on('click', '.btnImprimir', function (event) {
+    event.preventDefault(); // Previene el comportamiento por defecto del enlace
+
+    // Obtiene el atributo 'idEgreso' del enlace clickeado
+    const idEgreso = $(this).attr('idEgreso');
+    const tipoComprobante = $(this).attr('tipoComprobante');
+
+    if (idEgreso && tipoComprobante == "ticket") {
+      const url = `extensiones/ticket/ticket.php?id_egreso=${idEgreso}`;
+      console.log(`Redirigiendo a: ${url}`);
+      window.location.href = url;
+    } else if (idEgreso && tipoComprobante == "boleta"){
+      const url = `extensiones/boleta/boleta.php?id_egreso=${idEgreso}`;
+      console.log(`Redirigiendo a: ${url}`);
+      window.location.href = url;
+    } else if (idEgreso && tipoComprobante == "factura"){
+      const url = `extensiones/factura/factura.php?id_egreso=${idEgreso}`;
+      console.log(`Redirigiendo a: ${url}`);
+      window.location.href = url;
+    }
+  });
+
+
 
   //MOSTRAR DEUDA A COMPRAR
   $("#data_lista_egresos").on("click", ".btnPagarCompra", function (e) {
