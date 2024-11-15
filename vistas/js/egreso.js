@@ -486,9 +486,6 @@ $(document).ready(function () {
         processData: false,
         success: function (respuesta) {
 
-          console.log(respuesta);
-          return;
-
           var res = JSON.parse(respuesta);
 
           if (res.estado === "ok") {

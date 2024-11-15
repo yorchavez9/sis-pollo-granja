@@ -147,11 +147,12 @@ else{
             'id_persona' => $egreso['id_persona'],
             'precio_compra' => $egreso['precio_compra'],
             'precio_venta' => $egreso['precio_venta'],
-            'cantidad_u' => $egreso['cantidad_u'],
-            'cantidad_kg' => $egreso['cantidad_kg'],
+            'numero_javas' => $egreso['numero_javas'],
+            'numero_aves' => $egreso['numero_aves'],
             'id_egreso' => $egreso['id_egreso'],
             'id_usuario' => $egreso['id_usuario'],
             'fecha_egre' => $egreso['fecha_egre'],
+            'hora_egreso' => $egreso['hora_egreso'],
             'tipo_comprobante' => $egreso['tipo_comprobante'],
             'serie_comprobante' => $egreso['serie_comprobante'],
             'num_comprobante' => $egreso['num_comprobante'],
@@ -174,7 +175,3 @@ else{
     
     echo json_encode($tblEgreso);
 }
-
-
-?>
-

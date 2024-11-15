@@ -176,12 +176,6 @@ $(document).ready(function () {
                                 <i class="fas fa-money-bill-alt fa-lg" style="color: #28C76F"></i>
                             </a>
 
-                            <a href="#" class="me-3 btnEditarProducto" idEgreso="${egreso.id_egreso}" data-bs-toggle="modal" data-bs-target="#modalEditarProducto">
-                                <i class="text-warning fas fa-edit fa-lg"></i>
-                            </a>
-                            <a href="#" class="me-3 btnVerProducto" idEgreso="${egreso.id_egreso}" data-bs-toggle="modal" data-bs-target="#modalVerProducto">
-                                <i class="text-primary fa fa-eye fa-lg"></i>
-                            </a>
                             <a href="#" class="me-3 btnVerProducto" idEgreso="${egreso.id_egreso}" data-bs-toggle="modal" data-bs-target="#modalVerProducto">
                                 <i class="fa fa-print fa-lg" style="color: #0084FF"></i>
                             </a>
