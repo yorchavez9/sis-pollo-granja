@@ -123,7 +123,7 @@
                     <?php if (!empty($_SESSION["imagen_usuario"])): ?>
                         <img src="<?php echo substr($_SESSION["imagen_usuario"], 3); ?>" alt="">
                     <?php else: ?>
-                        <img src="ruta/a/imagen_predeterminada.jpg" alt="Usuario sin imagen">
+                        <img src="vistas/img/usuarios/default.jpeg" alt="Usuario sin imagen">
                     <?php endif; ?>
                     <span class="status online"></span>
                 </span>
