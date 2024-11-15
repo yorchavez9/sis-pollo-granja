@@ -62,7 +62,7 @@
 
         <li class="nav-item dropdown">
             <?php
-            
+
             $item = null;
             $valor = null;
 
@@ -71,7 +71,7 @@
             $totalProductosVencer = count($productosPorVencer);
             ?>
             <a href="javascript:void(0);" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
-                <img src="vistas/dist/assets/img/icons/notification-bing.svg" alt="img"> <span class="badge rounded-pill" id="cantidad_notificacion"><?php echo $totalProductosVencer?></span>
+                <img src="vistas/dist/assets/img/icons/notification-bing.svg" alt="img"> <span class="badge rounded-pill" id="cantidad_notificacion"><?php echo $totalProductosVencer ?></span>
             </a>
             <div class="dropdown-menu notifications">
                 <div class="topnav-dropdown-header">
@@ -83,31 +83,31 @@
 
                         <?php
 
-                        foreach ($productosPorVencer as $producto){
+                        foreach ($productosPorVencer as $producto) {
                         ?>
 
-                        <li class="notification-message">
-                            <a href="activities.html">
-                                <div class="media d-flex">
-                                    <span class="avatar flex-shrink-0">
-                                        <img alt="" src="<?php echo substr($producto["imagen_producto"],3)?>">
-                                    </span>
-                                    <div class="media-body flex-grow-1">
-                                        <p class="noti-details"><span class="noti-title"><?php echo $producto["nombre_producto"]?></span> <?php echo $producto["nombre_categoria"]?>
-                        
-                                        </p>
-                                        <p class="noti-time"><span class="notification-time"><?php echo $producto["fecha_vencimiento"]?></span>
-                                        </p>
+                            <li class="notification-message">
+                                <a href="activities.html">
+                                    <div class="media d-flex">
+                                        <span class="avatar flex-shrink-0">
+                                            <img alt="" src="<?php echo substr($producto["imagen_producto"], 3) ?>">
+                                        </span>
+                                        <div class="media-body flex-grow-1">
+                                            <p class="noti-details"><span class="noti-title"><?php echo $producto["nombre_producto"] ?></span> <?php echo $producto["nombre_categoria"] ?>
+
+                                            </p>
+                                            <p class="noti-time"><span class="notification-time"><?php echo $producto["fecha_vencimiento"] ?></span>
+                                            </p>
+                                        </div>
                                     </div>
-                                </div>
-                            </a>
-                        </li>
+                                </a>
+                            </li>
 
 
                         <?php
                         }
                         ?>
-                        
+
 
                     </ul>
                 </div>
@@ -119,25 +119,32 @@
 
         <li class="nav-item dropdown has-arrow main-drop">
             <a href="javascript:void(0);" class="dropdown-toggle nav-link userset" data-bs-toggle="dropdown">
-                <span class="user-img"><img src="<?php echo substr($_SESSION["imagen_usuario"],3)?>" alt="">
-                    <span class="status online"></span></span>
+                <span class="user-img">
+                    <?php if (!empty($_SESSION["imagen_usuario"])): ?>
+                        <img src="<?php echo substr($_SESSION["imagen_usuario"], 3); ?>" alt="">
+                    <?php else: ?>
+                        <img src="ruta/a/imagen_predeterminada.jpg" alt="Usuario sin imagen">
+                    <?php endif; ?>
+                    <span class="status online"></span>
+                </span>
             </a>
+
             <div class="dropdown-menu menu-drop-user">
                 <div class="profilename">
                     <div class="profileset">
-                        <span class="user-img"><img src="<?php echo substr($_SESSION["imagen_usuario"],3)?>" alt="">
+                        <span class="user-img"><img src="<?php echo substr($_SESSION["imagen_usuario"], 3) ?>" alt="">
                             <span class="status online"></span></span>
                         <div class="profilesets">
-                            <h6><?php echo $_SESSION["usuario"]?></h6>
+                            <h6><?php echo $_SESSION["usuario"] ?></h6>
                             <h5>
-                            <?php
+                                <?php
 
                                 $data_roles = json_decode($_SESSION["roles"], true);
                                 foreach ($data_roles as $rol) {
                                     echo $rol . "<br>";
                                 }
 
-                            ?>
+                                ?>
                             </h5>
                         </div>
                     </div>
@@ -164,8 +171,8 @@
 </div>
 
 <script>
-document.getElementById('clear-noti').addEventListener('click', function() {
-    document.getElementById('notification-list').innerHTML = '';
-    document.getElementById('cantidad_notificacion').innerHTML = '0';
-});
+    document.getElementById('clear-noti').addEventListener('click', function() {
+        document.getElementById('notification-list').innerHTML = '';
+        document.getElementById('cantidad_notificacion').innerHTML = '0';
+    });
 </script>

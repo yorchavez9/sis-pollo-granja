@@ -98,7 +98,9 @@
                                 <!-- INGRESO DE LA FECHA -->
                                 <div class="col-md-3">
                                     <div class="form-group">
-                                        <label for="fecha_egre" class="form-label">Selecione la fecha(<span class="text-danger">*</span>):</label>
+                                        <label for="fecha_egreso" class="form-label">
+                                            Seleccione la fecha (<span class="text-danger">*</span>):
+                                        </label>
                                         <input type="date" id="fecha_egreso" class="form-control" name="fecha_egre" placeholder="Ingrese la fecha">
                                         <small id="error_egreso_fecha"></small>
                                     </div>
@@ -243,9 +245,9 @@
                                                 </ul>
                                             </div>
                                         </div>
-                                        <!-- SECCION DE CREAR VENTA -->
+                                        <!-- SECCION DE CREAR COMPRA -->
                                         <div class="row mb-3">
-                                            <button type="button" id="btn_crear_venta" class="btn btn-block" style="background:#7367F0; color:white">
+                                            <button type="button" id="btn_crear_compra" class="btn btn-block" style="background:#7367F0; color:white">
                                                 <h5><i class="fa fa-plus fa-lg text-white me-2"></i> Crear compra</h5>
                                             </button>
                                         </div>

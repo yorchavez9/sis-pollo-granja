@@ -75,16 +75,12 @@ $(document).ready(function () {
   SELECION DE FECHA AUTOMATICO
   =============================================*/
 
-  function seleccionFecha() {
-
-    const today = new Date().toISOString().split("T")[0];
-
-    // Asignar la fecha actual al campo de entrada de fecha
-
-    document.getElementById("fecha_venta").value = today;
-
+  function setDateToToday(inputId) {
+    let today = new Date();
+    let formattedDate = today.toISOString().split('T')[0];
+    $(`#${inputId}`).val(formattedDate);
   }
-
+  setDateToToday('fecha_venta');
  /*=============================================
   MOSTRANDO SERIE Y NUMERO DE VENTA
   =============================================*/
@@ -791,8 +787,6 @@ $(document).ready(function () {
 
             mostrarProductoVenta();
 
-            seleccionFecha();
-
             mostrarSerieNumero();
 
             mostrarVentas();
@@ -860,11 +854,6 @@ $(document).ready(function () {
 
   mostrarProductoVenta();
 
-  /*=============================================
-  SELECCION DE LA FECHA AUTOMATICO
-  =============================================*/
-
-  seleccionFecha();
 
   /*=============================================
   MOSTRANDO SERIE Y NUMERO DE LA VENTA

@@ -1,26 +1,32 @@
 $(document).ready(function () {
 
-  seleccionFecha();
-  
+  function setDateToToday(inputId) {
+    let today = new Date(); 
+    let formattedDate = today.toISOString().split('T')[0]; 
+    $(`#${inputId}`).val(formattedDate); 
+  }
+  setDateToToday('fecha_egreso');
+
   function actualizarReloj() {
     var ahora = new Date();
     var horas = ahora.getHours();
-    var minutos = String(ahora.getMinutes()).padStart(2, '0');  // Minutos con 2 dígitos
-    var segundos = String(ahora.getSeconds()).padStart(2, '0');  // Segundos con 2 dígitos
+    var minutos = String(ahora.getMinutes()).padStart(2, '0');
+    var segundos = String(ahora.getSeconds()).padStart(2, '0');
 
-    var ampm = horas >= 12 ? 'PM' : 'AM';  // Determina si es AM o PM
-    horas = horas % 12;  // Convierte de 24h a 12h
-    horas = horas ? horas : 12;  // El "0" de la medianoche se muestra como 12
+    var ampm = horas >= 12 ? 'PM' : 'AM';
+    horas = horas % 12;
+    horas = horas ? horas : 12;
     var horaFormateada = String(horas).padStart(2, '0') + ":" + minutos + ":" + segundos + " " + ampm;
 
-    // Mostrar la hora en el campo de entrada
-    document.getElementById('hora_egreso').value = horaFormateada;
+    $('#hora_egreso').value = horaFormateada;
   }
 
-  // Actualizar la hora cada 1000 milisegundos (1 segundo)
+
   setInterval(actualizarReloj, 1000);
 
-  // Inicializar la hora en el campo de texto cuando la página carga
+  /* ===================================
+  SELECCION DE FECHA AUTOMATICA
+  =================================== */
   actualizarReloj();
 
 
@@ -49,20 +55,6 @@ $(document).ready(function () {
 
   tipoPago();
 
-  /*=============================================
-  SELECION DE FECHA AUTOMATICO
-  =============================================*/
-  function seleccionFecha() {
-    const fechaEgresoInput = document.getElementById("fecha_egreso");
-    
-    // Verificar si el elemento existe
-    if (fechaEgresoInput !== null) {
-        const today = new Date().toISOString().split("T")[0];
-        fechaEgresoInput.value = today;
-    } else {
-        console.log("El  elemento con ID 'fecha_egreso' no existe.");
-    }
-}
 
   /*=============================================
   MOSTRAR PRODUCTOS
@@ -84,19 +76,17 @@ $(document).ready(function () {
                       <tr>
                          
                           <td class="text-center">
-                              <a href="#" id="btnAddProducto" class=" hover_img_a btnAddProducto" idProductoAdd="${
-                                producto.id_producto
-                              }">
-                                  <img class="hover_img" src="${
-                                    producto.imagen_producto
-                                  }" alt="${producto.imagen_producto}">
+                              <a href="#" id="btnAddProducto" class=" hover_img_a btnAddProducto" idProductoAdd="${producto.id_producto
+            }">
+                                  <img class="hover_img" src="${producto.imagen_producto
+            }" alt="${producto.imagen_producto}">
                               </a>
                           </td>
                           <td>${producto.nombre_categoria}</td>
                           <td>${producto.nombre_producto}</td>
                           <td class="text-center"><button type="button" class="btn btn-sm" style="${getButtonStyles(
-                            producto.stock_producto
-                          )}">${producto.stock_producto}</button></td>
+              producto.stock_producto
+            )}">${producto.stock_producto}</button></td>
 
                       </tr>`;
 
@@ -131,7 +121,7 @@ $(document).ready(function () {
       dataType: "json",
       success: function (respuesta) {
 
-        if(respuesta == "" || respuesta == null){
+        if (respuesta == "" || respuesta == null) {
           $("#serie_comprobante").val("T0001");
           $("#num_comprobante").val("0001");
         }
@@ -386,18 +376,19 @@ $(document).ready(function () {
   /* ===========================================
   CREAR VENTA EGRESO
   =========================================== */
-  $("#btn_crear_venta").click(function (e) {
+  $("#btn_crear_compra").click(function (e) {
     e.preventDefault();
 
-    var isValid = true;
+    let isValid = true;
 
-    var id_usuario_egreso = $("#id_usuario_egreso").val();
-    var id_proveedor_egreso = $("#id_proveedor_egreso").val();
-    var fecha_egreso = $("#fecha_egreso").val();
-    var tipo_comprobante_egreso = $("#tipo_comprobante_egreso").val();
-    var serie_comprobante = $("#serie_comprobante").val();
-    var num_comprobante = $("#num_comprobante").val();
-    var impuesto_egreso = $("#impuesto_egreso").val();
+    let id_usuario_egreso = $("#id_usuario_egreso").val();
+    let id_proveedor_egreso = $("#id_proveedor_egreso").val();
+    let fecha_egreso = $("#fecha_egreso").val();
+    let hora_egreso = $("#hora_egreso").val();
+    let tipo_comprobante_egreso = $("#tipo_comprobante_egreso").val();
+    let serie_comprobante = $("#serie_comprobante").val();
+    let num_comprobante = $("#num_comprobante").val();
+    let impuesto_egreso = $("#impuesto_egreso").val();
 
     // Validar la categoria
     if (id_proveedor_egreso == "" || id_proveedor_egreso == null) {
@@ -408,17 +399,6 @@ $(document).ready(function () {
       isValid = false;
     } else {
       $("#error_egreso_proveedor").html("").removeClass("text-danger");
-    }
-
-    // Validar el codigo de producto
-    if (fecha_egreso == "") {
-      $("#error_egreso_fecha")
-        .html("Por favor, ingrese ingrese la fecha")
-        .addClass("text-danger");
-
-      isValid = false;
-    } else {
-      $("#error_egreso_fecha").html("").removeClass("text-danger");
     }
 
     // Validar el nombre del producto
@@ -437,59 +417,58 @@ $(document).ready(function () {
 
     // Iterar sobre cada fila de producto
     $("#detalle_egreso_producto tr").each(function () {
+
       var fila = $(this);
 
-      // Obtener los valores de cada campo en la fila
       var idProductoEgreso = fila.find(".id_producto_egreso").val();
-      var cantidadU = fila.find(".cantidad_u").val();
-      var cantidadKg = fila.find(".cantidad_kg").val();
-      var precioCompra = fila.find(".precio_compra").val();
-      var precioVenta = fila.find(".precio_venta").val();
+      var numero_javas = fila.find(".numero_javas").val();
+      var numero_aves = fila.find(".numero_aves").val();
+      var peso_promedio = fila.find(".peso_promedio").val();
+      var peso_bruto = fila.find(".peso_bruto").val();
+      var peso_tara = fila.find(".peso_tara").val();
+      var peso_merma = fila.find(".peso_merma").val();
+      var peso_neto = fila.find(".peso_neto").val();
+      var precio_compra = fila.find(".precio_compra").val();
+      var precio_venta = fila.find(".precio_venta").val();
 
-      // Crear un objeto con los valores y agregarlo al array
       var producto = {
         idProductoEgreso: idProductoEgreso,
-        cantidad_u: cantidadU,
-        cantidad_kg: cantidadKg,
-        precio_compra: precioCompra,
-        precio_venta: precioVenta,
+        numero_javas: numero_javas,
+        numero_aves: numero_aves,
+        peso_promedio: peso_promedio,
+        peso_bruto: peso_bruto,
+        peso_tara: peso_tara,
+        peso_merma: peso_merma,
+        peso_neto: peso_neto,
+        precio_compra: precio_compra,
+        precio_venta: precio_venta
       };
 
       valoresProductos.push(producto);
     });
 
-    var productoAddEgreso = JSON.stringify(valoresProductos);
-
-    var subtotal = $("#subtotal_egreso").text().replace(/,/g, "");
-
-    var igv = $("#igv_egreso").text().replace(/,/g, "");
-
-    var total = $("#total_precio_egreso").text().replace(/,/g, "");
-
-    // Captura el valor del tipo de pago (contado o crédito)
-    var tipo_pago = $("input[name='forma_pago']:checked").val();
-
-    // Variable para almacenar el estado
+    let productoAddEgreso = JSON.stringify(valoresProductos);
+    let subtotal = $("#subtotal_egreso").text().replace(/,/g, "");
+    let igv = $("#igv_egreso").text().replace(/,/g, "");
+    let total = $("#total_precio_egreso").text().replace(/,/g, "");
+    let tipo_pago = $("input[name='forma_pago']:checked").val();
     var estado_pago;
 
-    // Verifica el tipo de pago seleccionado
     if (tipo_pago == "contado") {
       estado_pago = "completado";
     } else {
       estado_pago = "pendiente";
     }
 
-    // Captura el valor del tipo de pago (contado o crédito)
     var pago_tipo = $("input[name='pago_tipo']:checked").val();
-
-    // Variable para almacenar el estado
     var pago_e_y;
 
-    // Verifica el tipo de pago seleccionado
     if (pago_tipo == "efectivo") {
       pago_e_y = "efectivo";
-    } else {
+    } else if (pago_tipo == "yape") {
       pago_e_y = "yape";
+    } else {
+      pago_e_y = ""
     }
 
     if (isValid) {
@@ -498,19 +477,24 @@ $(document).ready(function () {
       datos.append("id_proveedor_egreso", id_proveedor_egreso);
       datos.append("id_usuario_egreso", id_usuario_egreso);
       datos.append("fecha_egreso", fecha_egreso);
+      datos.append("hora_egreso", hora_egreso);
       datos.append("tipo_comprobante_egreso", tipo_comprobante_egreso);
       datos.append("serie_comprobante", serie_comprobante);
       datos.append("num_comprobante", num_comprobante);
       datos.append("impuesto_egreso", impuesto_egreso);
-
       datos.append("productoAddEgreso", productoAddEgreso);
-
       datos.append("subtotal", subtotal);
       datos.append("igv", igv);
       datos.append("total", total);
       datos.append("tipo_pago", tipo_pago);
       datos.append("estado_pago", estado_pago);
       datos.append("pago_e_y", pago_e_y);
+
+      datos.forEach(element => {
+        console.log(element);
+      });
+
+      return;
 
       $.ajax({
         url: "ajax/Compra.ajax.php",
@@ -548,7 +532,7 @@ $(document).ready(function () {
             });
 
             mostrarProductos();
-            seleccionFecha();
+          
             mostrarSerieNumero();
           } else {
             Swal.fire({
@@ -570,8 +554,8 @@ $(document).ready(function () {
   /* ==========================================
   LIMPIAR MODALES
   ========================================== */
-  function limpiarModales(){
-    
+  function limpiarModales() {
+
     $(".btn_modal_ver_close_usuario").click(function () {
       $("#mostrar_data_roles").text("");
     });
@@ -596,6 +580,5 @@ $(document).ready(function () {
   MSOTRANDO DATOS
   ===================================== */
   mostrarProductos();
-  seleccionFecha();
   mostrarSerieNumero();
 });
