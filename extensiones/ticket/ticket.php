@@ -143,4 +143,10 @@ foreach ($tickets as $ticket) {
 }
 
 // Generando el PDF
-$pdf->Output("ticket_compra.pdf", "I");
+if (isset($_GET['accion']) && $_GET['accion'] === 'descargar') {
+    // Descargar el PDF
+    $pdf->Output('D', 'factura.pdf'); // 'D' fuerza la descarga con el nombre 'boleta.pdf'
+} else {
+    // Mostrar el PDF en el navegador (imprimir)
+    $pdf->Output(); // Muestra el archivo en el navegador
+}
