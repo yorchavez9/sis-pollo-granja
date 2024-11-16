@@ -1,5 +1,8 @@
 <?php
 
+// Incluyendo librerías necesarias
+require "./code128.php";
+
 session_start();
 
 $nombre_usuario = $_SESSION["nombre_usuario"];
@@ -10,9 +13,6 @@ require_once "../../controladores/Configuracion.ticket.controlador.php";
 require_once "../../modelos/Compra.modelo.php";
 require_once "../../modelos/Producto.modelo.php";
 require_once "../../modelos/Configuracion.ticket.modelo.php";
-
-// Incluyendo librerías necesarias
-require "./code128.php";
 
 $pdf = new PDF_Code128('P', 'mm', array(80, 258));
 $pdf->SetMargins(4, 10, 4);

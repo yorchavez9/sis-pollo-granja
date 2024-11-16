@@ -122,8 +122,9 @@ class ControladorCompra
 		$productos = json_decode($_POST["productoAddEgreso"], true);
 		$datos = array();
 
+		// Recorrer productos y preparar datos
 		foreach ($productos as $dato) {
-			$nuevo_dato = array(
+			$datos[] = array(
 				'id_egreso' => $id_egreso_ultimo,
 				'id_producto' => $dato['idProductoEgreso'],
 				'numero_javas' => $dato['numero_javas'],
@@ -136,11 +137,12 @@ class ControladorCompra
 				'precio_compra' => $dato['precio_compra'],
 				'precio_venta' => $dato['precio_venta']
 			);
-
-			$datos[] = $nuevo_dato;
-			$respuestaDatos = ModeloCompra::mdlIngresarDetalleCompra($tablaDetalleEgreso, $nuevo_dato);
-
 		}
+
+		// Insertar todos los datos en una sola operación
+		$respuestaDatos = ModeloCompra::mdlGuardarDetalleCompra($tablaDetalleEgreso, $datos);
+
+
 
 		/* ==========================================
 		ACTUALIZANDO EL STOCK DEL PRODUCTO

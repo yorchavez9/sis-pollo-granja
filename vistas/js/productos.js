@@ -10,7 +10,6 @@ $(document).ready(function () {
       dataType: "json",
       success: function (productos) {
 
-        console.log(productos);
 
         var tbody = $("#data_productos");
 
