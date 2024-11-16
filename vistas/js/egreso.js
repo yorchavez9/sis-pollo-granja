@@ -343,6 +343,29 @@ $(document).ready(function () {
     $("#total_precio_egreso").text(totalFormateado);
   }
 
+  // FUNCION PARA LIMPIAR LOS INPUTS AL HCER FOCUS
+  function configurarInputConValorPorDefecto(selector, valorPorDefecto) {
+    let input = $(selector);
+
+    // Asignar el valor por defecto inicial
+    input.val(valorPorDefecto);
+
+    // Limpiar el valor por defecto al hacer focus
+    input.on("focus", function () {
+      if ($(this).val() === valorPorDefecto) {
+        $(this).val("");
+      }
+    });
+
+    // Restaurar el valor por defecto al perder el foco si está vacío
+    input.on("blur", function () {
+      if ($(this).val().trim() === "") {
+        $(this).val(valorPorDefecto);
+      }
+    });
+  }
+
+  configurarInputConValorPorDefecto("#impuesto_egreso", "0.00");
   //CREAR COMPRA
   $("#btn_crear_compra").click(function (e) {
     e.preventDefault();
