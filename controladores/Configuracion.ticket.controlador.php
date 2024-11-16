@@ -47,6 +47,7 @@ class ControladorConfiguracionTicket
 
 		$datos = array(
 			"nombre_empresa" => $_POST["nombre_empresa_ticket"],
+			"ruc" => $_POST["ruc_ticket"],
 			"telefono" => $_POST["telefono_ticket"],
 			"correo" => $_POST["correo_ticket"],
 			"direccion" => $_POST["direccion_ticket"],
@@ -146,6 +147,7 @@ class ControladorConfiguracionTicket
             $datos = array(
                 "id_config_ticket" => $_POST["edit_id_config_ticket"],
                 "nombre_empresa" => $_POST["edit_nombre_empresa_ticket"],
+                "ruc" => $_POST["edit_ruc_ticket"],
                 "telefono" => $_POST["edit_telefono_ticket"],
                 "correo" => $_POST["edit_correo_ticket"],
                 "direccion" => $_POST["edit_direccion_ticket"],

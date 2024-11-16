@@ -44,12 +44,14 @@ class ModeloConfiguracionTicket
 	static public function mdlIngresarConfiguracionTicket($tabla, $datos){
 
 		$stmt = Conexion::conectar()->prepare("INSERT INTO $tabla(nombre_empresa, 
+                                                                  ruc,
                                                                   telefono,
                                                                   correo,
                                                                   direccion,
                                                                   logo,
                                                                   mensaje)
                                                             VALUES(:nombre_empresa,
+                                                                   :ruc,
                                                                    :telefono,
                                                                    :correo,
                                                                    :direccion,
@@ -57,6 +59,7 @@ class ModeloConfiguracionTicket
                                                                    :mensaje)");
 
 		$stmt->bindParam(":nombre_empresa", $datos["nombre_empresa"], PDO::PARAM_STR);
+		$stmt->bindParam(":ruc", $datos["ruc"], PDO::PARAM_STR);
 		$stmt->bindParam(":telefono", $datos["telefono"], PDO::PARAM_STR);
 		$stmt->bindParam(":correo", $datos["correo"], PDO::PARAM_STR);
 		$stmt->bindParam(":direccion", $datos["direccion"], PDO::PARAM_STR);
@@ -85,6 +88,7 @@ class ModeloConfiguracionTicket
 	
 		$stmt = Conexion::conectar()->prepare("UPDATE $tabla SET 
 																nombre_empresa = :nombre_empresa, 
+																ruc = :ruc, 
 																telefono = :telefono, 
 																correo = :correo, 
 																direccion = :direccion, 
@@ -93,6 +97,7 @@ class ModeloConfiguracionTicket
 																WHERE id_config_ticket = :id_config_ticket");
 
 		$stmt -> bindParam(":nombre_empresa", $datos["nombre_empresa"], PDO::PARAM_STR);
+		$stmt -> bindParam(":ruc", $datos["ruc"], PDO::PARAM_STR);
 		$stmt -> bindParam(":telefono", $datos["telefono"], PDO::PARAM_STR);
 		$stmt -> bindParam(":correo", $datos["correo"], PDO::PARAM_STR);
 		$stmt -> bindParam(":direccion", $datos["direccion"], PDO::PARAM_STR);

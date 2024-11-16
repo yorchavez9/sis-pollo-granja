@@ -86,35 +86,40 @@ $(document).ready(function () {
     }
   };
 
-  // MOSTRAR NÚMERO DE SERIE Y VENTA AUTOMÁTICAMENTE
-  function mostrarSerieNumero() {
+  function mostrarSerieNumero(tipoComprobante) {
     $.ajax({
       url: "ajax/SerieNumero.ajax.php",
-      type: "GET",
-      dataType: "json",
+      type: "POST",
+      data: { tipoComprobante },
       success: function (respuesta) {
-        if (!respuesta) {
-          $("#serie_comprobante").val("T0001");
-          $("#num_comprobante").val("0001");
-          return;
+        try {
+          if (respuesta.trim() !== "") {
+            let data = JSON.parse(respuesta);
+            console.log(data);
+            $('#serie_comprobante').val(data[0].serie_comprobante); 
+            $('#num_comprobante').val(data[0].num_comprobante);
+          }
+        } catch (e) {
+          console.error("Error al parsear JSON:", e);
         }
-        respuesta.forEach((data) => {
-          let serie = parseInt(data.serie_comprobante.match(/\d+/)[0]) + 1;
-          let numero = parseInt(data.num_comprobante.match(/\d+/)[0]) + 1;
-
-          // Formatear serie y número con ceros a la izquierda
-          let serieComprobante = "T" + serie.toString().padStart(4, "0");
-          let numeroComprobante = numero.toString().padStart(data.num_comprobante.length, "0");
-
-          $("#serie_comprobante").val(serieComprobante);
-          $("#num_comprobante").val(numeroComprobante);
-        });
       },
       error: function (xhr, status, error) {
         console.error(xhr, status, error);
-      },
+      }
     });
   }
+
+
+  // Llamada inicial
+  mostrarSerieNumero('ticket');
+
+  // Evento de cambio en el select
+  $('#tipo_comprobante_egreso').change(function () {
+    var tipoComprobante = $(this).val();
+    mostrarSerieNumero(tipoComprobante);
+  });
+
+
 
   // Agregar productos a la tabla detalle de la compra
   $("#tabla_add_producto").on("click", ".btnAddProducto", function (e) {
@@ -421,7 +426,7 @@ $(document).ready(function () {
 
             // Llamar funciones adicionales
             mostrarProductos();
-            mostrarSerieNumero();
+            mostrarSerieNumero('ticket');
           } else {
             Swal.fire({
               title: "¡Error!",

@@ -89,18 +89,76 @@ class ModeloCompra
 	/*=============================================
 	MOSTRAR SERIE Y NUMERO DE COMPRA O EGRESO
 	=============================================*/
-
 	static public function mdlMostrarSerieNumero($tabla, $item, $valor)
 	{
+		$tipo_comprobante = $valor;
+		$letra = '';
 
-		$stmt = Conexion::conectar()->prepare("SELECT * FROM $tabla ORDER BY id_egreso DESC LIMIT 1");
+		if ($tipo_comprobante == 'factura') {
+			$letra = "F";
+			$stmt = Conexion::conectar()->prepare("SELECT serie_comprobante, num_comprobante FROM $tabla WHERE tipo_comprobante = 'factura'");
+		} elseif ($tipo_comprobante == 'boleta') {
+			$letra = "B";
+			$stmt = Conexion::conectar()->prepare("SELECT serie_comprobante, num_comprobante FROM $tabla WHERE tipo_comprobante = 'boleta'");
+		} elseif ($tipo_comprobante == 'ticket') {
+			$letra = "T";
+			$stmt = Conexion::conectar()->prepare("SELECT serie_comprobante, num_comprobante FROM $tabla WHERE tipo_comprobante = 'ticket'");
+		} else {
+			$letra = "T";
+			$stmt = Conexion::conectar()->prepare("SELECT serie_comprobante, num_comprobante FROM $tabla ");
+		}
 
 		$stmt->execute();
+		$resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-		return $stmt->fetchAll();
+		if ($resultado) {
+			$maxSerie = 0;
+			$maxNumero = 0;
 
-		$stmt = null;
+			foreach ($resultado as $row) {
+				// Extraer el número de serie y el número de comprobante
+				$currentSerie = intval(substr($row['serie_comprobante'], 1));
+				$currentNumero = intval($row['num_comprobante']);
+
+				// Comparar para encontrar el máximo
+				if ($currentSerie > $maxSerie) {
+					$maxSerie = $currentSerie;
+				}
+				if ($currentNumero > $maxNumero) {
+					$maxNumero = $currentNumero;
+				}
+			}
+
+			// Incrementar el número de serie y de comprobante
+			$maxSerie++;
+			$maxNumero++;
+
+			// Formatear la nueva serie y el nuevo número con ceros a la izquierda
+			$nuevoSerie = $letra . str_pad($maxSerie, 2, "0", STR_PAD_LEFT);
+			$nuevoNumero = str_pad($maxNumero, 2, "0", STR_PAD_LEFT);
+
+			// Retornar la nueva serie y número
+			$resultado = [
+				[
+					'serie_comprobante' => $nuevoSerie,
+					'num_comprobante' => $nuevoNumero
+				]
+			];
+		} else {
+			// Si no hay resultados, asignar los valores por defecto
+			$letraDefecto = $letra . '01';
+			$resultado = [
+				[
+					'serie_comprobante' => $letraDefecto,
+					'num_comprobante' => '01'
+				]
+			];
+		}
+
+		echo json_encode($resultado);
 	}
+
+
 
 	/*=============================================
 	MOSTRAR EGRESO

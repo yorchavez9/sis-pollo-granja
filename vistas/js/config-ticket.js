@@ -128,6 +128,7 @@ $(document).ready(function () {
         e.preventDefault();
 
         let nombre_empresa_ticket = $("#nombre_empresa_ticket").val();
+        let ruc_ticket = $("#ruc_ticket").val();
         let telefono_ticket = $("#telefono_ticket").val();
         let correo_ticket = $("#correo_ticket").val();
         let direccion_ticket = $("#direccion_ticket").val();
@@ -137,6 +138,7 @@ $(document).ready(function () {
 
         var datos = new FormData();
         datos.append("nombre_empresa_ticket", nombre_empresa_ticket);
+        datos.append("ruc_ticket", ruc_ticket);
         datos.append("telefono_ticket", telefono_ticket);
         datos.append("correo_ticket", correo_ticket);
         datos.append("direccion_ticket", direccion_ticket);
@@ -219,6 +221,7 @@ $(document).ready(function () {
 
                               <td>${ticket.nombre_empresa}</td>
 
+                              <td>${ticket.ruc}</td>
                               <td>${ticket.telefono}</td>
 
                               <td>${ticket.correo}</td>
@@ -298,6 +301,7 @@ $(document).ready(function () {
 
                 $("#edit_id_config_ticket").val(respuesta["id_config_ticket"]);
                 $("#edit_nombre_empresa_ticket").val(respuesta["nombre_empresa"]);
+                $("#edit_ruc_ticket").val(respuesta["ruc"]);
                 $("#edit_telefono_ticket").val(respuesta["telefono"]);
                 $("#edit_correo_ticket").val(respuesta["correo"]);
                 $("#edit_direccion_ticket").val(respuesta["direccion"]);
@@ -328,6 +332,7 @@ $(document).ready(function () {
 
         let edit_id_config_ticket = $("#edit_id_config_ticket").val();
         let edit_nombre_empresa_ticket = $("#edit_nombre_empresa_ticket").val();
+        let edit_ruc_ticket = $("#edit_ruc_ticket").val();
         let edit_telefono_ticket = $("#edit_telefono_ticket").val();
         let edit_correo_ticket = $("#edit_correo_ticket").val();
         let edit_direccion_ticket = $("#edit_direccion_ticket").val();
@@ -339,6 +344,7 @@ $(document).ready(function () {
         var datos = new FormData();
         datos.append("edit_id_config_ticket", edit_id_config_ticket);
         datos.append("edit_nombre_empresa_ticket", edit_nombre_empresa_ticket);
+        datos.append("edit_ruc_ticket", edit_ruc_ticket);
         datos.append("edit_telefono_ticket", edit_telefono_ticket);
         datos.append("edit_correo_ticket", edit_correo_ticket);
         datos.append("edit_direccion_ticket", edit_direccion_ticket);
@@ -469,7 +475,7 @@ $(document).ready(function () {
 
         var idTicket = $(this).attr("idTicket");
 
-        window.open("extensiones/ticket.prueba.php?idTicket=" + idTicket, "_blank");
+        window.open("extensiones/ticket/ticketPrueba.php?idTicket=" + idTicket, "_blank");
 
     });
 

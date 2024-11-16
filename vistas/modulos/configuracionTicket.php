@@ -62,6 +62,7 @@
                             <tr>
                                 <th>N°</th>
                                 <th>Nombre tienda</th>
+                                <th>RUC</th>
                                 <th>Teléfono</th>
                                 <th>Correo</th>
                                 <th>Dirección</th>
@@ -97,8 +98,14 @@
 
                     <!-- INGRESO NOMBRE DE LA TIENDA -->
                     <div class="form-group">
-                        <label for="nombre_empresa" class="form-label">Ingrese el nombre:</label>
+                        <label for="nombre_empresa" class="form-label">Ingrese el nombre de la empresa o negocio:</label>
                         <input type="text" name="nombre_empresa_ticket" id="nombre_empresa_ticket" placeholder="Ingresa el el nombre de la tienda">
+                    </div>
+
+                    <!-- INGRESO EL RUC -->
+                    <div class="form-group">
+                        <label class="form-label">Ingrese el RUC u otros:</label>
+                        <input type="text" id="ruc_ticket" class="form-control" placeholder="Ingrese el ruc ou otros">
                     </div>
 
                     <!-- INGRESO DEL TELÉFONO -->
@@ -168,6 +175,12 @@
                     <div class="form-group">
                         <label for="nombre_empresa" class="form-label">Ingrese el nombre:</label>
                         <input type="text" name="edit_nombre_empresa_ticket" id="edit_nombre_empresa_ticket" placeholder="Ingresa el el nombre de la tienda">
+                    </div>
+
+                    <!-- INGRESO EL RUC -->
+                    <div class="form-group">
+                        <label class="form-label">Ingrese el RUC u otros:</label>
+                        <input type="text" id="edit_ruc_ticket" class="form-control" placeholder="Ingrese el ruc ou otros">
                     </div>
 
                     <!-- INGRESO DEL TELÉFONO -->

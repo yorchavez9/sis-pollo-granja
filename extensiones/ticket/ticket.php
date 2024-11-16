@@ -36,9 +36,8 @@ $valor = $_GET["id_egreso"];
 $respuesta = ControladorCompra::ctrMostrarCompras($item, $valor);
 
 $respuesta_de = ControladorCompra::ctrMostrarDetalleCompra($item, $valor);
-$horaVenta = $respuesta["fecha_egre"];
-$horaFormateada = date("h:i A", strtotime($horaVenta));
-
+$fechaEgreso = date("d/m/Y", strtotime($respuesta["fecha_egre"]));
+$numero_comprobante = $respuesta["num_comprobante"];
 $itemConfig = null;
 $valorConfig = null;
 
@@ -51,7 +50,7 @@ foreach ($tickets as $ticket) {
     $pdf->SetTextColor(0, 0, 0);
     $pdf->MultiCell(0, 5, iconv("UTF-8", "ISO-8859-1", strtoupper($ticket["nombre_empresa"])), 0, 'C', false);
     $pdf->SetFont('Arial', '', 9);
-    $pdf->MultiCell(0, 5, iconv("UTF-8", "ISO-8859-1", "RUC: 10234533456234"), 0, 'C', false);
+    $pdf->MultiCell(0, 5, iconv("UTF-8", "ISO-8859-1", "RUC: " . $ticket["ruc"] . ""), 0, 'C', false);
     $pdf->MultiCell(0, 5, iconv("UTF-8", "ISO-8859-1", "Dirección: " . $ticket["direccion"] . ""), 0, 'C', false);
     $pdf->MultiCell(0, 5, iconv("UTF-8", "ISO-8859-1", "Teléfono: " . $ticket["telefono"] . ""), 0, 'C', false);
     $pdf->MultiCell(0, 5, iconv("UTF-8", "ISO-8859-1", "Email: " . $ticket["correo"] . ""), 0, 'C', false);
@@ -60,7 +59,7 @@ foreach ($tickets as $ticket) {
     $pdf->Cell(0, 5, iconv("UTF-8", "ISO-8859-1", "------------------------------------------------------"), 0, 0, 'C');
     $pdf->Ln(5);
 
-    $pdf->MultiCell(0, 5, iconv("UTF-8", "ISO-8859-1", "Fecha: " . date("d/m/Y", strtotime($respuesta["fecha_egre"])) . " " . $horaFormateada), 0, 'C', false);
+    $pdf->MultiCell(0, 5, iconv("UTF-8", "ISO-8859-1", "Fecha: " . $fechaEgreso . " " . $respuesta["hora_egreso"]), 0, 'C', false);
     $pdf->MultiCell(0, 5, iconv("UTF-8", "ISO-8859-1", "Cajero: " . $nombre_usuario . ""), 0, 'C', false);
     $pdf->SetFont('Arial', 'B', 10);
     $pdf->MultiCell(0, 5, iconv("UTF-8", "ISO-8859-1", strtoupper("Ticket Nro: " . $respuesta["num_comprobante"] . "")), 0, 'C', false);
@@ -126,7 +125,7 @@ foreach ($tickets as $ticket) {
     $pdf->Ln(5);
 
     $pdf->Cell(18, 5, iconv("UTF-8", "ISO-8859-1", ""), 0, 0, 'C');
-    $pdf->Cell(22, 5, iconv("UTF-8", "ISO-8859-1", "IGV (18%)"), 0, 0, 'R');
+    $pdf->Cell(22, 5, iconv("UTF-8", "ISO-8859-1", "(IGV ". $respuesta["impuesto"]." %)"), 0, 0, 'R');
     $pdf->Cell(32, 5, iconv("UTF-8", "ISO-8859-1", " S/ " . formatearPrecio($respuesta["igv"]) . ""), 0, 0, 'R');
 
     $pdf->Ln(5);
@@ -139,13 +138,13 @@ foreach ($tickets as $ticket) {
     $pdf->Cell(0, 5, iconv("UTF-8", "ISO-8859-1", "-------------------------------------------------------------------"), 0, 0, 'C');
 
     $pdf->Ln(5);
-    $pdf->Cell(0, 5, iconv("UTF-8", "ISO-8859-1", "Gracias por su compra!"), 0, 0, 'C');
+    $pdf->Cell(0, 5, iconv("UTF-8", "ISO-8859-1", $ticket["mensaje"]), 0, 0, 'C');
 }
 
 // Generando el PDF
 if (isset($_GET['accion']) && $_GET['accion'] === 'descargar') {
     // Descargar el PDF
-    $pdf->Output('D', 'factura.pdf'); // 'D' fuerza la descarga con el nombre 'boleta.pdf'
+    $pdf->Output('D', 'ticket'. $numero_comprobante.'.pdf'); // 'D' fuerza la descarga con el nombre 'boleta.pdf'
 } else {
     // Mostrar el PDF en el navegador (imprimir)
     $pdf->Output(); // Muestra el archivo en el navegador

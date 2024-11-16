@@ -85,6 +85,7 @@ else{
         $fila = array(
             'id_config_ticket' => $ticket['id_config_ticket'],
             'nombre_empresa' => $ticket['nombre_empresa'],
+            'ruc' => $ticket['ruc'],
             'telefono' => $ticket['telefono'],
             'correo' => $ticket['correo'],
             'direccion' => $ticket['direccion'],

@@ -2,27 +2,10 @@
 require_once "../modelos/Compra.modelo.php";
 require_once "../controladores/Compra.controlador.php";
 
+if (isset($_POST["tipoComprobante"])) {
+    $item = null;
+    $valor = $_POST["tipoComprobante"];
 
-
-$item = null;
-
-$valor = null;
-
-$SerieNumero = ControladorCompra::ctrMostrarSerieNumero($item, $valor);
-
-$datosSerieNumero = array();
-
-foreach ($SerieNumero as $key => $serieNumero) {
-
-    $fila = array(
-        'id_egreso' => $serieNumero['id_egreso'],
-        'serie_comprobante' => $serieNumero['serie_comprobante'],
-        'num_comprobante' => $serieNumero['num_comprobante']
-    );
-
-
-    $datosSerieNumero[] = $fila;
+    $SerieNumero = ControladorCompra::ctrMostrarSerieNumero($item, $valor);
+    return $SerieNumero;
 }
-
-
-echo json_encode($datosSerieNumero);
