@@ -29,7 +29,10 @@ $(document).ready(function () {
       $("#ver_detalle_venta_producto").empty();
     });
   }
-  // MOSTRAR SERIE Y NUMERO DEL COMPROBANTE
+
+  /*=============================================
+   FUNCION PARA MOSTRAR LA SERIE Y NUMERO AUTOMATICO
+   =============================================*/
   function mostrarSerieNumero(tipoComprobante) {
     $.ajax({
       url: "ajax/Serie.numero.venta.ajax.php",
@@ -39,7 +42,6 @@ $(document).ready(function () {
         try {
           if (respuesta.trim() !== "") {
             let data = JSON.parse(respuesta);
-            console.log(data);
             $('#serie_venta').val(data[0].serie_comprobante);
             $('#numero_venta').val(data[0].num_comprobante);
           }
@@ -52,17 +54,30 @@ $(document).ready(function () {
       }
     });
   }
-
-  // Llamada inicial
   mostrarSerieNumero('ticket');
-
-  // Evento de cambio en el select
   $('#comprobante_venta').change(function () {
     var tipoComprobante = $(this).val();
     mostrarSerieNumero(tipoComprobante);
   });
-
   showSection();
+
+  /*=============================================
+  LIMPIAR EL INPUT DEL INPUESTO AL HACER FOCUS
+  =============================================*/
+  function handleInputFocusAndBlur(inputSelector, defaultValue) {
+    $(inputSelector).on('focus', function () {
+      if ($(this).val() === defaultValue) {
+        $(this).val('');
+      }
+    });
+
+    $(inputSelector).on('blur', function () {
+      if ($(this).val() === '') {
+        $(this).val(defaultValue);
+      }
+    });
+  }
+  handleInputFocusAndBlur('#igv_venta', '0');
 
   /*=============================================
   SELECION DE TIPO DE PAGO (EFECYIVO O YAPE)
@@ -158,54 +173,16 @@ $(document).ready(function () {
     return numero.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
 
-  /*=============================================
-  CALCULAR EL TOTAL DE LA VENTA
-  =============================================*/
-
-  function calcularTotal() {
-    var subtotalTotal = 0;
-    var impuesto = parseFloat($("#igv_venta").val());
-    // Recorrer todas las filas para sumar los subtotales
-    $("#detalle_venta_producto tr").each(function () {
-      var subtotalString = $(this)
-        .find(".precio_sub_total_venta")
-        .text()
-        .replace("S/ ", "")
-        .replace(",", "");
-      var subtotal = parseFloat(subtotalString);
-      // Si subtotal no es un número válido, asignar 0
-      if (isNaN(subtotal)) {
-        subtotal = 0;
-      }
-      subtotalTotal += subtotal;
-    });
-
-    // Calcular el impuesto
-    var igv = subtotalTotal * (impuesto / 100);
-    // Calcular el total
-    var total = subtotalTotal + igv;
-    // Verificar si el resultado es NaN y mostrar "0.00" en su lugar
-    if (isNaN(total)) {
-      total = 0;
-    }
-
-    // Formatear los resultados
-    var subtotalFormateado = formateoPrecio(subtotalTotal.toFixed(2));
-    var igvFormateado = formateoPrecio(igv.toFixed(2));
-    var totalFormateado = formateoPrecio(total.toFixed(2));
-    // Mostrar los resultados en el HTML
-    $("#subtotal_venta").text(subtotalFormateado);
-    $("#igv_venta_show").text(igvFormateado);
-    $("#total_precio_venta").text(totalFormateado);
-  }
 
   /*=============================================
   AGREGANDO EL PRODUCTO AL DETALLE VENTA
   =============================================*/
   $("#tabla_add_producto_venta").on("click", ".btnAddProductoVenta", function (e) {
     e.preventDefault();
-    var idProductoAdd = $(this).attr("idProductoAdd");
-    var stockProducto = $(this).attr("stockProducto");
+
+    let idProductoAdd = $(this).attr("idProductoAdd");
+    let stockProducto = $(this).attr("stockProducto");
+
     if (stockProducto <= 0) {
       Swal.fire({
         title: "¡Alerta!",
@@ -220,8 +197,10 @@ $(document).ready(function () {
         icon: "warning",
       });
     }
-    var datos = new FormData();
+
+    let datos = new FormData();
     datos.append("idProductoAdd", idProductoAdd);
+
     $.ajax({
       url: "ajax/ventas.ajax.php",
       method: "POST",
@@ -232,63 +211,101 @@ $(document).ready(function () {
       dataType: "json",
       success: function (respuesta) {
         respuesta.imagen_producto = respuesta.imagen_producto.substring(3);
-        var nuevaFila = `
-                        <tr>
-                            <input type="hidden" class="id_producto_venta" value="${respuesta.id_producto}">
-                            <th class="text-center align-middle d-none d-md-table-cell">
-                                <a href="#" class="me-3 confirm-text btnEliminarAddProductoVenta" idAddProducto="${respuesta.id_producto}"">
-                                    <i class="fa fa-trash fa-lg" style="color: #F1666D"></i>
-                                </a>
-                            </th>
-                            <td>
-                                <img src="${respuesta.imagen_producto}" alt="Imagen de un pollo" width="50">
-                            </td>
-                            <td>${respuesta.nombre_producto}</td>
-                            <td>
-                                <input type="number" class="form-control form-control-sm cantidad_u_v" value="0">
-                            </td>
-                            <td>
-                                <input type="number" class="form-control form-control-sm cantidad_kg_v" value="0">
-                            </td>
-                            <td>
-                                <input type="number" class="form-control form-control-sm precio_venta" value="${respuesta.precio_producto}">
-                            </td>
-                            <td style="text-align: right;">
-                                <p class="price">S/ <span class="precio_sub_total_venta">0.00</span></p>
-                            </td>
-                        </tr>`;
+
+        // Crear una nueva fila
+        let nuevaFila = `
+        <tr>
+          <input type="hidden" class="id_producto_venta" value="${respuesta.id_producto}">
+          <th class="text-center align-middle d-none d-md-table-cell">
+            <a href="#" class="me-3 confirm-text btnEliminarAddProductoVenta" idAddProducto="${respuesta.id_producto}">
+              <i class="fa fa-trash fa-lg" style="color: #F1666D"></i>
+            </a>
+          </th>
+          <td><img src="${respuesta.imagen_producto}" alt="Imagen de un pollo" width="50"></td>
+          <td>${respuesta.nombre_producto}</td>
+          <td><input type="number" class="form-control form-control-sm numero_javas_v" value="0" min="0" style="width: 50px;"></td>
+          <td><input type="number" class="form-control form-control-sm numero_aves_v" value="0" min="0"></td>
+          <td><input type="number" class="form-control form-control-sm peso_promedio_v" value="0.00" min="0" step="0.01"></td>
+          <td><input type="number" class="form-control form-control-sm peso_bruto_v" value="0.00" min="0" readonly step="0.01"></td>
+          <td><input type="number" class="form-control form-control-sm peso_tara_v" value="0.00" min="0" step="0.01"></td>
+          <td><input type="number" class="form-control form-control-sm peso_merma_v" value="0.00" min="0" step="0.01"></td>
+          <td><input type="number" class="form-control form-control-sm peso_neto_v" value="0.00" min="0" readonly step="0.01"></td>
+          <td><input type="number" class="form-control form-control-sm precio_venta" value="${respuesta.precio_producto}" min="0" step="0.01"></td>
+          <td class="text-end">
+            <span style="font-weight: bold;">S/</span>
+            <input type="text" class="form-control form-control-sm precio_sub_total_v" value="0.00" readonly style="width: 100px; display: inline-block; text-align: right; font-weight: bold;">
+          </td>
+        </tr>`;
 
         $("#detalle_venta_producto").append(nuevaFila);
-        var input = document.querySelector(".cantidad_u_v");
-        input.focus();
-        input.value = "";
-        $(".cantidad_kg_v, .precio_venta").on("input", function () {
-          var fila = $(this).closest("tr");
-          var cantidad_kg = parseFloat(fila.find(".cantidad_kg_v").val());
-          var precio_compra = parseFloat(fila.find(".precio_venta").val());
-          if (isNaN(cantidad_kg)) {
-            cantidad_kg = 0;
+
+        // Eventos para inputs
+        $("input[type='number']").on("focus", function () {
+          if ($(this).val() === "0" || $(this).val() === "0.00") {
+            $(this).val("");
           }
-          if (isNaN(precio_compra)) {
-            precio_compra = 0;
-          }
-          var subtotal = cantidad_kg * precio_compra;
-          var formateadoSubTotal = formateoPrecio(subtotal.toFixed(2));
-          fila.find(".precio_sub_total_venta").text(formateadoSubTotal);
-          // Calcular y mostrar el total
-          calcularTotal();
+        });
+
+        $("input[type='number']").on("input", function () {
+          let value = parseFloat($(this).val());
+          if (value < 0) $(this).val(0);
+        });
+
+        $(".numero_aves_v, .peso_promedio_v, .peso_tara_v, .peso_merma_v, .precio_venta, #igv_venta").on("input", function () {
+          const fila = $(this).closest("tr");
+
+          let numero_aves = parseFloat(fila.find(".numero_aves_v").val()) || 0;
+          let peso_promedio = parseFloat(fila.find(".peso_promedio_v").val()) || 0;
+          let peso_tara = parseFloat(fila.find(".peso_tara_v").val()) || 0;
+          let peso_merma = parseFloat(fila.find(".peso_merma_v").val()) || 0;
+          let precio_venta = parseFloat(fila.find(".precio_venta").val()) || 0;
+          let igv_venta = parseFloat($("#igv_venta").val()) || 0;
+
+          // Calcular valores
+          const peso_bruto = peso_promedio * numero_aves;
+          const peso_neto = peso_bruto - peso_tara - peso_merma;
+          const precio_sub_total = peso_neto * precio_venta;
+
+          // Actualizar los inputs
+          fila.find(".peso_bruto_v").val(peso_bruto.toFixed(2));
+          fila.find(".peso_neto_v").val(peso_neto.toFixed(2));
+          fila.find(".precio_sub_total_v").val(precio_sub_total.toFixed(2));
+
+          // Calcular total general
+          calcularTotal(igv_venta);
         });
       },
       error: function (err) {
         console.error(err);
       },
     });
+
+    // Llamada inicial
     calcularTotal();
-    $(document).ready(function () {
-      calcularTotal();
+  });
+
+/*=============================================
+CALCULAR EL TOTAL DE LA VENTA
+=============================================*/
+
+  function calcularTotal(igv_venta) {
+    let subtotalTotal = 0;
+
+    $("#detalle_venta_producto tr").each(function () {
+      let precio_sub_total_v = $(this).find(".precio_sub_total_v").val().replace(/,/g, '');
+      let subtotal = parseFloat(precio_sub_total_v) || 0;
+      subtotalTotal += subtotal;
     });
+
+    igv_venta = isNaN(igv_venta) ? 0 : igv_venta;
+    let igv = subtotalTotal * (igv_venta / 100);
+    let total = subtotalTotal + igv;
+    total = isNaN(total) ? 0 : total;
+    $("#subtotal_venta").text(formateoPrecio(subtotalTotal.toFixed(2)));
+    $("#igv_venta_show").text(formateoPrecio(igv.toFixed(2)));
+    $("#total_precio_venta").text(formateoPrecio(total.toFixed(2)));
   }
-  );
+
 
 
   /*=============================================
@@ -329,14 +346,15 @@ $(document).ready(function () {
   // CREAR VENTA
   $("#btn_crear_nueva_venta").click(function (e) {
     e.preventDefault();
-    var isValid = true;
-    var id_usuario_venta = $("#id_usuario_venta").val();
-    var id_cliente_venta = $("#id_cliente_venta").val();
-    var fecha_venta = $("#fecha_venta").val();
-    var comprobante_venta = $("#comprobante_venta").val();
-    var serie_venta = $("#serie_venta").val();
-    var numero_venta = $("#numero_venta").val();
-    var igv_venta = $("#igv_venta").val();
+    let isValid = true;
+    let id_usuario_venta = $("#id_usuario_venta").val();
+    let id_cliente_venta = $("#id_cliente_venta").val();
+    let fecha_venta = $("#fecha_venta").val();
+    let hora_venta = $("#hora_venta").val();
+    let comprobante_venta = $("#comprobante_venta").val();
+    let serie_venta = $("#serie_venta").val();
+    let numero_venta = $("#numero_venta").val();
+    let igv_venta = $("#igv_venta").val();
    
     if (id_cliente_venta == "" || id_cliente_venta == null) {
       $("#error_cliente_venta")
@@ -347,28 +365,33 @@ $(document).ready(function () {
       $("#error_cliente_venta").html("").removeClass("text-danger");
     }
 
-    var valoresProductos = [];
-    $("#detalle_venta_producto tr").each(function () {
-      var fila = $(this);
-      var idProductoVenta = fila.find(".id_producto_venta").val();
-      var cantidadU = fila.find(".cantidad_u_v").val();
-      var cantidadKg = fila.find(".cantidad_kg_v").val();
-      var precioVenta = fila.find(".precio_venta").val();
+    const valoresProductos = [];
 
-      var producto = {
-        id_producto: idProductoVenta,
-        cantidad_u: cantidadU,
-        cantidad_kg: cantidadKg,
-        precio_venta: precioVenta,
+    $("#detalle_venta_producto tr").each(function () {
+      const fila = $(this);
+      const producto = {
+        id_producto_venta: fila.find(".id_producto_venta").val(),
+        numero_javas: fila.find(".numero_javas_v").val(),
+        numero_aves: fila.find(".numero_aves_v").val(),
+        peso_promedio: fila.find(".peso_promedio_v").val(),
+        peso_bruto: fila.find(".peso_bruto_v").val(),
+        peso_tara: fila.find(".peso_tara_v").val(),
+        peso_merma: fila.find(".peso_merma_v").val(),
+        peso_neto: fila.find(".peso_neto_v").val(),
+        precio_venta: fila.find(".precio_venta").val()
       };
       valoresProductos.push(producto);
+      
     });
 
-    var productoAddVenta = JSON.stringify(valoresProductos);
-    var subtotal = $("#subtotal_venta").text().replace(/,/g, "");
-    var igv = $("#igv_venta_show").text().replace(/,/g, "");
-    var total = $("#total_precio_venta").text().replace(/,/g, "");
-    var tipo_pago = $("input[name='forma_pago_v']:checked").val();
+    const productoAddVenta = JSON.stringify(valoresProductos);
+    
+    //Datos para la venta
+    const subtotal = $("#subtotal_venta").text().replace(/,/g, "");
+    const igv = $("#igv_venta_show").text().replace(/,/g, "");
+    const total = $("#total_precio_venta").text().replace(/,/g, "");
+    const tipo_pago = $("input[name='forma_pago_v']:checked").val();
+
     var estado_pago;
     if (tipo_pago == "contado") {
       estado_pago = "completado";
@@ -383,10 +406,12 @@ $(document).ready(function () {
       pago_e_y = "yape";
     }
     if (isValid) {
-      var datos = new FormData();
+
+      const datos = new FormData();
       datos.append("id_usuario_venta", id_usuario_venta);
       datos.append("id_cliente_venta", id_cliente_venta);
       datos.append("fecha_venta", fecha_venta);
+      datos.append("hora_venta", hora_venta);
       datos.append("comprobante_venta", comprobante_venta);
       datos.append("serie_venta", serie_venta);
       datos.append("numero_venta", numero_venta);
@@ -406,13 +431,16 @@ $(document).ready(function () {
         cache: false,
         contentType: false,
         processData: false,
-        success: function (idVentaTicket) {
+        success: function (respuesta) {
+          console.log(respuesta);
+          return;
           $("#form_venta_producto")[0].reset();
           $("#detalle_venta_producto").empty();
           $("#subtotal_venta").text("00.00");
           $("#igv_venta_show").text("00.00");
           $("#total_precio_venta").text("00.00");
           
+          // Mostrar alerta y preguntar acción
           Swal.fire({
             title: "¿Qué desea hacer con el comprobante?",
             text: "Seleccione una opción.",
@@ -425,23 +453,25 @@ $(document).ready(function () {
             footer: '<a href="#">Enviar por WhatsApp o correo</a>',
           }).then((result) => {
             if (result.isConfirmed) {
-              // Acción para imprimir
               Swal.fire({
                 title: "¡Imprimiendo!",
                 text: "Su comprobante se está imprimiendo.",
                 icon: "success",
               });
-              // Aquí puedes agregar el código para imprimir el comprobante
+              const documento = res.tipo_documento;
+              const id_egreso = res.id_egreso;
+              const urlDocumento = `extensiones/${documento}/${documento}.php?id_egreso=${id_egreso}`;
+              const ventana = window.open(urlDocumento, '_blank');
+              ventana.onload = () => ventana.print();
             } else if (result.dismiss === Swal.DismissReason.cancel) {
-              // Acción para descargar
               Swal.fire({
                 title: "¡Descargando!",
                 text: "Su comprobante se está descargando.",
                 icon: "success",
               });
-              // Aquí puedes agregar el código para descargar el comprobante
+              const documento = res.tipo_documento;
+              window.location.href = `extensiones/${documento}/${documento}.php?id_egreso=${res.id_egreso}&accion=descargar`;
             } else {
-              // Acción para enviar por WhatsApp o correo
               Swal.fire({
                 title: "¿Cómo desea enviar el comprobante?",
                 text: "Seleccione una opción.",
@@ -450,27 +480,15 @@ $(document).ready(function () {
                 cancelButtonText: "WhatsApp",
                 confirmButtonText: "Correo",
               }).then((sendResult) => {
-                if (sendResult.isConfirmed) {
-                  // Acción para enviar por correo
-                  Swal.fire({
-                    title: "¡Enviando por correo!",
-                    text: "Su comprobante se está enviando por correo.",
-                    icon: "success",
-                  });
-                  // Aquí puedes agregar el código para enviar por correo
-                } else {
-                  // Acción para enviar por WhatsApp
-                  Swal.fire({
-                    title: "¡Enviando por WhatsApp!",
-                    text: "Su comprobante se está enviando por WhatsApp.",
-                    icon: "success",
-                  });
-                  // Aquí puedes agregar el código para enviar por WhatsApp
-                }
+                const mensaje = sendResult.isConfirmed ? "¡Enviando por correo!" : "¡Enviando por WhatsApp!";
+                Swal.fire({
+                  title: mensaje,
+                  text: `Su comprobante se está enviando por ${sendResult.isConfirmed ? "correo" : "WhatsApp"}.`,
+                  icon: "success",
+                });
               });
             }
           });
-
 
           mostrarProductoVenta();
           mostrarSerieNumero('ticket');

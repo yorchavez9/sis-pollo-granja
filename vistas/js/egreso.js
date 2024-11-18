@@ -160,7 +160,7 @@ $(document).ready(function () {
           <td><input type="number" class="form-control form-control-sm precio_venta" value="0.00" min="0"></td>
           <td class="text-end">
             <span style="font-weight: bold;">S/</span>
-            <input type="text" class="form-control form-control-sm precio_sub_total" value="0.00" readonly style="width: 100px; display: inline-block; text-align: right; font-weight: bold;">
+            <input type="text" class="form-control form-control-sm precio_sub_total_v" value="0.00" readonly style="width: 100px; display: inline-block; text-align: right; font-weight: bold;">
           </td>
         </tr>`;
 
@@ -297,7 +297,7 @@ $(document).ready(function () {
 
     // Si falta el tipo de comprobante
     if (!tipo_comprobante_egreso) {
-      $("#error_compra_comprobante").html("Por favor, ingrese el tipo de comprobante").addClass("text-danger");
+      $("#error_compra_comprobante").html("Por favor, selecione el tipo de comprobante").addClass("text-danger");
       isValid = false;
     } else {
       $("#error_compra_comprobante").html("").removeClass("text-danger");

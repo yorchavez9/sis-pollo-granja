@@ -112,7 +112,7 @@
                                 <!-- INGRESO DE LA HORA -->
                                 <div class="col-md-3">
                                     <div class="form-group">
-                                        <label for="hora_venta" class="form-label">Seleccione la hora (<span class="text-danger">*</span>):</label>
+                                        <label for="hora_venta" class="form-label">Hora:</label>
                                         <input type="text" id="hora_venta" class="form-control" name="hora_venta" readonly>
                                         <small id="error_egreso_hora"></small>
                                     </div>
@@ -158,21 +158,28 @@
                                     <i class="bi bi-plus me-2"></i> Agregar producto
                                 </a>
                             </div>
+                            <!-- DATOS DEL DETALLE DEL PRODUCTO -->
                             <div class="row">
                                 <!-- TABLA DE SELECIÓN DE PRODUCTOS -->
                                 <div class="table-responsive">
                                     <table class="table" width="100%">
                                         <thead>
                                             <tr style="background: #28C76F;">
-                                                <th scope="col" class="text-white">Opciones</th>
-                                                <th scope="col" class="text-white">Imagen</th>
-                                                <th scope="col" class="text-white">Producto</th>
-                                                <th scope="col" class="text-white">Cantidad U.</th>
-                                                <th scope="col" class="text-white">Cantidad KG.</th>
-                                                <th scope="col" class="text-white">Precio venta.</th>
-                                                <th scope="col" class="text-white">Sub total</th>
+                                                <th scope="col" class="text-white">Opc</th>
+                                                <th scope="col" class="text-white">Img</th>
+                                                <th scope="col" class="text-white">Prod</th>
+                                                <th scope="col" class="text-white">N° javas</th>
+                                                <th scope="col" class="text-white">N° aves</th>
+                                                <th scope="col" class="text-white">P. Prom</th>
+                                                <th scope="col" class="text-white">P. Brut</th>
+                                                <th scope="col" class="text-white">P. Tara</th>
+                                                <th scope="col" class="text-white">P. Merma</th>
+                                                <th scope="col" class="text-white">P. Neto</th>
+                                                <th scope="col" class="text-white">Precio</th>
+                                                <th scope="col" class="text-white">Subt</th>
                                             </tr>
                                         </thead>
+
                                         <tbody id="detalle_venta_producto">
                                         </tbody>
                                     </table>
@@ -181,6 +188,7 @@
                             <div class="row">
                                 <div class="col-md-7">
                                 </div>
+                                <!-- DATOS DEL SUB TOTAL Y EL TOTAL -->
                                 <div class="col-md-5">
                                     <div class="pt-3 pb-2">
                                         <!-- SECCIÓN DE PRECIO DE VENTA -->
