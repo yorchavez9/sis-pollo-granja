@@ -95,11 +95,8 @@ $(document).ready(function () {
 
         // Verificar si el radio button existe
         if (radioButton) {
-          // Verificar si el radio button no está marcado
-          if (!radioButton.checked) {
-            // Marcar el radio button
-            radioButton.checked = true;
-          }
+          // Alternar el estado del radio button
+          radioButton.checked = !radioButton.checked;
         } else {
           console.warn("Radio button no encontrado dentro de la etiqueta <a>");
         }

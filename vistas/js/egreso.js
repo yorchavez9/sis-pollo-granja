@@ -33,17 +33,15 @@ $(document).ready(function () {
 
         // Verificar si el radio button existe
         if (radioButton) {
-          // Si el radio button no está marcado, marcarlo
-          if (!radioButton.checked) {
-            radioButton.checked = true;
-          }
+          // Alternar el estado del radio button
+          radioButton.checked = !radioButton.checked;
         } else {
-          // Mostrar un mensaje de advertencia si no se encuentra el radio button
           console.warn("No se encontró el radio button con la clase .tipo_pago_egreso en el enlace.");
         }
       });
     });
   };
+
 
   tipoPago();
 
@@ -164,13 +162,13 @@ $(document).ready(function () {
           <td>${respuesta.nombre_producto}</td>
           <td><input type="number" class="form-control form-control-sm numero_javas" value="0" min="0"></td>
           <td><input type="number" class="form-control form-control-sm numero_aves" value="0" min="0"></td>
-          <td><input type="number" class="form-control form-control-sm peso_promedio" value="0.00" min="0"></td>
-          <td><input type="number" class="form-control form-control-sm peso_bruto" readonly value="0.00" min="0"></td>
-          <td><input type="number" class="form-control form-control-sm peso_tara" value="0.00" style="width: 60px;" min="0"></td>
-          <td><input type="number" class="form-control form-control-sm peso_merma" value="0.00" style="width: 60px;" min="0"></td>
-          <td><input type="number" class="form-control form-control-sm peso_neto" readonly value="0.00" min="0"></td>
-          <td><input type="number" class="form-control form-control-sm precio_compra" value="0.00" min="0"></td>
-          <td><input type="number" class="form-control form-control-sm precio_venta" value="0.00" min="0"></td>
+          <td><input type="number" class="form-control form-control-sm peso_promedio" value="0.00" min="0" step="0.01"></td>
+          <td><input type="number" class="form-control form-control-sm peso_bruto" readonly value="0.00" min="0" step="0.01"></td>
+          <td><input type="number" class="form-control form-control-sm peso_tara" value="0.00" style="width: 60px;" min="0" step="0.01"></td>
+          <td><input type="number" class="form-control form-control-sm peso_merma" value="0.00" style="width: 60px;" min="0" step="0.01"></td>
+          <td><input type="number" class="form-control form-control-sm peso_neto" readonly value="0.00" min="0" step="0.01"></td>
+          <td><input type="number" class="form-control form-control-sm precio_compra" value="0.00" min="0" step="0.01"></td>
+          <td><input type="number" class="form-control form-control-sm precio_venta" value="0.00" min="0" step="0.01"></td>
           <td class="text-end">
             <span style="font-weight: bold;">S/</span>
             <input type="text" class="form-control form-control-sm precio_sub_total_v" value="0.00" readonly style="width: 100px; display: inline-block; text-align: right; font-weight: bold;">

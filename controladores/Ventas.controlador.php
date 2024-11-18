@@ -203,9 +203,6 @@ class ControladorVenta
 			"pago_e_y" => $pago_e_y
 		);
 
-		var_dump($datos);
-		return;
-
 		ModeloVenta::mdlIngresarVenta($tabla, $datos);
 
 		/* MOSTRANDO EL ULTIMO ID INGRESADO */
@@ -226,10 +223,15 @@ class ControladorVenta
 		foreach ($productos as $dato) {
 			$nuevo_dato = array(
 				'id_venta' => $id_venta_ultimo,
-				'id_producto' => $dato['id_producto'],
-				'precio_venta' => $dato['precio_venta'],
-				'cantidad_u' => $dato['cantidad_u'],
-				'cantidad_kg' => $dato['cantidad_kg']
+				'id_producto' => $dato['id_producto_venta'],
+				'numero_javas' => $dato['numero_javas'],
+				'numero_aves' => $dato['numero_aves'],
+				'peso_promedio' => $dato['peso_promedio'],
+				'peso_bruto' => $dato['peso_bruto'],
+				'peso_tara' => $dato['peso_tara'],
+				'peso_merma' => $dato['peso_merma'],
+				'peso_neto' => $dato['peso_neto'],
+				'precio_venta' => $dato['precio_venta']
 			);
 			$datos[] = $nuevo_dato;
 			$respuestaDatos = ModeloVenta::mdlIngresarDetalleVenta($tblDetalleVenta, $nuevo_dato);
@@ -241,8 +243,8 @@ class ControladorVenta
 		$tblProducto = "productos";
 		$stocks = json_decode($_POST["productoAddVenta"], true);
 		foreach ($stocks as $value) {
-			$idProducto = $value['id_producto'];
-			$cantidad = $value['cantidad_u'];
+			$idProducto = $value['id_producto_venta'];
+			$cantidad = $value['numero_aves'];
 			// Actualizar el stock del producto
 			ModeloVenta::mdlActualizarStockProducto($tblProducto, $idProducto, $cantidad);
 		}
