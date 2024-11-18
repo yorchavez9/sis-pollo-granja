@@ -168,14 +168,6 @@ class ControladorVenta
 		return $respuesta;
 	}
 
-
-
-	/*=============================================
-	MOSTRAR SERIE NUMERO COMPRA
-	=============================================*/
-
-
-
 	/*=============================================
 	REGISTRO DE VENTA
 	=============================================*/
@@ -183,31 +175,21 @@ class ControladorVenta
 	static public function ctrCrearVenta()
 	{
 
-
-
 		$tabla = "ventas";
-
 		$pago_total = 0;
-
 		if($_POST["tipo_pago"] == "contado"){
-
 			$pago_total = $_POST["total"];
-
 			$pago_e_y = $_POST["pago_e_y"];
-
 		}else{
 			$pago_total = 0;
-
 			$pago_e_y = "Ninguno";
 		}
-
-		
-
 
 		$datos = array(
 			"id_persona" => $_POST["id_cliente_venta"],
 			"id_usuario" => $_POST["id_usuario_venta"],
 			"fecha_venta" => $_POST["fecha_venta"],
+			"hora_venta" => $_POST["hora_venta"],
 			"tipo_comprobante" => $_POST["comprobante_venta"],
 			"serie_comprobante" => $_POST["serie_venta"],
 			"num_comprobante" => $_POST["numero_venta"],
@@ -221,36 +203,26 @@ class ControladorVenta
 			"pago_e_y" => $pago_e_y
 		);
 
+		var_dump($datos);
+		return;
 
-		$respuesta = ModeloVenta::mdlIngresarVenta($tabla, $datos);
-
+		ModeloVenta::mdlIngresarVenta($tabla, $datos);
 
 		/* MOSTRANDO EL ULTIMO ID INGRESADO */
-
 		$tabla = "ventas";
-
 		$item = null;
-
 		$valor = null;
-
 		$respuestaDetalleVenta = ModeloVenta::mdlMostrarIdVenta($tabla, $item, $valor);
-
 		foreach ($respuestaDetalleVenta as $value) {
-
 			$id_venta_ultimo = $value["id_venta"];
 		}
-
-
 
 		/* ==========================================
 		INGRESO DE DATOS AL DETALLE VENTA
 		========================================== */
 		$tblDetalleVenta = "detalle_venta";
-
 		$productos = json_decode($_POST["productoAddVenta"], true);
-
 		$datos = array();
-
 		foreach ($productos as $dato) {
 			$nuevo_dato = array(
 				'id_venta' => $id_venta_ultimo,
@@ -259,41 +231,24 @@ class ControladorVenta
 				'cantidad_u' => $dato['cantidad_u'],
 				'cantidad_kg' => $dato['cantidad_kg']
 			);
-
 			$datos[] = $nuevo_dato;
-
-			 $respuestaDatos = ModeloVenta::mdlIngresarDetalleVenta($tblDetalleVenta, $nuevo_dato);
-
+			$respuestaDatos = ModeloVenta::mdlIngresarDetalleVenta($tblDetalleVenta, $nuevo_dato);
 		}
 
 		/* ==========================================
 		ACTUALIZANDO EL STOCK DEL PRODUCTO
 		========================================== */
-
 		$tblProducto = "productos";
-
 		$stocks = json_decode($_POST["productoAddVenta"], true);
-
 		foreach ($stocks as $value) {
-			
 			$idProducto = $value['id_producto'];
 			$cantidad = $value['cantidad_u'];
-
 			// Actualizar el stock del producto
-			$respStock = ModeloVenta::mdlActualizarStockProducto($tblProducto, $idProducto, $cantidad);
+			ModeloVenta::mdlActualizarStockProducto($tblProducto, $idProducto, $cantidad);
 		}
-
-
-
-
-		
 		if ($respuestaDatos) {
-
             echo $respuestaDatos;
-
         }
-
-		
 	}
 
 	/*=============================================

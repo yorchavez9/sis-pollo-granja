@@ -85,24 +85,28 @@ $(document).ready(function () {
   function tipoPagoYE() {
     // Obtener todos los elementos <a> con la clase "paymentmethod"
     var paymentMethodLinks = document.querySelectorAll("a.tipo_pago_e_y");
+
     // Iterar sobre cada elemento <a>
     paymentMethodLinks.forEach(function (link) {
       // Añadir un evento de clic a cada elemento <a>
       link.addEventListener("click", function () {
         // Obtener el radio button dentro del elemento <a> actual
         var radioButton = this.querySelector(".tipo_pago_venta");
-        // Verificar si el radio button no está marcado
-        if (!radioButton.checked) {
-          // Marcar el radio button
-          radioButton.checked = true;
 
+        // Verificar si el radio button existe
+        if (radioButton) {
+          // Verificar si el radio button no está marcado
+          if (!radioButton.checked) {
+            // Marcar el radio button
+            radioButton.checked = true;
+          }
+        } else {
+          console.warn("Radio button no encontrado dentro de la etiqueta <a>");
         }
-
       });
-
     });
-
   }
+
 
   /*=============================================
   SELECION DE FECHA AUTOMATICO

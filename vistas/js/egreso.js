@@ -25,13 +25,26 @@ $(document).ready(function () {
   // SELECCION DE TIPO DE PAGO YAPE O EFECTIVO 
   const tipoPago = () => {
     const paymentMethodLinks = document.querySelectorAll("a.paymentmethod");
+
     paymentMethodLinks.forEach(link => {
       link.addEventListener("click", () => {
+        // Buscar el radio button dentro del enlace
         const radioButton = link.querySelector(".tipo_pago_egreso");
-        if (!radioButton.checked) { radioButton.checked = true; }
+
+        // Verificar si el radio button existe
+        if (radioButton) {
+          // Si el radio button no está marcado, marcarlo
+          if (!radioButton.checked) {
+            radioButton.checked = true;
+          }
+        } else {
+          // Mostrar un mensaje de advertencia si no se encuentra el radio button
+          console.warn("No se encontró el radio button con la clase .tipo_pago_egreso en el enlace.");
+        }
       });
     });
   };
+
   tipoPago();
 
   // MOSTRAR PRODUCTOS PARA LA COMPRA
