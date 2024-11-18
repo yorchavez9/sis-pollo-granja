@@ -149,6 +149,7 @@
                                     </div>
                                 </div>
                             </div>
+                            <!-- BOTON DE MODAL PARA AGREGAR PRODUCTO -->
                             <div class="text-center mb-5">
                                 <a href="#" class="btn btn-primary btn-add-category" data-bs-toggle="modal" data-bs-target="#modalAddProductCompra">
                                     <i class="bi bi-plus me-2"></i> Agregar producto

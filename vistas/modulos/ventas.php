@@ -1,4 +1,8 @@
 <style>
+    #hora_venta {
+        font-weight: bold;
+    }
+
     .flex-container {
         display: flex;
         flex-direction: column;
@@ -42,10 +46,8 @@
 <!-- SECCCION DE CREAR VENTA -->
 <div class="page-wrapper" id="pos_venta">
     <div class="content">
-
         <div class="card">
             <div class="card-body">
-
                 <div class="page-header">
                     <div class="">
                         <h4 class="h2" style="font-size: 25px">Crear venta <i class="fas fa-shopping-cart" style="color: #5645ED"></i></h4>
@@ -54,45 +56,27 @@
                         <a href="#" id="ver_ventas" class="btn btn-added"><i class="fas fa-eye me-2"></i>Ver ventas</a>
                     </div>
                 </div>
-
-
                 <div class="row">
-                    <div class="col-md-7">
-
+                    <div class="col-md-12">
                         <!--======================================
                         FORMULARIO DE COMPRA DE PRODUCTO
                         ======================================-->
-
                         <form id="form_venta_producto">
-
                             <!-- INGRESO DE ID DEL USUARIO -->
                             <input type="hidden" id="id_usuario_venta" value="<?php echo $_SESSION["id_usuario"] ?>">
-
-
                             <div class="row">
-
                                 <!-- INGRESO DE CLIENTE -->
-                                <div class="col-md-6">
-
+                                <div class="col-md-4">
                                     <div class="form-group">
-
                                         <label for="id_cliente" class="form-label">Selecione el cliente(<span class="text-danger">*</span>):</label>
-
                                         <?php
-
                                         $item = null;
                                         $valor = null;
-
                                         $proveedores = ControladorCliente::ctrMostrarCliente($item, $valor);
-
                                         ?>
                                         <select name="" id="id_cliente_venta" class="form-select small-select">
-
-
                                             <?php
-
                                             foreach ($proveedores as $key => $proveedor) {
-
                                                 if ($proveedor["tipo_persona"] == "cliente") {
                                                     if ($proveedor["id_persona"] == 1) {
                                             ?>
@@ -107,109 +91,77 @@
                                             }
                                             ?>
                                         </select>
-
                                         <small id="error_cliente_venta"></small>
-
                                     </div>
-
                                 </div>
-
                                 <!-- BOTON PARA AGREGAR CLIENTE -->
                                 <div class="col-md-1">
-
                                     <div class="form-group">
-
                                         <a href="#" class="btn btn-sm btn-adds mt-4" id="btn_add_cliente" data-bs-toggle="modal" data-bs-target="#modalNuevoCliente"><i class="fa fa-user-plus me-2"></i></a>
-
                                     </div>
 
                                 </div>
-
                                 <!-- INGRESO DE LA FECHA -->
-                                <div class="col-md-5">
-
+                                <div class="col-md-3">
                                     <div class="form-group">
-
                                         <label for="fecha_egre" class="form-label">Selecione la fecha(<span class="text-danger">*</span>):</label>
-
                                         <input type="date" id="fecha_venta" class="form-control" name="fecha_venta" placeholder="Ingrese la fecha">
-
                                         <small id="error_fecha_venta"></small>
-
                                     </div>
                                 </div>
-
+                                <!-- INGRESO DE LA HORA -->
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="hora_venta" class="form-label">Seleccione la hora (<span class="text-danger">*</span>):</label>
+                                        <input type="text" id="hora_venta" class="form-control" name="hora_venta" readonly>
+                                        <small id="error_egreso_hora"></small>
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="row">
-
                                 <!-- INGRESO DE TIPO DE COMPROBANTE -->
                                 <div class="col-md-4">
-
                                     <label for="comprobante_venta" class="form-label">Tipo de comprobante(<span class="text-danger">*</span>):</label>
-
                                     <select name="comprobante_venta" id="comprobante_venta" class="form-control">
-
                                         <option value="boleta">Boleta</option>
                                         <option value="factura">Factura</option>
                                         <option value="ticket" selected>Ticket</option>
-
                                     </select>
-
                                     <small id="error_comprobante_venta"></small>
-
                                 </div>
-
                                 <!-- INGRESO DE LA SERIE -->
                                 <div class="col-md-3">
-
                                     <div class="form-group">
-
                                         <label for="serie_venta" class="form-label">Serie:</label>
-
                                         <input type="text" id="serie_venta" name="serie_venta" placeholder="Ingrese la serie" readonly>
-
                                     </div>
-
                                 </div>
-
                                 <!-- INGRESO DE NÚMERO -->
                                 <div class="col-md-3">
-
                                     <div class="form-group">
-
                                         <label for="numero_venta" class="form-label">Número:</label>
-
                                         <input type="text" id="numero_venta" name="numero_venta" placeholder="Ingrese el número" readonly>
-
                                     </div>
-
                                 </div>
-
                                 <!-- INGRESO EL INPUESTO -->
                                 <div class="col-md-2">
-
                                     <div class="form-group">
-
                                         <label for="igv_venta" class="form-label">Impuesto (%):</label>
-
                                         <input type="text" id="igv_venta" name="igv_venta" value="0" min="0" placeholder="Ingrese el impuesto">
-
                                     </div>
-
                                 </div>
-
-
                             </div>
-
-
+                            <!-- BOTON DE MODAL PARA AGREGAR PRODUCTO -->
+                            <div class="text-center mb-5">
+                                <a href="#" class="btn btn-primary btn-add-category" data-bs-toggle="modal" data-bs-target="#modalAddProductVenta">
+                                    <i class="bi bi-plus me-2"></i> Agregar producto
+                                </a>
+                            </div>
                             <div class="row">
-
                                 <!-- TABLA DE SELECIÓN DE PRODUCTOS -->
                                 <div class="table-responsive">
-
                                     <table class="table" width="100%">
-
                                         <thead>
                                             <tr style="background: #28C76F;">
                                                 <th scope="col" class="text-white">Opciones</th>
@@ -221,202 +173,134 @@
                                                 <th scope="col" class="text-white">Sub total</th>
                                             </tr>
                                         </thead>
-
                                         <tbody id="detalle_venta_producto">
-
                                         </tbody>
-
                                     </table>
-
                                 </div>
-
                             </div>
-
                             <div class="row">
-
-                                <div class="col-md-6">
-
+                                <div class="col-md-7">
                                 </div>
-
-                                <div class="col-md-6">
-
+                                <div class="col-md-5">
                                     <div class="pt-3 pb-2">
-
                                         <!-- SECCIÓN DE PRECIO DE VENTA -->
                                         <div class="flex-container">
-
                                             <ul>
-
                                                 <li>
                                                     <p>Subtotal</p>
                                                     <p class="price">S/ <span id="subtotal_venta">00.00</span></p>
                                                 </li>
-
                                                 <li>
                                                     <p>IGV (%)</p>
                                                     <p class="price">S/ <span id="igv_venta_show">00.00</span></p>
                                                 </li>
-
                                                 <li class="total-value">
                                                     <p class="fw-bold">Total</p>
                                                     <p class="price">S/ <span id="total_precio_venta">00.00</span></p>
                                                 </li>
-
                                             </ul>
-
                                         </div>
-
                                         <!-- SECTION DE VENTA AL CONTADO O AL CRÉDITO -->
                                         <div class="row mb-3">
-
                                             <div class="col">
-
                                                 <div class="form-check">
-
                                                     <input class="form-check-input tipo_pago_venta" type="radio" name="forma_pago_v" value="contado" checked>
-
                                                     <label class="form-check-label" for="contado">
-
                                                         Al contado
-
                                                     </label>
-
                                                 </div>
-
                                             </div>
-
                                             <div class="col">
-
                                                 <div class="form-check">
-
                                                     <input class="form-check-input tipo_pago_venta" type="radio" name="forma_pago_v" value="credito">
-
                                                     <label class="form-check-label" for="credito">
-
                                                         Al crédito
-
                                                     </label>
-
                                                 </div>
-
                                             </div>
-
                                         </div>
-
                                         <!-- SECCION DE PAGO AL CONTADO -->
                                         <div id="venta_al_contado">
-
                                             <div class="setvaluecash">
-
                                                 <ul style="list-style-type: none;">
-
                                                     <li>
                                                         <a href="javascript:void(0);" class="paymentmethod tipo_pago_e_y">
-
                                                             <img src="vistas/dist/assets/img/icons/cash.svg" alt="img" class="me-2">
-
                                                             <input class="form-check-input tipo_pago_venta" type="radio" name="pago_tipo_v" value="efectivo">
-
                                                             <label class="form-check-label" for="credito">
                                                                 Efectivo
                                                             </label>
-
                                                         </a>
-
                                                     </li>
-
                                                     <li style="float: right;">
-
                                                         <a href="javascript:void(0);" class="paymentmethod tipo_pago_e_y">
-
                                                             <img src="vistas/dist/assets/img/icons/scan.svg" alt="img" class="me-2">
-
                                                             <input class="form-check-input tipo_pago_venta" type="radio" name="pago_tipo_v" value="yape">
-
                                                             <label class="form-check-label" for="credito">
                                                                 Yape
                                                             </label>
-
                                                         </a>
-
                                                     </li>
-
                                                 </ul>
-
                                             </div>
-
                                         </div>
-
-
                                         <!-- SECCION DE CREAR VENTA -->
                                         <div class="row mb-3">
-
                                             <button type="button" id="btn_crear_nueva_venta" class="btn btn-block" style="background:#7367F0; color:white">
-
                                                 <h5><i class="fa fa-plus fa-lg text-white me-2"></i> Crear Venta</h5>
-
                                             </button>
-
                                         </div>
-
-
-
                                     </div>
-
                                 </div>
-
                             </div>
-
                         </form>
-
                     </div>
-
-                    <!-- TABLA DE LISTA DE PRODUCTOS -->
-
-                    <div class="col-md-5">
-
-                        <div class="table-responsive">
-
-                            <table class="table table-striped table-bordered" style="width:100%" id="tabla_add_producto_venta">
-
-                                <thead>
-                                    <tr>
-                                        <th class="text-center">Imagen</th>
-                                        <th>Categoría</th>
-                                        <th>Precio</th>
-                                        <th>Nombre</th>
-                                        <th>Stock</th>
-                                    </tr>
-                                </thead>
-
-                                <tbody id="data_productos_detalle_venta">
-
-                                </tbody>
-
-                            </table>
-
-                        </div>
-
-                    </div>
-
-
                 </div>
-
             </div>
-
         </div>
-
     </div>
+</div>
 
+<!-- MOSTRAR PRODUCTOS EN EL MODAL -->
+<div class="modal fade" id="modalAddProductVenta" tabindex="-1" aria-labelledby="modalAddProductVentaLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Crear nuevo cliente</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+                <!-- TABLA DE LISTA DE PRODUCTOS -->
+                <div class="col-md-12">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered" style="width:100%" id="tabla_add_producto_venta">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">Imagen</th>
+                                    <th>Categoría</th>
+                                    <th>Precio</th>
+                                    <th>Nombre</th>
+                                    <th>Stock</th>
+                                </tr>
+                            </thead>
+                            <tbody id="data_productos_detalle_venta">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="text-end mx-4 mb-2">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- SECCCION DE EDITAR VENTA -->
 <div class="page-wrapper" id="edit_pos_venta" style="display: none">
     <div class="content">
-
         <div class="card">
             <div class="card-body">
-
                 <div class="page-header">
                     <div class="">
                         <h4 class="h2" style="font-size: 25px">Editar venta <i class="fas fa-shopping-cart" style="color: #5645ED"></i></h4>
@@ -425,8 +309,6 @@
                         <a href="#" class="btn btn-added seccion_lista_venta"><i class="fas fa-eye me-2"></i>Ver ventas</a>
                     </div>
                 </div>
-
-
                 <div class="row">
                     <div class="col-md-7">
 
@@ -1447,7 +1329,6 @@
 
 
 <script>
-
     const btnCrearVenta = document.getElementById('btn_crear_nueva_venta');
 
     // Función para manejar el atajo Ctrl + M

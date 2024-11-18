@@ -20,7 +20,16 @@ class ControladorVenta
 		return $respuesta;
 	}
 
-	
+	/*=============================================
+    MOSTRAR SERIE Y NUMERO DE LA VENTA
+    =============================================*/
+	static public function ctrMostrarSerieNumero($item, $valor)
+	{
+		$tabla = "ventas";
+		$respuesta = ModeloVenta::mdlMostrarSerieNumero($tabla, $item, $valor);
+		return $respuesta;
+	}
+
 	/*=============================================
 	MOSTRAR SUMA TOTAL DE VENTA
 	=============================================*/
@@ -165,16 +174,6 @@ class ControladorVenta
 	MOSTRAR SERIE NUMERO COMPRA
 	=============================================*/
 
-	static public function ctrMostrarSerieNumero($item, $valor)
-	{
-
-		$tabla = "ventas";
-
-		$respuesta = ModeloVenta::mdlMostrarSerieNumero($tabla, $item, $valor);
-
-		return $respuesta;
-
-	}
 
 
 	/*=============================================

@@ -86,6 +86,7 @@ $(document).ready(function () {
     }
   };
 
+  // MOSTRAR SERIE Y NUMERO DEL COMPROBANTE
   function mostrarSerieNumero(tipoComprobante) {
     $.ajax({
       url: "ajax/SerieNumero.ajax.php",
@@ -95,7 +96,6 @@ $(document).ready(function () {
         try {
           if (respuesta.trim() !== "") {
             let data = JSON.parse(respuesta);
-            console.log(data);
             $('#serie_comprobante').val(data[0].serie_comprobante); 
             $('#num_comprobante').val(data[0].num_comprobante);
           }
@@ -109,7 +109,6 @@ $(document).ready(function () {
     });
   }
 
-
   // Llamada inicial
   mostrarSerieNumero('ticket');
 
@@ -118,8 +117,6 @@ $(document).ready(function () {
     var tipoComprobante = $(this).val();
     mostrarSerieNumero(tipoComprobante);
   });
-
-
 
   // Agregar productos a la tabla detalle de la compra
   $("#tabla_add_producto").on("click", ".btnAddProducto", function (e) {

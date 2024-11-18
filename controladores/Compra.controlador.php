@@ -63,9 +63,6 @@ class ControladorCompra
 	}
 
 	/*=============================================
-	MOSTRAR SERIE NUMERO COMPRA
-	=============================================*/
-	/*=============================================
     MOSTRAR SERIE NUMERO COMPRA
     =============================================*/
 	static public function ctrMostrarSerieNumero($item, $valor)

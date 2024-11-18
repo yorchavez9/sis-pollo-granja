@@ -3,6 +3,22 @@ import { mostrarVentas } from "./lista-ventas.js";
 
 $(document).ready(function () {
 
+  /*=============================================
+   RELOJ AUTOMATICO PARA LA VENTA
+   =============================================*/
+  const actualizarReloj = () => {
+    const ahora = new Date();
+    let horas = ahora.getHours();
+    const minutos = String(ahora.getMinutes()).padStart(2, '0');
+    const segundos = String(ahora.getSeconds()).padStart(2, '0');
+    const ampm = horas >= 12 ? 'PM' : 'AM';
+    horas = horas % 12 || 12;
+    const horaFormateada = `${String(horas).padStart(2, '0')}:${minutos}:${segundos} ${ampm}`;
+    $('#hora_venta').val(horaFormateada);
+  };
+  setInterval(actualizarReloj, 1000);
+  actualizarReloj();
+
   function showSection() {
     $(".seccion_lista_venta").on("click", function () {
       $("#ventas_lista").show();
@@ -13,6 +29,39 @@ $(document).ready(function () {
       $("#ver_detalle_venta_producto").empty();
     });
   }
+  // MOSTRAR SERIE Y NUMERO DEL COMPROBANTE
+  function mostrarSerieNumero(tipoComprobante) {
+    $.ajax({
+      url: "ajax/Serie.numero.venta.ajax.php",
+      type: "POST",
+      data: { tipoComprobante },
+      success: function (respuesta) {
+        try {
+          if (respuesta.trim() !== "") {
+            let data = JSON.parse(respuesta);
+            console.log(data);
+            $('#serie_venta').val(data[0].serie_comprobante);
+            $('#numero_venta').val(data[0].num_comprobante);
+          }
+        } catch (e) {
+          console.error("Error al parsear JSON:", e);
+        }
+      },
+      error: function (xhr, status, error) {
+        console.error(xhr, status, error);
+      }
+    });
+  }
+
+  // Llamada inicial
+  mostrarSerieNumero('ticket');
+
+  // Evento de cambio en el select
+  $('#comprobante_venta').change(function () {
+    var tipoComprobante = $(this).val();
+    mostrarSerieNumero(tipoComprobante);
+  });
+
   showSection();
 
   /*=============================================
@@ -50,41 +99,6 @@ $(document).ready(function () {
   }
   setDateToToday('fecha_venta');
 
-  /*=============================================
-   MOSTRANDO SERIE Y NUMERO DE VENTA
-   =============================================*/
-  function mostrarSerieNumero() {
-    $.ajax({
-      url: "ajax/Serie.numero.venta.ajax.php",
-      type: "GET",
-      dataType: "json",
-      success: function (respuesta) {
-        if (respuesta == "" || respuesta == null) {
-          $("#serie_venta").val("T0001");
-          $("#numero_venta").val("0001");
-        }
-        respuesta.forEach((data) => {
-          var serie = parseInt(data.serie_comprobante.match(/\d+/)[0]);
-          var numero = parseInt(data.num_comprobante.match(/\d+/)[0]);
-          serie += 1;
-          numero += 1;
-          var seriComprobante = "T" + serie.toString().padStart(4, "0");
-          var numeroComprobante = numero
-            .toString()
-            .padStart(data.num_comprobante.length, "0");
-          $("#serie_venta").val(seriComprobante);
-          $("#numero_venta").val(numeroComprobante);
-        });
-      },
-      error: function (xhr, status, error) {
-        console.error(xhr);
-        console.error(status);
-        console.error(error);
-      },
-
-    });
-
-  }
 
   /*=============================================
   MOSTRANDO TAABLE DE PRODUCTOS PARA VENTA
@@ -459,7 +473,7 @@ $(document).ready(function () {
 
 
           mostrarProductoVenta();
-          mostrarSerieNumero();
+          mostrarSerieNumero('ticket');
           mostrarVentas();
         },
         error: function (xhr, status, error) {
@@ -494,6 +508,5 @@ $(document).ready(function () {
 
   limpiarModales();
   mostrarProductoVenta();
-  mostrarSerieNumero();
   tipoPagoYE();
 });
