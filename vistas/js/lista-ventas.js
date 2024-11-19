@@ -123,15 +123,11 @@ function mostrarVentas() {
                                 <i class="text-warning fas fa-edit fa-lg"></i>
                             </a>
 
-                            <a href="#" class="me-3 btnVerVenta" idVenta="${venta.id_venta}">
-                                <i class="text-primary fa fa-eye fa-lg"></i>
-                            </a>
-
-                            <a href="#" class="me-3 btnImprimirTicket" idVenta="${venta.id_venta}">
+                            <a href="#" class="me-3 btnImprimirComprobanteV" idVenta="${venta.id_venta}" tipo_comprobante="${venta.tipo_comprobante}">
                                 <i class="fa fa-print fa-lg" style="color: #0084FF"></i>
                             </a>
 
-                            <a href="#" class="me-3 btnDescargarTicket" idVenta="${venta.id_venta}">
+                            <a href="#" class="me-3 btnDescargarComprobanteV" idVenta="${venta.id_venta}" tipo_comprobante="${venta.tipo_comprobante}">
                                 <i class="fa fa-download fa-lg" style="color: #28C76F"></i>
                             </a>
 
@@ -158,6 +154,33 @@ function mostrarVentas() {
     },
   });
 }
+
+/*=============================================
+IMPRIMIR TICKET
+=============================================*/
+
+$("#data_lista_ventas").on("click", ".btnImprimirComprobanteV", function (e) {
+  e.preventDefault();
+  console.log("Imprimiendo comprobante");
+  var idVenta = $(this).attr("idVenta");
+  var documento = $(this).attr("tipo_comprobante");
+  const urlDocumento = `extensiones/${documento}/${documento}_v.php?id_venta=${idVenta}`;
+  const ventana = window.open(urlDocumento, '_blank');
+  ventana.onload = () => ventana.print();
+});
+
+/*=============================================
+DESCARGAR TICKET
+=============================================*/
+
+$("#data_lista_ventas").on("click", ".btnDescargarComprobanteV", function (e) {
+  e.preventDefault();
+  console.log("Descargando comprobante");
+  var idVenta = $(this).attr("idVenta");
+  var documento = $(this).attr("tipo_comprobante");
+  window.location.href = `extensiones/${documento}/${documento}_v.php?id_venta=${idVenta}&accion=descargar`;
+});
+
 
 /* ===========================================
 AGREGANDO PRODUCTO PARA EDITAR
@@ -497,99 +520,6 @@ $("#data_lista_ventas").on("click", ".btnEditarVenta", function (e) {
 
 });
 
-
-
-/*=============================================
-IMPRIMIR TICKET
-=============================================*/
-
-$("#data_lista_ventas").on("click", ".btnImprimirTicket", function(e) {
-  e.preventDefault();
-
-  var idVentaTicket = $(this).attr("idVenta");
-
-  // Guardar el ticket en el servidor
-  $.ajax({
-    url: "extensiones/ticketPrint.php",
-    type: "GET",
-    data: { idVentaTicket: idVentaTicket },
-    success: function (response) {
-
-      const $estado = document.querySelector("#section_imprimir_mensaje_ventas");
-
-      $estado.textContent = "Imprimiendo ...";
-
-      // URL del PDF
-      var urlPDF = `http://localhost/sis_venta_pollo/vistas/ticket/ticket${idVentaTicket}.pdf`;
-
-      var nombreImpresora = '';
-
-      $.ajax({
-        url: "ajax/Impresora.ajax.php",
-        type: "GET",
-        dataType: "json",
-        success: function (impresoras) {
-      
-          impresoras.forEach(function (impresora) {
-            nombreImpresora = impresora.nombre;
-          });
-      
-          // Asegúrate de codificar las partes de la URL
-          var url = `http://127.0.0.1:5000/print/${encodeURIComponent(nombreImpresora)}/${encodeURIComponent(urlPDF)}`;
-      
-          fetch(url)
-            .then(respuesta => {
-              if (respuesta.ok) {
-                respuesta.json().then(mensaje => {
-                  console.log("Impresión exitosa: ", mensaje);
-                });
-              } else {
-                respuesta.json().then(mensaje => {
-                  $estado.textContent = "Error imprimiendo: " + mensaje.message;
-                  
-                });
-              }
-            })
-            .catch(error => {
-              $estado.textContent = "Error haciendo petición: " + error.message;
-              
-            });
-        },
-      });
-
-    },
-    error: function (error) {
-      console.log("Error guardando el ticket: ", error);
-    }
-  });
-  
-});
-
-/*=============================================
-DESCARGAR TICKET
-=============================================*/
-
-$("#data_lista_ventas").on("click", ".btnDescargarTicket", function(e) {
-  e.preventDefault();
-
-  var idVentaTicket = $(this).attr("idVenta");
-
-  // Crea un enlace temporal
-  var link = document.createElement('a');
-  link.href = "extensiones/ticket.php?idVentaTicket=" + idVentaTicket;
-
-  // Establece el atributo download en el enlace con el nombre deseado
-  link.setAttribute('download', 'ticket' + idVentaTicket + '.pdf');
-
-  // Agrega el enlace temporal al DOM
-  document.body.appendChild(link);
-
-  // Simula un clic en el enlace
-  link.click();
-
-  // Remueve el enlace temporal del DOM
-  document.body.removeChild(link);
-});
 
 
 /*=============================================
