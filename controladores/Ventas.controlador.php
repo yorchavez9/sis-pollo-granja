@@ -249,7 +249,7 @@ class ControladorVenta
 			ModeloVenta::mdlActualizarStockProducto($tblProducto, $idProducto, $cantidad);
 		}
 		if ($respuestaDatos) {
-            echo $respuestaDatos;
+            echo json_encode($respuestaDatos);
         }
 	}
 

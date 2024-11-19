@@ -433,8 +433,7 @@ CALCULAR EL TOTAL DE LA VENTA
         contentType: false,
         processData: false,
         success: function (respuesta) {
-          console.log(respuesta);
-          return;
+          const res = JSON.parse(respuesta);
           $("#form_venta_producto")[0].reset();
           $("#detalle_venta_producto").empty();
           $("#subtotal_venta").text("00.00");

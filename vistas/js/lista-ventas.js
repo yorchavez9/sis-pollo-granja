@@ -1,27 +1,16 @@
-/* ===========================================
-MOSTRANDO PRODUCTO PARA LA VENTA
-=========================================== */
 
 /*=============================================
 SELECCIONANDO LA SECCCION DE LA VENTA
 =============================================*/
 
 function showSection(){
-    
     $(".seccion_lista_venta").on("click", function () {
-
       $("#ventas_lista").show();
-  
       $("#pos_venta").hide();
-  
       $("#ver_pos_venta").hide();
-  
       $("#edit_pos_venta").hide();
-  
       $("#edit_detalle_venta_producto").empty();
-  
       $("#ver_detalle_venta_producto").empty();
-  
     });
 }
 
@@ -32,141 +21,80 @@ MOSTRANDO PRODUCTOS DE LA VENTA
 =============================================*/
 
 function mostrarProductoVenta() {
-
   $.ajax({
-
     url: "ajax/Producto.ajax.php",
-
     type: "GET",
-
     dataType: "json",
-
     success: function (productos) {
-
       var tbody = $("#data_edit_productos_detalle_venta");
-
       tbody.empty();
-
       productos.forEach(function (producto) {
-
         producto.imagen_producto = producto.imagen_producto.substring(3);
-
         var fila = `
                 <tr>
                     <td class="text-center">
-
                         <a href="#" id="btnAddProductoVenta" class="hover_img_a btnAddEditProductoVenta" idProductoAdd="${producto.id_producto}" stockProducto="${producto.stock_producto}">
-
                             <img class="hover_img" src="${producto.imagen_producto}" alt="${producto.imagen_producto}">
-
                         </a>
-
                     </td>
-
                     <td>${producto.nombre_categoria}</td>
-
                     <td class="fw-bold">S/ ${producto.precio_producto}</td>
-
                     <td>${producto.nombre_producto}</td>
-
                     <td class="text-center">
-
                         <button type="button" class="btn btn-sm" style="${getButtonStyles(producto.stock_producto)}">
-
                             ${producto.stock_producto}
-
                         </button>
-
                     </td>
-
                 </tr>`;
 
         function getButtonStyles(stock) {
-
           if (stock > 20) {
-
             return "background-color: #28C76F; color: white; border: none;";
-
           } else if (stock >= 10 && stock <= 20) {
-
             return "background-color: #FF9F43; color: white; border: none;";
-
           } else {
-
             return "background-color: #FF4D4D; color: white; border: none;";
-
           }
         }
-
         tbody.append(fila);
-
       });
-
       $("#tabla_edit_add_producto_venta").DataTable();
-
     },
-
     error: function (xhr, status, error) {
-
       console.error("Error al recuperar los usuarios:", error.mensaje);
-
     },
-
   });
-
 }
 
 /* ===========================================
 FORMATEO DE PRECIOS
 =========================================== */
 function formateoPrecio(numero) {
-
   return numero.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-
 }
 
 /* ===========================================
 MOSTRANDO VENTAS
 =========================================== */
-
 function mostrarVentas() {
-
   $.ajax({
-
     url: "ajax/Lista.venta.ajax.php",
-
     type: "GET",
-
     dataType: "json",
-
     success: function (ventas) {
-
       var tbody = $("#data_lista_ventas");
-
       tbody.empty();
-
       // Inicializamos un conjunto vacío para almacenar los id_egreso ya procesados
-
       var ventasProcesados = new Set();
-
       ventas.forEach(function (venta, index) {
-
         // Verificar si el id_egreso ya ha sido procesado
-
         if (!ventasProcesados.has(venta.id_venta)) {
-
           var restantePago = (venta.total_venta - venta.total_pago).toFixed(2);
-
           let fechaOriginal = venta.fecha_venta;
-
           let partesFecha = fechaOriginal.split("-"); // Dividir la fecha en año, mes y día
-
           let fechaFormateada = partesFecha[2] + "/" + partesFecha[1] + "/" + partesFecha[0];
-
           let totalCompra = formateoPrecio(venta.total_venta);
-
           let formateadoPagoRestante = formateoPrecio(restantePago);
-
           var fila = `
                     <tr>
                         <td>${index + 1}</td>
@@ -215,59 +143,37 @@ function mostrarVentas() {
                     </tr>`;
 
           // Agregar la fila al tbody
-
           tbody.append(fila);
-
           // Agregar el id_egreso al conjunto de egresos procesados
-
           ventasProcesados.add(venta.id_venta);
-
         }
-
       });
-
       // Inicializar DataTables después de cargar los datos
-
       $("#tabla_lista_ventas").DataTable();
     },
     error: function (xhr, status, error) {
-
       console.error(error);
-
       console.error(xhr);
-
       console.error(status);
-
     },
-
   });
-
 }
 
 /* ===========================================
 AGREGANDO PRODUCTO PARA EDITAR
 =========================================== */
-
 $("#data_edit_productos_detalle_venta").on("click", ".btnAddEditProductoVenta", function (e) {
-
   e.preventDefault();
-
   var id_producto_edit = $(this).attr("idProductoAdd");
-
   var sotck_producto_edit = $(this).attr("stockProducto");
-
   if (sotck_producto_edit <= 0) {
-
     Swal.fire({
       title: "¡Alerta!",
       text: "¡El stock de este producto se agotado!",
       icon: "error",
     });
-
     return;
-
   } else if (sotck_producto_edit > 0 && sotck_producto_edit < 10) {
-
     Swal.fire({
       title: "¡Aviso!",
       text: "¡El stock de este producto se está agotando!",
@@ -276,61 +182,39 @@ $("#data_edit_productos_detalle_venta").on("click", ".btnAddEditProductoVenta", 
     
   }
 
-
   var datos = new FormData();
-
   datos.append("id_producto_edit", id_producto_edit);
-
   $.ajax({
-
     url: "ajax/Lista.venta.ajax.php",
-
     method: "POST",
-
     data: datos,
-
     cache: false,
-
     contentType: false,
-
     processData: false,
-
     dataType: "json",
-
     success: function (respuesta) {
-
       respuesta.imagen_producto = respuesta.imagen_producto.substring(3);
-
       var nuevaFila = `
                       <tr>
                           <input type="hidden" class="edit_id_producto_venta" value="${respuesta.id_producto}">
-
                           <th class="text-center align-middle d-none d-md-table-cell">
-
                               <a href="#" class="me-3 confirm-text btnEliminarAddProductoVentaEdit" idAddProducto="${respuesta.id_producto}"">
                                   <i class="fa fa-trash fa-lg" style="color: #F1666D"></i>
                               </a>
-
                           </th>
-
                           <td>
                               <img src="${respuesta.imagen_producto}" alt="Imagen de un pollo" width="50">
                           </td>
-
                           <td>${respuesta.nombre_producto}</td>
-
                           <td>
                               <input type="number" class="form-control form-control-sm edit_cantidad_u_v" value="0">
                           </td>
-
                           <td>
                               <input type="number" class="form-control form-control-sm edit_cantidad_kg_v" value="0">
                           </td>
-
                           <td>
                               <input type="number" class="form-control form-control-sm edit_precio_venta" value="${respuesta.precio_producto}">
                           </td>
-
                           <td style="text-align: right;">
                               <p class="price">S/ <span class="edit_precio_sub_total_venta">0.00</span></p>
                           </td>
@@ -338,26 +222,16 @@ $("#data_edit_productos_detalle_venta").on("click", ".btnAddEditProductoVenta", 
                       </tr>`;
 
       $("#edit_detalle_venta_producto").append(nuevaFila);
-
       calcularSubTotal();
-
     },
     error: function (err) {
-
       console.error(err);
-
     },
-
   });
-
   calcularTotal();
-
   $(document).ready(function () {
-
     calcularTotal();
-
   });
-
 });
 
 /* ===========================================
@@ -691,8 +565,6 @@ $("#data_lista_ventas").on("click", ".btnImprimirTicket", function(e) {
   
 });
 
-
-
 /*=============================================
 DESCARGAR TICKET
 =============================================*/
@@ -718,8 +590,6 @@ $("#data_lista_ventas").on("click", ".btnDescargarTicket", function(e) {
   // Remueve el enlace temporal del DOM
   document.body.removeChild(link);
 });
-
-
 
 
 /*=============================================
@@ -777,8 +647,6 @@ $("#data_lista_ventas").on("click", ".btnEliminarVenta", function(e) {
       }
   });
 });
-
-
 
 /*=============================================
 ACTUALIZANDO LA VENTA
@@ -1018,8 +886,6 @@ $("#btn_actualizar_venta").click(function (e) {
 
 });
 
-
-
 /* ===========================================
 CALCULAR EL TOTAL DE LA VENTA
 =========================================== */
@@ -1086,7 +952,6 @@ function calcularTotal() {
 
   $("#edit_total_precio_venta").text(totalFormateado);
 }
-
 
 /* ===========================================
 ELIMINAR EL PRODUCTO AGREGADO DE LA LISTA
@@ -1345,8 +1210,6 @@ mostrarVentas();
 CALCULAR EL TOTAL DE LA VENTA
 =========================================== */
 calcularTotal();
-
-
 
 /* ===========================================
 EXPORTANDO VENTA

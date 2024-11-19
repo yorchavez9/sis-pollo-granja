@@ -403,25 +403,36 @@ class ModeloVenta
 		$stmt->bindParam(":numero_aves", $datos["numero_aves"], PDO::PARAM_INT);
 
 		// Usar PDO::PARAM_STR para los valores decimales
-		$stmt->bindParam(":peso_promedio", $datos["peso_promedio"], PDO::PARAM_STR);
+		$stmt->bindParam(":peso_promedio", $datos["peso_promedio"],
+			PDO::PARAM_STR
+		);
 		$stmt->bindParam(":peso_bruto", $datos["peso_bruto"], PDO::PARAM_STR);
 		$stmt->bindParam(":peso_tara", $datos["peso_tara"], PDO::PARAM_STR);
 		$stmt->bindParam(":peso_merma", $datos["peso_merma"], PDO::PARAM_STR);
 		$stmt->bindParam(":peso_neto", $datos["peso_neto"], PDO::PARAM_STR);
 		$stmt->bindParam(":precio_venta", $datos["precio_venta"], PDO::PARAM_STR);
 
-		// Ejecutar la consulta y devolver el resultado
+		// Ejecutar la consulta
 		if ($stmt->execute()) {
-			// Devolver el id_venta que se acaba de insertar
-			return $datos["id_venta"];
+			$id_venta = $datos["id_venta"];
+			$stmtTipoDocumento = Conexion::conectar()->prepare("SELECT tipo_comprobante FROM ventas WHERE id_venta = :id_venta");
+			$stmtTipoDocumento->bindParam(":id_venta", $id_venta, PDO::PARAM_INT);
+			$stmtTipoDocumento->execute();
+			$tipoDocumento = $stmtTipoDocumento->fetch(PDO::FETCH_ASSOC);
+
+			return [
+				'id_venta' => $id_venta,
+				'tipo_comprobante' => $tipoDocumento['tipo_comprobante'] ?? 'Desconocido' 
+			];
 		} else {
-			// Si hay un error, devolver "error"
 			return "error";
 		}
 
 		// Cerrar la conexión
 		$stmt = null;
+		$stmtTipoDocumento = null;
 	}
+
 
 
 
