@@ -171,7 +171,7 @@ $(document).ready(function () {
           <td><input type="number" class="form-control form-control-sm precio_venta" value="0.00" min="0" step="0.01"></td>
           <td class="text-end">
             <span style="font-weight: bold;">S/</span>
-            <input type="text" class="form-control form-control-sm precio_sub_total_v" value="0.00" readonly style="width: 100px; display: inline-block; text-align: right; font-weight: bold;">
+            <input type="text" class="form-control form-control-sm precio_sub_total" value="0.00" readonly style="width: 100px; display: inline-block; text-align: right; font-weight: bold;">
           </td>
         </tr>`;
 
