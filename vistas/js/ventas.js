@@ -226,8 +226,8 @@ $(document).ready(function () {
           <td>${respuesta.nombre_producto}</td>
           <td><input type="number" class="form-control form-control-sm numero_javas_v" value="0" min="0" style="width: 50px;"></td>
           <td><input type="number" class="form-control form-control-sm numero_aves_v" value="0" min="0"></td>
-          <td><input type="number" class="form-control form-control-sm peso_promedio_v" value="0.00" min="0" step="0.01"></td>
-          <td><input type="number" class="form-control form-control-sm peso_bruto_v" value="0.00" min="0" readonly step="0.01"></td>
+          <td><input type="number" class="form-control form-control-sm peso_promedio_v" value="0.00" min="0" readonly step="0.01"></td>
+          <td><input type="number" class="form-control form-control-sm peso_bruto_v" value="0.00" min="0" step="0.01"></td>
           <td><input type="number" class="form-control form-control-sm peso_tara_v" value="0.00" min="0" step="0.01"></td>
           <td><input type="number" class="form-control form-control-sm peso_merma_v" value="0.00" min="0" step="0.01"></td>
           <td><input type="number" class="form-control form-control-sm peso_neto_v" value="0.00" min="0" readonly step="0.01"></td>
@@ -240,10 +240,17 @@ $(document).ready(function () {
 
         $("#detalle_venta_producto").append(nuevaFila);
 
-        // Eventos para inputs
-        $("input[type='number']").on("focus", function () {
-          if ($(this).val() === "0" || $(this).val() === "0.00") {
-            $(this).val("");
+        // Evento para limpiar valores predeterminados al hacer focus
+        $("input").on("focus", function () {
+          // Excluir los campos específicos por su clase
+          if (
+            !$(this).hasClass("peso_promedio_v") &&
+            !$(this).hasClass("peso_neto_v") &&
+            !$(this).hasClass("precio_sub_total_v")
+          ) {
+            if ($(this).val() === "0" || $(this).val() === "0.00") {
+              $(this).val(""); // Borra el valor cuando se hace focus
+            }
           }
         });
 
@@ -252,25 +259,30 @@ $(document).ready(function () {
           if (value < 0) $(this).val(0);
         });
 
-        $(".numero_aves_v, .peso_promedio_v, .peso_tara_v, .peso_merma_v, .precio_venta, #igv_venta").on("input", function () {
+        $(".numero_aves_v, .peso_promedio_v, .peso_bruto_v, .peso_tara_v, .peso_merma_v, .peso_neto_v, .precio_venta, #igv_venta").on("input", function () {
           const fila = $(this).closest("tr");
 
           let numero_aves = parseFloat(fila.find(".numero_aves_v").val()) || 0;
-          let peso_promedio = parseFloat(fila.find(".peso_promedio_v").val()) || 0;
+          let peso_bruto = parseFloat(fila.find(".peso_bruto_v").val()) || 0;
           let peso_tara = parseFloat(fila.find(".peso_tara_v").val()) || 0;
           let peso_merma = parseFloat(fila.find(".peso_merma_v").val()) || 0;
           let precio_venta = parseFloat(fila.find(".precio_venta").val()) || 0;
           let igv_venta = parseFloat($("#igv_venta").val()) || 0;
 
-          // Calcular valores
-          const peso_bruto = peso_promedio * numero_aves;
-          const peso_neto = peso_bruto - peso_tara - peso_merma;
-          const precio_sub_total = peso_neto * precio_venta;
+          // Calcular peso_bruto, peso_neto y precio_sub_total
+          const peso_neto_f = peso_bruto - peso_tara - peso_merma;
+          const peso_promedio_f = peso_neto_f / numero_aves;
+          const precio_sub_total_f = peso_neto_f * precio_venta;
+
+          // Formatear los valores
+          const format_peso_promedio = formateoPrecio(peso_promedio_f.toFixed(2));
+          const format_peso_neto = formateoPrecio(peso_neto_f.toFixed(2));
+          const format_precio_sub_total = formateoPrecio(precio_sub_total_f.toFixed(2));
 
           // Actualizar los inputs
-          fila.find(".peso_bruto_v").val(peso_bruto.toFixed(2));
-          fila.find(".peso_neto_v").val(peso_neto.toFixed(2));
-          fila.find(".precio_sub_total_v").val(precio_sub_total.toFixed(2));
+          fila.find(".peso_promedio_v").val(format_peso_promedio);
+          fila.find(".peso_neto_v").val(format_peso_neto);
+          fila.find(".precio_sub_total_v").val(format_precio_sub_total);
 
           // Calcular total general
           calcularTotal(igv_venta);

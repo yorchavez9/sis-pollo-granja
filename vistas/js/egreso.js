@@ -162,8 +162,8 @@ $(document).ready(function () {
           <td>${respuesta.nombre_producto}</td>
           <td><input type="number" class="form-control form-control-sm numero_javas" value="0" min="0"></td>
           <td><input type="number" class="form-control form-control-sm numero_aves" value="0" min="0"></td>
-          <td><input type="number" class="form-control form-control-sm peso_promedio" value="0.00" min="0" step="0.01"></td>
-          <td><input type="number" class="form-control form-control-sm peso_bruto" readonly value="0.00" min="0" step="0.01"></td>
+          <td><input type="number" class="form-control form-control-sm peso_promedio" readonly value="0.00" min="0" step="0.01"></td>
+          <td><input type="number" class="form-control form-control-sm peso_bruto" value="0.00" min="0" step="0.01"></td>
           <td><input type="number" class="form-control form-control-sm peso_tara" value="0.00" style="width: 60px;" min="0" step="0.01"></td>
           <td><input type="number" class="form-control form-control-sm peso_merma" value="0.00" style="width: 60px;" min="0" step="0.01"></td>
           <td><input type="number" class="form-control form-control-sm peso_neto" readonly value="0.00" min="0" step="0.01"></td>
@@ -179,8 +179,15 @@ $(document).ready(function () {
 
         // Evento para limpiar valores predeterminados al hacer focus
         $("input").on("focus", function () {
-          if ($(this).val() === "0" || $(this).val() === "0.00") {
-            $(this).val(""); // Borra el valor cuando se hace focus
+          // Excluir los campos específicos por su clase
+          if (
+            !$(this).hasClass("peso_promedio") &&
+            !$(this).hasClass("peso_neto") &&
+            !$(this).hasClass("precio_sub_total")
+          ) {
+            if ($(this).val() === "0" || $(this).val() === "0.00") {
+              $(this).val(""); // Borra el valor cuando se hace focus
+            }
           }
         });
 
@@ -193,28 +200,29 @@ $(document).ready(function () {
         });
 
         // Evento para calcular el subtotal al cambiar cantidad_aves o peso_promedio
-        $(".numero_aves, .peso_promedio, .peso_tara, .peso_merma, .precio_compra, #impuesto_egreso").on("input", function () {
+        $(".numero_aves, .peso_promedio, .peso_bruto, .peso_tara, .peso_merma, .peso_neto, .precio_compra, #impuesto_egreso").on("input", function () {
           const fila = $(this).closest("tr");
 
           let numero_aves = parseFloat(fila.find(".numero_aves").val()) || 0;
-          let peso_promedio = parseFloat(fila.find(".peso_promedio").val()) || 0;
+          let peso_bruto = parseFloat(fila.find(".peso_bruto").val()) || 0.00;
           let peso_tara = parseFloat(fila.find(".peso_tara").val()) || 0;
           let peso_merma = parseFloat(fila.find(".peso_merma").val()) || 0;
           let precio_compra = parseFloat(fila.find(".precio_compra").val()) || 0;
           let impuesto_egreso = parseFloat($("#impuesto_egreso").val()) || 0;
 
           // Calcular peso_bruto, peso_neto y precio_sub_total
-          const peso_bruto = peso_promedio * numero_aves;
-          const peso_neto = peso_bruto - peso_tara - peso_merma;
-          const precio_sub_total = peso_neto * precio_compra;
-
+          const peso_neto_f = peso_bruto - peso_tara - peso_merma;
+          const peso_promedio_f = peso_neto_f / numero_aves;
+          const precio_sub_total_f = peso_neto_f *  precio_compra;
+          
           // Formatear los valores
-          const format_peso_bruto = formateoPrecio(peso_bruto.toFixed(2));
-          const format_peso_neto = formateoPrecio(peso_neto.toFixed(2));
-          const format_precio_sub_total = formateoPrecio(precio_sub_total.toFixed(2));
+          const format_peso_promedio = formateoPrecio(peso_promedio_f.toFixed(2));
+          const format_peso_neto = formateoPrecio(peso_neto_f.toFixed(2));
+          const format_precio_sub_total = formateoPrecio(precio_sub_total_f.toFixed(2));
+
 
           // Actualizar los inputs con los valores calculados
-          fila.find(".peso_bruto").val(format_peso_bruto);
+          fila.find(".peso_promedio").val(format_peso_promedio);
           fila.find(".peso_neto").val(format_peso_neto);
           fila.find(".precio_sub_total").val(format_precio_sub_total);
 
