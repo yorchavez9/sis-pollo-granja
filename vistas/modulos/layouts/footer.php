@@ -26,9 +26,11 @@
     <script src="vistas/js/codigo-barra.js" type="module"></script>
     <script src="vistas/js/egreso.js" type="module"></script>
     <script src="vistas/js/lista-egreso.js" type="module"></script>
+    
     <script src="vistas/js/ventas.js" type="module"></script>
     <script src="vistas/js/lista-ventas.js" type="module"></script>
     <script src="vistas/js/ver-venta.js" type="module"></script>
+
     <script src="vistas/js/trabajador.js" type="module"></script>
     <script src="vistas/js/contrato.js" type="module"></script>
     <script src="vistas/js/pago.js" type="module"></script>
