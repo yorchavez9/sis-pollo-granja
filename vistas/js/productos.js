@@ -31,6 +31,7 @@ $(document).ready(function () {
                             </td>
                             <td>${producto.nombre_categoria}</td>
                             <td>${producto.nombre_producto}</td>
+                            <td>S/ ${producto.precio_producto}</td>
                             <td class="text-center"><button type="button" class="btn btn-sm" style="${getButtonStyles(producto.stock_producto)}">${producto.stock_producto}</button></td>
                             <td>${producto.fecha_vencimiento}</td>
 
@@ -173,6 +174,7 @@ $(document).ready(function () {
     let id_categoria_P = $("#id_categoria_P").val();
     let codigo_producto = $("#codigo_producto").val();
     let nombre_producto = $("#nombre_producto").val();
+    let precio_producto = $("#precio_producto").val();
     let stock_producto = $("#stock_producto").val();
     let fecha_vencimiento = $("#fecha_vencimiento").val();
     let descripcion_producto = $("#descripcion_producto").val();
@@ -212,7 +214,7 @@ $(document).ready(function () {
     }
 
     // Validar el stock del producto
-    if (stock_producto === "" || stock_producto === null || isNaN(stock_producto) || parseInt(stock_producto) !== parseFloat(stock_producto) || parseInt(stock_producto) <= 0) {
+    if (stock_producto === "" || stock_producto === null || isNaN(stock_producto) || parseInt(stock_producto) !== parseFloat(stock_producto) || parseInt(stock_producto) < 0) {
       $("#error_stock_p")
         .html("Por favor, ingrese un número entero positivo para el stock")
         .addClass("text-danger");
@@ -228,13 +230,11 @@ $(document).ready(function () {
       datos.append("id_categoria_P", id_categoria_P);
       datos.append("codigo_producto", codigo_producto);
       datos.append("nombre_producto", nombre_producto);
+      datos.append("precio_producto", precio_producto);
       datos.append("stock_producto", stock_producto);
       datos.append("fecha_vencimiento", fecha_vencimiento);
       datos.append("descripcion_producto", descripcion_producto);
       datos.append("imagen_producto", imagen_producto);
-
-
-
 
       $.ajax({
         url: "ajax/Producto.ajax.php",
@@ -245,23 +245,16 @@ $(document).ready(function () {
         processData: false,
         success: function (respuesta) {
           var res = JSON.parse(respuesta);
-
           if (res.estado === "ok") {
-
             $("#form_nuevo_producto")[0].reset();
-
             $(".vistaPreviaImagenProducto").attr("src", "");
-
             $("#modalNuevoProducto").modal("hide");
-
             Swal.fire({
               title: "¡Correcto!",
               text: res.mensaje,
               icon: "success",
             });
-
             mostrarProductos();
-
           } else {
             Swal.fire({
               title: "¡Error!",
@@ -331,7 +324,6 @@ $(document).ready(function () {
 
     var idProducto = $(this).attr("idProducto");
 
-
     var datos = new FormData();
     datos.append("idProducto", idProducto);
 
@@ -350,6 +342,7 @@ $(document).ready(function () {
 
         $("#edit_codigo_producto").val(respuesta["codigo_producto"]);
         $("#edit_nombre_producto").val(respuesta["nombre_producto"]);
+        $("#edit_precio_producto").val(respuesta["precio_producto"]);
         $("#edit_stock_producto").val(respuesta["stock_producto"]);
         $("#edit_fecha_vencimiento").val(respuesta["fecha_vencimiento"]);
         $("#edit_descripcion_producto").val(respuesta["descripcion_producto"]);
@@ -457,6 +450,7 @@ $(document).ready(function () {
     var edit_id_categoria_p = $("#edit_id_categoria_p").val();
     var edit_codigo_producto = $("#edit_codigo_producto").val();
     var edit_nombre_producto = $("#edit_nombre_producto").val();
+    var edit_precio_producto = $("#edit_precio_producto").val();
     var edit_stock_producto = $("#edit_stock_producto").val();
     var edit_fecha_vencimiento = $("#edit_fecha_vencimiento").val();
     var edit_descripcion_producto = $("#edit_descripcion_producto").val();
@@ -499,7 +493,7 @@ $(document).ready(function () {
     }
 
     // Validar el stock del producto
-    if (edit_stock_producto === "" || edit_stock_producto === null || isNaN(edit_stock_producto) || parseInt(edit_stock_producto) !== parseFloat(edit_stock_producto) || parseInt(edit_stock_producto) <= 0) {
+    if (edit_stock_producto === "" || edit_stock_producto === null || isNaN(edit_stock_producto) || parseInt(edit_stock_producto) !== parseFloat(edit_stock_producto) || parseInt(edit_stock_producto) < 0) {
       $("#edit_error_stock_p")
         .html("Por favor, ingrese un número entero positivo para el stock")
         .addClass("text-danger");
@@ -517,6 +511,7 @@ $(document).ready(function () {
       datos.append("edit_id_categoria_p", edit_id_categoria_p);
       datos.append("edit_codigo_producto", edit_codigo_producto);
       datos.append("edit_nombre_producto", edit_nombre_producto);
+      datos.append("edit_precio_producto", edit_precio_producto);
       datos.append("edit_stock_producto", edit_stock_producto);
       datos.append("edit_fecha_vencimiento", edit_fecha_vencimiento);
       datos.append("edit_descripcion_producto", edit_descripcion_producto);

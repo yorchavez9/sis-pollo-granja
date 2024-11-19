@@ -115,6 +115,7 @@ class ModeloProducto{
                                                                 id_categoria,
                                                                 codigo_producto, 
                                                                 nombre_producto, 
+                                                                precio_producto, 
                                                                 stock_producto, 
                                                                 fecha_vencimiento, 
                                                                 descripcion_producto, 
@@ -123,6 +124,7 @@ class ModeloProducto{
                                                                 :id_categoria, 
                                                                 :codigo_producto, 
                                                                 :nombre_producto, 
+                                                                :precio_producto, 
                                                                 :stock_producto, 
                                                                 :fecha_vencimiento, 
                                                                 :descripcion_producto, 
@@ -131,6 +133,7 @@ class ModeloProducto{
 		$stmt->bindParam(":id_categoria", $datos["id_categoria"], PDO::PARAM_INT);
 		$stmt->bindParam(":codigo_producto", $datos["codigo_producto"], PDO::PARAM_STR);
 		$stmt->bindParam(":nombre_producto", $datos["nombre_producto"], PDO::PARAM_STR);
+		$stmt->bindParam(":precio_producto", $datos["precio_producto"], PDO::PARAM_STR);
 		$stmt->bindParam(":stock_producto", $datos["stock_producto"], PDO::PARAM_INT);
 		$stmt->bindParam(":fecha_vencimiento", $datos["fecha_vencimiento"], PDO::PARAM_STR);
 		$stmt->bindParam(":descripcion_producto", $datos["descripcion_producto"], PDO::PARAM_STR);
@@ -161,6 +164,7 @@ class ModeloProducto{
 																id_categoria = :id_categoria, 
 																codigo_producto = :codigo_producto, 
 																nombre_producto = :nombre_producto, 
+																precio_producto = :precio_producto, 
 																stock_producto = :stock_producto, 
 																fecha_vencimiento = :fecha_vencimiento, 
 																descripcion_producto = :descripcion_producto, 
@@ -170,6 +174,7 @@ class ModeloProducto{
 		$stmt -> bindParam(":id_categoria", $datos["id_categoria"], PDO::PARAM_INT);
 		$stmt -> bindParam(":codigo_producto", $datos["codigo_producto"], PDO::PARAM_STR);
 		$stmt -> bindParam(":nombre_producto", $datos["nombre_producto"], PDO::PARAM_STR);
+		$stmt -> bindParam(":precio_producto", $datos["precio_producto"], PDO::PARAM_STR);
 		$stmt -> bindParam(":stock_producto", $datos["stock_producto"], PDO::PARAM_INT);
 		$stmt -> bindParam(":fecha_vencimiento", $datos["fecha_vencimiento"], PDO::PARAM_STR);
 		$stmt -> bindParam(":descripcion_producto", $datos["descripcion_producto"], PDO::PARAM_STR);

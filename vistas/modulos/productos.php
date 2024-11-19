@@ -66,6 +66,7 @@
                                 <th class="text-center">Imagen</th>
                                 <th>Categoría</th>
                                 <th>Nombre</th>
+                                <th>Precio</th>
                                 <th>Stock</th>
                                 <th>Fecha v.</th>
                                 <th>Estado</th>
@@ -118,23 +119,8 @@
                             <small id="error_id_categoria_p"></small>
                         </div>
 
-                        <!-- INGRESO DE DEL CODIGO  -->
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="codigo" class="form-label">Código del producto (<span class="text-danger">*</span>)</label>
-                                <input type="text" id="codigo_producto" placeholder="Ingrese el código del producto">
-                                <small id="error_codigo_p"></small>
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="row">
-
                         <!-- INGRESO DE NOMBRE  -->
-                        <div class="col-md-5">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label for="direccion" class="form-label">Nombre del producto (<span class="text-danger">*</span>)</label>
                                 <input type="text" id="nombre_producto" placeholder="Ingrese el nombre del producto">
@@ -142,10 +128,34 @@
                             </div>
                         </div>
 
+                    </div>
+
+
+                    <div class="row">
+
+                        <!-- INGRESO DE DEL CODIGO  -->
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="codigo" class="form-label">Código del producto (<span class="text-danger">*</span>)</label>
+                                <input type="text" id="codigo_producto" placeholder="Ingrese el código" class="form-control">
+                                <small id="error_codigo_p"></small>
+                            </div>
+
+                        </div>
+
+                        <!-- INGRESO DEL PRECIO  -->
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="precio_producto" class="form-label">Precio</label>
+                                <input type="number" id="precio_producto" class="form-control" value="0.00" min="0" placeholder="Ingrese el código">
+                            </div>
+
+                        </div>
+
                         <!-- INGRESO DE STOCK -->
                         <div class="col-md-2">
                             <div class="form-group">
-                                <label for="stock" class="form-label">Stock (<span class="text-danger">*</span>)</label>
+                                <label for="stock" class="form-label">Stock</label>
                                 <input type="number" id="stock_producto" value="0" min="0" class="form-control">
                                 <small id="error_stock_p"></small>
                             </div>
@@ -153,7 +163,7 @@
                         </div>
 
                         <!-- INGRESO DE FECHA DE VENCIMIENTO -->
-                        <div class="col-md-5">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label for="fecha_vencimiento" class="form-label">Fecha de vencimiento</label>
                                 <input type="date" id="fecha_vencimiento" name="fecha_vencimiento" class="form-control">
@@ -225,20 +235,6 @@
                             <small id="edit_error_id_categoria_p"></small>
                         </div>
 
-                        <!-- INGRESO DE DEL CODIGO  -->
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="codigo" class="form-label">Ingrese el código del producto (<span class="text-danger">*</span>)</label>
-                                <input type="text" id="edit_codigo_producto" placeholder="Ingrese el código del producto">
-                                <small id="edit_error_codigo_p"></small>
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="row">
 
                         <!-- INGRESO DE NOMBRE  -->
                         <div class="col-md-5">
@@ -249,17 +245,40 @@
                             </div>
                         </div>
 
+                    </div>
+
+
+                    <div class="row">
+
+                        <!-- INGRESO DE DEL CODIGO  -->
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="codigo" class="form-label">Ingrese el código (<span class="text-danger">*</span>)</label>
+                                <input type="text" id="edit_codigo_producto" placeholder="Ingrese el código del producto">
+                                <small id="edit_error_codigo_p"></small>
+                            </div>
+
+                        </div>
+
+                        <!-- INGRESO DE STOCK -->
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="edit_precio_producto" class="form-label">Precio</label>
+                                <input type="number" id="edit_precio_producto" value="0.00" min="0" class="form-control form-control">
+                            </div>
+                        </div>
+
                         <!-- INGRESO DE STOCK -->
                         <div class="col-md-2">
                             <div class="form-group">
-                                <label for="stock" class="form-label">Stock (<span class="text-danger">*</span>)</label>
+                                <label for="stock" class="form-label">Stock</label>
                                 <input type="number" id="edit_stock_producto" value="0" class="form-control form-control">
                                 <small id="edit_error_stock_p"></small>
                             </div>
                         </div>
 
                         <!-- INGRESO DE FECHA DE VENCIMIENTO -->
-                        <div class="col-md-5">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label for="fecha_vencimiento" class="form-label">Ingrese la fecha de vencimiento</label>
                                 <input type="date" id="edit_fecha_vencimiento" name="edit_fecha_vencimiento" class="form-control">
