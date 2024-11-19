@@ -458,9 +458,9 @@ CALCULAR EL TOTAL DE LA VENTA
                 text: "Su comprobante se está imprimiendo.",
                 icon: "success",
               });
-              const documento = res.tipo_documento;
-              const id_egreso = res.id_egreso;
-              const urlDocumento = `extensiones/${documento}/${documento}.php?id_egreso=${id_egreso}`;
+              const documento = res.tipo_comprobante;
+              const id_venta = res.id_venta;
+              const urlDocumento = `extensiones/${documento}/${documento}_v.php?id_venta=${id_venta}`;
               const ventana = window.open(urlDocumento, '_blank');
               ventana.onload = () => ventana.print();
             } else if (result.dismiss === Swal.DismissReason.cancel) {
@@ -469,8 +469,8 @@ CALCULAR EL TOTAL DE LA VENTA
                 text: "Su comprobante se está descargando.",
                 icon: "success",
               });
-              const documento = res.tipo_documento;
-              window.location.href = `extensiones/${documento}/${documento}.php?id_egreso=${res.id_egreso}&accion=descargar`;
+              const documento = res.tipo_comprobante;
+              window.location.href = `extensiones/${documento}/${documento}_v.php?id_venta=${res.id_venta}&accion=descargar`;
             } else {
               Swal.fire({
                 title: "¿Cómo desea enviar el comprobante?",

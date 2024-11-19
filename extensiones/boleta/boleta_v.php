@@ -5,11 +5,13 @@ session_start();
 
 $nombre_usuario = $_SESSION["nombre_usuario"];
 
-require_once "../../controladores/Compra.controlador.php";
+require_once "../../controladores/Ventas.controlador.php";
+require_once "../../modelos/Ventas.modelo.php";
+
 require_once "../../controladores/Producto.controlador.php";
-require_once "../../controladores/Configuracion.ticket.controlador.php";
-require_once "../../modelos/Compra.modelo.php";
 require_once "../../modelos/Producto.modelo.php";
+
+require_once "../../controladores/Configuracion.ticket.controlador.php";
 require_once "../../modelos/Configuracion.ticket.modelo.php";
 
 function formatearPrecio($precio)
@@ -20,16 +22,16 @@ function formatearPrecio($precio)
 /* ========================================
 MOSTRANDO DATOS DE LA VENTA
 ======================================== */
-$item = "id_egreso";
-$valor = $_GET["id_egreso"];
+$item = "id_venta";
+$valor = $_GET["id_venta"];
 
-$respuesta = ControladorCompra::ctrMostrarCompras($item, $valor);
+$respuesta = ControladorVenta::ctrMostrarListaVentas($item, $valor);
 $serieNumero = $respuesta["serie_comprobante"];
-$horaEgreso = $respuesta["hora_egreso"];
-$respuesta_de = ControladorCompra::ctrMostrarDetalleCompra($item, $valor);
-$fechaEgreso = $respuesta["fecha_egre"];
+$horaVenta = $respuesta["hora_venta"];
+$respuesta_dv = ControladorVenta::ctrMostrarDetalleVenta($item, $valor);
+$fechaVenta = $respuesta["fecha_venta"];
 $impuesto = $respuesta["impuesto"];  // Obtenemos el valor del impuesto
-$horaFormateada = date("h:i A", strtotime($fechaEgreso));
+$horaFormateada = date("h:i A", strtotime($fechaVenta));
 
 $itemConfig = null;
 $valorConfig = null;
@@ -48,8 +50,8 @@ foreach ($configuracion as $key => $value) {
 class PDF extends FPDF
 {
     private $serieNumero;
-    private $fechaEgreso;
-    private $horaEgreso;
+    private $fechaVenta;
+    private $horaVenta;
     private $nombreEmpresa;
     private $ruc;
     private $telefono;
@@ -59,12 +61,12 @@ class PDF extends FPDF
     private $mensaje;
 
     // Constructor que acepta los datos de la empresa y los de la venta
-    function __construct($serieNumero, $fechaEgreso, $horaEgreso, $nombreEmpresa, $ruc, $telefono, $correo, $direccion, $logo, $mensaje)
+    function __construct($serieNumero, $fechaVenta, $horaVenta, $nombreEmpresa, $ruc, $telefono, $correo, $direccion, $logo, $mensaje)
     {
         parent::__construct(); // Llamada al constructor de la clase FPDF
         $this->serieNumero = $serieNumero;
-        $this->fechaEgreso = $fechaEgreso;
-        $this->horaEgreso = $horaEgreso;
+        $this->fechaVenta = $fechaVenta;
+        $this->horaVenta = $horaVenta;
         $this->nombreEmpresa = $nombreEmpresa;
         $this->ruc = $ruc;
         $this->telefono = $telefono;
@@ -86,8 +88,8 @@ class PDF extends FPDF
         $this->SetFont('Helvetica', 'B', 12);
         $this->Cell(0, 7, utf8_decode('Boleta N° ' . $this->serieNumero), 0, 1, 'L');  // Accede a la propiedad
         $this->SetFont('Helvetica', '', 10);
-        $this->Cell(0, 7, 'Fecha: ' . date("d/m/Y", strtotime($this->fechaEgreso)), 0, 1, 'L');
-        $this->Cell(0, 7, utf8_decode('Hora: ' . $this->horaEgreso), 0, 1, 'L');
+        $this->Cell(0, 7, 'Fecha: ' . date("d/m/Y", strtotime($this->fechaVenta)), 0, 1, 'L');
+        $this->Cell(0, 7, utf8_decode('Hora: ' . $this->horaVenta), 0, 1, 'L');
         $this->Ln(5);
 
         // Logotipo
@@ -123,7 +125,7 @@ class PDF extends FPDF
 
 
 // Crear PDF
-$pdf = new PDF($serieNumero, $fechaEgreso, $horaEgreso, $nombreEmpresa, $ruc, $telefono, $correo, $direccion, $logo, $mensaje);
+$pdf = new PDF($serieNumero, $fechaVenta, $horaVenta, $nombreEmpresa, $ruc, $telefono, $correo, $direccion, $logo, $mensaje);
 $pdf->AliasNbPages();
 $pdf->AddPage();
 $pdf->SetMargins(10, 10, 10);
@@ -135,7 +137,7 @@ $pdf->SetX(10);
 $pdf->SetFont('Helvetica', 'B', 10);
 $pdf->Cell(0, 7, 'Cliente:', 0, 1, 'L');
 $pdf->SetFont('Helvetica', '', 10);
-$pdf->Cell(0, 7, 'Proveedor: ' . $respuesta["razon_social"], 0, 1, 'L');
+$pdf->Cell(0, 7, 'Cliente: ' . utf8_decode($respuesta["razon_social"]), 0, 1, 'L');
 $pdf->Cell(0, 7, 'Documento: ' . $respuesta["numero_documento"], 0, 1, 'L');
 $pdf->Cell(0, 7, utf8_decode('Dirección: ' . $respuesta["direccion"]), 0, 1, 'L');
 $pdf->Cell(0, 7, utf8_decode('Teléfono: ' . $respuesta["telefono"]), 0, 1, 'L');
@@ -154,21 +156,21 @@ $pdf->Cell(20, 10, 'Peso Br.', 'T B', 0, 'C', true);
 $pdf->Cell(20, 10, 'Peso Tara', 'T B', 0, 'C', true);
 $pdf->Cell(15, 10, 'Merma', 'T B', 0, 'C', true);
 $pdf->Cell(20, 10, 'Peso Neto', 'T B', 0, 'C', true);
-$pdf->Cell(20, 10, 'P. Compra', 'T B', 0, 'C', true);
+$pdf->Cell(20, 10, 'P. Venta', 'T B', 0, 'C', true);
 $pdf->Cell(25, 10, 'Total', 'T B', 1, 'C', true);
 
 // Datos de productos
 $pdf->SetFont('Helvetica', '', 10);
 
 $subtotal = 0;
-usort($respuesta_de, fn($a, $b) => strcmp($a['nombre_producto'], $b['nombre_producto']));
+usort($respuesta_dv, fn($a, $b) => strcmp($a['nombre_producto'], $b['nombre_producto']));
 
 $totalCompra = 0;
 
-foreach ($respuesta_de as $index => $producto) {
-    $totalProducto = $producto['peso_neto'] * $producto['precio_compra'];
+foreach ($respuesta_dv as $index => $producto) {
+    $totalProducto = $producto['peso_neto'] * $producto['precio_venta'];
     $totalCompra += $totalProducto;
-    $borde = ($index === count($respuesta_de) - 1) ? 'B' : 0;
+    $borde = ($index === count($respuesta_dv) - 1) ? 'B' : 0;
 
     // Ajusta el ancho de las celdas según sea necesario
     $pdf->SetX(10);
@@ -180,7 +182,7 @@ foreach ($respuesta_de as $index => $producto) {
     $pdf->Cell(20, 10, $producto['peso_tara'], $borde, 0, 'C');
     $pdf->Cell(15, 10, $producto['peso_merma'], $borde, 0, 'C');
     $pdf->Cell(20, 10, $producto['peso_neto'], $borde, 0, 'C');
-    $pdf->Cell(20, 10, 'S/ ' . number_format($producto['precio_compra'], 2), $borde, 0, 'C');
+    $pdf->Cell(20, 10, 'S/ ' . number_format($producto['precio_venta'], 2), $borde, 0, 'C');
     $pdf->Cell(25, 10, 'S/ ' . number_format($totalProducto, 2), $borde, 1, 'C');
 }
 
@@ -194,7 +196,7 @@ $pdf->Ln(5);
 $pdf->SetFont('Helvetica', 'B', 10);
 $pdf->Cell(150, 10, 'Subtotal:', 0, 0, 'R');
 $pdf->Cell(40, 10, 'S/ ' . number_format($totalCompra, 2), 0, 1, 'R');
-$pdf->Cell(150, 10, 'Impuestos (' . $impuesto . '%):', 0, 0, 'R');
+$pdf->Cell(150, 10, 'Impuesto (' . intval($impuesto) . '%):', 0, 0, 'R');
 $pdf->Cell(40, 10, 'S/ ' . number_format($impuestoTotal, 2), 0, 1, 'R');
 // Total con borde superior e inferior
 $pdf->Cell(150, 10, 'Total:', 'TB', 0, 'R'); // Borde superior e inferior en la celda de "Total"
@@ -202,7 +204,7 @@ $pdf->Cell(40, 10, 'S/ ' . number_format($totalConImpuesto, 2), 'TB', 1, 'R'); /
 
 if (isset($_GET['accion']) && $_GET['accion'] === 'descargar') {
     // Descargar el PDF
-    $pdf->Output('D', 'boleta' . $serieNumero . '.pdf'); // 'D' fuerza la descarga con el nombre 'boleta.pdf'
+    $pdf->Output('D', 'boleta' . $serieNumero . '_v.pdf'); // 'D' fuerza la descarga con el nombre 'boleta.pdf'
 } else {
     // Mostrar el PDF en el navegador (imprimir)
     $pdf->Output(); // Muestra el archivo en el navegador
