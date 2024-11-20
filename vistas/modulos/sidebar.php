@@ -16,8 +16,11 @@ $data_roles = json_decode($_SESSION["roles"], true);
                             Personas</span> <span class="menu-arrow"></span></a>
                     <ul>
 
+                        <li><a href="sucursales">Sucursales</a></li>
                         <li><a href="tipoDocumento">Tipo documento</a></li>
                         <li><a href="usuarios">Usuarios</a></li>
+                        <li><a href="roles">Roles</a></li>
+                        <li><a href="establecerRoles">Establecer roles</a></li>
                         <li><a href="proveedores">Proveedores</a></li>
                         <li><a href="clientes">Clientes</a></li>
                     </ul>
