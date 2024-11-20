@@ -103,37 +103,39 @@
     </div>
 </div>
 
-<!-- MODAL EDITAR CATEGORIA -->
+<!-- MODAL NUEVO CATEGORIA -->
 <div class="modal fade" id="modal_editar_sucursal" tabindex="-1" aria-labelledby="modal_editar_sucursal_Label" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Editar categoría</h5>
+                <h5 class="modal-title">Editar sucursal</h5>
                 <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
             </div>
-            <form enctype="multipart/form-data" id="form_actualizar_categoria">
+            <form enctype="multipart/form-data" id="form_update_sucursal">
                 <div class="modal-body">
-
-                    <!-- ID CATEGORIA -->
-                    <input type="hidden" name="edit_id_categoria" id="edit_id_categoria">
+                    <!-- ID DEL SUCURSAL -->
+                    <input type="hidden" name="edit_id_sucursal" id="edit_id_sucursal">
                     <!-- INGRESO TIPO DE PROVEEDOR -->
                     <div class="form-group">
-                        <label for="nombre_categoria" class="form-label">Ingrese el nombre (<span class="text-danger">*</span>)</label>
-                        <input type="text" name="edit_nombre_categoria" id="edit_nombre_categoria" placeholder="Ingresa el nombre">
-                        <small id="edit_error_nombre_categoria"></small>
+                        <label for="nombre_sucursal" class="form-label">Ingrese el nombre (<span class="text-danger">*</span>)</label>
+                        <input type="text" name="edit_nombre_sucursal" id="edit_nombre_sucursal" placeholder="Ingresa el nombre">
+                        <small id="error_edit_nombre_sucursal"></small>
                     </div>
-
-                    <!-- INGRESO DE RAZÓN SOCIAL -->
+                    <!-- INGRESO LA DIRECCION -->
                     <div class="form-group">
-                        <label class="form-label">Ingrese la descripción (<span class="text-danger">*</span>)</label>
-                        <textarea name="edit_descripcion_categoria" id="edit_descripcion_categoria" cols="30" rows="10" placeholder="Ingrese la descripción"></textarea>
-                        <small id="edit_error_descripcion_categoria"></small>
+                        <label for="edit_direccion" class="form-label">Ingrese la dirección (<span class="text-danger">*</span>)</label>
+                        <input type="text" name="edit_direccion_sucursal" id="edit_direccion_sucursal" placeholder="Ingresa la dirección">
+                        <small id="error_edit_direccion_sucursal"></small>
                     </div>
-
+                    <!-- INGRESO DEL  TELEFONO -->
+                    <div class="form-group">
+                        <label for="edit_telefono" class="form-label">Ingrese el teléfono (<span class="text-danger">*</span>)</label>
+                        <input type="text" name="edit_telefono_sucursal" id="edit_telefono_sucursal" placeholder="Ingresa el teléfono">
+                        <small id="error_edit_telefono_sucursal"></small>
+                    </div>
                 </div>
-
                 <div class="text-end mx-4 mb-2">
-                    <button type="button" id="btn_actualizar_categoria" class="btn btn-primary mx-2"><i class="fas fa-sync"></i> Guardar</button>
+                    <button type="button" id="btn_update_sucursal" class="btn btn-primary mx-2"><i class="fa fa-save"></i> Guardar</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                 </div>
             </form>

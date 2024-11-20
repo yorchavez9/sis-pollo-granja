@@ -70,15 +70,13 @@ $(document).ready(function () {
                 contentType: false,
                 processData: false,
                 success: function (respuesta) {
-                    console.log(respuesta);
-                    return;
                     var res = JSON.parse(respuesta);
                     if (res === "ok") {
-                        $("#form_nuevo_categoria")[0].reset();
-                        $("#modalNuevoCategoria").modal("hide");
+                        $("#form_nuevo_sucursal")[0].reset();
+                        $("#modal_nuevo_sucursal").modal("hide");
                         Swal.fire({
                             title: "¡Correcto!",
-                            text: "La categoría ha sido guardado",
+                            text: "Los datos guardados con éxito",
                             icon: "success",
                         });
                         mostrarSucursal();
@@ -139,16 +137,12 @@ $(document).ready(function () {
     ACTIVAR SUCURSAL
     =============================================*/
     $("#tabla_sucursal").on("click", ".btnActivar", function () {
-
         var idSucursal = $(this).attr("idSucursal");
         var estadoSucursal = $(this).attr("estadoSucursal");
-
         var datos = new FormData();
         datos.append("activarId", idSucursal);
         datos.append("activarSucursal", estadoSucursal);
-
         $.ajax({
-
             url: "ajax/Sucursal.ajax.php",
             method: "POST",
             data: datos,
@@ -157,25 +151,18 @@ $(document).ready(function () {
             processData: false,
             success: function (respuesta) {
                 if (window.matchMedia("(max-width:767px)").matches) {
-
                     swal({
                         title: "El usuario ha sido actualizado",
                         type: "success",
                         confirmButtonText: "¡Cerrar!"
                     }).then(function (result) {
                         if (result.value) {
-
                             window.location = "usuarios";
 
                         }
-
-
                     });
-
                 }
-
             }
-
         })
 
         if (estadoSucursal == 0) {
@@ -196,17 +183,14 @@ $(document).ready(function () {
 
 
     /*=============================================
-    EDITAR EL CATEGORIA
+    EDITAR EL SUCURSAL
     =============================================*/
-    $("#tabla_categoria").on("click", ".btnEditarCategoria", function () {
-
-        var idCategoria = $(this).attr("idCategoria");
-
-        var datos = new FormData();
-        datos.append("idCategoria", idCategoria);
-
+    $("#tabla_sucursal").on("click", ".btnEditarSucursal", function () {
+        let idSucursal = $(this).attr("idSucursal");
+        let datos = new FormData();
+        datos.append("idSucursal", idSucursal);
         $.ajax({
-            url: "ajax/Categoria.ajax.php",
+            url: "ajax/Sucursal.ajax.php",
             method: "POST",
             data: datos,
             cache: false,
@@ -215,10 +199,10 @@ $(document).ready(function () {
             dataType: "json",
             success: function (respuesta) {
 
-                $("#edit_id_categoria").val(respuesta["id_categoria"]);
-                $("#edit_nombre_categoria").val(respuesta["nombre_categoria"]);
-                $("#edit_descripcion_categoria").val(respuesta["descripcion"]);
-
+                $("#edit_id_sucursal").val(respuesta["id_sucursal"]);
+                $("#edit_nombre_sucursal").val(respuesta["nombre_sucursal"]);
+                $("#edit_direccion_sucursal").val(respuesta["direccion"]);
+                $("#edit_telefono_sucursal").val(respuesta["telefono"]);
             },
         });
     });
@@ -227,81 +211,84 @@ $(document).ready(function () {
     /*===========================================
     ACTUALIZAR CATEGORIA
     =========================================== */
-    $("#btn_actualizar_categoria").click(function (e) {
-
+    $("#btn_update_sucursal").click(function (e) {
         e.preventDefault();
-
-
-        var isValid = true;
-
-        var edit_id_categoria = $("#edit_id_categoria").val();
-        var edit_nombre_categoria = $("#edit_nombre_categoria").val();
-        var edit_descripcion_categoria = $("#edit_descripcion_categoria").val();
-
-        // Validar el nombre de categoríua
-        if (edit_nombre_categoria === "") {
-            $("#edit_error_nombre_categoria")
+        let isValid = true;
+        let edit_id_sucursal = $("#edit_id_sucursal").val();
+        let nombre_sucursal = $("#edit_nombre_sucursal").val();
+        let direccion = $("#edit_direccion_sucursal").val();
+        let telefono = $("#edit_telefono_sucursal").val();
+        
+        // Validar el nombre de la sucursal
+        if (nombre_sucursal === "") {
+            $("#error_edit_nombre_sucursal")
                 .html("Por favor, ingrese el nombre")
                 .addClass("text-danger");
             isValid = false;
-        } else if (!isNaN(edit_nombre_categoria)) {
-            $("#edit_error_nombre_categoria")
-                .html("El nombre no puede contener números")
+        } else if (!/^[a-zA-Z0-9\s,.-]+$/.test(nombre_sucursal)) { // Solo letras y espacios
+            $("#error_edit_nombre_sucursal")
+                .html("El nombre no puede contener números ni caracteres especiales")
                 .addClass("text-danger");
             isValid = false;
         } else {
-            $("#edit_error_nombre_categoria").html("").removeClass("text-danger");
+            $("#error_edit_nombre_sucursal").html("").removeClass("text-danger");
         }
 
-
-
-        // Validar el descripcion de categoria
-        if (edit_descripcion_categoria === "") {
-            $("#edit_error_descripcion_categoria")
-                .html("Por favor, ingrese la descripción")
+        // Validar la dirección de la sucursal
+        if (direccion === "") {
+            $("#error_edit_direccion_sucursal")
+                .html("Por favor, ingrese la dirección")
                 .addClass("text-danger");
             isValid = false;
-        } else if (!isNaN(edit_descripcion_categoria)) {
-            $("#edit_error_descripcion_categoria")
-                .html("La descripción no puede contener números")
+        } else if (!/^[a-zA-Z0-9\s,.\-#]+$/.test(direccion)) { // Permitir números y algunos caracteres comunes
+            $("#error_edit_direccion_sucursal")
+                .html("La dirección no puede contener caracteres especiales no permitidos")
                 .addClass("text-danger");
             isValid = false;
         } else {
-            $("#edit_error_descripcion_categoria").html("").removeClass("text-danger");
+            $("#error_edit_direccion_sucursal").html("").removeClass("text-danger");
         }
 
+        // Validar el teléfono de la sucursal
+        if (telefono === "") {
+            $("#error_edit_telefono_sucursal")
+                .html("Por favor, ingrese el teléfono")
+                .addClass("text-danger");
+            isValid = false;
+        } else if (!/^\d{9,12}$/.test(telefono)) { // Solo números, longitud de 9 caracteres
+            $("#error_edit_telefono_sucursal")
+                .html("El teléfono debe ser un número válido de 12 dígitos")
+                .addClass("text-danger");
+            isValid = false;
+        } else {
+            $("#error_edit_telefono_sucursal").html("").removeClass("text-danger");
+        }
 
 
         if (isValid) {
             var datos = new FormData();
-            datos.append("edit_id_categoria", edit_id_categoria);
-            datos.append("edit_nombre_categoria", edit_nombre_categoria);
-            datos.append("edit_descripcion_categoria", edit_descripcion_categoria);
-
-
+            datos.append("edit_id_sucursal", edit_id_sucursal);
+            datos.append("nombre_sucursal", nombre_sucursal);
+            datos.append("direccion", direccion);
+            datos.append("telefono", telefono);
             $.ajax({
-                url: "ajax/Categoria.ajax.php",
+                url: "ajax/Sucursal.ajax.php",
                 method: "POST",
                 data: datos,
                 cache: false,
                 contentType: false,
                 processData: false,
                 success: function (respuesta) {
-                    var res = JSON.parse(respuesta);
-
+                    let res = JSON.parse(respuesta);
                     if (res === "ok") {
-                        $("#form_actualizar_categoria")[0].reset();
-
-                        $("#modalEditarCategoria").modal("hide");
-
+                        $("#form_update_sucursal")[0].reset();
+                        $("#modal_editar_sucursal").modal("hide");
                         Swal.fire({
                             title: "¡Correcto!",
-                            text: "La categoría ha sido actualizado",
+                            text: "Datos actualizados con éxito",
                             icon: "success",
                         });
-
                         mostrarSucursal();
-
                     } else {
                         console.error("Error al cargar los datos.");
                     }
@@ -311,19 +298,15 @@ $(document).ready(function () {
     });
 
     /*=============================================
-      ELIMINAR CATEGORIA
+      ELIMINAR SUCURSAL
       =============================================*/
-    $("#tabla_categoria").on("click", ".btnEliminarCategoria", function (e) {
-
+    $("#tabla_sucursal").on("click", ".btnEliminarSucursal", function (e) {
         e.preventDefault();
-
-        var deleteIdCategoria = $(this).attr("idCategoria");
-
+        var delete_id_sucursal = $(this).attr("idSucursal");
         var datos = new FormData();
-        datos.append("deleteIdCategoria", deleteIdCategoria);
-
+        datos.append("delete_id_sucursal", delete_id_sucursal);
         Swal.fire({
-            title: "¿Está seguro de borrar la categoría?",
+            title: "¿Está seguro de borrar la sucursal?",
             text: "¡Si no lo está puede cancelar la accíón!",
             icon: "warning",
             showCancelButton: true,
@@ -334,7 +317,7 @@ $(document).ready(function () {
         }).then(function (result) {
             if (result.value) {
                 $.ajax({
-                    url: "ajax/Categoria.ajax.php",
+                    url: "ajax/Sucursal.ajax.php",
                     method: "POST",
                     data: datos,
                     cache: false,
@@ -342,29 +325,21 @@ $(document).ready(function () {
                     processData: false,
                     success: function (respuesta) {
                         var res = JSON.parse(respuesta);
-
                         if (res === "ok") {
-
                             Swal.fire({
                                 title: "¡Eliminado!",
-                                text: "La categoria ha sido eliminado",
+                                text: "Se eliminó con éxito",
                                 icon: "success",
                             });
-
                             mostrarSucursal();
-
                         } else {
-
                             console.error("Error al eliminar los datos");
-
                         }
                     }
                 });
-
             }
         });
-    }
-    );
+    });
 
     /* =====================================
     MOSTRANDO DATOS

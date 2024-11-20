@@ -23,19 +23,13 @@ class AjaxSucursal
 
     public $activarSucursal;
     public $activarId;
-
-
     public function ajaxActivarSucursal()
     {
-
         $tabla = "sucursales";
-
         $item1 = "estado";
         $valor1 = $this->activarSucursal;
-
         $item2 = "id_sucursal";
         $valor2 = $this->activarId;
-
         $respuesta = ModeloSucursal::mdlActualizarSucursal($tabla, $item1, $valor1, $item2, $valor2);
     }
 
@@ -57,25 +51,25 @@ elseif (isset($_POST["activarSucursal"])) {
     $activarSucursal->activarId = $_POST["activarId"];
     $activarSucursal->ajaxActivarSucursal();
 }
-//GUARDAR CATEGORIA
+//GUARDAR SUCURSAL
 elseif (isset($_POST["nombre_sucursal"])) {
     $crearSucursal = new ControladorSucursal();
     $crearSucursal->ctrCrearSucursal();
 }
 
-//ACTUALIZAR CATEGORIA
+//ACTUALIZAR SUCURSAL
 elseif (isset($_POST["edit_id_sucursal"])) {
-    $editCategoria = new ControladorSucursal();
-    $editCategoria->ctrEditarSucursal();
+    $editSucursal = new ControladorSucursal();
+    $editSucursal->ctrEditarSucursal();
 }
 
-//ELIMINAR CATEGORIA
-elseif (isset($_POST["deleteIdSucursal"])) {
-    $borrarCategoria = new ControladorSucursal();
-    $borrarCategoria->ctrBorraSucursal();
+//ELIMINAR SUCURSAL
+elseif (isset($_POST["delete_id_sucursal"])) {
+    $borrarSucursal = new ControladorSucursal();
+    $borrarSucursal->ctrBorraSucursal();
 }
 
-//MOSTRAR CATEGORIA
+//MOSTRAR SUCURSAL
 else {
     $item = null;
     $valor = null;
