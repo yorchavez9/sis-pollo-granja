@@ -193,7 +193,7 @@ $(document).ready(function () {
       type: "GET",
       dataType: "json",
       success: function (trabajadores) {
-        console.log(trabajadores);
+
         var tbody = $("#datos_trabajadores");
 
         var contador = 1;

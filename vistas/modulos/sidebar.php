@@ -11,8 +11,8 @@ $data_roles = json_decode($_SESSION["roles"], true);
                     <a href="inicio"><img src="vistas/dist/assets/img/icons/dashboard.svg" alt="img"><span>
                             Panel</span> </a>
                 </li>
-                <li class="submenu">
-                    <a href="javascript:void(0);"><img src="vistas/dist/assets/img/icons/sucursales.svg" alt="img"><span>Sucursales</span></a>
+                <li >
+                    <a href="sucursales"><img src="vistas/dist/assets/img/icons/sucursales.svg" alt="img"><span>Sucursales</span></a>
                 </li>
                 <li class="submenu">
                     <a href="javascript:void(0);"><img src="vistas/dist/assets/img/icons/users1.svg" alt="img"><span>

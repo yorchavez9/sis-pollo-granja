@@ -2,11 +2,11 @@
     <div class="content">
         <div class="page-header">
             <div class="page-title">
-                <h4>Lista de categorias</h4>
-                <h6>Administrar categorias</h6>
+                <h4>Lista de sucursales</h4>
+                <h6>Administrar sucursal</h6>
             </div>
             <div class="page-btn">
-                <a href="#" class="btn btn-added" data-bs-toggle="modal" data-bs-target="#modalNuevoCategoria"><img src="vistas/dist/assets/img/icons/plus.svg" alt="img" class="me-2">Agregar categoría</a>
+                <a href="#" class="btn btn-added" data-bs-toggle="modal" data-bs-target="#modal_nuevo_sucursal"><img src="vistas/dist/assets/img/icons/plus.svg" alt="img" class="me-2">Agregar sucursal</a>
             </div>
         </div>
 
@@ -42,17 +42,18 @@
                 </div>
 
                 <div class="table-responsive">
-                    <table class="table table-striped table-bordered" style="width:100%" id="tabla_categoria">
+                    <table class="table table-striped table-bordered" style="width:100%" id="tabla_sucursal">
                         <thead>
                             <tr>
                                 <th>N°</th>
                                 <th>Nombre</th>
-                                <th>Descripción</th>
-                                <th>Fecha</th>
+                                <th>Dirección</th>
+                                <th>Teléfono</th>
+                                <th>Estado</th>
                                 <th class="text-center">Acción</th>
                             </tr>
                         </thead>
-                        <tbody id="dataCategorias">
+                        <tbody id="data_sucursal">
 
                         </tbody>
                     </table>
@@ -65,34 +66,36 @@
 
 
 <!-- MODAL NUEVO CATEGORIA -->
-<div class="modal fade" id="modalNuevoCategoria" tabindex="-1" aria-labelledby="modalNuevoCategoriaLabel" aria-hidden="true">
+<div class="modal fade" id="modal_nuevo_sucursal" tabindex="-1" aria-labelledby="modal_nuevo_sucursal_Label" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Crear categoría</h5>
+                <h5 class="modal-title">Crear sucursal</h5>
                 <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
             </div>
-            <form enctype="multipart/form-data" id="form_nuevo_categoria">
+            <form enctype="multipart/form-data" id="form_nuevo_sucursal">
                 <div class="modal-body">
-
                     <!-- INGRESO TIPO DE PROVEEDOR -->
                     <div class="form-group">
-                        <label for="nombre_categoria" class="form-label">Ingrese el nombre (<span class="text-danger">*</span>)</label>
-                        <input type="text" name="nombre_categoria" id="nombre_categoria" placeholder="Ingresa el nombre">
-                        <small id="error_nombre_categoria"></small>
+                        <label for="nombre_sucursal" class="form-label">Ingrese el nombre (<span class="text-danger">*</span>)</label>
+                        <input type="text" name="nombre_sucursal" id="nombre_sucursal" placeholder="Ingresa el nombre">
+                        <small id="error_nombre_sucursal"></small>
                     </div>
-
-                    <!-- INGRESO DE RAZÓN SOCIAL -->
+                    <!-- INGRESO LA DIRECCION -->
                     <div class="form-group">
-                        <label class="form-label">Ingrese la descripción (<span class="text-danger">*</span>)</label>
-                        <textarea name="descripcion_categoria" id="descripcion_categoria" cols="30" rows="10" placeholder="Ingrese la descripción"></textarea>
-                        <small id="error_descripcion_categoria"></small>
+                        <label for="direccion" class="form-label">Ingrese la dirección (<span class="text-danger">*</span>)</label>
+                        <input type="text" name="direccion_sucursal" id="direccion_sucursal" placeholder="Ingresa la dirección">
+                        <small id="error_direccion_sucursal"></small>
                     </div>
-
+                    <!-- INGRESO DEL  TELEFONO -->
+                    <div class="form-group">
+                        <label for="telefono" class="form-label">Ingrese el teléfono (<span class="text-danger">*</span>)</label>
+                        <input type="text" name="telefono_sucursal" id="telefono_sucursal" placeholder="Ingresa el teléfono">
+                        <small id="error_telefono_sucursal"></small>
+                    </div>
                 </div>
-
                 <div class="text-end mx-4 mb-2">
-                    <button type="button" id="btn_guardar_categoria" class="btn btn-primary mx-2"><i class="fa fa-save"></i> Guardar</button>
+                    <button type="button" id="btn_guardar_sucursal" class="btn btn-primary mx-2"><i class="fa fa-save"></i> Guardar</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                 </div>
             </form>
@@ -101,7 +104,7 @@
 </div>
 
 <!-- MODAL EDITAR CATEGORIA -->
-<div class="modal fade" id="modalEditarCategoria" tabindex="-1" aria-labelledby="modalEditarCategoriaLabel" aria-hidden="true">
+<div class="modal fade" id="modal_editar_sucursal" tabindex="-1" aria-labelledby="modal_editar_sucursal_Label" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
