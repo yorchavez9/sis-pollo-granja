@@ -12,11 +12,12 @@ $data_roles = json_decode($_SESSION["roles"], true);
                             Panel</span> </a>
                 </li>
                 <li class="submenu">
+                    <a href="javascript:void(0);"><img src="vistas/dist/assets/img/icons/sucursales.svg" alt="img"><span>Sucursales</span></a>
+                </li>
+                <li class="submenu">
                     <a href="javascript:void(0);"><img src="vistas/dist/assets/img/icons/users1.svg" alt="img"><span>
                             Personas</span> <span class="menu-arrow"></span></a>
                     <ul>
-
-                        <li><a href="sucursales">Sucursales</a></li>
                         <li><a href="tipoDocumento">Tipo documento</a></li>
                         <li><a href="usuarios">Usuarios</a></li>
                         <li><a href="roles">Roles</a></li>
