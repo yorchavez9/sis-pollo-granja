@@ -110,7 +110,9 @@ class ModeloProducto{
 	=============================================*/
 
 	static public function mdlIngresarProducto($tabla, $datos){
-
+		if (empty($datos["fecha_vencimiento"])) {
+			$datos["fecha_vencimiento"] = NULL; // Asignar NULL si no se proporciona fecha
+		}
 		$stmt = Conexion::conectar()->prepare("INSERT INTO $tabla(
                                                                 id_categoria,
                                                                 codigo_producto, 
@@ -159,7 +161,9 @@ class ModeloProducto{
 	=============================================*/
 
 	static public function mdlEditarProducto($tabla, $datos){
-	
+		if (empty($datos["fecha_vencimiento"])) {
+			$datos["fecha_vencimiento"] = NULL; // Asignar NULL si no se proporciona fecha
+		}
 		$stmt = Conexion::conectar()->prepare("UPDATE $tabla SET 
 																id_categoria = :id_categoria, 
 																codigo_producto = :codigo_producto, 

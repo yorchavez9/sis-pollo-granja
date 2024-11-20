@@ -16,20 +16,8 @@ $data_roles = json_decode($_SESSION["roles"], true);
                             Personas</span> <span class="menu-arrow"></span></a>
                     <ul>
 
-                        <?php
-
-                        foreach ($data_roles as $rol) {
-
-                            if ($rol == "administrador") {
-                        ?>
-                                <li><a href="tipoDocumento">Tipo documento</a></li>
-                                <li><a href="usuarios">Usuarios</a></li>
-                        <?php
-                            }
-                        }
-
-                        ?>
-
+                        <li><a href="tipoDocumento">Tipo documento</a></li>
+                        <li><a href="usuarios">Usuarios</a></li>
                         <li><a href="proveedores">Proveedores</a></li>
                         <li><a href="clientes">Clientes</a></li>
                     </ul>
@@ -52,7 +40,7 @@ $data_roles = json_decode($_SESSION["roles"], true);
                         <li><a href="listaCompras">Lista de compras</a></li>
                     </ul>
                 </li>
-                
+
                 <li class="submenu">
                     <a href="javascript:void(0);"><img src="vistas/dist/assets/img/icons/sales1.svg" alt="img"><span>
                             Ventas</span> <span class="menu-arrow"></span></a>
@@ -88,25 +76,14 @@ $data_roles = json_decode($_SESSION["roles"], true);
                         <li><a href="reporteVenta">Reporte de venta</a></li>
                     </ul>
                 </li>
-                <?php
-
-                foreach ($data_roles as $rol) {
-
-                    if ($rol == "administrador") {
-                ?>
-                        <li class="submenu">
-                            <a href="javascript:void(0);"><img src="vistas/dist/assets/img/icons/settings.svg" alt="img"><span>
-                                    Ajustes</span> <span class="menu-arrow"></span></a>
-                            <ul>
-                                <li><a href="configuracionTicket">Configuración Ticket</a></li>
-                                <li><a href="configuracionImpresora">Configuración Impresora</a></li>
-                            </ul>
-                        </li>
-                <?php
-                    }
-                }
-
-                ?>
+                <li class="submenu">
+                    <a href="javascript:void(0);"><img src="vistas/dist/assets/img/icons/settings.svg" alt="img"><span>
+                            Ajustes</span> <span class="menu-arrow"></span></a>
+                    <ul>
+                        <li><a href="configuracionTicket">Configuración Ticket</a></li>
+                        <li><a href="configuracionImpresora">Configuración Impresora</a></li>
+                    </ul>
+                </li>
 
             </ul>
         </div>

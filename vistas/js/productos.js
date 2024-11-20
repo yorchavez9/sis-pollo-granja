@@ -33,7 +33,8 @@ $(document).ready(function () {
                             <td>${producto.nombre_producto}</td>
                             <td>S/ ${producto.precio_producto}</td>
                             <td class="text-center"><button type="button" class="btn btn-sm" style="${getButtonStyles(producto.stock_producto)}">${producto.stock_producto}</button></td>
-                            <td>${producto.fecha_vencimiento}</td>
+                            <td>${producto.fecha_vencimiento ? producto.fecha_vencimiento : 'No tiene fecha de vencimiento'}</td>
+
 
                             <td>
                               ${producto.estado_producto != 0 ? '<button class="btn bg-lightgreen badges btn-sm rounded btnActivar" idProducto="' + producto.id_producto + '" estadoProducto="0">Activado</button>'
@@ -216,7 +217,7 @@ $(document).ready(function () {
     // Validar el stock del producto
     if (stock_producto === "" || stock_producto === null || isNaN(stock_producto) || parseInt(stock_producto) !== parseFloat(stock_producto) || parseInt(stock_producto) < 0) {
       $("#error_stock_p")
-        .html("Por favor, ingrese un número entero positivo para el stock")
+        .html("Por favor, ingrese un número válido")
         .addClass("text-danger");
       isValid = false;
     } else {
@@ -454,11 +455,8 @@ $(document).ready(function () {
     var edit_stock_producto = $("#edit_stock_producto").val();
     var edit_fecha_vencimiento = $("#edit_fecha_vencimiento").val();
     var edit_descripcion_producto = $("#edit_descripcion_producto").val();
-
-
     var edit_imagen_producto = $("#edit_imagen_producto").get(0).files[0];
     var edit_imagen_actual_p = $("#edit_imagen_actual_p").val();
-
 
 
     // Validar la categoria
@@ -495,13 +493,12 @@ $(document).ready(function () {
     // Validar el stock del producto
     if (edit_stock_producto === "" || edit_stock_producto === null || isNaN(edit_stock_producto) || parseInt(edit_stock_producto) !== parseFloat(edit_stock_producto) || parseInt(edit_stock_producto) < 0) {
       $("#edit_error_stock_p")
-        .html("Por favor, ingrese un número entero positivo para el stock")
+        .html("Por favor, ingrese un numero válido")
         .addClass("text-danger");
       isValid = false;
     } else {
       $("#edit_error_stock_p").html("").removeClass("text-danger");
     }
-
 
 
     // Si el formulario es válido, envíalo
@@ -527,7 +524,6 @@ $(document).ready(function () {
         contentType: false,
         processData: false,
         success: function (respuesta) {
-
           var res = JSON.parse(respuesta);
 
           if (res === "ok") {

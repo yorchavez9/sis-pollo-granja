@@ -193,7 +193,7 @@ $(document).ready(function () {
       type: "GET",
       dataType: "json",
       success: function (trabajadores) {
-
+        console.log(trabajadores);
         var tbody = $("#datos_trabajadores");
 
         var contador = 1;
@@ -211,18 +211,16 @@ $(document).ready(function () {
                         ${contador}
                       </td>
                       <td>
-                          <a href="javascript:void(0);" class="product-img">
-                              <img src="${trabajador.foto}" alt="${trabajador.foto}">
-                          </a>
+                        <a href="javascript:void(0);" class="product-img">
+                          <img src="${trabajador.foto && trabajador.foto.trim() !== '' ? trabajador.foto : 'vistas/img/trabajador/default.png'}" alt="Imagen del trabajador" width="200" height="100">
+                        </a>
                       </td>
                       <td>${trabajador.nombre}</td>
                       <td>${trabajador.num_documento}</td>
                       <td>${trabajador.telefono}</td>
                       <td>${trabajador.correo}</td>
-                      <td>
-                        <a href="${trabajador.cv}" class="product-img" download>
-                            <img src="vistas/pdf/pdf.png" alt="${trabajador.cv}">
-                        </a>
+                     <td>
+                        ${trabajador.cv && trabajador.cv.trim() !== '' ? `<a href="${trabajador.cv}" class="product-img" download><img src="vistas/pdf/pdf.png" alt="${trabajador.cv}"></a>` :'<span>No tiene</span>'}
                       </td>
                       <td>
                       ${trabajador.tipo_pago}
@@ -442,7 +440,7 @@ $(document).ready(function () {
 
         } else {
 
-          $(".mostrar_foto_trabajador").attr("src","vistas/img/usuarios/default/anonymous.png");
+          $(".mostrar_foto_trabajador").attr("src","vistas/img/trabajador/default.png");
 
         }
 
@@ -524,8 +522,6 @@ $(document).ready(function () {
         contentType: false,
         processData: false,
         success: function (respuesta) {
-
-
           var res = JSON.parse(respuesta);
 
           if (res === "ok") {

@@ -1,18 +1,18 @@
 <?php
-
-class Conexion{
-
-	static public function conectar(){
-
-		$link = new PDO(
-			"mysql:host=localhost;dbname=sis_pollo_granja",
-			            "root",
-			            "");
-
-		$link->exec("set names utf8");
-
-		return $link;
-
+class Conexion
+{
+	static public function conectar()
+	{
+		try {
+			$link = new PDO(
+				"mysql:host=127.0.0.1;port=3308;dbname=sis_granja_pollo",
+				"root",
+				"Marzo199972243561myc"
+			);
+			$link->exec("set names utf8");
+			return $link;
+		} catch (PDOException $e) {
+			die("Error de conexión: " . $e->getMessage());
+		}
 	}
-
 }
