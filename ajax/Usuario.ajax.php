@@ -120,7 +120,7 @@ elseif (isset($_POST["validarUsuario"])) {
 }
 
 /* GUARDAR USUARIO */
-elseif (isset($_POST["nombre"])) {
+elseif (isset($_POST["nombre_usuario"])) {
 
     $crearUsuario = new ControladorUsuarios();
     
@@ -157,19 +157,16 @@ else{
         
         $fila = array(
             'id_usuario' => $usuario['id_usuario'],
+            'id_sucursal' => $usuario['id_sucursal'],
             'nombre_usuario' => $usuario['nombre_usuario'],
-            'id_doc' => $usuario['id_doc'],
-            'nombre_doc' => $usuario['nombre_doc'],
-            'numero_documento' => $usuario['numero_documento'],
-            'direccion' => $usuario['direccion'],
+            'nombre_sucursal' => $usuario['nombre_sucursal'],
             'telefono' => $usuario['telefono'],
             'correo' => $usuario['correo'],
             'usuario' => $usuario['usuario'],
             'contrasena' => $usuario['contrasena'],
             'imagen_usuario' => $usuario['imagen_usuario'],
             'estado' => $usuario['estado'],
-            'fecha_usuario' => $usuario['fecha_usuario'],
-            'roles' => $usuario['roles']
+            'fecha_usuario' => $usuario['fecha_usuario']
         );
     
         

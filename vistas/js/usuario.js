@@ -1,5 +1,10 @@
 $(document).ready(function () {
 
+  /* =====================================
+ MSOTRANDO DATOS
+ ===================================== */
+  mostrarUsuarios();
+
 
   /* =====================================
   VISTA PREVIA DE LA IMAGEN DEL USUARIO
@@ -23,18 +28,14 @@ $(document).ready(function () {
   /* =====================================
   VISTA PREVIA DE LA IMAGEN DEL USUARIO
   ===================================== */
-  $("#edit_imagen_usuario").change(function () {
+  $("#edit_new_imagen_usuario").change(function () {
     const file = this.files[0];
-
     if (file) {
       const reader = new FileReader();
-
       reader.onload = function (e) {
-        $(".editVistaPreviaImagenUsuario").attr("src", e.target.result);
-
-        $(".editVistaPreviaImagenUsuario").show();
+        $(".edit_vista_imagen_usuario").attr("src", e.target.result);
+        $(".edit_vista_imagen_usuario").show();
       };
-
       reader.readAsDataURL(file);
     }
   });
@@ -90,131 +91,53 @@ $(document).ready(function () {
   GUARDAR USUARIO
   =========================================== */
 
-  $("#guardar_usuario").click(function () {
-    var isValid = true;
+  $("#guardar_usuario").click(() => {
+    let isValid = true;
+    const campos = {
+      id_sucursal: $("#id_sucursal").val(),
+      nombre_usuario: $("#nombre_usuario").val(),
+      telefono: $("#telefono").val(),
+      correo: $("#correo").val(),
+      usuario: $("#usuario").val(),
+      contrasena: $("#contrasena").val(),
+      imagen: $("#imagen_usuario").get(0).files[0]
+    };
 
-    var nombre = $("#nombre_usuario").val();
-    var tipoDocumento = $("#id_doc").val();
-    var numeroDocumento = $("#numero_documento").val();
-    var direccion = $("#direccion").val();
-    var telefono = $("#telefono").val();
-    var correo = $("#correo").val();
-    var usuario = $("#usuario").val();
-    var contrasena = $("#contrasena").val();
-    var imagen = $("#imagen_usuario").get(0).files[0];
+    // Función de validación genérica con nombre específico
+    const validarCampo = (campo, mensaje, nombreLegible, regex = null) => {
+      if (!campo || (regex && !regex.test(campo))) {
+        $(`#error${mensaje}`).html(`Por favor, ingrese un ${nombreLegible} válido`).addClass("text-danger");
+        isValid = false;
+      } else {
+        $(`#error${mensaje}`).html("").removeClass("text-danger");
+      }
+    };
 
-    var roles = [];
+    // Validaciones específicas con nombres legibles
+    validarCampo(campos.id_sucursal, "id_sucursal", "Sucursal");
+    validarCampo(campos.nombre_usuario, "nombre_usuario", "Nombre de Usuario");
+    validarCampo(campos.usuario, "usuario", "Usuario");
+    validarCampo(campos.telefono, "TelefonoUsuario", "Teléfono", /^[0-9]{9,15}$/); // Validación de teléfono
+    validarCampo(campos.correo, "CorreoUsuario", "Correo", /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/); // Validación de correo
+    validarCampo(campos.contrasena, "Contrasena", "Contraseña", /^.{6,}$/); // Contraseña con mínimo 6 caracteres
 
-    $('.data_rol:checked').each(function () {
-      roles.push($(this).val());
-    });
-
-    var data_roles = JSON.stringify(roles);
-
-    // Validar el nombre de usuario
-    if (nombre == "") {
-      $("#errorNombreUsuario")
-        .html("Por favor, ingrese el nombre completo")
-        .addClass("text-danger");
-      isValid = false;
-    } else {
-      $("#errorNombreUsuario").html("").removeClass("text-danger");
-    }
-
-    // Validar el tipo de documento
-    if (tipoDocumento == null) {
-      $("#errorTipoDocumento")
-        .html("Por favor, seleccione el tipo de documento")
-        .addClass("text-danger");
-      isValid = false;
-    } else {
-      $("#errorTipoDocumento").html("").removeClass("text-danger");
-    }
-
-    // Validar el número de documento
-    if (numeroDocumento == "") {
-      $("#errorNumeroDocumento")
-        .html("Por favor, ingrese el número de documento")
-        .addClass("text-danger");
-      isValid = false;
-    } else {
-      $("#errorNumeroDocumento").html("").removeClass("text-danger");
-    }
-
-    // Validar la dirección
-    if (direccion == "") {
-      $("#errorDireccionUsuario")
-        .html("Por favor, ingrese la dirección")
-        .addClass("text-danger");
-      isValid = false;
-    } else {
-      $("#errorDireccionUsuario").html("").removeClass("text-danger");
-    }
-
-    // Validar el teléfono
-    if (telefono == "") {
-      $("#errorTelefonoUsuario")
-        .html("Por favor, ingrese el teléfono")
-        .addClass("text-danger");
-      isValid = false;
-    } else {
-      $("#errorTelefonoUsuario").html("").removeClass("text-danger");
-    }
-
-    // Validar el correo electrónico
-    if (correo == "") {
-      $("#errorCorreoUsuario")
-        .html("Por favor, ingrese el correo electrónico")
-        .addClass("text-danger");
-      isValid = false;
-    } else {
-      $("#errorCorreoUsuario").html("").removeClass("text-danger");
-    }
-
-    // Validar el usuario
-    if (usuario == "") {
-      $("#errorUsuario")
-        .html("Por favor, ingrese el usuario")
-        .addClass("text-danger");
-      isValid = false;
-    } else {
-      $("#errorUsuario").html("").removeClass("text-danger");
-    }
-
-    // Validar la contraseña
-    if (contrasena == "") {
-      $("#errorContrasena")
-        .html("Por favor, ingrese la contraseña")
-        .addClass("text-danger");
-      isValid = false;
-    } else {
-      $("#errorContrasena").html("").removeClass("text-danger");
-    }
-
-    // Validar la imagen
-    if (!imagen) {
-      $("#errorImagenUsuario")
-        .html("Por favor, selecciona una imagen")
-        .addClass("text-danger");
+    // Validación de imagen
+    if (!campos.imagen) {
+      $("#errorImagenUsuario").html("Por favor, selecciona una imagen").addClass("text-danger");
       isValid = false;
     } else {
       $("#errorImagenUsuario").html("").removeClass("text-danger");
     }
 
-    // Si el formulario es válido, envíalo
+    // Si es válido, enviar formulario
     if (isValid) {
-      var datos = new FormData();
+      const datos = new FormData();
+      Object.entries(campos).forEach(([key, value]) => {
+        datos.append(key, value);
+      });
 
-      datos.append("nombre", nombre);
-      datos.append("tipoDocumento", tipoDocumento);
-      datos.append("numeroDocumento", numeroDocumento);
-      datos.append("direccion", direccion);
-      datos.append("telefono", telefono);
-      datos.append("correo", correo);
-      datos.append("usuario", usuario);
-      datos.append("contrasena", contrasena);
-      datos.append("imagen", imagen);
-      datos.append("data_roles", data_roles);
+      // Para depuración, mostrar los datos antes de enviarlos
+      datos.forEach(element => console.log(element));
 
       $.ajax({
         url: "ajax/Usuario.ajax.php",
@@ -223,11 +146,8 @@ $(document).ready(function () {
         cache: false,
         contentType: false,
         processData: false,
-        success: function (respuesta) {
-          console.log(respuesta);
-
-          var res = JSON.parse(respuesta);
-
+        success: (respuesta) => {
+          const res = JSON.parse(respuesta);
           if (res === "ok") {
             $("#nuevoUsuario")[0].reset();
             $(".vistaPreviaImagenUsuario").attr("src", "");
@@ -253,72 +173,56 @@ $(document).ready(function () {
   MOSTRANDO USUARIOS
   =========================== */
   function mostrarUsuarios() {
-
     $.ajax({
       url: "ajax/Usuario.ajax.php",
       type: "GET",
       dataType: "json",
       success: function (usuarios) {
-
         var tbody = $("#dataUsuarios");
-
         tbody.empty();
 
         usuarios.forEach(function (usuario) {
-
           usuario.imagen_usuario = usuario.imagen_usuario.substring(3);
-
           var fila = `
-                <tr>
-                    <td>
-                        <a href="javascript:void(0);" class="product-img">
-                            <img src="${usuario.imagen_usuario}" alt="${usuario.nombre_usuario}">
-                        </a>
-                    </td>
-                    <td>${usuario.nombre_usuario}</td>
-                    <td>${usuario.usuario}</td>
-                    <td>
-                        <span>${usuario.nombre_doc}: </span>
-                        <span>${usuario.numero_documento}</span>
-                    </td>
-                    <td>${usuario.direccion}</td>
-                    <td>${usuario.telefono}</td>
-                    <td>${usuario.correo}</td>
+          <tr>
+            <td>
+              <a href="javascript:void(0);" class="product-img">
+                <img src="${usuario.imagen_usuario}" alt="${usuario.nombre_usuario}">
+              </a>
+            </td>
+            <td>${usuario.nombre_sucursal}</td>
+            <td>${usuario.nombre_usuario}</td>
+            <td>${usuario.usuario}</td>
+            <td>${usuario.telefono}</td>
+            <td>${usuario.correo}</td>
+            <td>
+              ${usuario.estado != 0 ? '<button class="btn bg-lightgreen badges btn-sm rounded btnActivar" idUsuario="' + usuario.id_usuario + '" estadoUsuario="0">Activado</button>'
+              : '<button class="btn bg-lightred badges btn-sm rounded btnActivar" idUsuario="' + usuario.id_usuario + '" estadoUsuario="1">Desactivado</button>'}
+            </td>
+            <td>
+              <a href="#" class="me-3 btnEditarUsuario" idUsuario="${usuario.id_usuario}" data-bs-toggle="modal" data-bs-target="#modalEditarUsuario">
+                <i class="text-warning fas fa-edit fa-lg"></i>
+              </a>
+              <a href="#" class="me-3 btnVerUsuario" idUsuario="${usuario.id_usuario}" data-bs-toggle="modal" data-bs-target="#modalVerUsuario">
+                <i class="text-primary fa fa-eye fa-lg"></i>
+              </a>
+              <a href="#" class="me-3 confirm-text btnEliminarUsuario" idUsuario="${usuario.id_usuario}" fotoUsuario="${usuario.imagen_usuario}">
+                <i class="fa fa-trash fa-lg" style="color: #F52E2F"></i>
+              </a>
+            </td>
+          </tr>`;
 
-                    <td>
-                        ${usuario.estado != 0 ? '<button class="btn bg-lightgreen badges btn-sm rounded btnActivar" idUsuario="' + usuario.id_usuario + '" estadoUsuario="0">Activado</button>'
-              : '<button class="btn bg-lightred badges btn-sm rounded btnActivar" idUsuario="' + usuario.id_usuario + '" estadoUsuario="1">Desactivado</button>'
-            }
-                    </td>
-                    
-                    <td>
-                        <a href="#" class="me-3 btnEditarUsuario" idUsuario="${usuario.id_usuario}" data-bs-toggle="modal" data-bs-target="#modalEditarUsuario">
-                            <i class="text-warning fas fa-edit fa-lg"></i>
-                        </a>
-                        <a href="#" class="me-3 btnVerUsuario" idUsuario="${usuario.id_usuario}" data-bs-toggle="modal" data-bs-target="#modalVerUsuario">
-                            <i class="text-primary fa fa-eye fa-lg"></i>
-                        </a>
-                        <a href="#" class="me-3 confirm-text btnEliminarUsuario" idUsuario="${usuario.id_usuario}" fotoUsuario="${usuario.imagen_usuario}">
-                            <i class="fa fa-trash fa-lg" style="color: #F52E2F"></i>
-                        </a>
-                    </td>
-                </tr>`;
-
-
-          // Agregar la fila al tbody
           tbody.append(fila);
-
         });
 
-        // Inicializar DataTables después de cargar los datos
-        $('#tabla_usuarios').DataTable();
-
+        $('#tabla_usuarios').DataTable()
       },
       error: function (xhr, status, error) {
         console.error("Error al recuperar los usuarios:", error);
       },
     });
   }
+
 
   /*=============================================
   ACTIVAR USUARIO
@@ -384,11 +288,9 @@ $(document).ready(function () {
   EDITAR EL USUARIO
   =============================================*/
   $("#tabla_usuarios").on("click", ".btnEditarUsuario", function () {
-    var idUsuario = $(this).attr("idUsuario");
-
-    var datos = new FormData();
+    let idUsuario = $(this).attr("idUsuario");
+    let datos = new FormData();
     datos.append("idUsuario", idUsuario);
-
     $.ajax({
       url: "ajax/Usuario.ajax.php",
       method: "POST",
@@ -399,45 +301,32 @@ $(document).ready(function () {
       dataType: "json",
       success: function (respuesta) {
 
-        $("#editIdUsuario").val(respuesta["id_usuario"]);
-        $("#edit_nombre_usuario").val(respuesta["nombre_usuario"]);
-
-        $("#edit_id_doc").append(
+        $("#edit_id_usuario").val(respuesta["id_usuario"]);
+        $("#edit_id_sucursal").append(
           '<option value="' +
-          respuesta["id_doc"] +
+          respuesta["id_sucursal"] +
           '" selected>' +
-          respuesta["nombre_doc"] +
+          respuesta["nombre_sucursal"] +
           "</option>"
         );
-
-        $("#edit_numero_documento").val(respuesta["numero_documento"]);
-        $("#edit_direccion").val(respuesta["direccion"]);
-        $("#edit_telefono").val(respuesta["telefono"]);
-        $("#edit_correo").val(respuesta["correo"]);
-        $("#edit_usuario").val(respuesta["usuario"]);
-        $("#passwordActual").val(respuesta["contrasena"]);
+        $("#edit_nombre_usuario").val(respuesta["nombre_usuario"]);
+        $("#edit_telefono_usuario").val(respuesta["telefono"]);
+        $("#edit_correo_usuario").val(respuesta["correo"]);
+        $("#edit_usuario_usuario").val(respuesta["usuario"]);
+        $("#edit_password_actual").val(respuesta["contrasena"]);
 
         var imagenUsuario = respuesta["imagen_usuario"].substring(3);
 
         if (respuesta["imagen_usuario"] != "") {
-          $(".editVistaPreviaImagenUsuario").attr("src", imagenUsuario);
+          $(".edit_vista_imagen_usuario").attr("src", imagenUsuario);
         } else {
-          $(".editVistaPreviaImagenUsuario").attr(
+          $(".edit_vista_imagen_usuario").attr(
             "src",
-            "vistas/img/usuarios/default/anonymous.png"
+            "vistas/img/usuarios/default.jpeg"
           );
         }
 
-        $("#imagenActualUsuario").val(respuesta["imagen_usuario"]);
-
-        var data_roles = JSON.parse(respuesta["roles"])
-
-        data_roles.forEach(function (rol) {
-          // Concatena "edit_rol_" con el nombre del rol para obtener el ID del checkbox
-          var checkboxId = "edit_rol_" + rol;
-          // Busca el checkbox por su ID y márcalo
-          document.getElementById(checkboxId).checked = true;
-        });
+        $("#edit_imagen_actual_usuario").val(respuesta["imagen_usuario"]);
 
       },
     });
@@ -464,9 +353,7 @@ $(document).ready(function () {
       dataType: "json",
       success: function (respuesta) {
         $("#mostrar_nombre_usuario").text(respuesta["nombre_usuario"]);
-        $("#mostrar_tipo_documento").text(respuesta["nombre_doc"]);
-        $("#mostrar_numero_documento_usuario").text(respuesta["numero_documento"]);
-        $("#mostrar_direccion_usuario").text(respuesta["direccion"]);
+        $("#mostrar_nombre_sucursal").text(respuesta["nombre_sucursal"]);
         $("#mostrar_telefono_usuario").text(respuesta["telefono"]);
         $("#mostrar_correo_usuario").text(respuesta["correo"]);
         $("#mostrar_usuario").text(respuesta["usuario"]);
@@ -500,124 +387,78 @@ $(document).ready(function () {
   /*===========================================
   ACTUALIZAR EL USUARIO
   =========================================== */
-  $("#actualizar_usuario").click(function (e) {
+  $("#btn_update_usuario").click(function (e) {
     e.preventDefault();
 
-    var isValid = true;
+    // Variables para los campos
+    let edit_idSucursal = $("#edit_id_sucursal").val();
+    let edit_nombreUsuario = $("#edit_nombre_usuario").val().trim();
+    let edit_telefonoUsuario = $("#edit_telefono_usuario").val().trim();
+    let edit_correoUsuario = $("#edit_correo_usuario").val().trim();
+    let edit_usuarioUsuario = $("#edit_usuario_usuario").val().trim();
+    let edit_contrasena = $("#edit_new_password_usuario").val();
+    let edit_actualContrasena = $("#edit_password_actual").val();
+    let edit_imagen = $("#edit_new_imagen_usuario")[0].files[0]; // Para obtener el archivo seleccionado
+    let edit_imagenActualUsuario = $("#edit_imagen_actual_usuario").val();
 
-    var edit_idUsuario = $("#editIdUsuario").val();
-    var edit_nombre = $("#edit_nombre_usuario").val();
-    var edit_tipoDocumento = $("#edit_id_doc").val();
-    var edit_numeroDocumento = $("#edit_numero_documento").val();
-    var edit_direccion = $("#edit_direccion").val();
-    var edit_telefono = $("#edit_telefono").val();
-    var edit_correo = $("#edit_correo").val();
-    var edit_usuario = $("#edit_usuario").val();
+    let isValid = true;
 
-    var edit_contrasena = $("#edit_contrasena").val();
-    var edit_actualContrasena = $("#passwordActual").val();
+    // Limpiar errores previos
+    $(".text-danger").text("");
 
-    var edit_imagen = $("#edit_imagen_usuario").get(0).files[0];
-    var edit_imagenActualUsuario = $("#imagenActualUsuario").val();
-
-    var roles = [];
-
-    $('.edit_data_rol:checked').each(function () {
-      roles.push($(this).val());
-    });
-
-    var data_roles = JSON.stringify(roles);
-
-
-
-    // Validar el nombre de usuario
-    if (edit_nombre == "") {
-      $("#editerrorNombreUsuario")
-        .html("Por favor, ingrese el nombre completo")
-        .addClass("text-danger");
-
+    // Validaciones
+    if (!edit_idSucursal) {
+      $("#error_edit_id_sucursal").text("Debe seleccionar una sucursal.");
       isValid = false;
-    } else {
-      $("#editerrorNombreUsuario").html("").removeClass("text-danger");
     }
 
-    // Validar el tipo de documento
-    if (edit_tipoDocumento == null) {
-      $("#editerrorTipoDocumento")
-        .html("Por favor, seleccione el tipo de documento")
-        .addClass("text-danger");
+    if (!edit_nombreUsuario || edit_nombreUsuario.length < 3) {
+      $("#error_edit_nombre_usuario").text("Debe ingresar un nombre válido (mínimo 3 caracteres).");
       isValid = false;
-    } else {
-      $("#editerrorTipoDocumento").html("").removeClass("text-danger");
     }
 
-    // Validar el número de documento
-    if (edit_numeroDocumento == "") {
-      $("#errorNumeroDocumento")
-        .html("Por favor, ingrese el número de documento")
-        .addClass("text-danger");
+    if (!/^\d{9}$/.test(edit_telefonoUsuario)) {
+      $("#error_edit_telefono_usuario").text("Debe ingresar un número de teléfono válido (9 dígitos).");
       isValid = false;
-    } else {
-      $("#errorNumeroDocumento").html("").removeClass("text-danger");
     }
 
-    // Validar la dirección
-    if (edit_direccion == "") {
-      $("#editerrorDireccionUsuario")
-        .html("Por favor, ingrese la dirección")
-        .addClass("text-danger");
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(edit_correoUsuario)) {
+      $("#error_edit_correo_usuario").text("Debe ingresar un correo electrónico válido.");
       isValid = false;
-    } else {
-      $("#editerrorDireccionUsuario").html("").removeClass("text-danger");
     }
 
-    // Validar el teléfono
-    if (edit_telefono == "") {
-      $("#editerrorTelefonoUsuario")
-        .html("Por favor, ingrese el teléfono")
-        .addClass("text-danger");
+    if (!edit_usuarioUsuario || edit_usuarioUsuario.length < 5) {
+      $("#error_edit_usuario_usuario").text("El usuario debe tener al menos 5 caracteres.");
       isValid = false;
-    } else {
-      $("#editerrorTelefonoUsuario").html("").removeClass("text-danger");
     }
 
-    // Validar el correo electrónico
-    if (edit_correo == "") {
-      $("#editerrorCorreoUsuario")
-        .html("Por favor, ingrese el correo electrónico")
-        .addClass("text-danger");
+    if (edit_contrasena && edit_contrasena.length < 6) {
+      $("#edit_new_password_usuario").text("La contraseña debe tener al menos 6 caracteres.");
       isValid = false;
-    } else {
-      $("#editerrorCorreoUsuario").html("").removeClass("text-danger");
     }
 
-    // Validar el usuario
-    if (edit_usuario == "") {
-      $("#editerrorUsuario")
-        .html("Por favor, ingrese el usuario")
-        .addClass("text-danger");
-      isValid = false;
-    } else {
-      $("#editerrorUsuario").html("").removeClass("text-danger");
+    if (edit_imagen) {
+      const allowedExtensions = ["jpg", "jpeg", "png", "gif"];
+      const fileExtension = edit_imagen.name.split('.').pop().toLowerCase();
+      if (!allowedExtensions.includes(fileExtension)) {
+        $("#error_edit_new_imagen_usuario").text("El archivo debe ser una imagen (jpg, jpeg, png, gif).");
+        isValid = false;
+      }
     }
 
-    // Si el formulario es válido, envíalo
+    // Si todo es válido, enviar la solicitud
     if (isValid) {
       var datos = new FormData();
-      datos.append("edit_idUsuario", edit_idUsuario);
-      datos.append("edit_nombre", edit_nombre);
-      datos.append("edit_tipoDocumento", edit_tipoDocumento);
-      datos.append("edit_numeroDocumento", edit_numeroDocumento);
-      datos.append("edit_direccion", edit_direccion);
-      datos.append("edit_telefono", edit_telefono);
-      datos.append("edit_correo", edit_correo);
-      datos.append("edit_usuario", edit_usuario);
+      datos.append("edit_idUsuario", $("#edit_id_usuario").val());
+      datos.append("edit_idSucursal", edit_idSucursal);
+      datos.append("edit_nombre", edit_nombreUsuario);
+      datos.append("edit_telefono", edit_telefonoUsuario);
+      datos.append("edit_correo", edit_correoUsuario);
+      datos.append("edit_usuario", edit_usuarioUsuario);
       datos.append("edit_contrasena", edit_contrasena);
       datos.append("edit_actualContrasena", edit_actualContrasena);
       datos.append("edit_imagen", edit_imagen);
       datos.append("edit_imagenActualUsuario", edit_imagenActualUsuario);
-      datos.append("data_roles", data_roles);
-
       $.ajax({
         url: "ajax/Usuario.ajax.php",
         method: "POST",
@@ -626,28 +467,39 @@ $(document).ready(function () {
         contentType: false,
         processData: false,
         success: function (respuesta) {
+          try {
+            var res = JSON.parse(respuesta);
+            if (res === "ok") {
+              $("#form_editar_usuario")[0].reset();
+              $(".edit_vista_imagen_usuario").attr("src", "");
+              $("#modalEditarUsuario").modal("hide");
 
-          var res = JSON.parse(respuesta);
+              Swal.fire({
+                title: "¡Correcto!",
+                text: "El usuario ha sido actualizado con éxito",
+                icon: "success",
+              });
 
-          if (res === "ok") {
-            $("#formEditUsuario")[0].reset();
-            $(".editVistaPreviaImagenUsuario").attr("src", "");
-            $("#modalEditarUsuario").modal("hide");
-
-            Swal.fire({
-              title: "¡Correcto!",
-              text: "El usuario ha sido actualizado con éxito",
-              icon: "success",
-            });
-
-            mostrarUsuarios();
-          } else {
-            console.error("Error al actualizar los datos");
+              mostrarUsuarios();
+            } else {
+              Swal.fire({
+                title: "Error",
+                text: "Hubo un error al actualizar el usuario.",
+                icon: "error",
+              });
+            }
+          } catch (error) {
+            console.error("Respuesta inesperada:", respuesta);
           }
+          mostrarUsuarios();
+        },
+        error: function (xhr, status, error) {
+          console.error("Error en la solicitud AJAX:", error);
         },
       });
     }
   });
+
 
   /*=============================================
     ELIMINAR USUARIO
@@ -723,10 +575,6 @@ $(document).ready(function () {
     $("#formEditUsuario")[0].reset();
   });
 
-  /* =====================================
-  MSOTRANDO DATOS
-  ===================================== */
-  mostrarUsuarios();
 
   /* ===========================
   MOSTRANDO REPORTE USUARIO

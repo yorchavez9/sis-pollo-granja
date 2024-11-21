@@ -46,10 +46,9 @@
                         <thead>
                             <tr>
                                 <th>Foto</th>
+                                <th>Sucursal</th>
                                 <th>Nombre</th>
                                 <th>Usuario</th>
-                                <th>N° documento</th>
-                                <th>Dirección</th>
                                 <th>Telefono</th>
                                 <th>Correo</th>
                                 <th>Estado</th>
@@ -76,133 +75,178 @@
                 <h5 class="modal-title">Crear nuevo usuario</h5>
                 <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
             </div>
-
             <form enctype="multipart/form-data" id="nuevoUsuario">
-                
                 <div class="modal-body">
-
-                    <!-- INGRESO DE NOMBRE -->
-                    <div class="form-group">
-                        <label>Ingrese el nombre completo (<span class="text-danger">*</span>)</label>
-                        <input type="text" name="nombre_usuario" id="nombre_usuario" placeholder="Ingrese el nombre completo">
-                        <small id="errorNombreUsuario"></small>
-                    </div>
-
-                    <!-- INGRESO DE TIPO DE DOCUMENTO Y NUMERO DOCUMENTO -->
-                    <div class="row">
+                    <!-- INGRESO DEL SUCURSAL -->
+                    <div class="row mb-4">
                         <div class="col-md-6">
-                            <label class="form-label">Selecione el tipo de documento (<span class="text-danger">*</span>)</label>
+                            <label class="form-label">Seleccione la sucursal (<span class="text-danger">*</span>)</label>
                             <?php
-
                             $item = null;
-
                             $valor = null;
-
-                            $tiposDocumentos = ControladorTipoDocumento::ctrMostrarTipoDocumento($item, $valor);
-
+                            $sucursales = ControladorSucursal::ctrMostrarSucursales($item, $valor);
                             ?>
-                            <select class="select" id="id_doc">
+                            <select class="form-control select" id="id_sucursal">
                                 <option disabled selected>Seleccione</option>
-                                <?php
-                                foreach ($tiposDocumentos as $key => $value) {
+                                <?php foreach ($sucursales as $key => $value) {
+                                    if ($value['estado'] == 1) {
                                 ?>
-                                    <option value="<?php echo $value["id_doc"] ?>"><?php echo $value["nombre_doc"] ?></option>
-                                <?php
-                                }
-                                ?>
+                                        <option value="<?php echo $value["id_sucursal"] ?>"><?php echo $value["nombre_sucursal"] ?></option>
+                                <?php }
+                                } ?>
                             </select>
-
-                            <small id="errorTipoDocumento"></small>
+                            <small id="errorid_sucursal" class="text-danger"></small>
                         </div>
                         <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="numero_documento" class="form-label">Ingrese el número de documento (<span class="text-danger">*</span>)</label>
-                                <input type="text" id="numero_documento" placeholder="Ingrese el número de documento">
-                                <small id="errorNumeroDocumento"></small>
-                            </div>
-
+                            <label>Ingrese el nombre completo (<span class="text-danger">*</span>)</label>
+                            <input type="text" id="nombre_usuario" class="form-control" placeholder="Ingrese el nombre completo">
+                            <small id="errornombre_usuario" class="text-danger"></small>
                         </div>
                     </div>
 
                     <!-- INGRESO DE DIRECCION Y TELEFONO -->
-                    <div class="row">
+                    <div class="row mb-4">
                         <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="direccion" class="form-label">Ingrese la dirección </label>
-                                <input type="text" id="direccion" placeholder="Ingrese la dirección">
-                                <small id="errorDireccionUsuario"></small>
-                            </div>
-
+                            <label for="telefono">Ingrese teléfono (<span class="text-danger">*</span>)</label>
+                            <input type="text" id="telefono" class="form-control" placeholder="Ingrese el teléfono">
+                            <small id="errorTelefonoUsuario" class="text-danger"></small>
                         </div>
                         <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="telefono" class="form-label">Ingrese teléfono (<span class="text-danger">*</span>)</label>
-                                <input type="text" id="telefono" placeholder="Ingrese el teléfono">
-                                <small id="errorTelefonoUsuario"></small>
-                            </div>
-
+                            <label for="correo">Ingrese el correo electrónico (<span class="text-danger">*</span>)</label>
+                            <input type="email" id="correo" class="form-control" placeholder="Ingrese el correo electrónico">
+                            <small id="errorCorreoUsuario" class="text-danger"></small>
                         </div>
                     </div>
 
-                    <!-- INGRESO DE CORREO ELECTRONICO Y USUARIO-->
-                    <div class="row">
+                    <!-- INGRESO DE CORREO ELECTRONICO Y USUARIO -->
+                    <div class="row mb-4">
                         <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="correo" class="form-label">Ingrese el correo electrónico(<span class="text-danger">*</span>)</label>
-                                <input type="email" id="correo" class="form-control" placeholder="Ingrese el correo electrónico">
-                                <small id="errorCorreoUsuario"></small>
-                            </div>
-
+                            <label for="usuario">Ingrese el usuario (<span class="text-danger">*</span>)</label>
+                            <input type="text" id="usuario" class="form-control" placeholder="Ingrese el usuario">
+                            <small id="errorusuario" class="text-danger"></small>
                         </div>
                         <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="usuario" class="form-label">Ingrese el usuario (<span class="text-danger">*</span>)</label>
-                                <input type="text" id="usuario" placeholder="Ingrese el usuario">
-                                <small id="errorUsuario"></small>
+                            <label for="contrasena">Ingrese la contraseña (<span class="text-danger">*</span>)</label>
+                            <div class="pass-group">
+                                <input type="password" id="contrasena" class="form-control pass-input" placeholder="Ingrese la contraseña">
+                                <span class="fas toggle-password fa-eye-slash"></span>
+                                <small id="errorContrasena" class="text-danger"></small>
                             </div>
-
                         </div>
-                    </div>
-
-                    <!-- INGRESO DE CONTRASEÑA -->
-                    <div class="form-group">
-                        <label for="contrasena" class="form-label">Ingrese la contraseña (<span class="text-danger">*</span>)</label>
-
-                        <div class="pass-group">
-                            <input type="password" id="contrasena" name="contrasena" class="pass-input" placeholder="Ingrese la contraseña">
-                            <span class="fas toggle-password fa-eye-slash"></span>
-                            <small id="errorContrasena"></small>
-                        </div>
-
-
                     </div>
 
                     <!-- INGRESO DE IMAGEN DEL USUARIO -->
-                    <div class="form-group">
-                        <label for="imagen_usuario" class="form-label"></label>
-                        <input type="file" class="form-control" id="imagen_usuario" class="">
+                    <div class="form-group mb-4">
+                        <label for="imagen_usuario">Seleccione una imagen</label>
+                        <input type="file" class="form-control" id="imagen_usuario">
                         <div class="text-center mt-3">
-                            <img src="" class="vistaPreviaImagenUsuario img img-fluid rounded-circle" width="250" alt="">
-                            <small id="errorImagenUsuario"></small>
-                        </div>
-                    </div>
-
-                    <!-- ROLES -->
-
-                    <div class="form-group">
-                        <h5 class="fw-bold mb-2">Roles</h5>
-                        <div id="data_roles">
-                            <input type="checkbox" class="data_rol mx-2 " id="rol_administrador" value="administrador"><small>Administrador</small>
-                            <input type="checkbox" class="data_rol mx-2 " id="rol_cajero" value="cajero"><small>Cajero</small>
-                            <input type="checkbox" class="data_rol mx-2 " id="rol_ayudante" value="ayudante"><small>Ayudante</small>
-                            <!-- <input type="checkbox" class="data_rol mx-2 " id="rol_prueba" value="prueba"><small>Prueba</small> -->
+                            <img src="" class="vistaPreviaImagenUsuario img-fluid rounded-circle" width="250" alt="">
+                            <small id="errorImagenUsuario" class="text-danger"></small>
                         </div>
                     </div>
 
                 </div>
 
                 <div class="text-end mx-4 mb-2">
-                    <button type="button" id="guardar_usuario" class="btn btn-primary mx-2">Guardar</button>
+                    <button type="button" id="guardar_usuario" class="btn btn-primary">Guardar</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<!-- MODAL EDITAR USUARIO -->
+<div class="modal fade" id="modalEditarUsuario" tabindex="-1" aria-labelledby="modalEditarUsuarioLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Editar usuario</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            </div>
+            <form enctype="multipart/form-data" id="form_editar_usuario">
+                <div class="modal-body">
+
+                    <!-- ID DEL USUARIO -->
+                    <input type="hidden" id="edit_id_usuario">
+
+                    <!-- INGRESO DEL SUCURSAL -->
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label">Seleccione la sucursal (<span class="text-danger">*</span>)</label>
+                            <?php
+                            $item = null;
+                            $valor = null;
+                            $sucursales = ControladorSucursal::ctrMostrarSucursales($item, $valor);
+                            ?>
+                            <select class="form-control select" id="edit_id_sucursal">
+                                <option disabled selected>Seleccione</option>
+                                <?php foreach ($sucursales as $key => $value) {
+                                    if ($value['estado'] == 1) {
+                                ?>
+                                        <option value="<?php echo $value["id_sucursal"] ?>"><?php echo $value["nombre_sucursal"] ?></option>
+                                <?php }
+                                } ?>
+                            </select>
+                            <small id="error_edit_id_sucursal" class="text-danger"></small>
+                        </div>
+                        <div class="col-md-6">
+                            <label>Ingrese el nombre completo (<span class="text-danger">*</span>)</label>
+                            <input type="text" id="edit_nombre_usuario" class="form-control" placeholder="Ingrese el nombre completo">
+                            <small id="error_edit_nombre_usuario" class="text-danger"></small>
+                        </div>
+                    </div>
+
+                    <!-- INGRESO DE DIRECCION Y TELEFONO -->
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <label for="edit_telefono_usuario">Ingrese teléfono (<span class="text-danger">*</span>)</label>
+                            <input type="text" id="edit_telefono_usuario" class="form-control" placeholder="Ingrese el teléfono">
+                            <small id="error_edit_telefono_usuario" class="text-danger"></small>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="correo">Ingrese el correo electrónico (<span class="text-danger">*</span>)</label>
+                            <input type="email" id="edit_correo_usuario" class="form-control" placeholder="Ingrese el correo electrónico">
+                            <small id="error_edit_correo_usuario" class="text-danger"></small>
+                        </div>
+                    </div>
+
+                    <!-- INGRESO DE CORREO ELECTRONICO Y USUARIO -->
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <label for="edit_usuario_usuario">Ingrese el usuario (<span class="text-danger">*</span>)</label>
+                            <input type="text" id="edit_usuario_usuario" class="form-control" placeholder="Ingrese el usuario">
+                            <small id="error_edit_usuario_usuario" class="text-danger"></small>
+                        </div>
+                        <div class="col-md-6">
+                            <!--  mostrando contraseña vieja -->
+                            <input type="hidden" id="edit_password_actual">
+                            <label for="contrasena">Ingrese la contraseña (<span class="text-danger">*</span>)</label>
+                            <div class="pass-group">
+                                <input type="password" id="edit_new_password_usuario" class="form-control pass-input" placeholder="Ingrese la contraseña">
+                                <span class="fas toggle-password fa-eye-slash"></span>
+                                <small id="edit_new_password_usuario" class="text-danger"></small>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- INGRESO DE IMAGEN DEL USUARIO -->
+                    <div class="form-group mb-4">
+                        <input type="hidden" id="edit_imagen_actual_usuario">
+                        <label for="imagen_usuario">Seleccione una imagen</label>
+                        <input type="file" class="form-control" id="edit_new_imagen_usuario" accept="image/*">
+                        <div class="text-center mt-3">
+                            <img src="" class="edit_vista_imagen_usuario img-fluid rounded-circle" width="250" alt="">
+                            <small id="error_edit_new_imagen_usuario" class="text-danger"></small>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="text-end mx-4 mb-2">
+                    <button type="button" id="btn_update_usuario" class="btn btn-primary">Guardar</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                 </div>
             </form>
@@ -210,141 +254,6 @@
     </div>
 </div>
 
-<!-- MODAL EDITAR   USUARIO -->
-<div class="modal fade" id="modalEditarUsuario" tabindex="-1" aria-labelledby="modalEditarUsuarioLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Editar usuario</h5>
-                <button type="button" class="btn_modal_editar_close_usuario close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-            </div>
-            <form enctype="multipart/form-data" id="formEditUsuario">
-                <div class="modal-body">
-
-                    <!-- ID -->
-                    <input type="hidden" id="editIdUsuario">
-
-                    <!-- INGRESO DE NOMBRE -->
-                    <div class="form-group">
-                        <label>Ingrese el nombre completo (<span class="text-danger">*</span>)</label>
-                        <input type="text" id="edit_nombre_usuario">
-                        <small id="editerrorNombreUsuario"></small>
-                    </div>
-
-                    <!-- INGRESO DE TIPO DE DOCUMENTO Y NUMERO DOCUMENTO -->
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label class="form-label">Selecione el tipo de documento (<span class="text-danger">*</span>)</label>
-                            <?php
-                            $item = null;
-                            $valor = null;
-                            $tiposDocumentos = ControladorTipoDocumento::ctrMostrarTipoDocumento($item, $valor);
-                            ?>
-                            <select class="select" id="edit_id_doc">
-                                <?php
-                                foreach ($tiposDocumentos as $key => $value) {
-                                ?>
-                                    <option value="<?php echo $value["id_doc"] ?>"><?php echo $value["nombre_doc"] ?></option>
-                                <?php
-                                }
-                                ?>
-                            </select>
-                            <small id="editerrorTipoDocumento"></small>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="numero_documento" class="form-label">Ingrese el número de documento (<span class="text-danger">*</span>)</label>
-                                <input type="text" id="edit_numero_documento" placeholder="Ingrese el número de documento">
-                                <small id="errorNumeroDocumento"></small>
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <!-- INGRESO DE DIRECCION Y TELEFONO -->
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="direccion" class="form-label">Ingrese la dirección </label>
-                                <input type="text" id="edit_direccion" placeholder="Ingrese la dirección">
-                                <small id="editerrorDireccionUsuario"></small>
-                            </div>
-
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="telefono" class="form-label">Ingrese teléfono (<span class="text-danger">*</span>)</label>
-                                <input type="text" id="edit_telefono" placeholder="Ingrese el teléfono">
-                                <small id="editerrorTelefonoUsuario"></small>
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <!-- INGRESO DE CORREO ELECTRONICO Y USUARIO-->
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="correo" class="form-label">Ingrese el correo electrónico(<span class="text-danger">*</span>)</label>
-                                <input type="email" id="edit_correo" class="form-control" placeholder="Ingrese el correo electrónico">
-                                <small id="editerrorCorreoUsuario"></small>
-                            </div>
-
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="usuario" class="form-label">Ingrese el usuario (<span class="text-danger">*</span>)</label>
-                                <input type="text" id="edit_usuario" placeholder="Ingrese el usuario">
-                                <small id="editerrorUsuario"></small>
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <!-- INGRESO DE CONTRASEÑA -->
-                    <div class="form-group">
-                        <label for="contrasena" class="form-label">Ingrese la contraseña (<span class="text-danger">*</span>)</label>
-
-                        <div class="pass-group">
-                            <input type="password" id="edit_contrasena" name="contrasena" class="pass-input" placeholder="Ingrese la contraseña">
-                            <span class="fas toggle-password fa-eye-slash"></span>
-
-                        </div>
-                        <input type="hidden" id="passwordActual">
-
-
-                    </div>
-
-                    <div class="form-group">
-                        <label for="imagen_usuario" class="form-label"></label>
-                        <input type="file" class="form-control" id="edit_imagen_usuario" class="">
-                        <div class="text-center mt-3">
-                            <img src="" class="editVistaPreviaImagenUsuario img img-fluid rounded-circle" width="250" alt="">
-                        </div>
-                        <input type="hidden" id="imagenActualUsuario">
-                    </div>
-
-                    <!-- ROLES -->
-
-                    <div class="form-group">
-                        <h5 class="fw-bold mb-2">Editar roles</h5>
-                        <div id="edit_data_roles">
-                            <input type="checkbox" class="edit_data_rol mx-2 " id="edit_rol_administrador" value="administrador"><small>Administrador</small>
-                            <input type="checkbox" class="edit_data_rol mx-2 " id="edit_rol_cajero" value="cajero"><small>Cajero</small>
-                            <input type="checkbox" class="edit_data_rol mx-2 " id="edit_rol_ayudante" value="ayudante"><small>Ayudante</small>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="text-end mx-4 mb-2">
-                    <button type="button" id="actualizar_usuario" class="btn btn-primary mx-2">Actualizar</button>
-                    <button type="button" class="btn_modal_editar_close_usuario btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
 
 <!-- MODAL VER   USUARIO -->
 <div class="modal fade" id="modalVerUsuario" tabindex="-1" aria-labelledby="modalVerUsuarioLabel" aria-hidden="true">
@@ -357,28 +266,20 @@
             <form enctype="multipart/form-data" id="formVerUsuario">
                 <div class="modal-body">
 
-                    <!-- MOSTRANDO NOMBRE DEL USUARIO -->
-                    <div class="form-group">
-                        <label><i class="fas fa-user text-primary"></i> Nombre de usuario:</label>
-                        <p id="mostrar_nombre_usuario"></p>
-                    </div>
-
                     <div class="row">
-
-                        <!-- MOSTRANDO TIPO DE DOCUMENTO -->
-                        <div class="col-md-6">
-                            <label class="form-label"><i class="fas fa-id-card-alt text-danger"></i> Tipo de documento:</label>
-                            <p id="mostrar_tipo_documento"></p>
+                        <!-- MOSTRANDO NOMBRE DE SUCURSAL -->
+                        <div class="form-group col-md-6">
+                            <label>
+                                <i class="fas fa-store text-primary"></i> Registrado en el sucursal:
+                            </label>
+                            <p id="mostrar_nombre_sucursal"></p>
                         </div>
 
-                        <!-- MOSTRANDO NUMERO DE DOCUMENTO -->
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="numero_documento" class="form-label"><i class="fas fa-address-card text-success"></i> Número de documento:</label>
-                                <p id="mostrar_numero_documento_usuario"></p>
-                            </div>
+                        <!-- MOSTRANDO NOMBRE DEL USUARIO -->
+                        <div class="form-group col-md-6">
+                            <label><i class="fas fa-user text-primary"></i> Nombre de usuario:</label>
+                            <p id="mostrar_nombre_usuario"></p>
                         </div>
-
                     </div>
 
                     <div class="row">
