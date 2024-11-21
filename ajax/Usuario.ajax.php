@@ -53,14 +53,15 @@ class AjaxUsuarios
     {
 
         $tabla = "usuarios";
-
-        $item1 = "estado";
+        $item1 = "estado_usuario";
         $valor1 = $this->activarUsuario;
 
         $item2 = "id_usuario";
         $valor2 = $this->activarId;
 
         $respuesta = ModeloUsuarios::mdlActualizarUsuario($tabla, $item1, $valor1, $item2, $valor2);
+
+        echo $respuesta;
     }
 
     /*=============================================
@@ -107,6 +108,7 @@ elseif (isset($_POST["activarUsuario"])) {
     $activarUsuario->activarUsuario = $_POST["activarUsuario"];
     $activarUsuario->activarId = $_POST["activarId"];
     $activarUsuario->ajaxActivarUsuario();
+
 
 }
 
@@ -165,7 +167,7 @@ else{
             'usuario' => $usuario['usuario'],
             'contrasena' => $usuario['contrasena'],
             'imagen_usuario' => $usuario['imagen_usuario'],
-            'estado' => $usuario['estado'],
+            'estado_usuario' => $usuario['estado_usuario'],
             'fecha_usuario' => $usuario['fecha_usuario']
         );
     

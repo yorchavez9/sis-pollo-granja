@@ -135,22 +135,18 @@
                         <span class="user-img"><img src="<?php echo substr($_SESSION["imagen_usuario"], 3) ?>" alt="">
                             <span class="status online"></span></span>
                         <div class="profilesets">
-                            <h6><?php echo $_SESSION["usuario"] ?></h6>
+                            <h6> <?php
+                                    $nombreUsuario = explode(" ", $_SESSION["nombre_usuario"]);
+                                    echo $nombreUsuario[0];
+                                    ?>
+                            </h6>
                             <h5>
-                                <?php
-
-                                $data_roles = json_decode($_SESSION["roles"], true);
-                                foreach ($data_roles as $rol) {
-                                    echo $rol . "<br>";
-                                }
-
-                                ?>
+                                Admin
                             </h5>
                         </div>
                     </div>
                     <hr class="m-0">
                     <a class="dropdown-item" href="usuarios"> <i class="me-2" data-feather="user"></i>Mi perfil</a>
-                    <a class="dropdown-item" href="usuarios"><i class="me-2" data-feather="settings"></i>Configuración</a>
                     <hr class="m-0">
                     <a class="dropdown-item logout pb-0" href="salir"><img src="vistas/dist/assets/img/icons/log-out.svg" class="me-2" alt="img">Salir</a>
                 </div>

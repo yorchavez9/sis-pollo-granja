@@ -22,7 +22,7 @@ class ControladorUsuarios
 				$respuesta = ModeloUsuarios::MdlMostrarUsuarios($tablaSucursales, $tablaUsuarios, $item, $valor);
 
 				if ($respuesta["usuario"] == $_POST["ingUsuario"] && $respuesta["contrasena"] == $encriptar) {
-					if ($respuesta["estado"] == 1) {
+					if ($respuesta["estado_usuario"] == 1) {
 						$_SESSION["iniciarSesion"] = "ok";
 						$_SESSION["id_usuario"] = $respuesta["id_usuario"];
 						$_SESSION["nombre_usuario"] = $respuesta["nombre_usuario"];

@@ -196,7 +196,7 @@ $(document).ready(function () {
             <td>${usuario.telefono}</td>
             <td>${usuario.correo}</td>
             <td>
-              ${usuario.estado != 0 ? '<button class="btn bg-lightgreen badges btn-sm rounded btnActivar" idUsuario="' + usuario.id_usuario + '" estadoUsuario="0">Activado</button>'
+              ${usuario.estado_usuario != 0 ? '<button class="btn bg-lightgreen badges btn-sm rounded btnActivar" idUsuario="' + usuario.id_usuario + '" estadoUsuario="0">Activado</button>'
               : '<button class="btn bg-lightred badges btn-sm rounded btnActivar" idUsuario="' + usuario.id_usuario + '" estadoUsuario="1">Desactivado</button>'}
             </td>
             <td>
@@ -235,9 +235,7 @@ $(document).ready(function () {
     var datos = new FormData();
     datos.append("activarId", idUsuario);
     datos.append("activarUsuario", estadoUsuario);
-
     $.ajax({
-
       url: "ajax/Usuario.ajax.php",
       method: "POST",
       data: datos,
@@ -245,7 +243,7 @@ $(document).ready(function () {
       contentType: false,
       processData: false,
       success: function (respuesta) {
-
+        console.log(respuesta);
         if (window.matchMedia("(max-width:767px)").matches) {
 
           swal({
@@ -352,12 +350,18 @@ $(document).ready(function () {
       processData: false,
       dataType: "json",
       success: function (respuesta) {
+        let EstadoUsuario = '';
         $("#mostrar_nombre_usuario").text(respuesta["nombre_usuario"]);
         $("#mostrar_nombre_sucursal").text(respuesta["nombre_sucursal"]);
         $("#mostrar_telefono_usuario").text(respuesta["telefono"]);
         $("#mostrar_correo_usuario").text(respuesta["correo"]);
         $("#mostrar_usuario").text(respuesta["usuario"]);
-
+        if(respuesta["estado_usuario"] == 1){
+          EstadoUsuario = "Usuario activado";
+        }else{
+          EstadoUsuario = "Usuario desactivado";
+        }
+        $("#mostrar_estado_usuario").text(EstadoUsuario);
         var imagenUsuario = respuesta["imagen_usuario"].substring(3);
 
         if (respuesta["imagen_usuario"] != "") {
@@ -368,18 +372,6 @@ $(document).ready(function () {
             "vistas/img/usuarios/default/anonymous.png"
           );
         }
-
-        var data_roles = JSON.parse(respuesta["roles"])
-
-        var rolesContainer = document.getElementById("mostrar_roles");
-
-        data_roles.forEach(role => {
-          var roleSpan = document.createElement("span");
-          roleSpan.textContent = role;
-          roleSpan.classList.add("badge", "bg-primary", "me-2"); // Añade clases de Bootstrap para hacer que los roles se vean como insignias coloridas
-          rolesContainer.appendChild(roleSpan);
-        });
-
       },
     });
   });

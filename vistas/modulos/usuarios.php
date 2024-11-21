@@ -287,8 +287,8 @@
                         <!-- MOSTRAR LA DIRECCION DEL USUARIO -->
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="direccion" class="form-label"><i class="fas fa-map-marker-alt text-warning"></i> Dirección:</label>
-                                <p id="mostrar_direccion_usuario"></p>
+                                <label for="direccion" class="form-label"><i class="fas fa-map-marker-alt text-warning"></i> Estado:</label>
+                                <p id="mostrar_estado_usuario"></p>
                             </div>
                         </div>
 
