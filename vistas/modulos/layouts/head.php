@@ -37,7 +37,7 @@
     <script src="vistas/dist/assets/js/dataTables.bootstrap4.min.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
-
+    <script src="vistas/dist/assets/plugins/select2/js/select2.min.js"></script>
 </head>
 
 <body>
