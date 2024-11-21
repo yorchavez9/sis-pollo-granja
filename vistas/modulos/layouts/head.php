@@ -17,6 +17,11 @@
     <link rel="stylesheet" href="vistas/assets/plugins/fontawesome/css/fontawesome.min.css">
     <link rel="stylesheet" href="vistas/assets/plugins/fontawesome/css/all.min.css">
     <link rel="stylesheet" href="vistas/assets/css/style.css">
+    <link rel="stylesheet" href="vistas/assets/bootstrap-icons/font/bootstrap-icons.min.css">
+    <script src="vistas/assets/js/jquery-3.6.0.min.js"></script>
+
+    <link rel="stylesheet" href="vistas/assets/sweetalert2/dist/sweetalert2.min.css">
+    <script src="vistas/assets/sweetalert2/dist/sweetalert2.min.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
 </head>

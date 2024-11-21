@@ -1,4 +1,4 @@
-<script src="vistas/assets/js/jquery-3.6.0.min.js"></script>
+
 <script src="vistas/assets/js/feather.min.js"></script>
 <script src="vistas/assets/js/jquery.slimscroll.min.js"></script>
 <script src="vistas/assets/js/jquery.dataTables.min.js"></script>
