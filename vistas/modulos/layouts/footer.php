@@ -1,9 +1,8 @@
 <script src="vistas/dist/assets/js/feather.min.js"></script>
 <script src="vistas/dist/assets/js/jquery.slimscroll.min.js"></script>
-<script src="vistas/dist/assets/js/bootstrap.bundle.min.js"></script>
+
 <script src="vistas/dist/assets/plugins/apexchart/apexcharts.min.js"></script>
 <script src="vistas/dist/assets/plugins/apexchart/chart-data.js"></script>
-<script src="vistas/dist/assets/js/main.js"></script>
 
 <!-- ===================================
     SCRIPT DE MODULOS

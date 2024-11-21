@@ -77,7 +77,7 @@
                     <!-- SELECCIONA EL USUARIO -->
                     <div class="form-group">
                         <label for="nombre_categoria" class="form-label">Seleccione el usuario (<span class="text-danger">*</span>)</label>
-                        <select id="id_select_usuario_rol" class="select">
+                        <select id="id_select_usuario_rol" class="js-example-basic-single select2 select2-hidden-accessible">
                             <option value="">Seleccione un usuario</option>
                             <option value="1">Juan Pérez</option>
                             <option value="2">María López</option>
@@ -142,5 +142,9 @@
 </div>
 
 <script>
-    $("#id_select_usuario_rol").select2();
+    $("#id_select_usuario_rol").select2({
+        placeholder: "Seleccione un usuario",
+        allowClear: true,
+        minimumResultsForSearch: 0
+    });
 </script>

@@ -20,24 +20,21 @@
 
     <link rel="stylesheet" href="vistas/dist/assets/plugins/fontawesome/css/fontawesome.min.css">
     <link rel="stylesheet" href="vistas/dist/assets/plugins/fontawesome/css/all.min.css">
-
-    <link rel="stylesheet" href="vistas/dist/assets/plugins/select2/css/select2.min.css">
-
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="vistas/dist/assets/css/estilos.css">
     <link rel="stylesheet" href="vistas/dist/font/bootstrap-icons.min.css">
 
-
     <script src="vistas/dist/assets/js/jquery-3.6.0.min.js"></script>
-
-    <!-- ALERTA -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <link rel="stylesheet" href="vistas/dist/alert/sweetalert2.min.css">
     <script src="vistas/dist/alert/sweetalert2.min.js"></script>
 
     <script src="vistas/dist/assets/js/script-jquery.dataTables.min.js"></script>
     <script src="vistas/dist/assets/js/dataTables.bootstrap4.min.js"></script>
-
+    <script src="vistas/dist/assets/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
-    <script src="vistas/dist/assets/plugins/select2/js/select2.min.js"></script>
+    <script src="vistas/dist/assets/js/main.js"></script>
+
 </head>
 
 <body>
