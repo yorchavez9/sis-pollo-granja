@@ -6,7 +6,7 @@
                 <h6>Administrar roles establecidos</h6>
             </div>
             <div class="page-btn">
-                <a href="#" class="btn btn-added" data-bs-toggle="modal" data-bs-target="#modalNuevoCategoria"><img src="vistas/dist/assets/img/icons/plus.svg" alt="img" class="me-2">Agregar roles al usuario</a>
+                <a href="#" class="btn btn-added" data-bs-toggle="modal" data-bs-target="#modalNuevoCategoria"><img src="vistas/assets/img/icons/plus.svg" alt="img" class="me-2">Agregar roles al usuario</a>
             </div>
         </div>
 
@@ -16,26 +16,26 @@
                     <div class="search-set">
                         <div class="search-path">
                             <a class="btn btn-filter" id="filter_search">
-                                <img src="vistas/dist/assets/img/icons/filter.svg" alt="img">
-                                <span><img src="vistas/dist/assets/img/icons/closes.svg" alt="img"></span>
+                                <img src="vistas/assets/img/icons/filter.svg" alt="img">
+                                <span><img src="vistas/assets/img/icons/closes.svg" alt="img"></span>
                             </a>
                         </div>
                         <div class="search-input">
                             <a class="btn btn-searchset">
-                                <img src="vistas/dist/assets/img/icons/search-white.svg" alt="img">
+                                <img src="vistas/assets/img/icons/search-white.svg" alt="img">
                             </a>
                         </div>
                     </div>
                     <div class="wordset">
                         <ul>
                             <li>
-                                <a data-bs-toggle="tooltip" data-bs-placement="top" title="pdf"><img src="vistas/dist/assets/img/icons/pdf.svg" alt="img"></a>
+                                <a data-bs-toggle="tooltip" data-bs-placement="top" title="pdf"><img src="vistas/assets/img/icons/pdf.svg" alt="img"></a>
                             </li>
                             <li>
-                                <a data-bs-toggle="tooltip" data-bs-placement="top" title="excel"><img src="vistas/dist/assets/img/icons/excel.svg" alt="img"></a>
+                                <a data-bs-toggle="tooltip" data-bs-placement="top" title="excel"><img src="vistas/assets/img/icons/excel.svg" alt="img"></a>
                             </li>
                             <li>
-                                <a data-bs-toggle="tooltip" data-bs-placement="top" title="print"><img src="vistas/dist/assets/img/icons/printer.svg" alt="img"></a>
+                                <a data-bs-toggle="tooltip" data-bs-placement="top" title="print"><img src="vistas/assets/img/icons/printer.svg" alt="img"></a>
                             </li>
                         </ul>
                     </div>
@@ -77,11 +77,10 @@
                     <!-- SELECCIONA EL USUARIO -->
                     <div class="form-group">
                         <label for="nombre_categoria" class="form-label">Seleccione el usuario (<span class="text-danger">*</span>)</label>
-                        <select id="id_select_usuario_rol" class="js-example-basic-single select2 select2-hidden-accessible">
-                            <option value="">Seleccione un usuario</option>
-                            <option value="1">Juan Pérez</option>
-                            <option value="2">María López</option>
-                            <option value="3">Carlos Díaz</option>
+                        <select class="js-example-basic-single select2">
+                            <option selected="selected">orange</option>
+                            <option>white</option>
+                            <option>purple</option>
                         </select>
                     </div>
 

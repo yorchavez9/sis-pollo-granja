@@ -227,7 +227,7 @@
                                                 <ul style="list-style-type: none;">
                                                     <li>
                                                         <a href="javascript:void(0);" class="paymentmethod">
-                                                            <img src="vistas/dist/assets/img/icons/cash.svg" alt="img" class="me-2">
+                                                            <img src="vistas/assets/img/icons/cash.svg" alt="img" class="me-2">
                                                             <input class="form-check-input tipo_pago_egreso" type="radio" name="pago_tipo" value="efectivo">
                                                             <label class="form-check-label" for="credito">
                                                                 Efectivo
@@ -236,7 +236,7 @@
                                                     </li>
                                                     <li style="float: right;">
                                                         <a href="javascript:void(0);" class="paymentmethod">
-                                                            <img src="vistas/dist/assets/img/icons/scan.svg" alt="img" class="me-2">
+                                                            <img src="vistas/assets/img/icons/scan.svg" alt="img" class="me-2">
                                                             <input class="form-check-input tipo_pago_egreso" type="radio" name="pago_tipo" value="yape">
                                                             <label class="form-check-label" for="credito">
                                                                 Yape

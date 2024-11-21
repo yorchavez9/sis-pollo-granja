@@ -6,7 +6,7 @@
                 <h6>Admistrar el código de barra</h6>
             </div>
             <div class="page-btn">
-                <a href="productos" class="btn btn-added"><img src="vistas/dist/assets/img/icons/plus.svg" alt="img" class="me-2">Administrar producto</a>
+                <a href="productos" class="btn btn-added"><img src="vistas/assets/img/icons/plus.svg" alt="img" class="me-2">Administrar producto</a>
             </div>
         </div>
 

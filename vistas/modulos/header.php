@@ -2,10 +2,10 @@
 
     <div class="header-left active">
         <a href="#" class="logo">
-            <img src="vistas/dist/assets/img/logo-apuuray.png" alt="">
+            <img src="vistas/assets/img/logo-apuuray.png" alt="">
         </a>
         <a href="#" class="logo-small">
-            <img src="vistas/dist/assets/img/logo-small.png" alt="">
+            <img src="vistas/assets/img/logo-small.png" alt="">
         </a>
         <a id="toggle_btn" href="javascript:void(0);">
         </a>
@@ -30,10 +30,10 @@
                     <div class="searchinputs">
                         <input type="text" placeholder="Search Here ...">
                         <div class="search-addon">
-                            <span><img src="vistas/dist/assets/img/icons/closes.svg" alt="img"></span>
+                            <span><img src="vistas/assets/img/icons/closes.svg" alt="img"></span>
                         </div>
                     </div>
-                    <a class="btn" id="searchdiv"><img src="vistas/dist/assets/img/icons/search.svg" alt="img"></a>
+                    <a class="btn" id="searchdiv"><img src="vistas/assets/img/icons/search.svg" alt="img"></a>
                 </form>
             </div>
         </li>
@@ -41,20 +41,20 @@
 
         <li class="nav-item dropdown has-arrow flag-nav">
             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0);" role="button">
-                <img src="vistas/dist/assets/img/flags/us1.png" alt="" height="20">
+                <img src="vistas/assets/img/flags/us1.png" alt="" height="20">
             </a>
             <div class="dropdown-menu dropdown-menu-right">
                 <a href="javascript:void(0);" class="dropdown-item">
-                    <img src="vistas/dist/assets/img/flags/us.png" alt="" height="16"> Ingles
+                    <img src="vistas/assets/img/flags/us.png" alt="" height="16"> Ingles
                 </a>
                 <a href="javascript:void(0);" class="dropdown-item">
-                    <img src="vistas/dist/assets/img/flags/fr.png" alt="" height="16"> Frances
+                    <img src="vistas/assets/img/flags/fr.png" alt="" height="16"> Frances
                 </a>
                 <a href="javascript:void(0);" class="dropdown-item">
-                    <img src="vistas/dist/assets/img/flags/es.png" alt="" height="16"> Español
+                    <img src="vistas/assets/img/flags/es.png" alt="" height="16"> Español
                 </a>
                 <a href="javascript:void(0);" class="dropdown-item">
-                    <img src="vistas/dist/assets/img/flags/de.png" alt="" height="16"> Aleman
+                    <img src="vistas/assets/img/flags/de.png" alt="" height="16"> Aleman
                 </a>
             </div>
         </li>
@@ -71,7 +71,7 @@
             $totalProductosVencer = count($productosPorVencer);
             ?>
             <a href="javascript:void(0);" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
-                <img src="vistas/dist/assets/img/icons/notification-bing.svg" alt="img"> <span class="badge rounded-pill" id="cantidad_notificacion"><?php echo $totalProductosVencer ?></span>
+                <img src="vistas/assets/img/icons/notification-bing.svg" alt="img"> <span class="badge rounded-pill" id="cantidad_notificacion"><?php echo $totalProductosVencer ?></span>
             </a>
             <div class="dropdown-menu notifications">
                 <div class="topnav-dropdown-header">
@@ -148,7 +148,7 @@
                     <hr class="m-0">
                     <a class="dropdown-item" href="usuarios"> <i class="me-2" data-feather="user"></i>Mi perfil</a>
                     <hr class="m-0">
-                    <a class="dropdown-item logout pb-0" href="salir"><img src="vistas/dist/assets/img/icons/log-out.svg" class="me-2" alt="img">Salir</a>
+                    <a class="dropdown-item logout pb-0" href="salir"><img src="vistas/assets/img/icons/log-out.svg" class="me-2" alt="img">Salir</a>
                 </div>
             </div>
         </li>

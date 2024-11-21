@@ -233,7 +233,7 @@
                                                 <ul style="list-style-type: none;">
                                                     <li>
                                                         <a href="javascript:void(0);" class="paymentmethod tipo_pago_e_y">
-                                                            <img src="vistas/dist/assets/img/icons/cash.svg" alt="img" class="me-2">
+                                                            <img src="vistas/assets/img/icons/cash.svg" alt="img" class="me-2">
                                                             <input class="form-check-input tipo_pago_venta" type="radio" name="pago_tipo_v" value="efectivo">
                                                             <label class="form-check-label" for="credito">
                                                                 Efectivo
@@ -242,7 +242,7 @@
                                                     </li>
                                                     <li style="float: right;">
                                                         <a href="javascript:void(0);" class="paymentmethod tipo_pago_e_y">
-                                                            <img src="vistas/dist/assets/img/icons/scan.svg" alt="img" class="me-2">
+                                                            <img src="vistas/assets/img/icons/scan.svg" alt="img" class="me-2">
                                                             <input class="form-check-input tipo_pago_venta" type="radio" name="pago_tipo_v" value="yape">
                                                             <label class="form-check-label" for="credito">
                                                                 Yape
@@ -573,7 +573,7 @@
                                                     <li>
                                                         <a href="javascript:void(0);" class="paymentmethod tipo_pago_e_y">
 
-                                                            <img src="vistas/dist/assets/img/icons/cash.svg" alt="img" class="me-2">
+                                                            <img src="vistas/assets/img/icons/cash.svg" alt="img" class="me-2">
 
                                                             <input class="form-check-input tipo_pago_venta" type="radio" name="edit_pago_tipo_v" value="efectivo">
 
@@ -589,7 +589,7 @@
 
                                                         <a href="javascript:void(0);" class="paymentmethod tipo_pago_e_y">
 
-                                                            <img src="vistas/dist/assets/img/icons/scan.svg" alt="img" class="me-2">
+                                                            <img src="vistas/assets/img/icons/scan.svg" alt="img" class="me-2">
 
                                                             <input class="form-check-input tipo_pago_venta" type="radio" name="edit_pago_tipo_v" value="yape">
 
@@ -941,7 +941,7 @@
                                                     <li>
                                                         <a href="javascript:void(0);" class="paymentmethod tipo_pago_e_y">
 
-                                                            <img src="vistas/dist/assets/img/icons/cash.svg" alt="img" class="me-2">
+                                                            <img src="vistas/assets/img/icons/cash.svg" alt="img" class="me-2">
 
                                                             <input class="form-check-input tipo_pago_venta" type="radio" name="pago_tipo_v" value="efectivo">
 
@@ -957,7 +957,7 @@
 
                                                         <a href="javascript:void(0);" class="paymentmethod tipo_pago_e_y">
 
-                                                            <img src="vistas/dist/assets/img/icons/scan.svg" alt="img" class="me-2">
+                                                            <img src="vistas/assets/img/icons/scan.svg" alt="img" class="me-2">
 
                                                             <input class="form-check-input tipo_pago_venta" type="radio" name="pago_tipo_v" value="yape">
 
@@ -1050,7 +1050,7 @@
                 <p id="section_imprimir_mensaje_ventas_pagado"></p>
             </div>
             <div class="page-btn">
-                <a href="#" id="crear_venta" class="btn btn-added"><img src="vistas/dist/assets/img/icons/plus.svg" alt="img" class="me-2">Crear venta</a>
+                <a href="#" id="crear_venta" class="btn btn-added"><img src="vistas/assets/img/icons/plus.svg" alt="img" class="me-2">Crear venta</a>
             </div>
         </div>
 
@@ -1062,14 +1062,14 @@
 
                         <div class="search-path">
                             <a class="btn btn-filter" id="filter_search">
-                                <img src="vistas/dist/assets/img/icons/filter.svg" alt="img">
-                                <span><img src="vistas/dist/assets/img/icons/closes.svg" alt="img"></span>
+                                <img src="vistas/assets/img/icons/filter.svg" alt="img">
+                                <span><img src="vistas/assets/img/icons/closes.svg" alt="img"></span>
                             </a>
                         </div>
 
                         <div class="search-input">
                             <a class="btn btn-searchset">
-                                <img src="vistas/dist/assets/img/icons/search-white.svg" alt="img">
+                                <img src="vistas/assets/img/icons/search-white.svg" alt="img">
                             </a>
                         </div>
 
@@ -1078,13 +1078,13 @@
                     <div class="wordset">
                         <ul>
                             <li>
-                                <a data-bs-toggle="tooltip" data-bs-placement="top" title="pdf"><img src="vistas/dist/assets/img/icons/pdf.svg" alt="img"></a>
+                                <a data-bs-toggle="tooltip" data-bs-placement="top" title="pdf"><img src="vistas/assets/img/icons/pdf.svg" alt="img"></a>
                             </li>
                             <li>
-                                <a data-bs-toggle="tooltip" data-bs-placement="top" title="excel"><img src="vistas/dist/assets/img/icons/excel.svg" alt="img"></a>
+                                <a data-bs-toggle="tooltip" data-bs-placement="top" title="excel"><img src="vistas/assets/img/icons/excel.svg" alt="img"></a>
                             </li>
                             <li>
-                                <a data-bs-toggle="tooltip" data-bs-placement="top" title="print"><img src="vistas/dist/assets/img/icons/printer.svg" alt="img"></a>
+                                <a data-bs-toggle="tooltip" data-bs-placement="top" title="print"><img src="vistas/assets/img/icons/printer.svg" alt="img"></a>
                             </li>
                         </ul>
                     </div>

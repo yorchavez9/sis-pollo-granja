@@ -4,10 +4,10 @@
             <div class="login-content">
                 <div class="login-userset">
                     <div class="login-logo text-center ">
-                        <!-- <img src="vistas/dist/assets/img/logo.png" class="text-center" alt="img"> -->
+                        <!-- <img src="vistas/assets/img/logo.png" class="text-center" alt="img"> -->
                     </div>
                     <div class="login-userheading text-center ">
-                        <img src="vistas/dist/assets/img/login-logo.png" width="150" alt="">
+                        <img src="vistas/assets/img/login-logo.png" width="150" alt="">
                         <h3>Iniciar sesión</h3>
                         <h4>Por favor, ingrese a su cuenta</h4>
                     </div>
@@ -21,7 +21,7 @@
                             <label>Ingrese su correo o usuario</label>
                             <div class="form-addons">
                                 <input type="text" id="ingUsuario" name="ingUsuario" placeholder="Ingrese su correo o usuario">
-                                <img src="vistas/dist/assets/img/icons/mail.svg" alt="img">
+                                <img src="vistas/assets/img/icons/mail.svg" alt="img">
                             </div>
                             <div id="errorIngUsuario"></div>
                         </div>
@@ -71,13 +71,13 @@
                         <ul>
                             <li>
                                 <a href="javascript:void(0);">
-                                    <img src="vistas/dist/assets/img/icons/google.png" class="me-2" alt="google">
+                                    <img src="vistas/assets/img/icons/google.png" class="me-2" alt="google">
                                     Regístrate usando Google
                                 </a>
                             </li>
                             <li>
                                 <a href="javascript:void(0);">
-                                    <img src="vistas/dist/assets/img/icons/facebook.png" class="me-2" alt="google">
+                                    <img src="vistas/assets/img/icons/facebook.png" class="me-2" alt="google">
                                     Regístrate usando Facebook
 
                                 </a>
@@ -88,7 +88,7 @@
                 </div>
             </div>
             <div class="login-img">
-                <img src="vistas/dist/assets/img/login.jpg" alt="img">
+                <img src="vistas/assets/img/login.jpg" alt="img">
             </div>
         </div>
     </div>

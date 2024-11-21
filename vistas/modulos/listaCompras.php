@@ -6,7 +6,7 @@
                 <h6>Administrar compras</h6>
             </div>
             <div class="page-btn">
-                <a href="compras" class="btn btn-added"><img src="vistas/dist/assets/img/icons/plus.svg" alt="img" class="me-2">Nueva compra</a>
+                <a href="compras" class="btn btn-added"><img src="vistas/assets/img/icons/plus.svg" alt="img" class="me-2">Nueva compra</a>
             </div>
         </div>
 
@@ -18,14 +18,14 @@
 
                         <div class="search-path">
                             <a class="btn btn-filter" id="filter_search">
-                                <img src="vistas/dist/assets/img/icons/filter.svg" alt="img">
-                                <span><img src="vistas/dist/assets/img/icons/closes.svg" alt="img"></span>
+                                <img src="vistas/assets/img/icons/filter.svg" alt="img">
+                                <span><img src="vistas/assets/img/icons/closes.svg" alt="img"></span>
                             </a>
                         </div>
 
                         <div class="search-input">
                             <a class="btn btn-searchset">
-                                <img src="vistas/dist/assets/img/icons/search-white.svg" alt="img">
+                                <img src="vistas/assets/img/icons/search-white.svg" alt="img">
                             </a>
                         </div>
 
@@ -34,13 +34,13 @@
                     <div class="wordset">
                         <ul>
                             <li>
-                                <a data-bs-toggle="tooltip" data-bs-placement="top" title="pdf"><img src="vistas/dist/assets/img/icons/pdf.svg" alt="img"></a>
+                                <a data-bs-toggle="tooltip" data-bs-placement="top" title="pdf"><img src="vistas/assets/img/icons/pdf.svg" alt="img"></a>
                             </li>
                             <li>
-                                <a data-bs-toggle="tooltip" data-bs-placement="top" title="excel"><img src="vistas/dist/assets/img/icons/excel.svg" alt="img"></a>
+                                <a data-bs-toggle="tooltip" data-bs-placement="top" title="excel"><img src="vistas/assets/img/icons/excel.svg" alt="img"></a>
                             </li>
                             <li>
-                                <a data-bs-toggle="tooltip" data-bs-placement="top" title="print"><img src="vistas/dist/assets/img/icons/printer.svg" alt="img"></a>
+                                <a data-bs-toggle="tooltip" data-bs-placement="top" title="print"><img src="vistas/assets/img/icons/printer.svg" alt="img"></a>
                             </li>
                         </ul>
                     </div>

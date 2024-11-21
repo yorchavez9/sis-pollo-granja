@@ -8,14 +8,14 @@ $data_roles = json_decode($_SESSION["roles"], true);
         <div id="sidebar-menu" class="sidebar-menu">
             <ul>
                 <li class="active">
-                    <a href="inicio"><img src="vistas/dist/assets/img/icons/dashboard.svg" alt="img"><span>
+                    <a href="inicio"><img src="vistas/assets/img/icons/dashboard.svg" alt="img"><span>
                             Panel</span> </a>
                 </li>
                 <li >
-                    <a href="sucursales"><img src="vistas/dist/assets/img/icons/sucursales.svg" alt="img"><span>Sucursales</span></a>
+                    <a href="sucursales"><img src="vistas/assets/img/icons/sucursales.svg" alt="img"><span>Sucursales</span></a>
                 </li>
                 <li class="submenu">
-                    <a href="javascript:void(0);"><img src="vistas/dist/assets/img/icons/users1.svg" alt="img"><span>
+                    <a href="javascript:void(0);"><img src="vistas/assets/img/icons/users1.svg" alt="img"><span>
                             Personas</span> <span class="menu-arrow"></span></a>
                     <ul>
                         <li><a href="tipoDocumento">Tipo documento</a></li>
@@ -27,7 +27,7 @@ $data_roles = json_decode($_SESSION["roles"], true);
                     </ul>
                 </li>
                 <li class="submenu">
-                    <a href="javascript:void(0);"><img src="vistas/dist/assets/img/icons/product.svg" alt="img"><span>
+                    <a href="javascript:void(0);"><img src="vistas/assets/img/icons/product.svg" alt="img"><span>
                             Inventario</span> <span class="menu-arrow"></span></a>
                     <ul>
                         <li><a href="categorias">Categorias</a></li>
@@ -37,7 +37,7 @@ $data_roles = json_decode($_SESSION["roles"], true);
                     </ul>
                 </li>
                 <li class="submenu">
-                    <a href="javascript:void(0);"><img src="vistas/dist/assets/img/icons/purchase1.svg" alt="img"><span>
+                    <a href="javascript:void(0);"><img src="vistas/assets/img/icons/purchase1.svg" alt="img"><span>
                             Compras</span> <span class="menu-arrow"></span></a>
                     <ul>
                         <li><a href="compras">Compra</a></li>
@@ -46,7 +46,7 @@ $data_roles = json_decode($_SESSION["roles"], true);
                 </li>
 
                 <li class="submenu">
-                    <a href="javascript:void(0);"><img src="vistas/dist/assets/img/icons/sales1.svg" alt="img"><span>
+                    <a href="javascript:void(0);"><img src="vistas/assets/img/icons/sales1.svg" alt="img"><span>
                             Ventas</span> <span class="menu-arrow"></span></a>
                     <ul>
 
@@ -57,7 +57,7 @@ $data_roles = json_decode($_SESSION["roles"], true);
                 </li>
 
                 <li class="submenu">
-                    <a href="javascript:void(0);"><img src="vistas/dist/assets/img/icons/users1.svg" alt="img">
+                    <a href="javascript:void(0);"><img src="vistas/assets/img/icons/users1.svg" alt="img">
                         <span>Trabajadores</span> <span class="menu-arrow"></span>
                     </a>
                     <ul>
@@ -70,7 +70,7 @@ $data_roles = json_decode($_SESSION["roles"], true);
                 </li>
 
                 <li class="submenu">
-                    <a href="javascript:void(0);"><img src="vistas/dist/assets/img/icons/time.svg" alt="img"><span>
+                    <a href="javascript:void(0);"><img src="vistas/assets/img/icons/time.svg" alt="img"><span>
                             Reportes</span> <span class="menu-arrow"></span></a>
                     <ul>
                         <li><a href="reporteUsuario">Reporte de usuarios</a></li>
@@ -81,7 +81,7 @@ $data_roles = json_decode($_SESSION["roles"], true);
                     </ul>
                 </li>
                 <li class="submenu">
-                    <a href="javascript:void(0);"><img src="vistas/dist/assets/img/icons/settings.svg" alt="img"><span>
+                    <a href="javascript:void(0);"><img src="vistas/assets/img/icons/settings.svg" alt="img"><span>
                             Ajustes</span> <span class="menu-arrow"></span></a>
                     <ul>
                         <li><a href="configuracionTicket">Configuración Ticket</a></li>

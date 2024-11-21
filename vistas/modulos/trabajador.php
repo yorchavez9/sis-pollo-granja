@@ -11,7 +11,7 @@ CONTENIDO PRINCIPAL
                 <h6>Administrar trabajadores</h6>
             </div>
             <div class="page-btn">
-                <a href="#" class="btn btn-added" data-bs-toggle="modal" data-bs-target="#modalNuevoTrabajador"><img src="vistas/dist/assets/img/icons/plus.svg" alt="img" class="me-2">Agregar trabajador</a>
+                <a href="#" class="btn btn-added" data-bs-toggle="modal" data-bs-target="#modalNuevoTrabajador"><img src="vistas/assets/img/icons/plus.svg" alt="img" class="me-2">Agregar trabajador</a>
             </div>
         </div>
 
@@ -22,13 +22,13 @@ CONTENIDO PRINCIPAL
                     <div class="wordset">
                         <ul>
                             <li>
-                                <a data-bs-toggle="tooltip" data-bs-placement="top" title="pdf"><img src="vistas/dist/assets/img/icons/pdf.svg" alt="img"></a>
+                                <a data-bs-toggle="tooltip" data-bs-placement="top" title="pdf"><img src="vistas/assets/img/icons/pdf.svg" alt="img"></a>
                             </li>
                             <li>
-                                <a data-bs-toggle="tooltip" data-bs-placement="top" title="excel"><img src="vistas/dist/assets/img/icons/excel.svg" alt="img"></a>
+                                <a data-bs-toggle="tooltip" data-bs-placement="top" title="excel"><img src="vistas/assets/img/icons/excel.svg" alt="img"></a>
                             </li>
                             <li>
-                                <a data-bs-toggle="tooltip" data-bs-placement="top" title="print"><img src="vistas/dist/assets/img/icons/printer.svg" alt="img"></a>
+                                <a data-bs-toggle="tooltip" data-bs-placement="top" title="print"><img src="vistas/assets/img/icons/printer.svg" alt="img"></a>
                             </li>
                         </ul>
                     </div>
