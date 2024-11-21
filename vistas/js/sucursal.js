@@ -125,7 +125,7 @@ $(document).ready(function () {
                 });
 
                 // Inicializar DataTables después de cargar los datos
-                $('#tabla_categoria').DataTable();
+                $('#tabla_sucursal').DataTable();
             },
             error: function (xhr, status, error) {
                 console.error("Error al recuperar los proveedores:", error);

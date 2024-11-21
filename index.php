@@ -6,6 +6,7 @@ require_once "controladores/Plantilla.controlador.php";
 
 require_once "controladores/Sucursal.controlador.php";
 require_once "controladores/Usuario.controlador.php";
+require_once "controladores/Rol.controlador.php";
 require_once "controladores/Tipo.documento.controlador.php";
 require_once "controladores/Proveedor.controlador.php";
 require_once "controladores/Cliente.controlador.php";
@@ -25,6 +26,7 @@ require_once "controladores/Impresora.controlador.php";
 
 require_once "modelos/Sucursal.modelo.php";
 require_once "modelos/Usuario.modelo.php";
+require_once "modelos/Rol.modelo.php";
 require_once "modelos/Tipo.documento.modelo.php";
 require_once "modelos/Proveedor.modelo.php";
 require_once "modelos/Cliente.modelo.php";

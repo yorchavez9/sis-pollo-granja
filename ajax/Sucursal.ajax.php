@@ -73,17 +73,17 @@ elseif (isset($_POST["delete_id_sucursal"])) {
 else {
     $item = null;
     $valor = null;
-    $mostrarCategorias = ControladorSucursal::ctrMostrarSucursales($item, $valor);
-    $tablaUsuarios = array();
-    foreach ($mostrarCategorias as $key => $usuario) {
+    $mostrarSucursales = ControladorSucursal::ctrMostrarSucursales($item, $valor);
+    $tablaSucursal = array();
+    foreach ($mostrarSucursales as $key => $sucursal) {
         $fila = array(
-            'id_sucursal' => $usuario['id_sucursal'],
-            'nombre_sucursal' => $usuario['nombre_sucursal'],
-            'direccion' => $usuario['direccion'],
-            'telefono' => $usuario['telefono'],
-            'estado' => $usuario['estado']
+            'id_sucursal' => $sucursal['id_sucursal'],
+            'nombre_sucursal' => $sucursal['nombre_sucursal'],
+            'direccion' => $sucursal['direccion'],
+            'telefono' => $sucursal['telefono'],
+            'estado' => $sucursal['estado']
         );
-        $tablaUsuarios[] = $fila;
+        $tablaSucursal[] = $fila;
     }
-    echo json_encode($tablaUsuarios);
+    echo json_encode($tablaSucursal);
 }

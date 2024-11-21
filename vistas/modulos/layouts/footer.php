@@ -17,6 +17,7 @@
 <script src="vistas/js/login.js" type="module"></script>
 <script src="vistas/js/sucursal.js" type="module"></script>
 <script src="vistas/js/usuario.js" type="module"></script>
+<script src="vistas/js/rol.js" type="module"></script>
 <script src="vistas/js/documento.js" type="module"></script>
 <script src="vistas/js/script-proveedor.js" type="module"></script>
 <script src="vistas/js/cliente.js" type="module"></script>
