@@ -92,7 +92,7 @@ MODAL CREAR VACACIONES
                         $trabajadores = ControladorTrabajador::ctrMostrarTrabajadores($item, $valor);
 
                         ?>
-                        <select class="select" id="id_trabajador_v">
+                        <select class="js-example-basic-single select2" id="id_trabajador_v">
                             <option disabled selected>Seleccione</option>
                             <?php
                             foreach ($trabajadores as $key => $trabajador) {
@@ -173,7 +173,7 @@ MODAL EDITAR VACACIONES
 
                     <!-- ID VACACIONES -->
                     <input type="text" id="edit_id_vacaciones">
-                            
+
                     <!-- INGRESO DEL TRABAJADOR -->
 
                     <div class="form-group">
@@ -187,7 +187,7 @@ MODAL EDITAR VACACIONES
                         $trabajadores = ControladorTrabajador::ctrMostrarTrabajadores($item, $valor);
 
                         ?>
-                        <select class="form-select" id="edit_id_trabajador_v">
+                        <select class="js-example-basic-single select2" id="edit_id_trabajador_v">
                             <option disabled selected>Seleccione</option>
                             <?php
                             foreach ($trabajadores as $key => $trabajador) {
@@ -251,3 +251,26 @@ MODAL EDITAR VACACIONES
         </div>
     </div>
 </div>
+
+<script>
+    // Inicializar Select2 en todos los elementos
+    $('.js-example-basic-single').select2({
+        placeholder: "Select an option",
+        allowClear: true,
+    });
+
+    // Reinicializar al abrir el modal
+    $('#modalNuevoVacaciones').on('shown.bs.modal', function() {
+        $(this).find('.js-example-basic-single').select2({
+            placeholder: "Select an option",
+            dropdownParent: $('#modalNuevoVacaciones')
+        });
+    });
+    // Reinicializar al abrir el modal
+    $('#modalEditarVacaciones').on('shown.bs.modal', function() {
+        $(this).find('.js-example-basic-single').select2({
+            placeholder: "Select an option",
+            dropdownParent: $('#modalEditarVacaciones')
+        });
+    });
+</script>

@@ -156,67 +156,54 @@ $(document).ready(function () {
     =========================================*/
 
   function mostrarContratoTrabajador() {
-    
     $.ajax({
       url: "ajax/Contrato.trabajador.ajax.php",
       type: "GET",
       dataType: "json",
       success: function (contratos) {
 
-      
-
         var tbody = $("#datos_contrato_trabajador");
-
         var contador = 1;
 
         tbody.empty();
 
         contratos.forEach(function (trabajador) {
 
+          // Formatear el sueldo a moneda
+          var sueldoFormateado = new Intl.NumberFormat('es-PE', { style: 'currency', currency: 'PEN' }).format(trabajador.sueldo);
 
           var fila = `
-                    <tr>
-                        <td>
-                          ${contador}
-                        </td>
-                        <td>${trabajador.nombre}</td>
-                        <td>${trabajador.tiempo_contrato}</td>
-                        <td>${trabajador.tipo_sueldo}</td>
-                        <td>${trabajador.sueldo}</td>
-                        <td>${trabajador.fecha_contrato}</td>
-                    
-                        
-                        <td>
-  
-                            <a href="#" class="me-3 btnEditarContrato" idContrato="${trabajador.id_contrato}" data-bs-toggle="modal" data-bs-target="#modalEditarContratoTrabajador">
-                                <i class="text-warning fas fa-edit fa-lg"></i>
-                            </a>
-  
-                            <a href="#" class="me-3 confirm-text btnEliminarContrato" idContrato="${trabajador.id_contrato}">
-                                <i class="fa fa-trash fa-lg" style="color: #F52E2F"></i>
-                            </a>
-  
-                        </td>
-  
-                    </tr>`;
+          <tr>
+            <td>${contador}</td>
+            <td>${trabajador.nombre}</td>
+            <td>${trabajador.tiempo_contrato}</td>
+            <td>${trabajador.tipo_sueldo}</td>
+            <td>${sueldoFormateado}</td>
+            <td>${trabajador.fecha_contrato}</td>
+            <td>
+              <a href="#" class="me-3 btnEditarContrato" idContrato="${trabajador.id_contrato}" data-bs-toggle="modal" data-bs-target="#modalEditarContratoTrabajador">
+                <i class="text-warning fas fa-edit fa-lg"></i>
+              </a>
+              <a href="#" class="me-3 confirm-text btnEliminarContrato" idContrato="${trabajador.id_contrato}">
+                <i class="fa fa-trash fa-lg" style="color: #F52E2F"></i>
+              </a>
+            </td>
+          </tr>`;
 
           // Agregar la fila al tbody
           tbody.append(fila);
 
           contador++;
         });
+
         // Inicializar DataTables después de cargar los datos
         $("#tabla_contrato_trabajador").DataTable();
-
       },
 
       error: function (xhr, status, error) {
-
         console.error("Error al recuperar los usuarios:", error);
       },
-
     });
-
   }
 
 

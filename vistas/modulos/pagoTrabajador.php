@@ -79,7 +79,7 @@ MODAL NUEVO PAGO DEL TRABAJADOR
 
                         <label>Selecione el trabajador (<span class="text-danger">*</span>)</label>
 
-                        <select id="id_contrato_pago" class="form-select form-select-sm">
+                        <select id="id_contrato_pago" class="js-example-basic-single select2">
                             <option selected disabled>Selecione</option>
                             <?php
 
@@ -244,3 +244,18 @@ MODAL NUEVO PAGO DEL TRABAJADOR
         </div>
     </div>
 </div>
+<script>
+    // Inicializar Select2 en todos los elementos
+    $('.js-example-basic-single').select2({
+        placeholder: "Select an option",
+        allowClear: true,
+    });
+
+    // Reinicializar al abrir el modal
+    $('#modalNuevoPagoTrabajador').on('shown.bs.modal', function() {
+        $(this).find('.js-example-basic-single').select2({
+            placeholder: "Select an option",
+            dropdownParent: $('#modalNuevoPagoTrabajador')
+        });
+    });
+</script>

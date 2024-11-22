@@ -68,13 +68,13 @@
                                 <!-- INGRESO DE CLIENTE -->
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label for="id_cliente" class="form-label">Selecione el cliente(<span class="text-danger">*</span>):</label>
+                                        <label for="id_cliente" class="form-label">Seleccione el cliente(<span class="text-danger">*</span>):</label>
                                         <?php
                                         $item = null;
                                         $valor = null;
                                         $proveedores = ControladorCliente::ctrMostrarCliente($item, $valor);
                                         ?>
-                                        <select name="" id="id_cliente_venta" class="form-select small-select">
+                                        <select name="" id="id_cliente_venta" class="js-example-basic-single select2">
                                             <?php
                                             foreach ($proveedores as $key => $proveedor) {
                                                 if ($proveedor["tipo_persona"] == "cliente") {
@@ -155,7 +155,7 @@
                             <!-- BOTON DE MODAL PARA AGREGAR PRODUCTO -->
                             <div class="text-center mb-5">
                                 <a href="#" class="btn btn-primary btn-add-category" data-bs-toggle="modal" data-bs-target="#modalAddProductVenta">
-                                    <i class="bi bi-plus me-2"></i> Agregar producto
+                                    <i class="fa fa-plus me-2"></i> Agregar producto
                                 </a>
                             </div>
                             <!-- DATOS DEL DETALLE DEL PRODUCTO -->
@@ -1370,6 +1370,12 @@
             $("#pos_venta").show();
         });
     }
+
+    // Inicializar Select2 en todos los elementos
+    $('.js-example-basic-single').select2({
+        placeholder: "Select an option",
+        allowClear: true,
+    });
 
 
 

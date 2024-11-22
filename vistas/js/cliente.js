@@ -122,7 +122,6 @@ $(document).ready(function () {
       type: "GET",
       dataType: "json",
       success: function (clientes) {
-        console.log(clientes);
 
         var tbody = $("#dataClientes");
 
