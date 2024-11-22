@@ -56,7 +56,7 @@ class ModeloVenta
 	static public function mdlMostrarSumaTotalVentaContado($tablaD, $tablaV, $tablaP, $item, $valor)
 	{
 
-			$stmt = Conexion::conectar()->prepare("SELECT SUM(total_venta) AS total_ventas_contado FROM $tablaV WHERE tipo_pago = 'credito';");
+			$stmt = Conexion::conectar()->prepare("SELECT SUM(total_venta) AS total_ventas_contado FROM $tablaV WHERE tipo_pago = 'contado'");
 
 			$stmt->execute();
 			
@@ -73,7 +73,7 @@ class ModeloVenta
 	static public function mdlMostrarSumaTotalCredito($tablaD, $tablaV, $tablaP, $item, $valor)
 	{
 
-			$stmt = Conexion::conectar()->prepare("SELECT SUM(total_venta) AS total_ventas_credito FROM $tablaV WHERE tipo_pago = 'credito';");
+			$stmt = Conexion::conectar()->prepare("SELECT SUM(total_venta) AS total_ventas_credito FROM $tablaV WHERE tipo_pago = 'credito'");
 
 			$stmt->execute();
 			
