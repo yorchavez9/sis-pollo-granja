@@ -2,10 +2,10 @@
 
     <div class="header-left active">
         <a href="#" class="logo">
-            <img src="vistas/assets/img/logo-apuuray.png" alt="">
+            <img src="vistas/img/sistema/logo-apuuray.png" alt="">
         </a>
         <a href="#" class="logo-small">
-            <img src="vistas/assets/img/logo-small.png" alt="">
+            <img src="vistas/img/logo-small.png" alt="">
         </a>
         <a id="toggle_btn" href="javascript:void(0);">
         </a>

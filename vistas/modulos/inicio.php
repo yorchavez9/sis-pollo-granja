@@ -78,11 +78,11 @@ $totalProveedores = ControladorProveedores::ctrMostrarTotalProveedores($item, $v
             foreach ($data_roles as $rol) {
 
                 if ($rol == "administrador") {
-                ?>
+            ?>
                     <div class="col-lg-3 col-sm-6 col-12">
                         <div class="dash-widget dash1">
                             <div class="dash-widgetimg">
-                                <span><img src="vistas/assets/img/icons/dash2.svg" alt="img"></span>
+                                <span><img src="vistas/dist/assets/img/icons/dash2.svg" alt="img"></span>
                             </div>
                             <div class="dash-widgetcontent">
                                 <h5>S/ <span class="counters"><?php echo $precioFormateado ?></span></h5>
@@ -94,7 +94,7 @@ $totalProveedores = ControladorProveedores::ctrMostrarTotalProveedores($item, $v
                     <div class="col-lg-3 col-sm-6 col-12">
                         <div class="dash-widget">
                             <div class="dash-widgetimg">
-                                <span><img src="vistas/assets/img/icons/dash1.svg" alt="img"></span>
+                                <span><img src="vistas/dist/assets/img/icons/dash1.svg" alt="img"></span>
                             </div>
                             <div class="dash-widgetcontent">
                                 <h5>S/ <span class="counters"><?php echo $precioFormateadoCompra; ?></span></h5>
@@ -106,7 +106,7 @@ $totalProveedores = ControladorProveedores::ctrMostrarTotalProveedores($item, $v
                     <div class="col-lg-3 col-sm-6 col-12">
                         <div class="dash-widget dash2">
                             <div class="dash-widgetimg">
-                                <span><img src="vistas/assets/img/icons/dash3.svg" alt="img"></span>
+                                <span><img src="vistas/dist/assets/img/icons/dash3.svg" alt="img"></span>
                             </div>
                             <div class="dash-widgetcontent">
                                 <h5>S/ <span class="counters"><?php echo number_format($sumaTotalVentaContado, 2, '.', ''); ?></span></h5>
@@ -118,7 +118,7 @@ $totalProveedores = ControladorProveedores::ctrMostrarTotalProveedores($item, $v
                     <div class="col-lg-3 col-sm-6 col-12">
                         <div class="dash-widget dash3">
                             <div class="dash-widgetimg">
-                                <span><img src="vistas/assets/img/icons/dash4.svg" alt="img"></span>
+                                <span><img src="vistas/dist/assets/img/icons/dash4.svg" alt="img"></span>
                             </div>
                             <div class="dash-widgetcontent">
                                 <h5>S/ <span class="counters"><?php echo $precioFormateadoCredito ?></span></h5>
@@ -126,7 +126,7 @@ $totalProveedores = ControladorProveedores::ctrMostrarTotalProveedores($item, $v
                             </div>
                         </div>
                     </div>
-                <?php
+            <?php
                 }
             }
 
@@ -202,7 +202,7 @@ $totalProveedores = ControladorProveedores::ctrMostrarTotalProveedores($item, $v
                             </ul>
                             <div class="dropdown">
                                 <button class="btn btn-white btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                    2024 <img src="vistas/assets/img/icons/dropdown.svg" alt="img" class="ms-2">
+                                    2024 <img src="vistas/dist/assets/img/icons/dropdown.svg" alt="img" class="ms-2">
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                     <li>

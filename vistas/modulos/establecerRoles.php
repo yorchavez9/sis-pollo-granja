@@ -68,33 +68,41 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Crear categoría</h5>
+                <h5 class="modal-title">Asignar Roles a Usuario</h5>
                 <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
             </div>
-            <form enctype="multipart/form-data" id="form_nuevo_categoria">
+            <form enctype="multipart/form-data" id="form_nuevo_usuario_roles">
                 <div class="modal-body">
 
-                    <!-- SELECCIONA EL USUARIO -->
-                    <div class="form-group">
-                        <label for="nombre_categoria" class="form-label">Seleccione el usuario (<span class="text-danger">*</span>)</label>
-                        <select class="js-example-basic-single select2">
-                            <option selected="selected">orange</option>
-                            <option>white</option>
-                            <option>purple</option>
+                    <!-- SELECCIONA UN USUARIO -->
+                    <div class="form-group mb-3">
+                        <label for="id_usuario_roles" class="form-label">Selecciona un Usuario</label>
+                        <select id="id_usuario_roles" class="js-example-basic-single select2 form-control" style="width: 100%;">
+                            <option value="1">Usuario 1</option>
+                            <option value="2">Usuario 2</option>
+                            <option value="3">Usuario 3</option>
+                            <option value="4">Usuario 4</option>
                         </select>
+                        <small id="error_usuario_roles" class="text-danger"></small>
                     </div>
 
                     <!-- SELECCIONA LOS ROLES -->
-                    <div class="form-group">
-                        <label class="form-label">Seleccione los roles (<span class="text-danger">*</span>)</label>
-                        <textarea name="descripcion_categoria" id="descripcion_categoria" cols="30" rows="10" class="form-control" placeholder="Ingrese la descripción"></textarea>
-                        <small id="error_descripcion_categoria"></small>
+                    <div class="form-group mb-3">
+                        <label for="id_roles" class="form-label">Selecciona Roles</label>
+                        <select id="id_roles" class="form-control select2" multiple="multiple" style="width: 100%;">
+                            <option value="admin">Administrador</option>
+                            <option value="editor">Editor</option>
+                            <option value="viewer">Visualizador</option>
+                            <option value="guest">Invitado</option>
+                        </select>
+                        <small id="error_roles" class="text-danger"></small>
                     </div>
 
                 </div>
 
+                <!-- BOTONES -->
                 <div class="text-end mx-4 mb-2">
-                    <button type="button" id="btn_guardar_categoria" class="btn btn-primary mx-2"><i class="fa fa-save"></i> Guardar</button>
+                    <button type="button" id="btn_guardar_usuario_roles" class="btn btn-primary mx-2"><i class="fa fa-save"></i> Guardar</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                 </div>
             </form>
@@ -141,9 +149,19 @@
 </div>
 
 <script>
-    $("#id_select_usuario_rol").select2({
-        placeholder: "Seleccione un usuario",
-        allowClear: true,
-        minimumResultsForSearch: 0
+    $(document).ready(function() {
+        // Inicializar Select2 en todos los elementos
+        $('.js-example-basic-single').select2({
+            placeholder: "Select an option",
+            allowClear: true,
+        });
+
+        // Reinicializar al abrir el modal
+        $('#modalNuevoCategoria').on('shown.bs.modal', function() {
+            $(this).find('.js-example-basic-single').select2({
+                placeholder: "Select an option",
+                dropdownParent: $('#modalNuevoCategoria')
+            });
+        });
     });
 </script>
