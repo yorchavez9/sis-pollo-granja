@@ -141,9 +141,8 @@
                         <!-- INGRESE LA CIUDAD -->
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="telefono" class="form-label">Ingrese la ciudad (<span class="text-danger">*</span>)</label>
+                                <label for="telefono" class="form-label">Ingrese la ciudad</label>
                                 <input type="text" id="ciudad_c" placeholder="Ingrese la ciudad">
-                                <small id="error_ciudad_c"></small>
                             </div>
 
                         </div>
@@ -156,16 +155,14 @@
                             <div class="form-group">
                                 <label for="codigo_postal" class="form-label">Ingrese el codigo postal</label>
                                 <input type="text" id="codigo_postal_c" placeholder="Ingrese el código postal">
-                                <small id="error_codigo_postal_c"></small>
                             </div>
                         </div>
 
                         <!-- INGRESO DE TELEFONO -->
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="telefono" class="form-label">Ingrese el telefono (<span class="text-danger">*</span>)</label>
+                                <label for="telefono" class="form-label">Ingrese el telefono</label>
                                 <input type="text" id="telefono_c" placeholder="Ingrese el teléfono">
-                                <small id="error_telefono_c"></small>
                             </div>
 
                         </div>
@@ -173,17 +170,15 @@
 
                     <!-- INGRESO DEL CORREO ELECTRÓNICO -->
                     <div class="form-group">
-                        <label for="correo" class="form-label">Ingrese el correo electrónico (<span class="text-danger">*</span>)</label>
+                        <label for="correo" class="form-label">Ingrese el correo electrónico</label>
                         <div class="pass-group">
                             <input type="text" id="correo_c" placeholder="Ingrese el correo electrónico">
-                            <small id="error_correo_c"></small>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="sitio_web" class="form-label">Ingrese el sitio web</label>
                         <input type="text" id="sitio_web_c" placeholder="Ingrese el link del sitio web">
-                        <small id="error_sitio_web_c"></small>
                     </div>
 
                     <div class="row">
@@ -393,9 +388,8 @@
                         <!-- INGRESE LA CIUDAD -->
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="telefono" class="form-label">Ingrese la ciudad (<span class="text-danger">*</span>)</label>
+                                <label for="telefono" class="form-label">Ingrese la ciudad</label>
                                 <input type="text" id="edit_ciudad_c" placeholder="Ingrese la ciudad">
-                                <small id="edit_error_c_c"></small>
                             </div>
 
                         </div>
@@ -408,16 +402,14 @@
                             <div class="form-group">
                                 <label for="codigo_postal" class="form-label">Ingrese el codigo postal</label>
                                 <input type="text" id="edit_codigo_postal_c" placeholder="Ingrese el código postal">
-                                <small id="edit_error_cp_c"></small>
                             </div>
                         </div>
 
                         <!-- INGRESO DE TELEFONO -->
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="telefono" class="form-label">Ingrese el telefono (<span class="text-danger">*</span>)</label>
+                                <label for="telefono" class="form-label">Ingrese el telefono</label>
                                 <input type="text" id="edit_telefono_c" placeholder="Ingrese el teléfono">
-                                <small id="edit_error_t_c"></small>
                             </div>
 
                         </div>
@@ -425,17 +417,15 @@
 
                     <!-- INGRESO DEL CORREO ELECTRÓNICO -->
                     <div class="form-group">
-                        <label for="correo" class="form-label">Ingrese el correo electrónico (<span class="text-danger">*</span>)</label>
+                        <label for="correo" class="form-label">Ingrese el correo electrónico</label>
                         <div class="pass-group">
                             <input type="text" id="edit_correo_c" placeholder="Ingrese el correo electrónico">
-                            <small id="edit_error_c_c"></small>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="sitio_web" class="form-label">Ingrese el sitio web</label>
                         <input type="text" id="edit_sitio_web_c" placeholder="Ingrese el link del sitio web">
-                        <small id="edit_error_sitio_web_c"></small>
                     </div>
 
                     <div class="row">

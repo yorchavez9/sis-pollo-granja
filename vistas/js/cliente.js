@@ -69,62 +69,6 @@ $(document).ready(function () {
       $("#error_numero_documento_c").html("").removeClass("text-danger");
     }
 
-    // Validar la ciudad
-    if (ciudad === "") {
-      $("#error_ciudad_c")
-        .html("Por favor, ingrese la ciudad")
-        .addClass("text-danger");
-      isValid = false;
-    } else if (/\d/.test(ciudad)) {
-      $("#error_ciudad_c")
-        .html("La ciudad no puede contener números")
-        .addClass("text-danger");
-      isValid = false;
-    } else {
-      $("#error_ciudad_c").html("").removeClass("text-danger");
-    }
-
-
-    if (codigo_postal && !/^\d{1,5}$/.test(codigo_postal)) {
-      $("#error_codigo_postal_c")
-        .html("El código postal debe contener como máximo 5 números")
-        .addClass("text-danger");
-      isValid = false;
-    } else {
-      $("#error_codigo_postal_c").html("").removeClass("text-danger");
-    }
-
-
-    // Validar el teléfono
-    if (telefono === "") {
-      $("#error_telefono_c")
-        .html("Por favor, ingrese el teléfono")
-        .addClass("text-danger");
-      isValid = false;
-    } else if (!(/^\d{1,11}$/.test(telefono))) {
-      $("#error_telefono_c")
-        .html("El teléfono debe contener solo números y tener un máximo de 11 dígitos")
-        .addClass("text-danger");
-      isValid = false;
-    } else {
-      $("#error_telefono_c").html("").removeClass("text-danger");
-    }
-
-    //Validar el correo electrónico
-    if (email === "") {
-      $("#error_correo_c")
-        .html("Por favor, ingrese el correo electrónico")
-        .addClass("text-danger");
-      isValid = false;
-    } else if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
-      $("#error_correo_c")
-        .html("Por favor, ingrese un correo electrónico válido")
-        .addClass("text-danger");
-      isValid = false;
-    } else {
-      $("#error_correo_c").html("").removeClass("text-danger");
-    }
-
     // Si el formulario es válido, envíalo
     if (isValid) {
       var datos = new FormData();
@@ -178,41 +122,51 @@ $(document).ready(function () {
       type: "GET",
       dataType: "json",
       success: function (clientes) {
+        console.log(clientes);
+
         var tbody = $("#dataClientes");
 
         tbody.empty();
 
         clientes.forEach(function (cliente, index) {
           if (cliente.tipo_persona == "cliente") {
+            // Reemplazar valores vacíos con "No tiene" y agregar clase para opacidad
+            var razonSocial = cliente.razon_social ? cliente.razon_social : '<span class="text-secondary">No tiene</span>';
+            var nombreDoc = cliente.nombre_doc ? cliente.nombre_doc : '<span class="text-secondary">No tiene</span>';
+            var numeroDoc = cliente.numero_documento ? cliente.numero_documento : '<span class="text-secondary">No tiene</span>';
+            var direccion = cliente.direccion ? cliente.direccion : '<span class="text-secondary">No tiene</span>';
+            var telefono = cliente.telefono ? cliente.telefono : '<span class="text-secondary">No tiene</span>';
+            var email = cliente.email ? cliente.email : '<span class="text-secondary">No tiene</span>';
+
             var fila = `
-                      <tr>
-                          <td>${index + 1}</td>
-                          <td>${cliente.razon_social}</td>
-                          <td class="text-center">
-                              <span>${cliente.nombre_doc}:</span><br>
-                              <span>${cliente.numero_documento}</span>
-                          </td>
-                          <td>${cliente.direccion}</td>
-                          <td>${cliente.telefono}</td>
-                          <td>${cliente.email}</td>
-                          <td>
-                              ${cliente.estado_persona != 0 ? '<button class="btn bg-lightgreen badges btn-sm rounded btnActivar" idCliente="' + cliente.id_persona + '" estadoCliente="0">Activado</button>' : '<button class="btn bg-lightred badges btn-sm rounded btnActivar" idCliente="' + cliente.id_persona + '" estadoCliente="1">Desactivado</button>'}
-                          </td>
-                          <td class="text-center">
-                              <a href="#" class="me-3 btnEditarCliente" idCliente="${cliente.id_persona}" data-bs-toggle="modal" data-bs-target="#modalEditarCliente">
-                                  <i class="text-warning fas fa-edit fa-lg"></i>
-                              </a>
-                              <a href="#" class="me-3 btnVerCliente" idVerCliente="${cliente.id_persona}" data-bs-toggle="modal" data-bs-target="#modalVerCliente">
-                                  <i class="text-primary fa fa-eye fa-lg"></i>
-                              </a>
-                              <a href="#" class="me-3 confirm-text btnEliminarCliente" idCliente="${cliente.id_persona}">
-                                  <i class="text-danger fa fa-trash fa-lg"></i>
-                              </a>
-                          </td>
-                      </tr>
-                  `;
+                        <tr>
+                            <td>${index + 1}</td>
+                            <td>${razonSocial}</td>
+                            <td class="text-center">
+                                <span>${nombreDoc}:</span><br>
+                                <span>${numeroDoc}</span>
+                            </td>
+                            <td>${direccion}</td>
+                            <td>${telefono}</td>
+                            <td>${email}</td>
+                            <td>
+                                ${cliente.estado_persona != 0 ? '<button class="btn bg-lightgreen badges btn-sm rounded btnActivar" idCliente="' + cliente.id_persona + '" estadoCliente="0">Activado</button>' : '<button class="btn bg-lightred badges btn-sm rounded btnActivar" idCliente="' + cliente.id_persona + '" estadoCliente="1">Desactivado</button>'}
+                            </td>
+                            <td class="text-center">
+                                <a href="#" class="me-3 btnEditarCliente" idCliente="${cliente.id_persona}" data-bs-toggle="modal" data-bs-target="#modalEditarCliente">
+                                    <i class="text-warning fas fa-edit fa-lg"></i>
+                                </a>
+                                <a href="#" class="me-3 btnVerCliente" idVerCliente="${cliente.id_persona}" data-bs-toggle="modal" data-bs-target="#modalVerCliente">
+                                    <i class="text-primary fa fa-eye fa-lg"></i>
+                                </a>
+                                <a href="#" class="me-3 confirm-text btnEliminarCliente" idCliente="${cliente.id_persona}">
+                                    <i class="text-danger fa fa-trash fa-lg"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    `;
+            tbody.append(fila);
           }
-          tbody.append(fila);
         });
 
         // Inicializar DataTables después de cargar los datos
@@ -223,6 +177,7 @@ $(document).ready(function () {
       },
     });
   }
+
 
 
   /*=============================================
@@ -434,64 +389,6 @@ $(document).ready(function () {
     } else {
       $("#edit_error_nd_c").html("").removeClass("text-danger");
     }
-
-    // Validar la ciudad
-    if (edit_ciudad === "") {
-      $("#edit_error_c_c")
-        .html("Por favor, ingrese la ciudad")
-        .addClass("text-danger");
-      isValid = false;
-    } else if (/\d/.test(edit_ciudad)) {
-      $("#edit_error_c_c")
-        .html("La ciudad no puede contener números")
-        .addClass("text-danger");
-      isValid = false;
-    } else {
-      $("#edit_error_c_c").html("").removeClass("text-danger");
-    }
-
-
-    if (edit_codigo_postal && !/^\d{1,5}$/.test(edit_codigo_postal)) {
-      $("#edit_error_cp_c")
-        .html("El código postal debe contener como máximo 5 números")
-        .addClass("text-danger");
-      isValid = false;
-    } else {
-      $("#edit_error_cp_c").html("").removeClass("text-danger");
-    }
-
-
-    // Validar el teléfono
-    if (edit_telefono === "") {
-      $("#edit_error_t_c")
-        .html("Por favor, ingrese el teléfono")
-        .addClass("text-danger");
-      isValid = false;
-    } else if (!(/^\d{1,11}$/.test(edit_telefono))) {
-      $("#edit_error_t_c")
-        .html("El teléfono debe contener solo números y tener un máximo de 11 dígitos")
-        .addClass("text-danger");
-      isValid = false;
-    } else {
-      $("#edit_error_t_c").html("").removeClass("text-danger");
-    }
-
-    //Validar el correo electrónico
-    if (edit_email === "") {
-      $("#edit_error_c_c")
-        .html("Por favor, ingrese el correo electrónico")
-        .addClass("text-danger");
-      isValid = false;
-    } else if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(edit_email)) {
-      $("#edit_error_c_c")
-        .html("Por favor, ingrese un correo electrónico válido")
-        .addClass("text-danger");
-      isValid = false;
-    } else {
-      $("#edit_error_c_c").html("").removeClass("text-danger");
-    }
-
-
 
     if (isValid) {
       var datos = new FormData();

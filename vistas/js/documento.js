@@ -77,10 +77,10 @@ $(document).ready(function () {
                           <td>${documentos.fecha_doc}</td>
                           <td class="text-center">
                               <a href="#" class="me-3 btnEditarTipoDocumento" idTipoDocumento="${documentos.id_doc}" data-bs-toggle="modal" data-bs-target="#modalEditarTipoDocumento">
-                                  <img src="vistas/dist/assets/img/icons/edit.svg" alt="img">
+                                  <img src="vistas/assets/img/icons/edit.svg" alt="img">
                               </a>
                               <a href="#" class="me-3 confirm-text btnEliminarTipoDocumento" idTipoDocumento="${documentos.id_doc}">
-                                  <img src="vistas/dist/assets/img/icons/delete.svg" alt="img">
+                                  <img src="vistas/assets/img/icons/delete.svg" alt="img">
                               </a>
                           </td>
                       </tr>
