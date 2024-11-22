@@ -1,7 +1,7 @@
 <?php
 
-require_once "../controladores/Usuario.controlador.php";
-require_once "../modelos/Usuario.modelo.php";
+require_once "../controladores/UsuarioRoles.controlador.php";
+require_once "../modelos/UsuarioRoles.modelo.php";
 
 class AjaxUsuarioRoles
 {
@@ -11,132 +11,51 @@ class AjaxUsuarioRoles
 	EDITAR USUARIO ROLES
 	=============================================*/
 
-    public $idUsuario;
+    public $idUsuarioRol;
 
     public function ajaxEditarUsuarioRoles()
     {
 
         $item = "id_usuario";
-        $valor = $this->idUsuario;
+        $valor = $this->idUsuarioRol;
 
-        $respuesta = ControladorUsuarios::ctrMostrarUsuarios($item, $valor);
-
-        echo json_encode($respuesta);
-    }
-
-    /*=============================================
-	MOSTRAR DETALLE USUARIO ROLES
-	=============================================*/
-
-    public $idUsuarioVer;
-
-    public function ajaxVerUsuarioRoles()
-    {
-
-        $item = "id_usuario";
-        $valor = $this->idUsuarioVer;
-
-        $respuesta = ControladorUsuarios::ctrMostrarUsuarios($item, $valor);
+        $respuesta = ControladorUsuarioRoles::ctrMostrarUsuarioRoles($item, $valor);
 
         echo json_encode($respuesta);
     }
 
-    /*=============================================
-	ACTIVAR USUARIO ROLES
-	=============================================*/
 
-    public $activarUsuario;
-    public $activarId;
-
-
-    public function ajaxActivarUsuarioRoles()
-    {
-
-        $tabla = "usuarios";
-        $item1 = "estado_usuario";
-        $valor1 = $this->activarUsuario;
-
-        $item2 = "id_usuario";
-        $valor2 = $this->activarId;
-
-        $respuesta = ModeloUsuarios::mdlActualizarUsuario($tabla, $item1, $valor1, $item2, $valor2);
-
-        echo $respuesta;
-    }
-
-    /*=============================================
-	VALIDAR NO REPETIR USUARIO ROLES
-	=============================================*/
-
-    public $validarUsuario;
-
-    public function ajaxValidarUsuario()
-    {
-
-        $item = "usuario";
-        $valor = $this->validarUsuario;
-
-        $respuesta = ControladorUsuarios::ctrMostrarUsuarios($item, $valor);
-
-        echo json_encode($respuesta);
-    }
 }
 
 /*=============================================
 EDITAR USUARIO ROLES
 =============================================*/
-if (isset($_POST["idUsuario"])) {
+if (isset($_POST["idUsuarioRol"])) {
 
     $editar = new AjaxUsuarioRoles();
-    $editar->idUsuario = $_POST["idUsuario"];
+    $editar->idUsuarioRol = $_POST["idUsuarioRol"];
     $editar->ajaxEditarUsuarioRoles();
 }
 
-/* VER DETALLE USUARIO ROLES */ 
-elseif (isset($_POST["idUsuarioVer"])) {
-
-    $verDetalle = new AjaxUsuarioRoles();
-    $verDetalle->idUsuarioVer = $_POST["idUsuarioVer"];
-    $verDetalle->ajaxVerUsuarioRoles();
-}
-
-/* ACTIVAR USUARIO ROLES */ 
-elseif (isset($_POST["activarUsuario"])) {
-
-    $activarUsuario = new AjaxUsuarioRoles();
-    $activarUsuario->activarUsuario = $_POST["activarUsuario"];
-    $activarUsuario->activarId = $_POST["activarId"];
-    $activarUsuario->ajaxActivarUsuarioRoles();
-}
-
-/* VALIDAR USUARIO ROLES*/ 
-elseif (isset($_POST["validarUsuario"])) {
-
-    $valUsuario = new AjaxUsuarioRoles();
-    $valUsuario->validarUsuario = $_POST["validarUsuario"];
-    $valUsuario->ajaxValidarUsuario();
-}
 
 /* GUARDAR USUARIO ROLES */ 
-elseif (isset($_POST["nombre_usuario"])) {
-
-    $crearUsuario = new ControladorUsuarios();
-
-    $crearUsuario->ctrCrearUsuario();
+elseif (isset($_POST["id_usuario_roles"])) {
+    $crear_usuario_roles = new ControladorUsuarioRoles();
+    $crear_usuario_roles->ctrCrearUsuarioRoles();
 }
 
 /* ACTUALIZAR USUARIO ROLES */ 
-elseif (isset($_POST["edit_idUsuario"])) {
+elseif (isset($_POST["edit_id_usuario_roles"])) {
 
-    $editusuario = new ControladorUsuarios();
-    $editusuario->ctrEditarUsuario();
+    $editusuarioRoles = new ControladorUsuarioRoles();
+    $editusuarioRoles->ctrEditarUsuarioRoles();
 }
 
 /* BORRAR USUARIO ROLES */ 
-elseif (isset($_POST["deleteUserId"])) {
+elseif (isset($_POST["deleteIdUsuarioRol"])) {
 
-    $borrarUsuario = new ControladorUsuarios();
-    $borrarUsuario->ctrBorrarUsuario();
+    $borrarUsuario = new ControladorUsuarioRoles();
+    $borrarUsuario->ctrBorrarUsuarioRoles();
 }
 
 /* MOSTRAR USUARIO ROLES EN LA TABLA  */ 
@@ -144,30 +63,22 @@ else {
 
     $item = null;
     $valor = null;
-    $mostrarUsuarios = ControladorUsuarios::ctrMostrarUsuarios($item, $valor);
+    $mostrarUsuarioRoles = ControladorUsuarioRoles::ctrMostrarUsuarioRoles($item, $valor);
 
-    $tablaUsuarios = array();
+    $tablaUsuarioRoles = array();
 
-    foreach ($mostrarUsuarios as $key => $usuario) {
+    foreach ($mostrarUsuarioRoles as $key => $usuario_rol) {
 
         $fila = array(
-            'id_usuario' => $usuario['id_usuario'],
-            'id_sucursal' => $usuario['id_sucursal'],
-            'nombre_usuario' => $usuario['nombre_usuario'],
-            'nombre_sucursal' => $usuario['nombre_sucursal'],
-            'telefono' => $usuario['telefono'],
-            'correo' => $usuario['correo'],
-            'usuario' => $usuario['usuario'],
-            'contrasena' => $usuario['contrasena'],
-            'imagen_usuario' => $usuario['imagen_usuario'],
-            'estado_usuario' => $usuario['estado_usuario'],
-            'fecha_usuario' => $usuario['fecha_usuario']
+            'id_usuario' => $usuario_rol['id_usuario'],
+            'nombre_usuario' => $usuario_rol['nombre_usuario'],
+            'nombre_rol' => $usuario_rol['nombre_rol']
         );
 
 
-        $tablaUsuarios[] = $fila;
+        $tablaUsuarioRoles[] = $fila;
     }
 
 
-    echo json_encode($tablaUsuarios);
+    echo json_encode($tablaUsuarioRoles);
 }

@@ -1,5 +1,3 @@
-
-
 <div class="page-wrapper">
     <div class="content">
         <div class="page-header">
@@ -44,7 +42,7 @@
                 </div>
 
                 <div class="table-responsive">
-                    <table class="table table-striped table-bordered" style="width:100%" id="tabla_categoria">
+                    <table class="table table-striped table-bordered" style="width:100%" id="tabla_usuario_roles">
                         <thead>
                             <tr>
                                 <th>N°</th>
@@ -53,7 +51,7 @@
                                 <th class="text-center">Acción</th>
                             </tr>
                         </thead>
-                        <tbody id="dataCategorias">
+                        <tbody id="data_usuario_roles">
 
                         </tbody>
                     </table>
@@ -110,7 +108,7 @@
                             foreach ($roles as $key => $rol) {
                             ?>
                                 <div class="form-check mb-2">
-                                    <input type="checkbox" id="role_<?php echo $rol["id_rol"] ?>" class="form-check-input" value="<?php echo $rol["id_rol"] ?>">
+                                    <input type="checkbox" id="role_<?php echo $rol["id_rol"] ?>" class="form-check-input usuario_roles" value="<?php echo $rol["id_rol"] ?>">
                                     <label for="role_<?php echo $rol["id_rol"] ?>" class="form-check-label"><?php echo $rol["nombre_rol"] ?></label>
                                 </div>
                             <?php
@@ -132,43 +130,76 @@
     </div>
 </div>
 
-<!-- MODAL EDITAR CATEGORIA -->
-<div class="modal fade" id="modalEditarCategoria" tabindex="-1" aria-labelledby="modalEditarCategoriaLabel" aria-hidden="true">
+
+<!-- MODAL EDITAR NUEVOS ROLES -->
+<div class="modal fade" id="modal_editar_usuario_rol" tabindex="-1" aria-labelledby="modal_editar_usuario_rolLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Editar categoría</h5>
+                <h5 class="modal-title">Asignar Roles a Usuario</h5>
                 <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
             </div>
-            <form enctype="multipart/form-data" id="form_actualizar_categoria">
+            <form enctype="multipart/form-data" id="form_update_usuario_roles">
                 <div class="modal-body">
 
-                    <!-- ID CATEGORIA -->
-                    <input type="hidden" name="edit_id_categoria" id="edit_id_categoria">
-                    <!-- INGRESO TIPO DE PROVEEDOR -->
-                    <div class="form-group">
-                        <label for="nombre_categoria" class="form-label">Ingrese el nombre (<span class="text-danger">*</span>)</label>
-                        <input type="text" name="edit_nombre_categoria" id="edit_nombre_categoria" placeholder="Ingresa el nombre">
-                        <small id="edit_error_nombre_categoria"></small>
+                    <?php
+                    $item = null;
+                    $valor = null;
+                    $usuarios = ControladorUsuarios::ctrMostrarUsuarios($item, $valor);
+                    ?>
+                    <!-- SELECCIONA UN USUARIO -->
+                    <div class="form-group mb-3">
+                        <label for="edit_id_usuario_roles" class="form-label">Selecciona un Usuario</label>
+                        <select id="edit_id_usuario_roles" class="js-example-basic-single select2 select" style="width: 100%;">
+                            <option selected disabled>Selecione el usuario</option>
+                            <?php
+                            foreach ($usuarios as $key => $usuario) {
+                                if ($usuario["estado_usuario"] == 1) {
+                            ?>
+                                    <option value="<?php echo $usuario["id_usuario"] ?>"><?php echo $usuario["nombre_usuario"] ?></option>
+                            <?php
+                                }
+                            }
+                            ?>
+                        </select>
+                        <small id="error_usuario_roles" class="text-danger"></small>
                     </div>
 
-                    <!-- INGRESO DE RAZÓN SOCIAL -->
-                    <div class="form-group">
-                        <label class="form-label">Ingrese la descripción (<span class="text-danger">*</span>)</label>
-                        <textarea name="edit_descripcion_categoria" id="edit_descripcion_categoria" cols="30" rows="10" placeholder="Ingrese la descripción"></textarea>
-                        <small id="edit_error_descripcion_categoria"></small>
+                    <!-- SELECCIONA LOS ROLES -->
+                    <div class="form-group mb-3">
+                        <label for="id_roles" class="form-label fw-bold">Selecciona Roles</label>
+                        <div class="card p-3 shadow-sm">
+                            <?php
+                            $item = null;
+                            $valor = null;
+                            $roles = ControladorRol::ctrMostrarRoles($item, $valor);
+                            foreach ($roles as $key => $rol) {
+                            ?>
+                                <div class="form-check mb-2">
+                                    <input type="checkbox" id="role_<?php echo $rol["id_rol"] ?>" class="form-check-input edit_usuario_roles" value="<?php echo $rol["id_rol"] ?>">
+                                    <label for="role_<?php echo $rol["id_rol"] ?>" class="form-check-label"><?php echo $rol["nombre_rol"] ?></label>
+                                </div>
+                            <?php
+                            }
+                            ?>
+                        </div>
                     </div>
+
+
 
                 </div>
 
+                <!-- BOTONES -->
                 <div class="text-end mx-4 mb-2">
-                    <button type="button" id="btn_actualizar_categoria" class="btn btn-primary mx-2"><i class="fas fa-sync"></i> Guardar</button>
+                    <button type="button" id="btn_update_usuario_roles" class="btn btn-primary mx-2"><i class="fa fa-save"></i> Guardar</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
+
+
 
 <script>
     $(document).ready(function() {
@@ -185,5 +216,20 @@
                 dropdownParent: $('#modal_nuevo_usuario_rol')
             });
         });
+
+        // Inicializar Select2 en todos los elementos
+        $('.js-example-basic-single').select2({
+            placeholder: "Select an option",
+            allowClear: true,
+        });
+
+        // Reinicializar al abrir el modal
+        $('#modal_editar_usuario_rol').on('shown.bs.modal', function() {
+            $(this).find('.js-example-basic-single').select2({
+                placeholder: "Select an option",
+                dropdownParent: $('#modal_editar_usuario_rol')
+            });
+        });
+
     });
 </script>

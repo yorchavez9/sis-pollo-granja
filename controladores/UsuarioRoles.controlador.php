@@ -4,128 +4,49 @@ class ControladorUsuarioRoles
 {
 
     /*=============================================
-	INGRESO DE USUARIO ROLES
-	=============================================*/
-
-    static public function ctrIngresoUsuario()
-    {
-
-        if (isset($_POST["ingUsuario"])) {
-            if (preg_match('/^[a-zA-Z0-9]+$/', $_POST["ingUsuario"])) {
-                $encriptar = crypt($_POST["ingPassword"], '$2a$07$asxx54ahjppf45sd87a5a4dDDGsystemdev$');
-                $tablaSucursales = "sucursales";
-                $tablaUsuarios = "usuarios";
-
-                $item = "usuario";
-                $valor = $_POST["ingUsuario"];
-
-                $respuesta = ModeloUsuarios::MdlMostrarUsuarios($tablaSucursales, $tablaUsuarios, $item, $valor);
-
-                if ($respuesta["usuario"] == $_POST["ingUsuario"] && $respuesta["contrasena"] == $encriptar) {
-                    if ($respuesta["estado_usuario"] == 1) {
-                        $_SESSION["iniciarSesion"] = "ok";
-                        $_SESSION["id_usuario"] = $respuesta["id_usuario"];
-                        $_SESSION["nombre_usuario"] = $respuesta["nombre_usuario"];
-                        $_SESSION["id_sucursal"] = $respuesta["id_sucursal"];
-                        $_SESSION["nombre_sucursal"] = $respuesta["nombre_sucursal"];
-                        $_SESSION["telefono"] = $respuesta["telefono"];
-                        $_SESSION["correo"] = $respuesta["correo"];
-                        $_SESSION["usuario"] = $respuesta["usuario"];
-                        $_SESSION["imagen_usuario"] = $respuesta["imagen_usuario"];
-
-                        echo '<script>
-								window.location = "inicio"
-							</script>';
-                    } else {
-
-                        echo '<script>
-						Swal.fire({
-							title: "Advertencia",
-							text: "¡El usuario no está activado!",
-							icon: "warning",
-							showCancelButton: false,
-							confirmButtonColor: "#3085d6",
-							confirmButtonText: "Ok"
-						  }).then((result) => {
-							if (result.isConfirmed) {
-								window.location = "ingreso"
-							}
-						  });
-						</script>';
-                    }
-                } else {
-
-                    echo '<script>
-					Swal.fire({
-						title: "Error",
-						text: "¡Vuelva a intentar nuevamente!",
-						icon: "error",
-						showCancelButton: false,
-						confirmButtonColor: "#3085d6",
-						confirmButtonText: "Ok"
-					  }).then((result) => {
-						if (result.isConfirmed) {
-							window.location = "ingreso"
-						}
-					  });
-					</script>';
-                }
-            }
-        }
-    }
-
-    /*=============================================
 	REGISTRO DE USUARIO ROLES
 	=============================================*/
 
-    static public function ctrCrearUsuario()
+    static public function ctrCrearUsuarioRoles()
     {
+        $idUsuario = $_POST['id_usuario_roles'];
+        $roles = json_decode($_POST['usuario_roles'], true);
 
-        /* VALIDANDO IMAGEN */
-        $ruta = "../vistas/img/usuarios/";
-        if (isset($_FILES["imagen"]["tmp_name"])) {
-            $extension = pathinfo($_FILES["imagen"]["name"], PATHINFO_EXTENSION);
-            $tipos_permitidos = array("jpg", "jpeg", "png", "gif");
-            if (in_array(strtolower($extension), $tipos_permitidos)) {
-                $nombre_imagen = date("YmdHis") . rand(1000, 9999);
-                $ruta_imagen = $ruta . $nombre_imagen . "." . $extension;
-                if (move_uploaded_file($_FILES["imagen"]["tmp_name"], $ruta_imagen)) {
-                } else {
-                }
-            } else {
+        if(!is_array($roles) || empty($roles)){
+            echo json_encode("Error");
+            return;
+        }
+
+        $tabla = "usuario_rol";
+        $respuesta = "ok";
+
+        foreach ($roles as $idRol) {
+            $datos = array(
+                "id_usuario" => $idUsuario,
+                "id_rol" => $idRol
+            );
+
+            $resultado = ModeloUsuariorRoles::mdlIngresarUsuarioRoles($tabla, $datos);
+            if($resultado != "ok"){
+                $respuesta = "Error";
             }
         }
-
-        $tabla = "usuarios";
-        $encriptar = crypt($_POST["contrasena"], '$2a$07$asxx54ahjppf45sd87a5a4dDDGsystemdev$');
-        $datos = array(
-            "id_sucursal" => $_POST["id_sucursal"],
-            "nombre_usuario" => $_POST["nombre_usuario"],
-            "telefono" => $_POST["telefono"],
-            "correo" => $_POST["correo"],
-            "usuario" => $_POST["usuario"],
-            "contrasena" => $encriptar,
-            "imagen_usuario" => $ruta_imagen
-        );
-        $respuesta = ModeloUsuarios::mdlIngresarUsuario($tabla,    $datos);
-        if ($respuesta == "ok") {
-            echo json_encode("ok");
-        } else {
-            echo json_encode("error");
-        }
+        echo json_encode($respuesta);
     }
 
     /*=============================================
 	MOSTRAR USUARIO ROLES
 	=============================================*/
 
-    static public function ctrMostrarUsuarios($item, $valor)
+    static public function ctrMostrarUsuarioRoles($item, $valor)
     {
+        // Define los nombres de las tablas
+        $tablaUsuarioRol = "usuario_rol";
+        $tablaUsuarios = "usuarios";
+        $tablaRoles = "rol";
 
-        $tablaSucursal = "sucursales";
-        $tablausuario = "usuarios";
-
-        $respuesta = ModeloUsuarios::MdlMostrarUsuarios($tablaSucursal, $tablausuario, $item, $valor);
+        // Llama al modelo pasando los nombres de las tablas
+        $respuesta = ModeloUsuariorRoles::mdlMostrarUsuarioRoles($tablaUsuarioRol, $tablaUsuarios, $tablaRoles, $item, $valor);
 
         return $respuesta;
     }
@@ -134,85 +55,41 @@ class ControladorUsuarioRoles
 	EDITAR USUARIO ROLES
 	=============================================*/
 
-    static public function ctrEditarUsuario()
+    public static function ctrEditarUsuarioRoles()
     {
 
-        /* ============================
-            VALIDANDO IMAGEN
-            ============================ */
-        $ruta = "../vistas/img/usuarios/";
-        $ruta_imagen = $_POST["edit_imagenActualUsuario"];
-        if (isset($_FILES["edit_imagen"]["tmp_name"]) && !empty($_FILES["edit_imagen"]["tmp_name"])) {
-            if (file_exists($ruta_imagen)) {
-                unlink($ruta_imagen);
-            }
-            $extension = pathinfo($_FILES["edit_imagen"]["name"], PATHINFO_EXTENSION);
-            $tipos_permitidos = array("jpg", "jpeg", "png", "gif");
-            if (in_array(strtolower($extension), $tipos_permitidos)) {
-                $nombre_imagen = date("YmdHis") . rand(1000, 9999);
-                $ruta_imagen = $ruta . $nombre_imagen . "." . $extension;
-                if (move_uploaded_file($_FILES["edit_imagen"]["tmp_name"], $ruta_imagen)) {
-                } else {
-                }
-            } else {
-            }
-        }
+        $idUsuario = $_POST['edit_id_usuario_roles'];
+        $rolesSeleccionados = json_decode($_POST['edit_usuario_roles'], true);
 
-        $tabla = "usuarios";
-        if ($_POST["edit_contrasena"] != "") {
-            $encriptar = crypt($_POST["edit_contrasena"], '$2a$07$asxx54ahjppf45sd87a5a4dDDGsystemdev$');
-        } else {
-            $encriptar = $_POST["edit_actualContrasena"];
-        }
-
+        $tabla = "usuario_rol";
         $datos = array(
-            "id_usuario" => $_POST["edit_idUsuario"],
-            "id_sucursal" => $_POST["edit_idSucursal"],
-            "nombre_usuario" => $_POST["edit_nombre"],
-            "telefono" => $_POST["edit_telefono"],
-            "correo" => $_POST["edit_correo"],
-            "usuario" => $_POST["edit_usuario"],
-            "contrasena" => $encriptar,
-            "imagen_usuario" => $ruta_imagen
+            "id_usuario" => $idUsuario,
+            "roles" => $rolesSeleccionados,
         );
 
-        $respuesta = ModeloUsuarios::mdlEditarUsuario($tabla, $datos);
+        $respuesta = ModeloUsuariorRoles::mdlEditarUsuarioRoles($tabla,$datos);
 
         if ($respuesta == "ok") {
-
             echo json_encode("ok");
+        } else {
+            echo json_encode("error");
         }
+
     }
+
 
     /*=============================================
 	BORRAR USUARIO ROLES
 	=============================================*/
 
-    static public function ctrBorrarUsuario()
+    static public function ctrBorrarUsuarioRoles()
     {
 
-        if (isset($_POST["deleteUserId"])) {
-
-            $tabla = "usuarios";
-
-            $datos = $_POST["deleteUserId"];
-
-            if ($_POST["deleteRutaUser"] != "") {
-                // Verificar si el archivo existe y eliminarlo
-                if (file_exists($_POST["deleteRutaUser"])) {
-                    unlink($_POST["deleteRutaUser"]);
-                } else {
-                    // El archivo no existe
-                    echo "El archivo a eliminar no existe.";
-                }
-            }
-
-
-
-            $respuesta = ModeloUsuarios::mdlBorrarUsuario($tabla, $datos);
-
+        if (isset($_POST["deleteIdUsuarioRol"])) {
+            $tabla = "usuario_rol";
+            $datos = $_POST["deleteIdUsuarioRol"];
+            $respuesta = ModeloUsuariorRoles::mdlBorrarUsuarioRoles($tabla, $datos);
             if ($respuesta == "ok") {
-
                 echo json_encode("ok");
             }
         }

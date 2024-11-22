@@ -9,112 +9,80 @@ class ModeloUsuariorRoles
 	MOSTRAR USUARIOS ROLES
 	=============================================*/
 
-    static public function mdlMostrarUsuarios($tablaSucursal, $tablausuario, $item, $valor)
+    static public function mdlMostrarUsuarioRoles($tablaUsuarioRol, $tablaUsuarios, $tablaRoles, $item, $valor)
     {
+        try {
+            $conexion = Conexion::conectar();
 
-        if ($item != null) {
-            $stmt = Conexion::conectar()->prepare("SELECT * from $tablaSucursal as s inner join $tablausuario as u on s.id_sucursal = u.id_sucursal WHERE $item = :$item");
-            $stmt->bindParam(":" . $item, $valor, PDO::PARAM_STR);
+            if ($item != null) {
+                $stmt = $conexion->prepare("SELECT u.id_usuario, u.nombre_usuario, r.id_rol, r.nombre_rol, r.descripcion FROM $tablaUsuarioRol ur JOIN $tablaUsuarios u ON ur.id_usuario = u.id_usuario JOIN $tablaRoles r ON ur.id_rol = r.id_rol WHERE u.$item = :$item");
+                $stmt->bindParam(":" . $item, $valor, PDO::PARAM_STR);
+            } else {
+                $stmt = $conexion->prepare("SELECT u.id_usuario, u.nombre_usuario, r.nombre_rol, r.descripcion
+                                            FROM $tablaUsuarioRol ur
+                                            JOIN $tablaUsuarios u ON ur.id_usuario = u.id_usuario
+                                            JOIN $tablaRoles r ON ur.id_rol = r.id_rol
+                                            ORDER BY u.id_usuario DESC");
+            }
+
             $stmt->execute();
-            return $stmt->fetch();
-        } else {
-            $stmt = Conexion::conectar()->prepare("SELECT * from $tablaSucursal as s inner join $tablausuario as u on s.id_sucursal = u.id_sucursal ORDER BY u.id_usuario DESC");
-            $stmt->execute();
-            return $stmt->fetchAll();
+            return $stmt->fetchAll(); // Retorna múltiples filas
+        } catch (PDOException $e) {
+            return "error: " . $e->getMessage();
+        } finally {
+            $stmt = null;
         }
-        $stmt = null;
     }
+
 
     /*=============================================
 	REGISTRO DE USUARIO ROLES
 	=============================================*/
 
-    static public function mdlIngresarUsuario($tabla, $datos)
+    static public function mdlIngresarUsuarioRoles($tabla, $datos)
     {
+        try {
+            $stmt = Conexion::conectar()->prepare("INSERT INTO $tabla (id_usuario, id_rol) VALUES (:id_usuario, :id_rol)");
 
-        $stmt = Conexion::conectar()->prepare("INSERT INTO $tabla(id_sucursal, 
-																nombre_usuario, 
-																telefono, 
-																correo, 
-																usuario, 
-																contrasena,
-																imagen_usuario) 
-														VALUES (:id_sucursal, 
-																:nombre_usuario, 
-																:telefono, 
-																:correo, 
-																:usuario, 
-																:contrasena, 
-																:imagen_usuario)");
+            $stmt->bindParam(":id_usuario", $datos["id_usuario"], PDO::PARAM_INT);
+            $stmt->bindParam(":id_rol", $datos["id_rol"], PDO::PARAM_INT);
 
-        $stmt->bindParam(":id_sucursal", $datos["id_sucursal"], PDO::PARAM_INT);
-        $stmt->bindParam(":nombre_usuario", $datos["nombre_usuario"], PDO::PARAM_STR);
-        $stmt->bindParam(":telefono", $datos["telefono"], PDO::PARAM_STR);
-        $stmt->bindParam(":correo", $datos["correo"], PDO::PARAM_STR);
-        $stmt->bindParam(":usuario", $datos["usuario"], PDO::PARAM_STR);
-        $stmt->bindParam(":contrasena", $datos["contrasena"], PDO::PARAM_STR);
-        $stmt->bindParam(":imagen_usuario", $datos["imagen_usuario"], PDO::PARAM_STR);
+            if ($stmt->execute()) {
+                return "ok";
+            } else {
+                return "error";
+            }
 
-        if ($stmt->execute()) {
-            return "ok";
-        } else {
+            $stmt = null; // Cerrar conexión
+        } catch (PDOException $e) {
             return "error";
         }
-        $stmt = null;
     }
+
 
     /*=============================================
 	EDITAR USUARIO ROLES
 	=============================================*/
-
-    static public function mdlEditarUsuario($tabla, $datos)
+    public static function mdlEditarUsuarioRoles($tabla, $datos)
     {
+        try {
+            // Primero, eliminar los roles actuales del usuario
+            $stmt = Conexion::conectar()->prepare("DELETE FROM $tabla WHERE id_usuario = :id_usuario");
+            $stmt->bindParam(":id_usuario", $datos["id_usuario"], PDO::PARAM_INT);
+            $stmt->execute();
 
-        $stmt = Conexion::conectar()->prepare("UPDATE $tabla SET 
-																id_sucursal = :id_sucursal, 
-																nombre_usuario = :nombre_usuario, 
-																telefono = :telefono, 
-																correo = :correo, 
-																usuario = :usuario, 
-																contrasena = :contrasena, 
-																imagen_usuario = :imagen_usuario
-																WHERE id_usuario = :id_usuario");
-
-        $stmt->bindParam(":id_sucursal", $datos["id_sucursal"], PDO::PARAM_INT);
-        $stmt->bindParam(":nombre_usuario", $datos["nombre_usuario"], PDO::PARAM_STR);
-        $stmt->bindParam(":telefono", $datos["telefono"], PDO::PARAM_STR);
-        $stmt->bindParam(":correo", $datos["correo"], PDO::PARAM_STR);
-        $stmt->bindParam(":usuario", $datos["usuario"], PDO::PARAM_STR);
-        $stmt->bindParam(":contrasena", $datos["contrasena"], PDO::PARAM_STR);
-        $stmt->bindParam(":imagen_usuario", $datos["imagen_usuario"], PDO::PARAM_STR);
-        $stmt->bindParam(":id_usuario", $datos["id_usuario"], PDO::PARAM_INT);
-
-        if ($stmt->execute()) {
+            // Insertar los nuevos roles
+            foreach ($datos["roles"] as $rol) {
+                $stmt = Conexion::conectar()->prepare("INSERT INTO $tabla (id_usuario, id_rol) VALUES (:id_usuario, :id_rol)");
+                $stmt->bindParam(":id_usuario", $datos["id_usuario"], PDO::PARAM_INT);
+                $stmt->bindParam(":id_rol", $rol,
+                    PDO::PARAM_INT
+                );
+                $stmt->execute();
+            }
 
             return "ok";
-        } else {
-
-            return "error";
-        }
-
-
-        $stmt = null;
-    }
-
-    /*=============================================
-	ACTUALIZAR USUARIO ROLES
-	=============================================*/
-    static public function mdlActualizarUsuario($tabla, $item1, $valor1, $item2, $valor2)
-    {
-
-        $stmt = Conexion::conectar()->prepare("UPDATE $tabla SET $item1 = :$item1 WHERE $item2 = :$item2");
-        $stmt->bindParam(":" . $item1, $valor1, PDO::PARAM_STR);
-        $stmt->bindParam(":" . $item2, $valor2, PDO::PARAM_STR);
-
-        if ($stmt->execute()) {
-            return "ok";
-        } else {
-            print_r($stmt->errorInfo()); // Muestra los errores de SQL
+        } catch (Exception $e) {
             return "error";
         }
     }
@@ -124,7 +92,7 @@ class ModeloUsuariorRoles
 	BORRAR USUARIO ROLES
 	=============================================*/
 
-    static public function mdlBorrarUsuario($tabla, $datos)
+    static public function mdlBorrarUsuarioRoles($tabla, $datos)
     {
         $stmt = Conexion::conectar()->prepare("DELETE FROM $tabla WHERE id_usuario = :id_usuario");
         $stmt->bindParam(":id_usuario", $datos, PDO::PARAM_INT);
