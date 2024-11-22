@@ -1,8 +1,8 @@
 <?php
 
+
 function formatearPrecio($precio)
 {
-
     return number_format($precio, 2, '.', ',');
 }
 
@@ -64,11 +64,13 @@ $totalClientes = ControladorCliente::ctrMostrarTotalCliente($item, $valor);
 /* MOSTRAR TOTAL DE PROVEEDORES */
 $totalProveedores = ControladorProveedores::ctrMostrarTotalProveedores($item, $valor);
 
+
+
 ?>
 
 <div class="page-wrapper">
     <div class="content">
-
+       
         <div class="row">
 
             <div class="col-lg-3 col-sm-6 col-12">
@@ -170,7 +172,7 @@ $totalProveedores = ControladorProveedores::ctrMostrarTotalProveedores($item, $v
 
 
         </div>
-
+       
         <div class="row">
 
             <div class="col-lg-8 col-sm-12 col-12 d-flex">
