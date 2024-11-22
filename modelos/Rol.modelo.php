@@ -16,7 +16,7 @@ class ModeloRol
             $stmt->execute();
             return $stmt->fetch();
         } else {
-            $stmt = Conexion::conectar()->prepare("SELECT * from $tabla ORDER BY id_rol DESC");
+            $stmt = Conexion::conectar()->prepare("SELECT * from $tabla ");
             $stmt->execute();
             return $stmt->fetchAll();
         }
@@ -24,18 +24,21 @@ class ModeloRol
     }
 
     /*=============================================
-	REGISTRAR ROL
-	=============================================*/
+    REGISTRAR ROL
+    =============================================*/
     static public function mdlIngresarRol($tabla, $datos)
     {
+        // Convertir nombre_rol a mayúsculas
+        $datos["nombre_rol"] = strtoupper($datos["nombre_rol"]);
+
         $stmt = Conexion::conectar()->prepare("INSERT INTO $tabla(
-                                                                    nombre_rol, 
-                                                                    descripcion
-                                                                    )
-                                                                    VALUES (
-                                                                    :nombre_rol, 
-                                                                    :descripcion
-                                                                    )");
+                                                                nombre_rol, 
+                                                                descripcion
+                                                                )
+                                                                VALUES (
+                                                                :nombre_rol, 
+                                                                :descripcion
+                                                                )");
 
         $stmt->bindParam(":nombre_rol", $datos["nombre_rol"], PDO::PARAM_STR);
         $stmt->bindParam(":descripcion", $datos["descripcion"], PDO::PARAM_STR);
@@ -48,14 +51,17 @@ class ModeloRol
     }
 
     /*=============================================
-	EDITAR ROL
-	=============================================*/
+    EDITAR ROL
+    =============================================*/
     static public function mdlEditarRol($tabla, $datos)
     {
+        // Convertir nombre_rol a mayúsculas
+        $datos["nombre_rol"] = strtoupper($datos["nombre_rol"]);
+
         $stmt = Conexion::conectar()->prepare("UPDATE $tabla SET 
-																nombre_rol = :nombre_rol, 
-																descripcion = :descripcion
-																WHERE id_rol = :id_rol");
+                                                            nombre_rol = :nombre_rol, 
+                                                            descripcion = :descripcion
+                                                            WHERE id_rol = :id_rol");
 
         $stmt->bindParam(":nombre_rol", $datos["nombre_rol"], PDO::PARAM_STR);
         $stmt->bindParam(":descripcion", $datos["descripcion"], PDO::PARAM_STR);
