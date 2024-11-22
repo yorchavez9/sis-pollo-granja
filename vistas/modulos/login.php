@@ -1,5 +1,5 @@
 <div class="main-wrapper" style="min-height: 100vh; display: flex; justify-content: center; align-items: center; background-image: url('vistas/img/sistema/login2.png'); background-size: cover; background-position: center; position: relative;">
-    <div class="account-content" style="background: rgba(255, 255, 255, 0.9); padding: 30px; border-radius: 10px; max-width: 400px; width: 100%; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);">
+    <div class="account-content" style="background: white; padding: 30px; border-radius: 10px; max-width: 400px; width: 100%;">
         <div class="login-content">
             <div class="login-userset">
                 <div class="login-logo text-center">
