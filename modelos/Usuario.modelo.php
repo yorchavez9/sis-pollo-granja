@@ -8,6 +8,37 @@ class ModeloUsuarios{
 	MOSTRAR USUARIOS
 	=============================================*/
 
+	static public function mdlMostrarUsuarioConRoles($tablaUsuario, $tablaUsuarioRol, $tablaRol, $item, $valor)
+	{
+		$stmt = Conexion::conectar()->prepare("
+												SELECT 
+													u.id_usuario,
+													u.nombre_usuario,
+													u.telefono,
+													u.contrasena,
+													u.correo,
+													u.usuario,
+													u.imagen_usuario,
+													r.id_rol,
+													r.nombre_rol
+												FROM 
+													$tablaUsuario AS u
+												INNER JOIN 
+													$tablaUsuarioRol AS ur ON u.id_usuario = ur.id_usuario
+												INNER JOIN 
+													$tablaRol AS r ON ur.id_rol = r.id_rol
+												WHERE 
+													u.$item = :$item AND u.estado_usuario = 1
+											");
+		$stmt->bindParam(":" . $item, $valor, PDO::PARAM_STR);
+		$stmt->execute();
+		return $stmt->fetchAll(PDO::FETCH_ASSOC); // Devolver múltiples roles si existen
+	}
+
+	/*=============================================
+	MOSTRAR USUARIOS
+	=============================================*/
+
 	static public function mdlMostrarUsuarios($tablaSucursal, $tablausuario, $item, $valor){
 
 		if($item != null){

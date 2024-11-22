@@ -6,69 +6,52 @@ class ControladorUsuarios
 	/*=============================================
 	INGRESO DE USUARIO
 	=============================================*/
-
 	static public function ctrIngresoUsuario()
 	{
-
 		if (isset($_POST["ingUsuario"])) {
 			if (preg_match('/^[a-zA-Z0-9]+$/', $_POST["ingUsuario"])) {
+				// Encriptar la contraseña
 				$encriptar = crypt($_POST["ingPassword"], '$2a$07$asxx54ahjppf45sd87a5a4dDDGsystemdev$');
-				$tablaSucursales = "sucursales";
-				$tablaUsuarios = "usuarios";
 
+				// Tablas involucradas
+				$tablaUsuarios = "usuarios";
+				$tablaUsuarioRol = "usuario_rol";
+				$tablaRol = "rol";
+
+				// Parámetros para el modelo
 				$item = "usuario";
 				$valor = $_POST["ingUsuario"];
 
-				$respuesta = ModeloUsuarios::MdlMostrarUsuarios($tablaSucursales, $tablaUsuarios, $item, $valor);
+				// Llamada al modelo
+				$respuesta = ModeloUsuarios::mdlMostrarUsuarioConRoles($tablaUsuarios, $tablaUsuarioRol, $tablaRol, $item, $valor);
 
-				if ($respuesta["usuario"] == $_POST["ingUsuario"] && $respuesta["contrasena"] == $encriptar) {
-					if ($respuesta["estado_usuario"] == 1) {
-						$_SESSION["iniciarSesion"] = "ok";
-						$_SESSION["id_usuario"] = $respuesta["id_usuario"];
-						$_SESSION["nombre_usuario"] = $respuesta["nombre_usuario"];
-						$_SESSION["id_sucursal"] = $respuesta["id_sucursal"];
-						$_SESSION["nombre_sucursal"] = $respuesta["nombre_sucursal"];
-						$_SESSION["telefono"] = $respuesta["telefono"];
-						$_SESSION["correo"] = $respuesta["correo"];
-						$_SESSION["usuario"] = $respuesta["usuario"];
-						$_SESSION["imagen_usuario"] = $respuesta["imagen_usuario"];
+				// Verificar credenciales
+				if (!empty($respuesta) && $respuesta[0]["contrasena"] === $encriptar) {
+					// Usuario encontrado y credenciales correctas
+					$_SESSION["iniciarSesion"] = "ok";
+					$_SESSION["id_usuario"] = $respuesta[0]["id_usuario"];
+					$_SESSION["nombre_usuario"] = $respuesta[0]["nombre_usuario"];
+					$_SESSION["telefono"] = $respuesta[0]["telefono"];
+					$_SESSION["correo"] = $respuesta[0]["correo"];
+					$_SESSION["usuario"] = $respuesta[0]["usuario"];
+					$_SESSION["imagen_usuario"] = $respuesta[0]["imagen_usuario"];
+					$_SESSION["roles"] = array_column($respuesta, "nombre_rol"); // Guardar roles en sesión
 
-						echo '<script>
-								window.location = "inicio"
-							</script>';
-					} else {
-
-						echo '<script>
-						Swal.fire({
-							title: "Advertencia",
-							text: "¡El usuario no está activado!",
-							icon: "warning",
-							showCancelButton: false,
-							confirmButtonColor: "#3085d6",
-							confirmButtonText: "Ok"
-						  }).then((result) => {
-							if (result.isConfirmed) {
-								window.location = "ingreso"
-							}
-						  });
-						</script>';
-					}
+					echo '<script>window.location = "inicio";</script>';
 				} else {
-
+					// Credenciales incorrectas
 					echo '<script>
-					Swal.fire({
-						title: "Error",
-						text: "¡Vuelva a intentar nuevamente!",
-						icon: "error",
-						showCancelButton: false,
-						confirmButtonColor: "#3085d6",
-						confirmButtonText: "Ok"
-					  }).then((result) => {
-						if (result.isConfirmed) {
-							window.location = "ingreso"
-						}
-					  });
-					</script>';
+                    Swal.fire({
+                        title: "Error",
+                        text: "¡Usuario o contraseña incorrectos!",
+                        icon: "error",
+                        confirmButtonText: "Ok"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location = "ingreso";
+                        }
+                    });
+                </script>';
 				}
 			}
 		}

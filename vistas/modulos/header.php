@@ -141,8 +141,13 @@
                                     ?>
                             </h6>
                             <h5>
-                                Admin
+                                <?php
+                                foreach ($_SESSION["roles"] as $rol) {
+                                    echo $rol . "<br>";
+                                }
+                                ?>
                             </h5>
+
                         </div>
                     </div>
                     <hr class="m-0">

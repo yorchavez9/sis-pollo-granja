@@ -1,8 +1,4 @@
-<?php
 
-$data_roles = json_decode($_SESSION["roles"], true);
-
-?>
 <div class="sidebar" id="sidebar">
     <div class="sidebar-inner slimscroll">
         <div id="sidebar-menu" class="sidebar-menu">
