@@ -14,5 +14,16 @@ class Conexion
 		} catch (PDOException $e) {
 			die("Error de conexión: " . $e->getMessage());
 		}
+		/* try {
+			$link = new PDO(
+				"mysql:host=localhost;dbname=sis_pollo_granja",
+				"root",
+				""
+			);
+			$link->exec("set names utf8");
+			return $link;
+		} catch (PDOException $e) {
+			die("Error de conexión: " . $e->getMessage());
+		} */
 	}
 }
