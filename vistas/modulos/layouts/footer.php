@@ -1,4 +1,3 @@
-
 <script src="vistas/assets/js/feather.min.js"></script>
 <script src="vistas/assets/js/jquery.slimscroll.min.js"></script>
 <script src="vistas/assets/js/jquery.dataTables.min.js"></script>
@@ -16,6 +15,7 @@
 <script src="vistas/js/sucursal.js" type="module"></script>
 <script src="vistas/js/usuario.js" type="module"></script>
 <script src="vistas/js/rol.js" type="module"></script>
+<script src="vistas/js/usuarioRoles.js" type="module"></script>
 <script src="vistas/js/documento.js" type="module"></script>
 <script src="vistas/js/script-proveedor.js" type="module"></script>
 <script src="vistas/js/cliente.js" type="module"></script>

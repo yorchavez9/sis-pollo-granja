@@ -1,3 +1,5 @@
+
+
 <div class="page-wrapper">
     <div class="content">
         <div class="page-header">
@@ -6,7 +8,7 @@
                 <h6>Administrar roles establecidos</h6>
             </div>
             <div class="page-btn">
-                <a href="#" class="btn btn-added" data-bs-toggle="modal" data-bs-target="#modalNuevoCategoria"><img src="vistas/assets/img/icons/plus.svg" alt="img" class="me-2">Agregar roles al usuario</a>
+                <a href="#" class="btn btn-added" data-bs-toggle="modal" data-bs-target="#modal_nuevo_usuario_rol"><img src="vistas/assets/img/icons/plus.svg" alt="img" class="me-2">Agregar roles al usuario</a>
             </div>
         </div>
 
@@ -64,7 +66,7 @@
 
 
 <!-- MODAL ESTABLECER NUEVOS ROLES -->
-<div class="modal fade" id="modalNuevoCategoria" tabindex="-1" aria-labelledby="modalNuevoCategoriaLabel" aria-hidden="true">
+<div class="modal fade" id="modal_nuevo_usuario_rol" tabindex="-1" aria-labelledby="modal_nuevo_usuario_rolLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -74,29 +76,49 @@
             <form enctype="multipart/form-data" id="form_nuevo_usuario_roles">
                 <div class="modal-body">
 
+                    <?php
+                    $item = null;
+                    $valor = null;
+                    $usuarios = ControladorUsuarios::ctrMostrarUsuarios($item, $valor);
+                    ?>
                     <!-- SELECCIONA UN USUARIO -->
                     <div class="form-group mb-3">
                         <label for="id_usuario_roles" class="form-label">Selecciona un Usuario</label>
-                        <select id="id_usuario_roles" class="js-example-basic-single select2 form-control" style="width: 100%;">
-                            <option value="1">Usuario 1</option>
-                            <option value="2">Usuario 2</option>
-                            <option value="3">Usuario 3</option>
-                            <option value="4">Usuario 4</option>
+                        <select id="id_usuario_roles" class="js-example-basic-single select2 select" style="width: 100%;">
+                            <option selected disabled>Selecione el usuario</option>
+                            <?php
+                            foreach ($usuarios as $key => $usuario) {
+                                if ($usuario["estado_usuario"] == 1) {
+                            ?>
+                                    <option value="<?php echo $usuario["id_usuario"] ?>"><?php echo $usuario["nombre_usuario"] ?></option>
+                            <?php
+                                }
+                            }
+                            ?>
                         </select>
                         <small id="error_usuario_roles" class="text-danger"></small>
                     </div>
 
                     <!-- SELECCIONA LOS ROLES -->
                     <div class="form-group mb-3">
-                        <label for="id_roles" class="form-label">Selecciona Roles</label>
-                        <select id="id_roles" class="form-control select2" multiple="multiple" style="width: 100%;">
-                            <option value="admin">Administrador</option>
-                            <option value="editor">Editor</option>
-                            <option value="viewer">Visualizador</option>
-                            <option value="guest">Invitado</option>
-                        </select>
-                        <small id="error_roles" class="text-danger"></small>
+                        <label for="id_roles" class="form-label fw-bold">Selecciona Roles</label>
+                        <div class="card p-3 shadow-sm">
+                            <?php
+                            $item = null;
+                            $valor = null;
+                            $roles = ControladorRol::ctrMostrarRoles($item, $valor);
+                            foreach ($roles as $key => $rol) {
+                            ?>
+                                <div class="form-check mb-2">
+                                    <input type="checkbox" id="role_<?php echo $rol["id_rol"] ?>" class="form-check-input" value="<?php echo $rol["id_rol"] ?>">
+                                    <label for="role_<?php echo $rol["id_rol"] ?>" class="form-check-label"><?php echo $rol["nombre_rol"] ?></label>
+                                </div>
+                            <?php
+                            }
+                            ?>
+                        </div>
                     </div>
+
 
                 </div>
 
@@ -157,10 +179,10 @@
         });
 
         // Reinicializar al abrir el modal
-        $('#modalNuevoCategoria').on('shown.bs.modal', function() {
+        $('#modal_nuevo_usuario_rol').on('shown.bs.modal', function() {
             $(this).find('.js-example-basic-single').select2({
                 placeholder: "Select an option",
-                dropdownParent: $('#modalNuevoCategoria')
+                dropdownParent: $('#modal_nuevo_usuario_rol')
             });
         });
     });
