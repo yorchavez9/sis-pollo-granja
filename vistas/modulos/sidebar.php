@@ -2,10 +2,9 @@
 // Normaliza los roles para evitar problemas de mayúsculas/minúsculas
 function normalizarRoles($roles)
 {
-    return array_map('strtolower', $roles); // Convierte todos los roles a minúsculas
+    return array_map('strtolower', $roles);
 }
 
-// Verifica si el usuario tiene al menos uno de los roles permitidos
 function tieneRol($rolesPermitidos)
 {
     if (!isset($_SESSION["roles"])) {
@@ -86,7 +85,7 @@ $permisosMenu = [
                             <li><a href="codigoBarra">Imprimir código de barras</a></li>
                         </ul>
                     </li>
-                <?php endif; ?>
+                <?php endif ?>
 
                 <!-- Compras -->
                 <?php if (tieneRol($permisosMenu['compras'])): ?>
@@ -97,7 +96,7 @@ $permisosMenu = [
                             <li><a href="listaCompras">Lista de compras</a></li>
                         </ul>
                     </li>
-                <?php endif; ?>
+                <?php endif ?>
 
                 <!-- Ventas -->
                 <?php if (tieneRol($permisosMenu['ventas'])): ?>
@@ -135,7 +134,7 @@ $permisosMenu = [
                             <li><a href="reporteVenta">Reporte de venta</a></li>
                         </ul>
                     </li>
-                    <?php } ?>;
+                    <?php } ?>
                     <!-- Reportes -->
 
                     <?php if (tieneRol($permisosMenu['ajustes'])) { ?>
@@ -147,7 +146,7 @@ $permisosMenu = [
                             </ul>
                         </li>
 
-                        <?php } ?>;
+                        <?php } ?>
                         <!-- Ajustes -->
 
             </ul>
