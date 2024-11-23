@@ -43,11 +43,18 @@ if (isset($_SESSION["iniciarSesion"]) && $_SESSION["iniciarSesion"] == "ok") {
                 $_GET["ruta"] == "pagoTrabajador" ||
                 $_GET["ruta"] == "vacaciones" ||
                 $_GET["ruta"] == "asistencia" ||
-                $_GET["ruta"] == "reporteUsuario" ||
-                $_GET["ruta"] == "reporteProveedor" ||
-                $_GET["ruta"] == "reporteCliente" ||
-                $_GET["ruta"] == "reporteProducto" ||
-                $_GET["ruta"] == "reporteVenta" ||
+                $_GET["ruta"] == "reporteSucursales" ||
+                $_GET["ruta"] == "reporteUsuarios" ||
+                $_GET["ruta"] == "reporteRoles" ||
+                $_GET["ruta"] == "reporteProveedores" ||
+                $_GET["ruta"] == "reporteClientes" ||
+                $_GET["ruta"] == "reporteCategorias" ||
+                $_GET["ruta"] == "reporteProductos" ||
+                $_GET["ruta"] == "reporteCompras" ||
+                $_GET["ruta"] == "reporteVentas" ||
+                $_GET["ruta"] == "reporteTrabajadores" ||
+                $_GET["ruta"] == "reportePagosTrabajador" ||
+                $_GET["ruta"] == "reporteAsistencia" ||
                 $_GET["ruta"] == "configuracionTicket" ||
                 $_GET["ruta"] == "configuracionImpresora" ||
                 $_GET["ruta"] == "salir"

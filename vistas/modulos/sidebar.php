@@ -127,11 +127,18 @@ $permisosMenu = [
                     <li class="submenu">
                         <a href="javascript:void(0);"><img src="vistas/assets/img/icons/time.svg" alt="img"><span>Reportes</span> <span class="menu-arrow"></span></a>
                         <ul>
-                            <li><a href="reporteUsuario">Reporte de usuarios</a></li>
-                            <li><a href="reporteProveedor">Reporte de proveedores</a></li>
-                            <li><a href="reporteCliente">Reporte de clientes</a></li>
-                            <li><a href="reporteProducto">Reporte de productos</a></li>
-                            <li><a href="reporteVenta">Reporte de venta</a></li>
+                            <li><a href="reporteSucursales">Sucursales</a></li>
+                            <li><a href="reporteUsuarios">Usuarios</a></li>
+                            <li><a href="reporteRoles">Roles</a></li>
+                            <li><a href="reporteProveedores">Proveedores</a></li>
+                            <li><a href="reporteClientes">Clientes</a></li>
+                            <li><a href="reporteCategorias">Categorias</a></li>
+                            <li><a href="reporteProductos">Productos</a></li>
+                            <li><a href="reporteCompras">Compras</a></li>
+                            <li><a href="reporteVentas">Ventas</a></li>
+                            <li><a href="reporteTrabajadores">Trabajadores</a></li>
+                            <li><a href="reportePagosTrabajador">Pagos trabajador</a></li>
+                            <li><a href="reporteAsistencia">Asistencia</a></li>
                         </ul>
                     </li>
                     <?php } ?>

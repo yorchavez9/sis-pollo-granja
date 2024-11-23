@@ -47,7 +47,7 @@
                             <tr>
                                 <th>N°</th>
                                 <th>Nombre</th>
-                                <th>Dirección</th>
+                                <th>Discripción</th>
                                 <th class="text-center">Acción</th>
                             </tr>
                         </thead>
