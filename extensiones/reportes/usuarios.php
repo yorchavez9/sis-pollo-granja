@@ -61,7 +61,7 @@ if (count($configuraciones) > 0) {
     if ($pdf->PageNo() == 1) {
         // Logo
         if (file_exists("../../uploads/" . $configuracion['logo'])) {
-            $pdf->Image("../../uploads/" . $configuracion['logo'], 170, 8, 30); // Logo a la derecha
+            $pdf->Image("../../uploads/" . $configuracion['logo'], 250, 8, 30); // Logo a la derecha
         }
         // Nombre de la empresa
         $pdf->Cell(0, 10, utf8_decode($configuracion['nombre_empresa']), 0, 1, 'L'); // Nombre a la izquierda
