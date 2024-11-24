@@ -571,7 +571,7 @@ $(document).ready(function () {
       dataType: "json",
       success: function (proveedores) {
 
-        var tbody = $("#dataReporteProveedro");
+        var tbody = $("#data_proveedores_reporte");
 
         tbody.empty();
 
@@ -614,7 +614,7 @@ $(document).ready(function () {
 
         // Inicializar DataTables después de cargar los datos
         
-        $('#tabla_reporte_proveedor').DataTable();
+        $('#tabla_proveedores_reporte').DataTable();
 
       },
       error: function (xhr, status, error) {
@@ -627,20 +627,29 @@ $(document).ready(function () {
 
   mostrarReporteProveedores();
 
+  /*=============================================
+  DESCARGAR REPORTE
+  =============================================*/
+  $("#seccion_proveedores_reporte").on("click", ".reporte_proveedores_pdf", (e) => {
+    e.preventDefault();
+    const url = "extensiones/reportes/proveedores.php";
+    window.open(url, "_blank");
+  });
+
 
   /*=============================================
-  DESCARGAR REPORTE DE PROVEEDORES
+   IMPRIMIR REPORTE
   =============================================*/
-
-  $("#btn_descargar_reporte_proveedor").click(function (e) {
-
-
+  $("#seccion_proveedores_reporte").on("click", ".reporte_proveedores_printer", (e) => {
     e.preventDefault();
+    const url = "extensiones/reportes/proveedores.php";
+    const newWindow = window.open(url, "_blank");
 
-    var idProveedor = $(this).attr("idVenta");
-
-    window.open("extensiones/reportes/reporte.proveedor.php?idProveedor=" + idProveedor, "_blank");
-
+    // Esperar a que se cargue la página antes de imprimir
+    newWindow.onload = () => {
+      newWindow.print();
+    };
   });
+
 
 });
