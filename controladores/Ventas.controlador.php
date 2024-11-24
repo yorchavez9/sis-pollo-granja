@@ -25,10 +25,32 @@ class ControladorVenta
     =============================================*/
 	static public function ctrMostrarSerieNumero($item, $valor)
 	{
-		$tabla = "ventas";
-		$respuesta = ModeloVenta::mdlMostrarSerieNumero($tabla, $item, $valor);
-		return $respuesta;
+		$tablaSerieNumero = "serie_num_comprobante";
+		$tablaVentas = "ventas";
+
+		$respuesta = ModeloVenta::mdlMostrarSerieNumero($tablaSerieNumero, $tablaVentas, $item, $valor);
+
+		if ($respuesta) {
+			// Obtener el último número de comprobante y el folio final
+			$ultimoNumero = $respuesta['num_comprobante'];
+			$folioFinal = $respuesta['folio_final'];
+
+			// Incrementar el número de comprobante
+			$nuevoNumero = $ultimoNumero + 1;
+
+			// Verificar si el nuevo número excede el folio final
+			if ($nuevoNumero <= $folioFinal) {
+				return $nuevoNumero;
+			} else {
+				// Si el número excede el folio final, devolver un mensaje de error
+				return "Error: El número de comprobante excede el límite.";
+			}
+		} else {
+			// Si no hay ventas previas, devolver el folio inicial
+			return $respuesta['folio_inicial'];
+		}
 	}
+
 
 	/*=============================================
 	MOSTRAR SUMA TOTAL DE VENTA

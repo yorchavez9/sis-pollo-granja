@@ -194,78 +194,33 @@ class ModeloVenta
 	/*=============================================
 	MOSTRAR SERIE Y NUMERO DE COMPRA O EGRESO
 	=============================================*/
-	static public function mdlMostrarSerieNumero($tabla, $item, $valor)
+	static public function mdlMostrarSerieNumero($tablaSerieNumero, $tablaVentas, $item, $valor)
 	{
-		$tipo_comprobante = $valor;
-		$letra = '';
+		$stmt = Conexion::conectar()->prepare("	SELECT 
+													sn.tipo_comprobante_sn,
+													sn.folio_inicial,
+													sn.folio_final, 
+													sn.serie_prefijo, 
+													v.num_comprobante 
+												FROM $tablaSerieNumero AS sn 
+												INNER JOIN $tablaVentas AS v 
+												ON sn.id_serie_num = v.id_serie_num 
+												WHERE sn.tipo_comprobante_sn = :tipo_comprobante
+												ORDER BY v.id_venta DESC 
+												LIMIT 1
+											");
 
-		if ($tipo_comprobante == 'factura') {
-			$letra = "F";
-			$stmt = Conexion::conectar()->prepare("SELECT serie_comprobante, num_comprobante FROM $tabla WHERE tipo_comprobante = 'factura'");
-		} elseif ($tipo_comprobante == 'boleta') {
-			$letra = "B";
-			$stmt = Conexion::conectar()->prepare("SELECT serie_comprobante, num_comprobante FROM $tabla WHERE tipo_comprobante = 'boleta'");
-		} elseif ($tipo_comprobante == 'ticket') {
-			$letra = "T";
-			$stmt = Conexion::conectar()->prepare("SELECT serie_comprobante, num_comprobante FROM $tabla WHERE tipo_comprobante = 'ticket'");
+		$stmt->bindParam(":tipo_comprobante", $valor, PDO::PARAM_STR);
+
+		if ($stmt->execute()) {
+			$resultado = $stmt->fetch(PDO::FETCH_ASSOC); // Obtenemos un solo registro
+			return $resultado; // Retornamos el último registro
 		} else {
-			$letra = "T";
-			$stmt = Conexion::conectar()->prepare("SELECT serie_comprobante, num_comprobante FROM $tabla ");
+			print_r($stmt->errorInfo()); // Depurar errores si falla
+			return null;
 		}
-
-		$stmt->execute();
-		$resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-		if ($resultado) {
-			$maxSerie = 0;
-			$maxNumero = 0;
-
-			foreach ($resultado as $row) {
-				// Extraer el número de serie y el número de comprobante
-				$currentSerie = intval(substr($row['serie_comprobante'], 1));
-				$currentNumero = intval($row['num_comprobante']);
-
-				// Comparar para encontrar el máximo
-				if ($currentSerie > $maxSerie) {
-					$maxSerie = $currentSerie;
-				}
-				if ($currentNumero > $maxNumero) {
-					$maxNumero = $currentNumero;
-				}
-			}
-
-			// Incrementar el número de serie y de comprobante
-			$maxSerie++;
-			$maxNumero++;
-
-			// Formatear la nueva serie y el nuevo número con ceros a la izquierda
-			$nuevoSerie = $letra . str_pad($maxSerie,
-				2,
-				"0",
-				STR_PAD_LEFT
-			);
-			$nuevoNumero = str_pad($maxNumero, 2, "0", STR_PAD_LEFT);
-
-			// Retornar la nueva serie y número
-			$resultado = [
-				[
-					'serie_comprobante' => $nuevoSerie,
-					'num_comprobante' => $nuevoNumero
-				]
-			];
-		} else {
-			// Si no hay resultados, asignar los valores por defecto
-			$letraDefecto = $letra . '01';
-			$resultado = [
-					[
-						'serie_comprobante' => $letraDefecto,
-						'num_comprobante' => '01'
-					]
-				];
-		}
-
-		echo json_encode($resultado);
 	}
+
 
 
 	/*=============================================

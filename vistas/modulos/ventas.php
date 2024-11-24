@@ -43,6 +43,12 @@
     }
 </style>
 
+<?php
+$item = null;
+$valor = null;
+$serieNumeroComprobante = ControladorSerieNumero::ctrMostrarSerieNumero($item, $valor);
+?>
+
 <!-- SECCCION DE CREAR VENTA -->
 <div class="page-wrapper" id="pos_venta">
     <div class="content">
@@ -76,7 +82,7 @@
                                     </div>
                                 </div>
                                 <!-- BOTON PARA AGREGAR CLIENTE -->
-                                <div class="col-md-1">
+                                <div class="col-md-2">
                                     <div class="form-group">
                                         <a href="#" class="btn btn-sm btn-adds mt-4" id="btn_add_cliente" data-bs-toggle="modal" data-bs-target="#modalNuevoCliente"><i class="fa fa-user-plus me-2"></i></a>
                                     </div>
@@ -105,9 +111,14 @@
                                 <div class="col-md-4">
                                     <label for="comprobante_venta" class="form-label">Tipo de comprobante(<span class="text-danger">*</span>):</label>
                                     <select name="comprobante_venta" id="comprobante_venta" class="form-control">
-                                        <option value="boleta">Boleta</option>
-                                        <option value="factura">Factura</option>
-                                        <option value="ticket" selected>Ticket</option>
+                                        <option selected disabled>Selecione el comprobante</option>
+                                        <?php
+                                        foreach ($serieNumeroComprobante as $value) {
+                                        ?>
+                                            <option value="<?php echo $value["tipo_comprobante_sn"] ?>" seriePrefijo="<?php echo $value["serie_prefijo"]?>" folioInicial="<?php echo $value["folio_inicial"]?>"><?php echo ucwords($value["tipo_comprobante_sn"]); ?></option>
+                                        <?php
+                                        }
+                                        ?>
                                     </select>
                                     <small id="error_comprobante_venta"></small>
                                 </div>
@@ -115,23 +126,27 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="serie_venta" class="form-label">Serie:</label>
-                                        <input type="text" id="serie_venta" name="serie_venta" placeholder="Ingrese la serie">
+                                        <input type="text" id="serie_venta" name="serie_venta" placeholder="Serie">
                                     </div>
                                 </div>
                                 <!-- INGRESO DE NÚMERO -->
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="numero_venta" class="form-label">Número:</label>
-                                        <input type="text" id="numero_venta" name="numero_venta" placeholder="Ingrese el número">
+                                        <input type="text" id="numero_venta" name="numero_venta" placeholder="Número">
                                     </div>
                                 </div>
                                 <!-- INGRESO EL INPUESTO -->
                                 <div class="col-md-2">
                                     <div class="form-group">
-                                        <label for="igv_venta" class="form-label">Impuesto (%):</label>
-                                        <input type="text" id="igv_venta" name="igv_venta" value="0" min="0" placeholder="Ingrese el impuesto">
+                                        <label for="igv_venta" class="form-label me-2">Impuesto (%):</label>
+                                        <div class="d-flex align-items-center">
+                                            <input type="text" id="igv_venta" name="igv_venta" value="0" min="0" class="form-control me-3" style="width: 90px;">
+                                            <input type="checkbox" id="igv_checkbox" name="igv_checkbox">
+                                        </div>
                                     </div>
                                 </div>
+
                             </div>
                             <!-- BOTON DE MODAL PARA AGREGAR PRODUCTO -->
                             <div class="text-center mb-5">
@@ -209,32 +224,31 @@
                                             </div>
                                         </div>
                                         <!-- SECCION DE PAGO AL CONTADO -->
-                                        <div id="venta_al_contado">
-                                            <div class="setvaluecash">
-                                                <ul style="list-style-type: none;">
-                                                    <li>
-                                                        <a href="javascript:void(0);" class="paymentmethod tipo_pago_e_y">
-                                                            <img src="vistas/assets/img/icons/cash.svg" alt="img" class="me-2">
-                                                            <input class="form-check-input tipo_pago_venta" type="radio" name="pago_tipo_v" value="efectivo">
-                                                            <label class="form-check-label" for="credito">
-                                                                Efectivo
-                                                            </label>
-                                                        </a>
-                                                    </li>
-                                                    <li style="float: right;">
-                                                        <a href="javascript:void(0);" class="paymentmethod tipo_pago_e_y">
-                                                            <img src="vistas/assets/img/icons/scan.svg" alt="img" class="me-2">
-                                                            <input class="form-check-input tipo_pago_venta" type="radio" name="pago_tipo_v" value="yape">
-                                                            <label class="form-check-label" for="credito">
-                                                                Yape
-                                                            </label>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
+                                        <div id="venta_al_contado mb-3">
+                                            <select name="metodos_pago" id="metodos_pago" class="js-example-basic-single select2">
+                                                <option value="yape">Yape</option>
+                                                <option value="plin">Plin</option>
+                                                <option value="tunki">Tunki</option>
+                                                <option value="agora_pay">Agora PAY</option>
+                                                <option value="bim">BIM</option>
+                                                <option value="tarjeta_debito">Tarjeta de Débito</option>
+                                                <option value="tarjeta_credito">Tarjeta de Crédito</option>
+                                                <option value="transferencia_bancaria">Transferencia Bancaria</option>
+                                                <option value="pago_efectivo">Pago Efectivo</option>
+                                            </select>
                                         </div>
+
+                                        <div class="mb-3 mt-3">
+                                            <input type="number" name="pago_cuota_venta" id="pago_cuota_venta" class="form-control" placeholder="Ingrese un monto de la cuota a pagar">
+                                        </div>
+
+                                        <div class="mt-3">
+                                            <input type="file" name="recibo_de_pago_venta" id="recibo_de_pago_venta" class="form-control mb-3">
+                                            <input type="text" name="serie_de_pago_venta" id="serie_de_pago_venta" class="form-control" placeholder="Ingrese la serie o numero de pago">
+                                        </div>
+
                                         <!-- SECCION DE CREAR VENTA -->
-                                        <div class="row mb-3">
+                                        <div class="row mb-3 mt-3">
                                             <button type="button" id="btn_crear_nueva_venta" class="btn btn-block" style="background:#7367F0; color:white">
                                                 <h5><i class="fa fa-plus fa-lg text-white me-2"></i> Crear Venta</h5>
                                             </button>

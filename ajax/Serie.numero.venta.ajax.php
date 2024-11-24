@@ -2,10 +2,13 @@
 require_once "../modelos/Ventas.modelo.php";
 require_once "../controladores/Ventas.controlador.php";
 
-if (isset($_POST["tipoComprobante"])) {
-    $item = null;
-    $valor = $_POST["tipoComprobante"];
+if($_POST["tipo_comprobante"] == '' || $_POST["tipo_comprobante"] == null){
+    echo json_encode("No existe comprobante");
+}
+else if (isset($_POST["tipo_comprobante"])) {
 
+    $item = null;
+    $valor = $_POST["tipo_comprobante"];
     $SerieNumero = ControladorVenta::ctrMostrarSerieNumero($item, $valor);
-    return $SerieNumero;
+    echo json_encode($SerieNumero);
 }
