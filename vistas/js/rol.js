@@ -123,6 +123,11 @@ $(document).ready(function () {
         });
     }
 
+    /* =====================================
+    MOSTRANDO DATOS
+    ===================================== */
+    mostrarRoles();
+
     /*=============================================
     EDITAR EL SUCURSAL
     =============================================*/
@@ -267,9 +272,66 @@ $(document).ready(function () {
         });
     });
 
+
+    /* ===========================================
+    MOSTRAR ROLES REPORTE
+    =========================================== */
+    function mostrarRolesReporte() {
+        $.ajax({
+            url: "ajax/Rol.ajax.php",
+            type: "GET",
+            dataType: "json",
+            success: function (roles) {
+                var tbody = $("#data_roles_reporte");
+                tbody.empty();
+                roles.forEach(function (rol, index) {
+                    var fila = `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${rol.nombre_rol}</td>
+                        <td>${rol.descripcion}</td>
+                    </tr>
+                `;
+                    tbody.append(fila);
+                });
+
+                // Inicializar DataTables después de cargar los datos
+                $('#tabla_roles_reporte').DataTable();
+            },
+            error: function (xhr, status, error) {
+                console.error("Error al recuperar los proveedores:", error);
+            },
+        });
+    }
+
     /* =====================================
-    MOSTRANDO DATOS
+    MOSTRANDO ROLES REPORTE
     ===================================== */
-    mostrarRoles();
+    mostrarRolesReporte();
+
+
+    /*=============================================
+    DESCARGAR REPORTE
+    =============================================*/
+    $("#seccion_roles_reporte").on("click", ".reporte_roles_pdf", (e) => {
+        e.preventDefault();
+        const url = "extensiones/reportes/roles.php";
+        window.open(url, "_blank");
+    });
+
+
+    /*=============================================
+    IMPRIMIR REPORTE
+    =============================================*/
+    $("#seccion_roles_reporte").on("click", ".reporte_roles_printer", (e) => {
+        e.preventDefault();
+        const url = "extensiones/reportes/roles.php";
+        const newWindow = window.open(url, "_blank");
+
+        // Esperar a que se cargue la página antes de imprimir
+        newWindow.onload = () => {
+            newWindow.print();
+        };
+    });
 
 });

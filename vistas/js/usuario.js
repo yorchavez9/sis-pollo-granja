@@ -568,6 +568,8 @@ $(document).ready(function () {
   });
 
 
+
+
   /* ===========================
   MOSTRANDO REPORTE USUARIO
   =========================== */
@@ -578,50 +580,32 @@ $(document).ready(function () {
       type: "GET",
       dataType: "json",
       success: function (usuarios) {
-
-        var tbody = $("#dataReporteUsuarios");
-
+ 
+        var tbody = $("#data_usuarios_reporte");
         tbody.empty();
-
-        usuarios.forEach(function (usuario) {
-
+        usuarios.forEach(function (usuario, index) {
           usuario.imagen_usuario = usuario.imagen_usuario.substring(3);
-
           var fila = `
-                <tr>
-                    <td>
-                        <a href="javascript:void(0);" class="product-img">
-                            <img src="${usuario.imagen_usuario}" alt="${usuario.nombre_usuario}">
-                        </a>
-                    </td>
-                    <td>${usuario.nombre_usuario}</td>
-                    <td>${usuario.usuario}</td>
-                    <td>
-                        <span>${usuario.nombre_doc}: </span>
-                        <span>${usuario.numero_documento}</span>
-                    </td>
-                    <td>${usuario.direccion}</td>
-                    <td>${usuario.telefono}</td>
-                    <td>${usuario.correo}</td>
-
-                    <td>
-                        ${usuario.estado != 0 ? '<button class="btn bg-lightgreen badges btn-sm rounded btnActivar" idUsuario="' + usuario.id_usuario + '" estadoUsuario="0">Activado</button>'
+        <tr>
+            <td>${index + 1}</td> <!-- Mostrar el índice sumando 1 para comenzar desde 1 -->
+            <td>${usuario.nombre_usuario}</td>
+            <td>${usuario.usuario}</td>
+            <td>${usuario.telefono}</td>
+            <td>${usuario.correo}</td>
+            <td>
+                ${usuario.estado != 0
+              ? '<button class="btn bg-lightgreen badges btn-sm rounded btnActivar" idUsuario="' + usuario.id_usuario + '" estadoUsuario="0">Activado</button>'
               : '<button class="btn bg-lightred badges btn-sm rounded btnActivar" idUsuario="' + usuario.id_usuario + '" estadoUsuario="1">Desactivado</button>'
             }
-                    </td>
-                    
-                </tr>`;
-
-
-          // Agregar la fila al tbody
-
+            </td>
+        </tr>`;
           tbody.append(fila);
-
         });
+
 
         // Inicializar DataTables después de cargar los datos
 
-        $('#tabla_reporte_usuarios').DataTable();
+        $('#tabla_usuarios_reporte').DataTable();
 
       },
       error: function (xhr, status, error) {
@@ -636,18 +620,30 @@ $(document).ready(function () {
 
 
   /*=============================================
-  DESCARGAR REPORTE DE USUARIO
+  DESCARGAR REPORTE
   =============================================*/
-
-  $("#btn_descargar_reporte_usuario").click(function (e) {
-
+  $("#seccion_usuarios_reporte").on("click", ".reporte_usuarios_pdf", (e) => {
     e.preventDefault();
-
-    var idVentaTicket = $(this).attr("idVenta");
-
-    window.open("extensiones/reportes/reporte.usuario.php?idVentaTicket=" + idVentaTicket, "_blank");
-
+    const url = "extensiones/reportes/usuarios.php";
+    window.open(url, "_blank");
   });
+
+
+  /*=============================================
+  DESCARGAR IMPRIMIR
+  =============================================*/
+  $("#seccion_usuarios_reporte").on("click", ".reporte_usuarios_printer", (e) => {
+    e.preventDefault();
+    const url = "extensiones/reportes/usuarios.php";
+    const newWindow = window.open(url, "_blank");
+
+    // Esperar a que se cargue la página antes de imprimir
+    newWindow.onload = () => {
+      newWindow.print();
+    };
+  });
+
+
 
 
 });
