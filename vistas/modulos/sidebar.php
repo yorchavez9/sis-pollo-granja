@@ -20,21 +20,17 @@ function tieneRol($rolesPermitidos)
 
 // Configuración central de permisos
 $permisosMenu = [
-    'sucursales' => ['DUEÑO', 'ADMINISTRADOR', 'GERENTE', 'SUPERVISOR'],
-    'personas' => ['DUEÑO', 'ADMINISTRADOR', 'GERENTE', 'RECURSOS_HUMANOS', 'SUPERVISOR'],
-    'inventario' => ['DUEÑO', 'ADMINISTRADOR', 'GERENTE', 'SUPERVISOR', 'ENCARGADO_INVENTARIO', 'TRABAJADOR'],
-    'compras' => ['DUEÑO', 'ADMINISTRADOR', 'GERENTE', 'SUPERVISOR', 'VENDEDOR', 'VENDEDORA', 'CAJERO', 'CAJERA', 'ASISTENTE', 'ENCARGADO_COMPRAS', 'AYUDANTE'],
-    'ventas' => ['DUEÑO', 'ADMINISTRADOR', 'GERENTE', 'SUPERVISOR', 'VENDEDOR', 'VENDEDORA', 'TRABAJADOR', 'CAJERO', 'CAJERA', 'COORDINADOR', 'ASISTENTE', 'AYUDANTE'],
-    'trabajadores' => ['DUEÑO', 'ADMINISTRADOR', 'GERENTE', 'RECURSOS_HUMANOS'],
-    'reportes' => ['DUEÑO', 'ADMINISTRADOR', 'GERENTE', 'SUPERVISOR', 'ANALISTA'],
-    'ajustes' => ['DUEÑO', 'ADMINISTRADOR', 'GERENTE'],
-    'promociones' => ['DUEÑO', 'ADMINISTRADOR', 'GERENTE', 'MARKETING', 'AYUDANTE'],
-    'clientes' => ['DUEÑO', 'ADMINISTRADOR', 'GERENTE', 'VENDEDOR', 'VENDEDORA', 'CAJERO', 'CAJERA', 'SUPERVISOR'],
-    'logistica' => ['DUEÑO', 'ADMINISTRADOR', 'GERENTE', 'ENCARGADO_LOGISTICA', 'SUPERVISOR', 'TRABAJADOR'],
-    'facturacion' => ['DUEÑO', 'ADMINISTRADOR', 'CAJERO', 'CAJERA', 'SUPERVISOR', 'CONTADOR'],
-    'soporte' => ['DUEÑO', 'ADMINISTRADOR', 'SOPORTE_TECNICO', 'SUPERVISOR'],
-    'editar' => ['DUEÑO', 'ADMINISTRADOR', 'GERENTE', 'SUPERVISOR'],
-    'eliminar' => ['DUEÑO', 'ADMINISTRADOR', 'GERENTE', 'SUPERVISOR'],
+    'ceo' => ['CEO'],
+    'sucursales' => ['ADMINISTRADOR', 'GERENTE', 'SUPERVISOR'],
+    'personas' => ['ADMINISTRADOR', 'GERENTE', 'SUPERVISOR'],
+    'inventario' => ['ADMINISTRADOR', 'GERENTE', 'SUPERVISOR'],
+    'compras' => ['ADMINISTRADOR', 'GERENTE', 'SUPERVISOR', 'VENDEDOR', 'VENDEDORA', 'CAJERO', 'CAJERA'],
+    'ventas' => ['ADMINISTRADOR', 'GERENTE', 'SUPERVISOR', 'VENDEDOR', 'VENDEDORA', 'CAJERO', 'CAJERA'],
+    'trabajadores' => ['ADMINISTRADOR', 'GERENTE'],
+    'reportes' => ['ADMINISTRADOR', 'GERENTE', 'FINANZAS', 'ANALISTA', 'CAJERA', 'CAJERO'],
+    'ajustes' => ['ADMINISTRADOR', 'GERENTE'],
+    'clientes' => ['ADMINISTRADOR', 'GERENTE', 'VENDEDOR', 'VENDEDORA', 'CAJERO', 'CAJERA', 'FINANZAS'],
+    'facturacion' => ['ADMINISTRADOR', 'GERENTE', 'FINANZAS', 'CAJERO', 'CAJERA']
 ];
 ?>
 
