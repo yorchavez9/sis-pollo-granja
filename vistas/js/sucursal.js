@@ -133,6 +133,44 @@ $(document).ready(function () {
         });
     }
 
+    /* ===========================
+    MOSTRANDO CATEGORIA
+    =========================== */
+    function mostrarSucursalReporte() {
+        $.ajax({
+            url: "ajax/Sucursal.ajax.php",
+            type: "GET",
+            dataType: "json",
+            success: function (sucursales) {
+                
+                var tbody = $("#data_sucursal_reporte");
+                tbody.empty();
+                sucursales.forEach(function (sucursal, index) {
+                    var fila = `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${sucursal.nombre_sucursal}</td>
+                        <td>${sucursal.direccion}</td>
+                        <td>${sucursal.telefono}</td>
+                        <td>
+                            ${sucursal.estado != 0 ? '<button class="btn bg-lightgreen badges btn-sm rounded btnActivar" idSucursal="' + sucursal.id_sucursal + '" estadoSucursal="0">Activado</button>'
+                            : '<button class="btn bg-lightred badges btn-sm rounded btnActivar" idSucursal="' + sucursal.id_sucursal + '" estadoSucursal="1">Desactivado</button>'
+                            }
+                        </td>
+                    </tr>
+                `;
+                    tbody.append(fila);
+                });
+
+                // Inicializar DataTables después de cargar los datos
+                $('#tabla_sucursal_reporte').DataTable();
+            },
+            error: function (xhr, status, error) {
+                console.error("Error al recuperar los proveedores:", error);
+            },
+        });
+    }
+
     /*=============================================
     ACTIVAR SUCURSAL
     =============================================*/
@@ -341,9 +379,40 @@ $(document).ready(function () {
         });
     });
 
+    /*=============================================
+    DESCARGAR REPORTE
+    =============================================*/
+    $("#seccion_sucursal_reporte").on("click", ".reporte_sucursal_pdf", (e)=>{
+        e.preventDefault();
+        const url = "extensiones/reportes/sucursales.php";
+        window.open(url, "_blank");
+    });
+    
+
+    /*=============================================
+    DESCARGAR IMPRIMIR
+    =============================================*/
+    $("#seccion_sucursal_reporte").on("click", ".reporte_sucursal_printer", (e) => {
+        e.preventDefault();
+        const url = "extensiones/reportes/sucursales.php";
+        const newWindow = window.open(url, "_blank");
+
+        // Esperar a que se cargue la página antes de imprimir
+        newWindow.onload = () => {
+            newWindow.print();
+        };
+    });
+
+    
+
     /* =====================================
     MOSTRANDO DATOS
     ===================================== */
     mostrarSucursal();
+
+    /* =====================================
+    MOSTRANDO REPORTE
+    ===================================== */
+    mostrarSucursalReporte();
 
 });
