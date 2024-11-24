@@ -69,27 +69,8 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="id_cliente" class="form-label">Seleccione el cliente(<span class="text-danger">*</span>):</label>
-                                        <?php
-                                        $item = null;
-                                        $valor = null;
-                                        $proveedores = ControladorCliente::ctrMostrarCliente($item, $valor);
-                                        ?>
-                                        <select name="" id="id_cliente_venta" class="js-example-basic-single select2">
-                                            <?php
-                                            foreach ($proveedores as $key => $proveedor) {
-                                                if ($proveedor["tipo_persona"] == "cliente") {
-                                                    if ($proveedor["id_persona"] == 1) {
-                                            ?>
-                                                        <option value="<?php echo $proveedor["id_persona"] ?>" selected><?php echo $proveedor["razon_social"] ?></option>
-                                                    <?php
-                                                    } else {
-                                                    ?>
-                                                        <option value="<?php echo $proveedor["id_persona"] ?>"><?php echo $proveedor["razon_social"] ?></option>
-                                            <?php
-                                                    }
-                                                }
-                                            }
-                                            ?>
+                                        <select name="id_cliente_venta" id="id_cliente_venta" class="js-example-basic-single select2">
+                                            <option value="">Seleccione un cliente</option>
                                         </select>
                                         <small id="error_cliente_venta"></small>
                                     </div>
@@ -1191,9 +1172,8 @@
                         <!-- INGRESE LA CIUDAD -->
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="telefono" class="form-label">Ingrese la ciudad (<span class="text-danger">*</span>)</label>
+                                <label for="telefono" class="form-label">Ingrese la ciudad</label>
                                 <input type="text" id="ciudad_c" placeholder="Ingrese la ciudad">
-                                <small id="error_ciudad_c"></small>
                             </div>
 
                         </div>
@@ -1206,16 +1186,14 @@
                             <div class="form-group">
                                 <label for="codigo_postal" class="form-label">Ingrese el codigo postal</label>
                                 <input type="text" id="codigo_postal_c" placeholder="Ingrese el código postal">
-                                <small id="error_codigo_postal_c"></small>
                             </div>
                         </div>
 
                         <!-- INGRESO DE TELEFONO -->
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="telefono" class="form-label">Ingrese el telefono (<span class="text-danger">*</span>)</label>
+                                <label for="telefono" class="form-label">Ingrese el telefono</label>
                                 <input type="text" id="telefono_c" placeholder="Ingrese el teléfono">
-                                <small id="error_telefono_c"></small>
                             </div>
 
                         </div>
@@ -1223,17 +1201,15 @@
 
                     <!-- INGRESO DEL CORREO ELECTRÓNICO -->
                     <div class="form-group">
-                        <label for="correo" class="form-label">Ingrese el correo electrónico (<span class="text-danger">*</span>)</label>
+                        <label for="correo" class="form-label">Ingrese el correo electrónico</label>
                         <div class="pass-group">
                             <input type="text" id="correo_c" placeholder="Ingrese el correo electrónico">
-                            <small id="error_correo_c"></small>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="sitio_web" class="form-label">Ingrese el sitio web</label>
                         <input type="text" id="sitio_web_c" placeholder="Ingrese el link del sitio web">
-                        <small id="error_sitio_web_c"></small>
                     </div>
 
                     <div class="row">
@@ -1278,7 +1254,6 @@
         </div>
     </div>
 </div>
-
 <!-- MODAL PAGAR COMPRA -->
 <div class="modal fade" id="modalPagarVenta" tabindex="-1" aria-labelledby="modalPagarVentaLabel" aria-hidden="true">
     <div class="modal-dialog">

@@ -56,36 +56,41 @@ class ModeloCliente{
 	REGISTRAR CLIENTE
 	=============================================*/
 
-	static public function mdlIngresarCliente($tabla, $datos){
+	static public function mdlIngresarCliente($tabla, $datos)
+	{
 
+		// Verificar si el email está vacío. Si es vacío, lo dejamos como NULL.
+		$email = !empty($datos["email"]) ? $datos["email"] : NULL;
+
+		// Continuar con la inserción
 		$stmt = Conexion::conectar()->prepare("INSERT INTO $tabla(
-                                                                    tipo_persona, 
-                                                                    razon_social, 
-                                                                    id_doc, 
-                                                                    numero_documento, 
-                                                                    direccion, 
-                                                                    ciudad, 
-                                                                    codigo_postal, 
-                                                                    telefono, 
-                                                                    email,
-                                                                    sitio_web,
-                                                                    tipo_banco,
-                                                                    numero_cuenta
-                                                                    )
-                                                                    VALUES (
-                                                                    :tipo_persona, 
-                                                                    :razon_social, 
-                                                                    :id_doc, 
-                                                                    :numero_documento, 
-                                                                    :direccion, 
-                                                                    :ciudad, 
-                                                                    :codigo_postal, 
-                                                                    :telefono, 
-                                                                    :email,
-                                                                    :sitio_web,
-                                                                    :tipo_banco,
-                                                                    :numero_cuenta
-                                                                    )");
+                                                tipo_persona, 
+                                                razon_social, 
+                                                id_doc, 
+                                                numero_documento, 
+                                                direccion, 
+                                                ciudad, 
+                                                codigo_postal, 
+                                                telefono, 
+                                                email,
+                                                sitio_web,
+                                                tipo_banco,
+                                                numero_cuenta
+                                                )
+                                                VALUES (
+                                                :tipo_persona, 
+                                                :razon_social, 
+                                                :id_doc, 
+                                                :numero_documento, 
+                                                :direccion, 
+                                                :ciudad, 
+                                                :codigo_postal, 
+                                                :telefono, 
+                                                :email,
+                                                :sitio_web,
+                                                :tipo_banco,
+                                                :numero_cuenta
+                                                )");
 
 		$stmt->bindParam(":tipo_persona", $datos["tipo_persona"], PDO::PARAM_STR);
 		$stmt->bindParam(":razon_social", $datos["razon_social"], PDO::PARAM_STR);
@@ -95,24 +100,18 @@ class ModeloCliente{
 		$stmt->bindParam(":ciudad", $datos["ciudad"], PDO::PARAM_STR);
 		$stmt->bindParam(":codigo_postal", $datos["codigo_postal"], PDO::PARAM_STR);
 		$stmt->bindParam(":telefono", $datos["telefono"], PDO::PARAM_STR);
-		$stmt->bindParam(":email", $datos["email"], PDO::PARAM_STR);
+		$stmt->bindParam(":email", $email, PDO::PARAM_STR);  // Aquí se pasa el valor de email, que puede ser NULL
 		$stmt->bindParam(":sitio_web", $datos["sitio_web"], PDO::PARAM_STR);
 		$stmt->bindParam(":tipo_banco", $datos["tipo_banco"], PDO::PARAM_STR);
 		$stmt->bindParam(":numero_cuenta", $datos["numero_cuenta"], PDO::PARAM_STR);
 
-		if($stmt->execute()){
-
-			return "ok";	
-
-		}else{
-
+		if ($stmt->execute()) {
+			return "ok";
+		} else {
 			return "error";
-		
 		}
 
-		
 		$stmt = null;
-
 	}
 
 	/*=============================================
@@ -120,7 +119,7 @@ class ModeloCliente{
 	=============================================*/
 
 	static public function mdlEditarCliente($tabla, $datos){
-	
+		$email = !empty($datos["email"]) ? $datos["email"] : NULL;
 		$stmt = Conexion::conectar()->prepare("UPDATE $tabla SET 
 																razon_social = :razon_social, 
 																id_doc = :id_doc, 
@@ -142,7 +141,7 @@ class ModeloCliente{
 		$stmt -> bindParam(":ciudad", $datos["ciudad"], PDO::PARAM_STR);
 		$stmt -> bindParam(":codigo_postal", $datos["codigo_postal"], PDO::PARAM_STR);
 		$stmt -> bindParam(":telefono", $datos["telefono"], PDO::PARAM_STR);
-		$stmt -> bindParam(":email", $datos["email"], PDO::PARAM_STR);
+		$stmt -> bindParam(":email", $$email, PDO::PARAM_STR);
 		$stmt -> bindParam(":sitio_web", $datos["sitio_web"], PDO::PARAM_STR);
 		$stmt -> bindParam(":tipo_banco", $datos["tipo_banco"], PDO::PARAM_STR);
 		$stmt -> bindParam(":numero_cuenta", $datos["numero_cuenta"], PDO::PARAM_STR);

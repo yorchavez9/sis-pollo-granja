@@ -1,7 +1,6 @@
 
 import { mostrarVentas } from "./lista-ventas.js";
 
-$(document).ready(function () {
 
   /*=============================================
    RELOJ AUTOMATICO PARA LA VENTA
@@ -536,7 +535,40 @@ CALCULAR EL TOTAL DE LA VENTA
     });
   }
 
+
+
+  /*=============================================
+  MOSTRAR CLIENTES EN EL SELECT
+  =============================================*/
+  function mostrarClientesSelect() {
+    $.ajax({
+      url: "ajax/Cliente.ajax.php",
+      method: "GET",
+      dataType: "json",
+      success: function (respuesta) {
+        $("#id_cliente_venta").empty();
+        $("#id_cliente_venta").append('<option value="">Seleccione un cliente</option>');
+        respuesta.forEach((cliente) => {
+          $("#id_cliente_venta").append(`<option value="${cliente.id_persona}">${cliente.razon_social}</option>`);
+        });
+      },
+      error: function (xhr, status, error) {
+        console.error("Error al cargar los clientes:", error);
+      }
+    });
+  }
+mostrarClientesSelect();
+
+  /*=============================================
+  MOSTRAR SERIE Y NUMERO DEL COMPROBANTE
+  =============================================*/
+
   limpiarModales();
   mostrarProductoVenta();
   tipoPagoYE();
-});
+
+
+
+export {
+  mostrarClientesSelect
+};
