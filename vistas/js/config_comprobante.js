@@ -5,17 +5,59 @@ $(document).ready(function () {
     =========================================== */
     $("#btn_guardar_serie_num").click(function (e) {
         e.preventDefault();
+
+        // Obtener los valores de los campos
         let tipo_comprobante = $("#tipo_comprobante").val();
         let serie_prefijo = $("#serie_prefijo").val();
         let folio_inicial = $("#folio_inicial").val();
         let folio_final = $("#folio_final").val();
 
+        // Limpiar mensajes de error anteriores
+        $("#error_serie_prefijo").text("");
+        $("#error_folio_inicial").text("");
+        $("#error_folio_final").text("");
+
+        let valid = true;
+
+        // Validaciones
+        if (tipo_comprobante === "" || tipo_comprobante == null) {
+            $("#error_tipo_comprobante").text("El prefijo de la serie es obligatorio.");
+            valid = false;
+            valid = false;
+        }
+
+        if (serie_prefijo === "") {
+            $("#error_serie_prefijo").text("El prefijo de la serie es obligatorio.");
+            valid = false;
+        }
+
+        if (folio_inicial === "" || isNaN(folio_inicial) || parseInt(folio_inicial) <= 0) {
+            $("#error_folio_inicial").text("El folio inicial debe ser un número mayor a 0.");
+            valid = false;
+        }
+
+        if (folio_final === "" || isNaN(folio_final) || parseInt(folio_final) <= 0) {
+            $("#error_folio_final").text("El folio final debe ser un número mayor a 0.");
+            valid = false;
+        }
+
+        // Comprobar que el folio final sea mayor o igual al folio inicial
+        if (parseInt(folio_final) < parseInt(folio_inicial)) {
+            $("#error_folio_final").text("El folio final no puede ser menor que el folio inicial.");
+            valid = false;
+        }
+
+        if (!valid) {
+            return; // Detener el flujo si hay errores
+        }
+
+        // Si todo es válido, proceder con el envío
         var datos = new FormData();
         datos.append("tipo_comprobante", tipo_comprobante);
         datos.append("serie_prefijo", serie_prefijo);
         datos.append("folio_inicial", folio_inicial);
         datos.append("folio_final", folio_final);
-       
+
         $.ajax({
             url: "ajax/Configuracion.num.serie.ajax.php",
             method: "POST",
@@ -24,17 +66,10 @@ $(document).ready(function () {
             contentType: false,
             processData: false,
             success: function (respuesta) {
-
-
                 let res = JSON.parse(respuesta);
-
-                if (res.estado === "ok") {
-
-                    $("#form_nuevo_configuracion_ticket")[0].reset();
-
-                    $("#vista_previa_logo_ticket").attr("src", "");
-
-                    $("#modalNuevoConfiguracionTicket").modal("hide");
+                if (res === "ok") {
+                    $("#form_nuevo_serie_num")[0].reset();
+                    $("#modal_config_serie_numero").modal("hide");
 
                     Swal.fire({
                         title: "¡Correcto!",
@@ -42,8 +77,13 @@ $(document).ready(function () {
                         icon: "success",
                     });
 
-                    mostrarConfiguracionTicket();
-
+                    mostrarConfiguracionSerieNum();
+                } else if (res == "error_tipo_comprobante_existente") {
+                    Swal.fire({
+                        title: "Aviso!",
+                        text: "El tipo de comprobante ya existe.",
+                        icon: "warning",
+                    });
                 } else {
                     Swal.fire({
                         title: "¡Error!",
@@ -58,73 +98,35 @@ $(document).ready(function () {
                 console.error(error);
             },
         });
-
-
-
-
     });
 
     /*=============================================
     MOSTRANDO CONFIGURACION TICKET
     =============================================*/
-    function mostrarConfiguracionTicket() {
+    function mostrarConfiguracionSerieNum() {
         $.ajax({
             url: "ajax/Configuracion.num.serie.ajax.php",
             type: "GET",
             dataType: "json",
-            success: function (tickets) {
-
-
-
-                var tbody = $("#data_configuracion_ticket");
-
+            success: function (respuestas) {
+                let tbody = $("#data_serie_num");
                 tbody.empty();
-
-                tickets.forEach(function (ticket, index) {
-
-                    if (ticket.logo != null) {
-                        ticket.logo = ticket.logo.substring(3);
-                    }
-
+                respuestas.forEach(function (value, index) {
                     var fila = `
                           <tr>
                               <td>${index + 1}</td>
-
-                              <td>${ticket.nombre_empresa}</td>
-
-                              <td>${ticket.ruc}</td>
-                              <td>${ticket.telefono}</td>
-
-                              <td>${ticket.correo}</td>
-
-                              <td>${ticket.direccion}</td>
-
+                              <td>${value.tipo_comprobante_sn.toUpperCase()}</td>
+                              <td>${value.serie_prefijo}</td>
+                              <td>${value.folio_inicial}</td>
+                              <td>${value.folio_final}</td>
+                              <td>${value.fecha_sn}</td>
                               <td class="text-center">
-
-                                  <a href="javascript:void(0);" class="product-img">
-                                      <img src="${ticket.logo}" alt="${ticket.nombre_empresa}">
-                                  </a>
-
-                              </td>
-
-                              <td>${ticket.mensaje}</td>
-
-                              <td>${ticket.fecha_config_ticket}</td>
-
-                              <td class="text-center">
-
-                                  <a href="#" class="me-3 btnEditarTicket" idTicket="${ticket.id_config_ticket}" data-bs-toggle="modal" data-bs-target="#modalEditarConfiguracionTicket">
+                                  <a href="#" class="me-3 btnEditarSerieNumero" idSerieNumero="${value.id_serie_num}" data-bs-toggle="modal" data-bs-target="#modal_editar_serie_numero">
                                       <i class="text-warning fas fa-edit fa-lg"></i>
                                   </a>
-
-                                  <a href="#" class="me-3 btn_descargar_ticket_prueba" idTicket="${ticket.id_config_ticket}" data-bs-toggle="modal">
-                                      <i class="fa fa-download fa-lg" style="color: #28C76F"></i>
-                                  </a>
-
-                                  <a href="#" class="me-3 confirm-text btnEliminarTicket" idTicket="${ticket.id_config_ticket}" imagenTicket="${ticket.logo}">
+                                  <a href="#" class="me-3 confirm-text btnEliminarSerieNumero" idSerieNumero="${value.id_serie_num}">
                                       <i class="fa fa-trash fa-lg" style="color: #FF4D4D"></i>
                                   </a>
-
                               </td>
 
                           </tr>`;
@@ -134,7 +136,7 @@ $(document).ready(function () {
                     tbody.append(fila);
                 });
                 // Inicializar DataTables después de cargar los datos
-                $('#tabla_configuracion_ticket').DataTable();
+                $('#tabla_serie_num').DataTable();
             },
             error: function (xhr, status, error) {
 
@@ -146,19 +148,14 @@ $(document).ready(function () {
 
     }
 
-
     /*=============================================
     EDITAR CONFIGURACION DEL TICKET
     =============================================*/
-    $("#tabla_configuracion_ticket").on("click", ".btnEditarTicket", function () {
-
-        let idTicket = $(this).attr("idTicket");
-
-
+    $("#tabla_serie_num").on("click", ".btnEditarSerieNumero", function (e) {
+        e.preventDefault();
+        let idSerieNumero = $(this).attr("idSerieNumero");
         let datos = new FormData();
-
-        datos.append("idTicket", idTicket);
-
+        datos.append("idSerieNumero", idSerieNumero);
         $.ajax({
             url: "ajax/Configuracion.num.serie.ajax.php",
             method: "POST",
@@ -168,61 +165,34 @@ $(document).ready(function () {
             processData: false,
             dataType: "json",
             success: function (respuesta) {
-
-
-                $("#edit_id_config_ticket").val(respuesta["id_config_ticket"]);
-                $("#edit_nombre_empresa_ticket").val(respuesta["nombre_empresa"]);
-                $("#edit_ruc_ticket").val(respuesta["ruc"]);
-                $("#edit_telefono_ticket").val(respuesta["telefono"]);
-                $("#edit_correo_ticket").val(respuesta["correo"]);
-                $("#edit_direccion_ticket").val(respuesta["direccion"]);
-                $("#edit_foto_actual_ticket").val(respuesta["logo"]);
-                $("#edit_mensaje_ticket").val(respuesta["mensaje"]);
-
-
-                var imagenTicket = respuesta["logo"].substring(3);
-
-                if (respuesta["logo"] != "") {
-                    $("#edit_vista_previa_logo_ticket").attr("src", imagenTicket);
-                } else {
-                    $("#edit_vista_previa_logo_ticket").attr("src", "vistas/img/usuarios/default/anonymous.png"
-                    );
-                }
-
-
+                // Asignar valores a los campos de formulario
+                $("#edit_id_serie_num").val(respuesta["id_serie_num"]);
+                $("#edit_serie_prefijo").val(respuesta["serie_prefijo"]);
+                $("#edit_folio_inicial").val(respuesta["folio_inicial"]);
+                $("#edit_folio_final").val(respuesta["folio_final"]);
+                $("#edit_tipo_comprobante").val(respuesta["tipo_comprobante_sn"]).trigger("change");
             },
+
         });
     });
 
     /*===========================================
     ACTUALIZAR EL PRODUCTO
     =========================================== */
-    $("#btn_update_configuracion_ticket").click(function (e) {
-
+    $("#btn_update_serie_num").click(function (e) {
         e.preventDefault();
-
-        let edit_id_config_ticket = $("#edit_id_config_ticket").val();
-        let edit_nombre_empresa_ticket = $("#edit_nombre_empresa_ticket").val();
-        let edit_ruc_ticket = $("#edit_ruc_ticket").val();
-        let edit_telefono_ticket = $("#edit_telefono_ticket").val();
-        let edit_correo_ticket = $("#edit_correo_ticket").val();
-        let edit_direccion_ticket = $("#edit_direccion_ticket").val();
-        let edit_logo_ticket = $("#edit_logo_ticket").get(0).files[0];
-        let edit_foto_actual_ticket = $("#edit_foto_actual_ticket").val();
-        let edit_mensaje_ticket = $("#edit_mensaje_ticket").val();
-
+        let edit_id_serie_num = $("#edit_id_serie_num").val();
+        let edit_tipo_comprobante = $("#edit_tipo_comprobante").val();
+        let edit_serie_prefijo = $("#edit_serie_prefijo").val();
+        let edit_folio_inicial = $("#edit_folio_inicial").val();
+        let edit_folio_final = $("#edit_folio_final").val();
 
         var datos = new FormData();
-        datos.append("edit_id_config_ticket", edit_id_config_ticket);
-        datos.append("edit_nombre_empresa_ticket", edit_nombre_empresa_ticket);
-        datos.append("edit_ruc_ticket", edit_ruc_ticket);
-        datos.append("edit_telefono_ticket", edit_telefono_ticket);
-        datos.append("edit_correo_ticket", edit_correo_ticket);
-        datos.append("edit_direccion_ticket", edit_direccion_ticket);
-        datos.append("edit_logo_ticket", edit_logo_ticket);
-        datos.append("edit_foto_actual_ticket", edit_foto_actual_ticket);
-        datos.append("edit_mensaje_ticket", edit_mensaje_ticket);
-
+        datos.append("edit_id_serie_num", edit_id_serie_num);
+        datos.append("edit_tipo_comprobante", edit_tipo_comprobante);
+        datos.append("edit_serie_prefijo", edit_serie_prefijo);
+        datos.append("edit_folio_inicial", edit_folio_inicial);
+        datos.append("edit_folio_final", edit_folio_final);
         $.ajax({
             url: "ajax/Configuracion.num.serie.ajax.php",
             method: "POST",
@@ -231,29 +201,18 @@ $(document).ready(function () {
             contentType: false,
             processData: false,
             success: function (respuesta) {
-
                 var res = JSON.parse(respuesta);
-
                 if (res === "ok") {
-
-                    $("#form_edit_configuracion_ticket")[0].reset();
-
-                    $("#edit_vista_previa_logo_ticket").attr("src", "");
-
-                    $("#modalEditarConfiguracionTicket").modal("hide");
-
+                    $("#form_update_serie_num")[0].reset();
+                    $("#modal_editar_serie_numero").modal("hide");
                     Swal.fire({
                         title: "¡Correcto!",
                         text: "La configuración ha sido actualizado con éxito",
                         icon: "success",
                     });
-
-                    mostrarConfiguracionTicket();
-
+                    mostrarConfiguracionSerieNum();
                 } else {
-
                     console.error("Error al actualizar los datos");
-
                 }
             }, error: function (xhr, status, error) {
                 console.error("Error al recuperar los usuarios:", error);
@@ -267,20 +226,11 @@ $(document).ready(function () {
     /*=============================================
     ELIMINAR CONFIGURACION DEL TICKET
     =============================================*/
-    $("#tabla_configuracion_ticket").on("click", ".btnEliminarTicket", function (e) {
-
+    $("#tabla_serie_num").on("click", ".btnEliminarSerieNumero", function (e) {
         e.preventDefault();
-
-
-        let idTicketDelete = $(this).attr("idTicket");
-        let imagenTicketDelete = $(this).attr("imagenTicket");
-        let rutaDeleteImagen = "../" + imagenTicketDelete;
-
-
-        var datos = new FormData();
-        datos.append("idTicketDelete", idTicketDelete);
-        datos.append("rutaDeleteImagen", rutaDeleteImagen);
-
+        let DeleteidSerieNumero = $(this).attr("idSerieNumero");
+        const datos = new FormData();
+        datos.append("DeleteidSerieNumero", DeleteidSerieNumero);
         Swal.fire({
             title: "¿Está seguro de borrar la configuración?",
             text: "¡Si no lo está puede cancelar la accíón!",
@@ -300,23 +250,16 @@ $(document).ready(function () {
                     contentType: false,
                     processData: false,
                     success: function (respuesta) {
-
-                        var res = JSON.parse(respuesta);
-
+                        let res = JSON.parse(respuesta);
                         if (res === "ok") {
-
                             Swal.fire({
                                 title: "¡Eliminado!",
                                 text: "La configuración ha sido eliminado",
                                 icon: "success",
                             });
-
-                            mostrarConfiguracionTicket();
-
+                            mostrarConfiguracionSerieNum();
                         } else {
-
                             console.error("Error al eliminar los datos");
-
                         }
                     }
                 });
@@ -326,30 +269,11 @@ $(document).ready(function () {
     }
     );
 
-
-
     /* =====================================
     MSOTRANDO DATOS
     ===================================== */
 
-    mostrarConfiguracionTicket();
-
-
-    /*=============================================
-    DESCARGAR REPORTE DE PROVEEDORES
-    =============================================*/
-
-    $("#tabla_configuracion_ticket").on("click", ".btn_descargar_ticket_prueba", function (e) {
-
-        e.preventDefault();
-
-
-        var idTicket = $(this).attr("idTicket");
-
-        window.open("extensiones/ticket/ticketPrueba.php?idTicket=" + idTicket, "_blank");
-
-    });
-
+    mostrarConfiguracionSerieNum();
 
 
 });

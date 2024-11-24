@@ -115,14 +115,14 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="serie_venta" class="form-label">Serie:</label>
-                                        <input type="text" id="serie_venta" name="serie_venta" placeholder="Ingrese la serie" readonly>
+                                        <input type="text" id="serie_venta" name="serie_venta" placeholder="Ingrese la serie">
                                     </div>
                                 </div>
                                 <!-- INGRESO DE NÚMERO -->
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="numero_venta" class="form-label">Número:</label>
-                                        <input type="text" id="numero_venta" name="numero_venta" placeholder="Ingrese el número" readonly>
+                                        <input type="text" id="numero_venta" name="numero_venta" placeholder="Ingrese el número">
                                     </div>
                                 </div>
                                 <!-- INGRESO EL INPUESTO -->

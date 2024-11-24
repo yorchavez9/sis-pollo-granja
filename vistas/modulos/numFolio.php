@@ -86,27 +86,28 @@
                             <option value="factura">Factura</option>
                             <option value="ticket">Ticket</option>
                         </select>
+                        <small id="error_tipo_comprobante" class="text-danger"></small>
                     </div>
                     <div class="row">
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="serie" class="form-label">Serie o prefijo</label>
                                 <input type="text" name="serie_prefijo" id="serie_prefijo" placeholder="Serie o prefijo">
-                                <small id="error_serie_prefijo"></small>
+                                <small id="error_serie_prefijo" class="text-danger"></small>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="serie" class="form-label">Folio inicial</label>
-                                <input type="text" name="folio_inicial" id="folio_inicial" placeholder="Folio inicial">
-                                <small id="error_folio_inicial"></small>
+                                <input type="number" name="folio_inicial" id="folio_inicial" class="form-control" placeholder="Folio inicial">
+                                <small id="error_folio_inicial" class="text-danger"></small>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="serie" class="form-label">Folio final</label>
-                                <input type="text" name="folio_final" id="folio_final" placeholder="Folio final">
-                                <small id="error_folio_final"></small>
+                                <input type="number" name="folio_final" id="folio_final" class="form-control" placeholder="Folio final">
+                                <small id="error_folio_final" class="text-danger"></small>
                             </div>
                         </div>
                     </div>
@@ -114,6 +115,66 @@
 
                 <div class="text-end mx-4 mb-2">
                     <button type="button" id="btn_guardar_serie_num" class="btn btn-primary mx-2"><i class="fa fa-save"></i> Guardar</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL EDIT SERIE Y NUMERO -->
+<div class="modal fade" id="modal_editar_serie_numero" tabindex="-1" aria-labelledby="modal_config_serie_numeroLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Crear categoría</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            </div>
+            <form enctype="multipart/form-data" id="form_update_serie_num">
+                <div class="modal-body">
+
+                    <!-- ID DEL SERIE NUMERO -->
+                    <input type="hidden" id="edit_id_serie_num">
+
+                    <!-- INGRESO TIPO DE PROVEEDOR -->
+                    <div class="form-group">
+                        <label for="nombre_categoria" class="form-label">Ingrese el nombre (<span class="text-danger">*</span>)</label>
+                        <select name="edit_tipo_comprobante" id="edit_tipo_comprobante" class="select" disabled>
+                            <option disabled selected>Selecione un comprobante</option>
+                            <option value="boleta">Boleta</option>
+                            <option value="factura">Factura</option>
+                            <option value="ticket">Ticket</option>
+                        </select>
+
+                        <small id="error_edit_tipo_comprobante" class="text-danger"></small>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="serie" class="form-label">Serie o prefijo</label>
+                                <input type="text" name="edit_serie_prefijo" id="edit_serie_prefijo" placeholder="Serie o prefijo">
+                                <small id="error_edit_serie_prefijo" class="text-danger"></small>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="serie" class="form-label">Folio inicial</label>
+                                <input type="number" name="edit_folio_inicial" id="edit_folio_inicial" class="form-control" placeholder="Folio inicial">
+                                <small id="error_edit_folio_inicial" class="text-danger"></small>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="serie" class="form-label">Folio final</label>
+                                <input type="number" name="edit_folio_final" id="edit_folio_final" class="form-control" placeholder="Folio final">
+                                <small id="error_edit_folio_final" class="text-danger"></small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-end mx-4 mb-2">
+                    <button type="button" id="btn_update_serie_num" class="btn btn-primary mx-2"><i class="fa fa-save"></i> Guardar</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                 </div>
             </form>
