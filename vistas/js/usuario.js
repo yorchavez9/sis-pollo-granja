@@ -588,6 +588,7 @@ $(document).ready(function () {
           var fila = `
         <tr>
             <td>${index + 1}</td> <!-- Mostrar el índice sumando 1 para comenzar desde 1 -->
+            <td>${usuario.nombre_sucursal}</td>
             <td>${usuario.nombre_usuario}</td>
             <td>${usuario.usuario}</td>
             <td>${usuario.telefono}</td>
