@@ -29,6 +29,7 @@
 <script src="vistas/js/ventas.js" type="module"></script>
 <script src="vistas/js/lista-ventas.js" type="module"></script>
 <script src="vistas/js/ver-venta.js" type="module"></script>
+<script src="vistas/js/config_comprobante.js" type="module"></script>
 
 <script src="vistas/js/trabajador.js" type="module"></script>
 <script src="vistas/js/contrato.js" type="module"></script>

@@ -137,20 +137,20 @@ $permisosMenu = [
                             <li><a href="reporteAsistencia">Asistencia</a></li>
                         </ul>
                     </li>
-                    <?php } ?>
-                    <!-- Reportes -->
+                <?php } ?>
+                <!-- Reportes -->
 
-                    <?php if (tieneRol($permisosMenu['ajustes'])) { ?>
-                        <li class="submenu">
-                            <a href="javascript:void(0);"><img src="vistas/assets/img/icons/settings.svg" alt="img"><span>Ajustes</span> <span class="menu-arrow"></span></a>
-                            <ul>
-                                <li><a href="configuracionTicket">Configuración Ticket</a></li>
-                                <li><a href="configuracionImpresora">Configuración Impresora</a></li>
-                            </ul>
-                        </li>
+                <?php if (tieneRol($permisosMenu['ajustes'])) { ?>
+                    <li class="submenu">
+                        <a href="javascript:void(0);"><img src="vistas/assets/img/icons/settings.svg" alt="img"><span>Ajustes</span> <span class="menu-arrow"></span></a>
+                        <ul>
+                            <li><a href="configuracionTicket">Config. comprobante</a></li>
+                            <li><a href="numFolio">Config Número y Folios</a></li>
+                        </ul>
+                    </li>
 
-                        <?php } ?>
-                        <!-- Ajustes -->
+                <?php } ?>
+                <!-- Ajustes -->
 
             </ul>
         </div>
