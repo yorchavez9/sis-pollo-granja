@@ -7,7 +7,7 @@ function mostrarClientes() {
         type: "GET",
         dataType: "json",
         success: function (clientes) {
-            console.log(clientes);
+           
             return;
             let tbody = $("#data_clientes_reporte");
             tbody.empty();

@@ -89,6 +89,22 @@ $('#comprobante_venta').change(function () {
 });
 showSection();
 
+// Función reutilizable con Arrow Function
+const manejarIGV = () => {
+  const checkbox = $("#igv_checkbox");
+  const igVenta = $("#igv_venta");
+
+  // Asignar valor basado en el estado del checkbox
+  const valorIGV = checkbox.is(":checked") ? 18 : 0;
+  igVenta.val(valorIGV);
+};
+
+// Asociar la función al evento
+$(document).ready(() => {
+  $("#igv_checkbox").change(manejarIGV);
+});
+
+
 /*=============================================
 LIMPIAR EL INPUT DEL INPUESTO AL HACER FOCUS
 =============================================*/
