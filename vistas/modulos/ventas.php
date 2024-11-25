@@ -223,7 +223,7 @@ $serieNumeroComprobante = ControladorSerieNumero::ctrMostrarSerieNumero($item, $
                                                 </div>
                                             </div>
                                         </div>
-                                        <!-- SECCION DE PAGO AL CONTADO -->
+                                        <!-- SECCION DE LISTA DE METODOS DE PAGO -->
                                         <div id="venta_al_contado mb-3">
                                             <select name="metodos_pago" id="metodos_pago" class="js-example-basic-single select2">
                                                 <option value="yape">Yape</option>
@@ -237,11 +237,11 @@ $serieNumeroComprobante = ControladorSerieNumero::ctrMostrarSerieNumero($item, $
                                                 <option value="pago_efectivo">Pago Efectivo</option>
                                             </select>
                                         </div>
-
+                                        <!-- SECCION DE PAGO DE LA CUOTA -->
                                         <div class="mb-3 mt-3">
                                             <input type="number" name="pago_cuota_venta" id="pago_cuota_venta" class="form-control" placeholder="Ingrese un monto de la cuota a pagar">
                                         </div>
-
+                                        <!-- SECCION DE SUBIR RECIBO DE PAGO Y DE SERIO O NUMERO D PAGO -->
                                         <div class="mt-3">
                                             <input type="file" name="recibo_de_pago_venta" id="recibo_de_pago_venta" class="form-control mb-3">
                                             <input type="text" name="serie_de_pago_venta" id="serie_de_pago_venta" class="form-control" placeholder="Ingrese la serie o numero de pago">

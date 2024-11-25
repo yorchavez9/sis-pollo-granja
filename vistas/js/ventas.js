@@ -124,29 +124,24 @@ function handleInputFocusAndBlur(inputSelector, defaultValue) {
 handleInputFocusAndBlur('#igv_venta', '0');
 
 /*=============================================
-SELECION DE TIPO DE PAGO (EFECYIVO O YAPE)
+SELECIONANDO EL TIPO DE PAGO
 =============================================*/
-function tipoPagoYE() {
-  // Obtener todos los elementos <a> con la clase "paymentmethod"
-  var paymentMethodLinks = document.querySelectorAll("a.tipo_pago_e_y");
+// Función para manejar el cambio de tipo de pago
+const manejarTipoPago = () => {
+  const tipoPago = $("input[name='forma_pago_v']:checked").val(); // Obtén el valor del tipo de pago seleccionado
 
-  // Iterar sobre cada elemento <a>
-  paymentMethodLinks.forEach(function (link) {
-    // Añadir un evento de clic a cada elemento <a>
-    link.addEventListener("click", function () {
-      // Obtener el radio button dentro del elemento <a> actual
-      var radioButton = this.querySelector(".tipo_pago_venta");
+  if (tipoPago === "contado") {
+    $("#pago_cuota_venta").hide(); // Oculta el campo de pago de cuota
+  } else {
+    $("#pago_cuota_venta").show(); // Muestra el campo de pago de cuota
+  }
+};
 
-      // Verificar si el radio button existe
-      if (radioButton) {
-        // Alternar el estado del radio button
-        radioButton.checked = !radioButton.checked;
-      } else {
-        console.warn("Radio button no encontrado dentro de la etiqueta <a>");
-      }
-    });
-  });
-}
+// Escuchar cambios en los inputs de tipo de pago
+$("input[name='forma_pago_v']").change(manejarTipoPago);
+
+// Ejecutar al cargar la página para ajustar según el valor inicial
+manejarTipoPago();
 
 
 /*=============================================
@@ -610,7 +605,6 @@ MOSTRAR SERIE Y NUMERO DEL COMPROBANTE
 
 limpiarModales();
 mostrarProductoVenta();
-tipoPagoYE();
 
 
 
