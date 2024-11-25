@@ -160,7 +160,6 @@ MOSTRANDO TAABLE DE PRODUCTOS PARA VENTA
 =============================================*/
 
 function mostrarProductoVenta() {
-
   $.ajax({
     url: "ajax/Producto.ajax.php",
     type: "GET",
@@ -251,7 +250,6 @@ $("#tabla_add_producto_venta").on("click", ".btnAddProductoVenta", function (e) 
     dataType: "json",
     success: function (respuesta) {
       respuesta.imagen_producto = respuesta.imagen_producto.substring(3);
-
       // Crear una nueva fila
       let nuevaFila = `
         <tr>
@@ -279,19 +277,32 @@ $("#tabla_add_producto_venta").on("click", ".btnAddProductoVenta", function (e) 
 
       $("#detalle_venta_producto").append(nuevaFila);
 
-      // Evento para limpiar valores predeterminados al hacer focus
+      // Limpiar valores predeterminados al hacer focus
       $("input").on("focus", function () {
-        // Excluir los campos específicos por su clase
         if (
           !$(this).hasClass("peso_promedio_v") &&
           !$(this).hasClass("peso_neto_v") &&
           !$(this).hasClass("precio_sub_total_v")
         ) {
           if ($(this).val() === "0" || $(this).val() === "0.00") {
-            $(this).val(""); // Borra el valor cuando se hace focus
+            $(this).val("");
           }
         }
       });
+
+      // Aplicar blur para restablecer valores predeterminados solo en inputs tipo text o number
+      $("input[type='text'], input[type='number']").on("blur", function () {
+        if (
+          !$(this).hasClass("peso_promedio_v") &&
+          !$(this).hasClass("peso_neto_v") &&
+          !$(this).hasClass("precio_sub_total_v")
+        ) {
+          if ($(this).val().trim() === "") {
+            $(this).val("0.00"); // Valor predeterminado
+          }
+        }
+      });
+
 
       $("input[type='number']").on("input", function () {
         let value = parseFloat($(this).val());
@@ -442,7 +453,11 @@ $("#btn_crear_nueva_venta").click(function (e) {
   const subtotal = $("#subtotal_venta").text().replace(/,/g, "");
   const igv = $("#igv_venta_show").text().replace(/,/g, "");
   const total = $("#total_precio_venta").text().replace(/,/g, "");
-  const tipo_pago = $("input[name='forma_pago_v']:checked").val();
+  let tipo_pago = $("input[name='forma_pago_v']:checked").val();
+  let metodos_pago_venta = $("#metodos_pago_venta").val();
+  let pago_cuota_venta = $("#pago_cuota_venta").val();
+  let recibo_de_pago_venta = $("#recibo_de_pago_venta").get(0).files[0];
+  let serie_de_pago_venta = $("#serie_de_pago_venta").val();
 
   var estado_pago;
   if (tipo_pago == "contado") {
@@ -450,13 +465,7 @@ $("#btn_crear_nueva_venta").click(function (e) {
   } else {
     estado_pago = "pendiente";
   }
-  var pago_tipo = $("input[name='pago_tipo_v']:checked").val();
-  var pago_e_y;
-  if (pago_tipo == "efectivo") {
-    pago_e_y = "efectivo";
-  } else {
-    pago_e_y = "yape";
-  }
+ 
   if (isValid) {
 
     const datos = new FormData();
@@ -474,8 +483,10 @@ $("#btn_crear_nueva_venta").click(function (e) {
     datos.append("total", total);
     datos.append("tipo_pago", tipo_pago);
     datos.append("estado_pago", estado_pago);
-    datos.append("pago_e_y", pago_e_y);
-
+    datos.append("metodos_pago_venta", metodos_pago_venta);
+    datos.append("pago_cuota_venta", pago_cuota_venta);
+    datos.append("recibo_de_pago_venta", recibo_de_pago_venta);
+    datos.append("serie_de_pago_venta", serie_de_pago_venta);
     $.ajax({
       url: "ajax/ventas.ajax.php",
       method: "POST",
@@ -484,7 +495,9 @@ $("#btn_crear_nueva_venta").click(function (e) {
       contentType: false,
       processData: false,
       success: function (respuesta) {
+
         const res = JSON.parse(respuesta);
+
         $("#form_venta_producto")[0].reset();
         $("#detalle_venta_producto").empty();
         $("#subtotal_venta").text("00.00");

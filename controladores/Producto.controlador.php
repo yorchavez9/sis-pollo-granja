@@ -15,29 +15,16 @@ class ControladorProducto
 		/* VALIDANDO IMAGEN */
 
 		$ruta = "../vistas/img/productos/";
-
 		if (isset($_FILES["imagen_producto"]["tmp_name"])) {
-
 			$extension = pathinfo($_FILES["imagen_producto"]["name"], PATHINFO_EXTENSION);
-
 			$tipos_permitidos = array("jpg", "jpeg", "png", "gif");
-
 			if (in_array(strtolower($extension), $tipos_permitidos)) {
-
 				$nombre_imagen = date("YmdHis") . rand(1000, 9999);
-
 				$ruta_imagen = $ruta . $nombre_imagen . "." . $extension;
-
 				if (move_uploaded_file($_FILES["imagen_producto"]["tmp_name"], $ruta_imagen)) {
-
-					/* echo "Imagen subida correctamente."; */
 				} else {
-
-					/* echo "Error al subir la imagen."; */
 				}
 			} else {
-
-				/* echo "Solo se permiten archivos de imagen JPG, JPEG, PNG o GIF."; */
 			}
 		}
 

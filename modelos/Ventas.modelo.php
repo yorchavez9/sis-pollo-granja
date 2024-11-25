@@ -5,29 +5,19 @@ require_once "Conexion.php";
 class ModeloVenta
 {
 
-
 	/*=============================================
 	MOSTRAR VENTAS
 	=============================================*/
-
 	static public function mdlMostrarListaVenta($tablaD, $tablaV, $tablaP, $item, $valor)
 	{
-
 		if ($item != null) {
-
 			$stmt = Conexion::conectar()->prepare("SELECT * FROM $tablaD as d INNER JOIN $tablaV as v on d.id_venta = v.id_venta INNER JOIN $tablaP as p ON p.id_persona = v.id_persona WHERE v.$item = :$item");
-
 			$stmt->bindParam(":" . $item, $valor, PDO::PARAM_STR);
-
 			$stmt->execute();
-
 			return $stmt->fetch();
 		} else {
-
-			$stmt = Conexion::conectar()->prepare("SELECT * FROM $tablaD as d INNER JOIN $tablaV as v on d.id_venta = v.id_venta INNER JOIN $tablaP as p ON p.id_persona = v.id_persona  ORDER BY v.estado_pago DESC");
-
+			$stmt = Conexion::conectar()->prepare("SELECT * FROM $tablaD as d INNER JOIN $tablaV as v on d.id_venta = v.id_venta INNER JOIN $tablaP as p ON p.id_persona = v.id_persona  ORDER BY v.forma_pago DESC");
 			$stmt->execute();
-
 			return $stmt->fetchAll();
 		}
 	}
@@ -35,16 +25,12 @@ class ModeloVenta
 	/*=============================================
 	MOSTRAR SUMA TOTAL DE VENTAS
 	=============================================*/
-
 	static public function mdlMostrarSumaTotalVenta($tablaD, $tablaV, $tablaP, $item, $valor)
 	{
-
 			$stmt = Conexion::conectar()->prepare("SELECT SUM(total_venta) AS total_ventas FROM $tablaV");
-
 			$stmt->execute();
-			
+		
 			$result = $stmt->fetch(PDO::FETCH_ASSOC);
-	
 			return $result['total_ventas'];
 		
 	}
@@ -57,7 +43,6 @@ class ModeloVenta
 	{
 
 			$stmt = Conexion::conectar()->prepare("SELECT SUM(total_venta) AS total_ventas_contado FROM $tablaV WHERE tipo_pago = 'contado'");
-
 			$stmt->execute();
 			
 			$result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -197,7 +182,7 @@ class ModeloVenta
 	static public function mdlMostrarSerieNumero($tablaSerieNumero, $tablaVentas, $item, $valor)
 	{
 		$stmt = Conexion::conectar()->prepare("	SELECT 
-													sn.tipo_comprobante_sn,
+													sn.id_serie_num,
 													sn.folio_inicial,
 													sn.folio_final, 
 													sn.serie_prefijo, 
@@ -205,12 +190,12 @@ class ModeloVenta
 												FROM $tablaSerieNumero AS sn 
 												INNER JOIN $tablaVentas AS v 
 												ON sn.id_serie_num = v.id_serie_num 
-												WHERE sn.tipo_comprobante_sn = :tipo_comprobante
+												WHERE sn.id_serie_num = :id_serie_num
 												ORDER BY v.id_venta DESC 
 												LIMIT 1
 											");
 
-		$stmt->bindParam(":tipo_comprobante", $valor, PDO::PARAM_STR);
+		$stmt->bindParam(":id_serie_num", $valor, PDO::PARAM_INT);
 
 		if ($stmt->execute()) {
 			$resultado = $stmt->fetch(PDO::FETCH_ASSOC); // Obtenemos un solo registro
@@ -259,13 +244,18 @@ class ModeloVenta
 
 	static public function mdlIngresarVenta($tabla, $datos)
 	{
-
+		$pago_adelanto = '';
+		if($datos["pago_delante"] == '' || $datos["pago_delante"] == null){
+			$pago_adelanto = 0.00;
+		}else{
+			$pago_adelanto = $datos["pago_delante"];
+		}
 		$stmt = Conexion::conectar()->prepare("INSERT INTO $tabla(
                                                                 id_persona,
                                                                 id_usuario, 
                                                                 fecha_venta, 
                                                                 hora_venta, 
-                                                                tipo_comprobante, 
+                                                                id_serie_num, 
                                                                 serie_comprobante, 
                                                                 num_comprobante, 
                                                                 impuesto,
@@ -274,14 +264,17 @@ class ModeloVenta
                                                                 sub_total,
                                                                 igv,
                                                                 tipo_pago,
-                                                                estado_pago,
-                                                                pago_e_y) 
+                                                                forma_pago,
+                                                                numero_serie_pago,
+																pago_delante,
+																estado_pago
+																) 
                                                                 VALUES (
                                                                 :id_persona, 
                                                                 :id_usuario, 
                                                                 :fecha_venta, 
                                                                 :hora_venta, 
-                                                                :tipo_comprobante, 
+                                                                :id_serie_num, 
                                                                 :serie_comprobante, 
                                                                 :num_comprobante, 
                                                                 :impuesto,
@@ -290,14 +283,16 @@ class ModeloVenta
                                                                 :sub_total,
                                                                 :igv,
                                                                 :tipo_pago,
-                                                                :estado_pago,
-                                                                :pago_e_y)");
+                                                                :forma_pago,
+                                                                :numero_serie_pago,
+                                                                :pago_delante,
+																:estado_pago)");
 
 		$stmt->bindParam(":id_persona", $datos["id_persona"], PDO::PARAM_INT);
 		$stmt->bindParam(":id_usuario", $datos["id_usuario"], PDO::PARAM_INT);
 		$stmt->bindParam(":fecha_venta", $datos["fecha_venta"], PDO::PARAM_STR);
 		$stmt->bindParam(":hora_venta", $datos["hora_venta"], PDO::PARAM_STR);
-		$stmt->bindParam(":tipo_comprobante", $datos["tipo_comprobante"], PDO::PARAM_STR);
+		$stmt->bindParam(":id_serie_num", $datos["id_serie_num"], PDO::PARAM_INT);
 		$stmt->bindParam(":serie_comprobante", $datos["serie_comprobante"], PDO::PARAM_STR);
 		$stmt->bindParam(":num_comprobante", $datos["num_comprobante"], PDO::PARAM_STR);
 		$stmt->bindParam(":impuesto", $datos["impuesto"], PDO::PARAM_STR);
@@ -306,8 +301,10 @@ class ModeloVenta
 		$stmt->bindParam(":sub_total", $datos["sub_total"], PDO::PARAM_STR);
 		$stmt->bindParam(":igv", $datos["igv"], PDO::PARAM_STR);
 		$stmt->bindParam(":tipo_pago", $datos["tipo_pago"], PDO::PARAM_STR);
+		$stmt->bindParam(":forma_pago", $datos["forma_pago"], PDO::PARAM_STR);
+		$stmt->bindParam(":numero_serie_pago", $datos["numero_serie_pago"], PDO::PARAM_STR);
+		$stmt->bindParam(":pago_delante", $pago_adelanto, PDO::PARAM_STR);
 		$stmt->bindParam(":estado_pago", $datos["estado_pago"], PDO::PARAM_STR);
-		$stmt->bindParam(":pago_e_y", $datos["pago_e_y"], PDO::PARAM_STR);
 
 		if ($stmt->execute()) {
 
@@ -370,14 +367,17 @@ class ModeloVenta
 		// Ejecutar la consulta
 		if ($stmt->execute()) {
 			$id_venta = $datos["id_venta"];
-			$stmtTipoDocumento = Conexion::conectar()->prepare("SELECT tipo_comprobante FROM ventas WHERE id_venta = :id_venta");
+			$stmtTipoDocumento = Conexion::conectar()->prepare("SELECT
+																sn.tipo_comprobante_sn,
+																v.id_venta
+																from serie_num_comprobante as sn inner join ventas as v on sn.id_serie_num = v.id_serie_num where v.id_venta = :id_venta");
 			$stmtTipoDocumento->bindParam(":id_venta", $id_venta, PDO::PARAM_INT);
 			$stmtTipoDocumento->execute();
 			$tipoDocumento = $stmtTipoDocumento->fetch(PDO::FETCH_ASSOC);
 
 			return [
 				'id_venta' => $id_venta,
-				'tipo_comprobante' => $tipoDocumento['tipo_comprobante'] ?? 'Desconocido' 
+				'tipo_comprobante' => $tipoDocumento['tipo_comprobante_sn'] ??'Desconocido' 
 			];
 		} else {
 			return "error";
@@ -388,6 +388,56 @@ class ModeloVenta
 		$stmtTipoDocumento = null;
 	}
 
+	/*=============================================
+	HISTORIAL DE PAGOS
+	=============================================*/
+	static public function mdlIngresoHistorialPago($tabla, $datos)
+	{
+		try {
+			// Preparar la consulta SQL
+			$stmt = Conexion::conectar()->prepare("INSERT INTO $tabla (
+													id_venta, 
+													fecha_pago, 
+													monto_pago, 
+													tipo_pago, 
+													forma_pago, 
+													numero_serie_pago, 
+													estado_pago, 
+													comprobante_imagen
+												) 
+												VALUES (
+													:id_venta, 
+													:fecha_pago, 
+													:monto_pago, 
+													:tipo_pago, 
+													:forma_pago, 
+													:numero_serie_pago, 
+													:estado_pago, 
+													:comprobante_imagen)");
+
+			// Vincular los valores a los parámetros de la consulta
+			$stmt->bindParam(":id_venta", $datos["id_venta"], PDO::PARAM_INT);
+			$stmt->bindParam(":fecha_pago", $datos["fecha_pago"], PDO::PARAM_STR);
+			$stmt->bindParam(":monto_pago", $datos["monto_pago"], PDO::PARAM_STR);
+			$stmt->bindParam(":tipo_pago", $datos["tipo_pago"], PDO::PARAM_STR);
+			$stmt->bindParam(":forma_pago", $datos["forma_pago"], PDO::PARAM_STR);
+			$stmt->bindParam(":numero_serie_pago", $datos["numero_serie_pago"], PDO::PARAM_STR);
+			$stmt->bindParam(":estado_pago", $datos["estado_pago"], PDO::PARAM_STR);
+			$stmt->bindParam(":comprobante_imagen", $datos["comprobante_imagen"], PDO::PARAM_STR);
+
+			// Ejecutar la consulta
+			if ($stmt->execute()) {
+				return "ok";
+			} else {
+				return "error";
+			}
+		} catch (PDOException $e) {
+			// Manejo de errores
+			return "Error: " . $e->getMessage();
+		}
+		// Cerrar la conexión
+		$stmt = null;
+	}
 
 
 
@@ -449,7 +499,7 @@ class ModeloVenta
 																id_persona = :id_persona, 
 																id_usuario = :id_usuario, 
 																fecha_venta = :fecha_venta, 
-																tipo_comprobante = :tipo_comprobante, 
+																id_serie_num = :id_serie_num, 
 																serie_comprobante = :serie_comprobante, 
 																num_comprobante = :num_comprobante, 
 																impuesto = :impuesto,
@@ -458,14 +508,14 @@ class ModeloVenta
 																sub_total = :sub_total,
 																igv = :igv,
 																tipo_pago = :tipo_pago,
-																estado_pago = :estado_pago,
-																pago_e_y = :pago_e_y
+																forma_pago = :forma_pago,
+																numero_serie_pago = :numero_serie_pago
 																WHERE id_venta = :id_venta");
 
 		$stmt->bindParam(":id_persona", $datos["id_persona"], PDO::PARAM_INT);
 		$stmt->bindParam(":id_usuario", $datos["id_usuario"], PDO::PARAM_INT);
 		$stmt->bindParam(":fecha_venta", $datos["fecha_venta"], PDO::PARAM_STR);
-		$stmt->bindParam(":tipo_comprobante", $datos["tipo_comprobante"], PDO::PARAM_STR);
+		$stmt->bindParam(":id_serie_num", $datos["id_serie_num"], PDO::PARAM_STR);
 		$stmt->bindParam(":serie_comprobante", $datos["serie_comprobante"], PDO::PARAM_STR);
 		$stmt->bindParam(":num_comprobante", $datos["num_comprobante"], PDO::PARAM_STR);
 		$stmt->bindParam(":impuesto", $datos["impuesto"], PDO::PARAM_STR);
@@ -474,8 +524,8 @@ class ModeloVenta
 		$stmt->bindParam(":sub_total", $datos["sub_total"], PDO::PARAM_STR);
 		$stmt->bindParam(":igv", $datos["igv"], PDO::PARAM_STR);
 		$stmt->bindParam(":tipo_pago", $datos["tipo_pago"], PDO::PARAM_STR);
-		$stmt->bindParam(":estado_pago", $datos["estado_pago"], PDO::PARAM_STR);
-		$stmt->bindParam(":pago_e_y", $datos["pago_e_y"], PDO::PARAM_STR);
+		$stmt->bindParam(":forma_pago", $datos["forma_pago"], PDO::PARAM_STR);
+		$stmt->bindParam(":numero_serie_pago", $datos["numero_serie_pago"], PDO::PARAM_STR);
 		$stmt->bindParam(":id_venta", $datos["id_venta"], PDO::PARAM_INT);
 
 		if ($stmt->execute()) {

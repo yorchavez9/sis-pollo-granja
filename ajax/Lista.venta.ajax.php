@@ -7,22 +7,15 @@ require_once "../modelos/Producto.modelo.php";
 
 class AjaxListaVentas
 {
-
     /*=============================================
 	AGREGAR PRODUCTO A LA LISTA DE VENTAS
 	=============================================*/
-
     public $id_producto_edit;
-
     public function ajaxAddProducto()
     {
-
         $item = "id_producto";
-
         $valor = $this->id_producto_edit;
-
         $respuesta = ControladorProducto::ctrMostrarProductos($item, $valor);
-
         echo json_encode($respuesta);
     }
 
@@ -30,57 +23,40 @@ class AjaxListaVentas
     /*=============================================
 	EDITAR VENTA
 	=============================================*/
-
     public $idVenta;
-
     public function ajaxEditarVenta()
     {
-
         $item = "id_venta";
         $valor = $this->idVenta;
-
         $respuesta = ControladorVenta::ctrMostrarListaVentas($item, $valor);
-
         echo json_encode($respuesta);
     }
     
     /*=============================================
 	MOSTRAR DETALLE VENTAS
 	=============================================*/
-
     public $idProductoVer;
-
     public function ajaxVerProducto()
     {
-
         $item = "id_producto";
         $valor = $this->idProductoVer;
-
         $respuesta = ControladorProducto::ctrMostrarProductos($item, $valor);
-
         echo json_encode($respuesta);
     }
 
     /*=============================================
 	ACTIVAR VENTAS
 	=============================================*/
-
     public $activarProducto;
     public $activarId;
-
-
     public function ajaxActivarProducto()
     {
-
         $tabla = "productos";
-
         $item1 = "estado_producto";
         $valor1 = $this->activarProducto;
-
         $item2 = "id_producto";
         $valor2 = $this->activarId;
-
-        $respuesta = ModeloProducto::mdlActualizarProducto($tabla, $item1, $valor1, $item2, $valor2);
+        ModeloProducto::mdlActualizarProducto($tabla, $item1, $valor1, $item2, $valor2);
     }
 
 
@@ -208,7 +184,7 @@ else{
             'id_usuario' => $ventas['id_usuario'],
             'fecha_venta' => $ventas['fecha_venta'],
             'hora_venta' => $ventas['hora_venta'],
-            'tipo_comprobante' => $ventas['tipo_comprobante'],
+            'id_serie_num' => $ventas['id_serie_num'],
             'serie_comprobante' => $ventas['serie_comprobante'],
             'num_comprobante' => $ventas['num_comprobante'],
             'impuesto' => $ventas['impuesto'],
@@ -218,7 +194,6 @@ else{
             'igv' => $ventas['igv'],
             'tipo_pago' => $ventas['tipo_pago'],
             'estado_pago' => $ventas['estado_pago'],
-            'pago_e_y' => $ventas['pago_e_y'],
             'razon_social' => $ventas['razon_social']
         );
         

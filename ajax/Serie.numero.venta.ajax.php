@@ -9,6 +9,7 @@ else if (isset($_POST["tipo_comprobante"])) {
 
     $item = null;
     $valor = $_POST["tipo_comprobante"];
-    $SerieNumero = ControladorVenta::ctrMostrarSerieNumero($item, $valor);
+    $folioInicial = $_POST["folio_inicial"];
+    $SerieNumero = ControladorVenta::ctrMostrarSerieNumero($item, $valor, $folioInicial);
     echo json_encode($SerieNumero);
 }

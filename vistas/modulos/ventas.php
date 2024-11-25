@@ -115,7 +115,7 @@ $serieNumeroComprobante = ControladorSerieNumero::ctrMostrarSerieNumero($item, $
                                         <?php
                                         foreach ($serieNumeroComprobante as $value) {
                                         ?>
-                                            <option value="<?php echo $value["tipo_comprobante_sn"] ?>" seriePrefijo="<?php echo $value["serie_prefijo"]?>" folioInicial="<?php echo $value["folio_inicial"]?>"><?php echo ucwords($value["tipo_comprobante_sn"]); ?></option>
+                                            <option value="<?php echo $value["id_serie_num"] ?>" seriePrefijo="<?php echo $value["serie_prefijo"] ?>" folioInicial="<?php echo $value["folio_inicial"] ?>"><?php echo ucwords($value["tipo_comprobante_sn"]); ?></option>
                                         <?php
                                         }
                                         ?>
@@ -225,7 +225,7 @@ $serieNumeroComprobante = ControladorSerieNumero::ctrMostrarSerieNumero($item, $
                                         </div>
                                         <!-- SECCION DE LISTA DE METODOS DE PAGO -->
                                         <div id="venta_al_contado mb-3">
-                                            <select name="metodos_pago" id="metodos_pago" class="js-example-basic-single select2">
+                                            <select name="metodos_pago_venta" id="metodos_pago_venta" class="js-example-basic-single select2">
                                                 <option value="yape">Yape</option>
                                                 <option value="plin">Plin</option>
                                                 <option value="tunki">Tunki</option>
