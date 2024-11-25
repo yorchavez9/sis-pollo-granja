@@ -226,6 +226,7 @@ $serieNumeroComprobante = ControladorSerieNumero::ctrMostrarSerieNumero($item, $
                                         <!-- SECCION DE LISTA DE METODOS DE PAGO -->
                                         <div id="venta_al_contado mb-3">
                                             <select name="metodos_pago_venta" id="metodos_pago_venta" class="js-example-basic-single select2">
+                                                <option value="pago_efectivo">Pago Efectivo</option>
                                                 <option value="yape">Yape</option>
                                                 <option value="plin">Plin</option>
                                                 <option value="tunki">Tunki</option>
@@ -234,7 +235,6 @@ $serieNumeroComprobante = ControladorSerieNumero::ctrMostrarSerieNumero($item, $
                                                 <option value="tarjeta_debito">Tarjeta de Débito</option>
                                                 <option value="tarjeta_credito">Tarjeta de Crédito</option>
                                                 <option value="transferencia_bancaria">Transferencia Bancaria</option>
-                                                <option value="pago_efectivo">Pago Efectivo</option>
                                             </select>
                                         </div>
                                         <!-- SECCION DE PAGO DE LA CUOTA -->
