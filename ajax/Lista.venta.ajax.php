@@ -8,9 +8,10 @@ require_once "../modelos/Producto.modelo.php";
 class AjaxListaVentas
 {
     /*=============================================
-	AGREGAR PRODUCTO A LA LISTA DE VENTAS
-	=============================================*/
+    AGREGAR PRODUCTO A LA LISTA DE VENTAS
+    =============================================*/
     public $id_producto_edit;
+
     public function ajaxAddProducto()
     {
         $item = "id_producto";
@@ -19,11 +20,11 @@ class AjaxListaVentas
         echo json_encode($respuesta);
     }
 
-
     /*=============================================
-	EDITAR VENTA
-	=============================================*/
+    EDITAR VENTA
+    =============================================*/
     public $idVenta;
+
     public function ajaxEditarVenta()
     {
         $item = "id_venta";
@@ -31,11 +32,12 @@ class AjaxListaVentas
         $respuesta = ControladorVenta::ctrMostrarListaVentas($item, $valor);
         echo json_encode($respuesta);
     }
-    
+
     /*=============================================
-	MOSTRAR DETALLE VENTAS
-	=============================================*/
+    MOSTRAR DETALLE VENTAS
+    =============================================*/
     public $idProductoVer;
+
     public function ajaxVerProducto()
     {
         $item = "id_producto";
@@ -45,10 +47,11 @@ class AjaxListaVentas
     }
 
     /*=============================================
-	ACTIVAR VENTAS
-	=============================================*/
+    ACTIVAR PRODUCTOS
+    =============================================*/
     public $activarProducto;
     public $activarId;
+
     public function ajaxActivarProducto()
     {
         $tabla = "productos";
@@ -58,152 +61,74 @@ class AjaxListaVentas
         $valor2 = $this->activarId;
         ModeloProducto::mdlActualizarProducto($tabla, $item1, $valor1, $item2, $valor2);
     }
-
-
 }
 
-
 /*=============================================
-AGREGAR PRODUCTO A LA LISTA
+GESTIÓN DE ACCIONES MEDIANTE POST
 =============================================*/
 
+// Agregar producto a la lista de ventas
 if (isset($_POST["id_producto_edit"])) {
-
     $editar = new AjaxListaVentas();
     $editar->id_producto_edit = $_POST["id_producto_edit"];
     $editar->ajaxAddProducto();
-
 }
-
-/*=============================================
-EDITAR VENTA
-=============================================*/
+// Editar venta
 elseif (isset($_POST["idVenta"])) {
-
     $editar = new AjaxListaVentas();
     $editar->idVenta = $_POST["idVenta"];
     $editar->ajaxEditarVenta();
-
 }
-
-
-/*=============================================
-ACTUALIZAR VENTA
-=============================================*/
+// Actualizar venta
 elseif (isset($_POST["edit_id_venta"])) {
-
-    $actualizarVenta = new ControladorVenta();
-    $actualizarVenta->ctrEditarVenta();
-
+    ControladorVenta::ctrEditarVenta();
 }
-
-/*=============================================
-VER DETALLE PRODUCTO
-=============================================*/
+// Ver detalle de producto
 elseif (isset($_POST["idProductoVer"])) {
-
     $verDetalle = new AjaxListaVentas();
     $verDetalle->idProductoVer = $_POST["idProductoVer"];
     $verDetalle->ajaxVerProducto();
 }
-
-
-/*=============================================
-GUARDAR PRODUCTO
-=============================================*/
+// Guardar producto
 elseif (isset($_POST["id_categoria_P"])) {
-
-    $crearProducto = new ControladorProducto();
-    $crearProducto->ctrCrearProducto();
-
+    ControladorProducto::ctrCrearProducto();
 }
-
-
-/*=============================================
-ACTUALIZAR PAGO DEUDA
-=============================================*/
+// Actualizar pago de deuda
 elseif (isset($_POST["id_venta_pagar"])) {
-
-    $pagoVenta = new ControladorVenta();
-    $pagoVenta->ctrActualizarDeudaVenta();
-
+    ControladorVenta::ctrActualizarDeudaVenta();
 }
-
-/*=============================================
-ACTUALIZAR PRODUCTO
-=============================================*/
-elseif(isset($_POST["edit_id_producto"])){
-
-    $editProducto = new ControladorProducto();
-    $editProducto->ctrEditarProducto();
-
+// Actualizar producto
+elseif (isset($_POST["edit_id_producto"])) {
+    ControladorProducto::ctrEditarProducto();
 }
-
-/*=============================================
-BORRAR PRODUCTO
-=============================================*/
-elseif(isset($_POST["idProductoDelete"])){
-
-    $borrarProducto = new ControladorProducto();
-    $borrarProducto->ctrBorrarProducto();
-
+// Borrar producto
+elseif (isset($_POST["idProductoDelete"])) {
+    ControladorProducto::ctrBorrarProducto();
 }
-
-/*=============================================
-BORRAR VENTA
-=============================================*/
-elseif(isset($_POST["ventaIdDelete"])){
-
-    $borrarVenta = new ControladorVenta();
-    $borrarVenta->ctrBorrarVenta();
-
+// Borrar venta
+elseif (isset($_POST["ventaIdDelete"])) {
+    ControladorVenta::ctrBorrarVenta();
 }
-
-/*=============================================
-MOSTRAR TODAS LAS VENTAS EN LA TABLA
-=============================================*/
-else{
-
+// Mostrar todas las ventas en la tabla
+else {
     $item = null;
     $valor = null;
     $mostrarVentas = ControladorVenta::ctrMostrarListaVentas($item, $valor);
-    
-    $tblVenta = array();
-    
-    foreach ($mostrarVentas as $key => $ventas) {
-        
-        $fila = array(
-            'id_detalle_venta' => $ventas['id_detalle_venta'],
+
+    $tblVenta = array_map(function ($ventas) {
+        return [
             'id_venta' => $ventas['id_venta'],
-            'id_producto' => $ventas['id_producto'],
             'id_persona' => $ventas['id_persona'],
-            'precio_venta' => $ventas['precio_venta'],
-            'numero_javas' => $ventas['numero_javas'],
-            'numero_aves' => $ventas['numero_aves'],
-            'peso_neto' => $ventas['peso_neto'],
-            'id_usuario' => $ventas['id_usuario'],
-            'fecha_venta' => $ventas['fecha_venta'],
-            'hora_venta' => $ventas['hora_venta'],
-            'id_serie_num' => $ventas['id_serie_num'],
-            'serie_comprobante' => $ventas['serie_comprobante'],
+            'razon_social' => $ventas['razon_social'],
+            'tipo_comprobante_sn' => $ventas['tipo_comprobante_sn'],
+            'serie_prefijo' => $ventas['serie_prefijo'],
             'num_comprobante' => $ventas['num_comprobante'],
-            'impuesto' => $ventas['impuesto'],
+            'tipo_pago' => $ventas['tipo_pago'],
             'total_venta' => $ventas['total_venta'],
             'total_pago' => $ventas['total_pago'],
-            'sub_total' => $ventas['sub_total'],
-            'igv' => $ventas['igv'],
-            'tipo_pago' => $ventas['tipo_pago'],
-            'estado_pago' => $ventas['estado_pago'],
-            'razon_social' => $ventas['razon_social']
-        );
-        
-        
-        $tblVenta[] = $fila;
-    }
-    
-    
+            'fecha_venta' => $ventas['fecha_venta'],
+            'estado_pago' => $ventas['estado_pago']
+        ];
+    }, $mostrarVentas);
     echo json_encode($tblVenta);
 }
-
-
-?>

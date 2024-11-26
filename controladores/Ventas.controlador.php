@@ -10,10 +10,10 @@ class ControladorVenta
 
 	static public function ctrMostrarListaVentas($item, $valor)
 	{
-		$tablaD = "detalle_venta";
-		$tablaV = "ventas";
-		$tablaP = "personas";
-		$respuesta = ModeloVenta::mdlMostrarListaVenta($tablaD, $tablaV, $tablaP, $item, $valor);
+		$tablaSerieNumero = "serie_num_comprobante";
+		$tablaVentas = "ventas";
+		$tablaPersonas = "personas";
+		$respuesta = ModeloVenta::mdlMostrarListaVenta($tablaSerieNumero, $tablaVentas, $tablaPersonas, $item, $valor);
 		return $respuesta;
 	}
 

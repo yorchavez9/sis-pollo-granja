@@ -8,19 +8,65 @@ class ModeloVenta
 	/*=============================================
 	MOSTRAR VENTAS
 	=============================================*/
-	static public function mdlMostrarListaVenta($tablaD, $tablaV, $tablaP, $item, $valor)
+	static public function mdlMostrarListaVenta($tablaSerieNumero, $tablaVentas, $tablaPersonas, $item, $valor)
 	{
+		// Si hay un filtro
 		if ($item != null) {
-			$stmt = Conexion::conectar()->prepare("SELECT * FROM $tablaD as d INNER JOIN $tablaV as v on d.id_venta = v.id_venta INNER JOIN $tablaP as p ON p.id_persona = v.id_persona WHERE v.$item = :$item");
+			$sql = "SELECT  
+						v.id_venta,
+						p.id_persona,
+						p.razon_social,
+						sn.tipo_comprobante_sn,
+						sn.serie_prefijo,
+						v.num_comprobante, 
+						v.tipo_pago, 
+						v.total_venta, 
+						v.total_pago, 
+						v.fecha_venta, 
+						v.estado_pago
+					FROM 
+						$tablaSerieNumero AS sn 
+					INNER JOIN 
+						$tablaVentas AS v ON sn.id_serie_num = v.id_serie_num 
+					INNER JOIN 
+						$tablaPersonas AS p ON v.id_persona = p.id_persona
+					WHERE 
+						$item = :$item";
+
+			$stmt = Conexion::conectar()->prepare($sql);
 			$stmt->bindParam(":" . $item, $valor, PDO::PARAM_STR);
 			$stmt->execute();
-			return $stmt->fetch();
+			return $stmt->fetch(); // Retorna un solo resultado
 		} else {
-			$stmt = Conexion::conectar()->prepare("SELECT * FROM $tablaD as d INNER JOIN $tablaV as v on d.id_venta = v.id_venta INNER JOIN $tablaP as p ON p.id_persona = v.id_persona  ORDER BY v.forma_pago DESC");
+			// Sin filtros
+			$sql = "SELECT 
+                    v.id_venta,
+                    p.id_persona,
+                    p.razon_social,
+                    sn.tipo_comprobante_sn, 
+                    sn.serie_prefijo,
+					v.num_comprobante, 
+                    v.tipo_pago, 
+                    v.total_venta, 
+                    v.total_pago, 
+                    v.fecha_venta, 
+                    v.estado_pago
+                FROM 
+                    $tablaSerieNumero AS sn 
+                INNER JOIN 
+                    $tablaVentas AS v ON sn.id_serie_num = v.id_serie_num 
+                INNER JOIN 
+                    $tablaPersonas AS p ON v.id_persona = p.id_persona";
+
+			$stmt = Conexion::conectar()->prepare($sql);
 			$stmt->execute();
-			return $stmt->fetchAll();
+			return $stmt->fetchAll(); // Retorna todos los resultados
 		}
+
+		// Cerrar conexión
+		$stmt = null;
 	}
+
 
 	/*=============================================
 	MOSTRAR SUMA TOTAL DE VENTAS

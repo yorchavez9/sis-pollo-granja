@@ -2,7 +2,6 @@
 /*=============================================
 SELECCIONANDO LA SECCCION DE LA VENTA
 =============================================*/
-
 function showSection(){
     $(".seccion_lista_venta").on("click", function () {
       $("#ventas_lista").show();
@@ -19,7 +18,6 @@ showSection();
 /*=============================================
 MOSTRANDO PRODUCTOS DE LA VENTA
 =============================================*/
-
 function mostrarProductoVenta() {
   $.ajax({
     url: "ajax/Producto.ajax.php",
@@ -82,6 +80,7 @@ function mostrarVentas() {
     type: "GET",
     dataType: "json",
     success: function (ventas) {
+
       var tbody = $("#data_lista_ventas");
       tbody.empty();
       // Inicializamos un conjunto vacío para almacenar los id_egreso ya procesados
@@ -98,14 +97,12 @@ function mostrarVentas() {
           var fila = `
                     <tr>
                         <td>${index + 1}</td>
-                        <td>${fechaFormateada}</td>
                         <td>${venta.razon_social}</td>
-                        <td>${venta.serie_comprobante}</td>
-                        <td>${venta.num_comprobante}</td>
+                        <td>${venta.serie_prefijo}-${venta.num_comprobante}</td>
                         <td>${venta.tipo_pago}</td>
                         <td>S/ ${totalCompra}</td>
                         <td>S/ ${formateadoPagoRestante}</td>
-
+                        <td>${fechaFormateada}</td>
                         <td class="text-center">
                             ${restantePago == "0.00"
                               ? '<button class="btn btn-sm rounded" style="background: #28C76F; color:white;">Completado</button>'
@@ -114,27 +111,21 @@ function mostrarVentas() {
                         </td>
                         
                         <td class="text-center">
-
                             <a href="#" class="me-3 btnPagarVenta" idVenta="${venta.id_venta}" totalCompraVenta="${totalCompra}" pagoRestanteVenta="${formateadoPagoRestante}" restantePago="${restantePago}">
                                 <i class="fas fa-money-bill-alt fa-lg" style="color: #28C76F"></i>
                             </a>
-                        
-                            <a href="#" class="me-3 btnEditarVenta" idVenta="${venta.id_venta}">
-                                <i class="text-warning fas fa-edit fa-lg"></i>
+                            <a href="#" class="me-3 btnHistorialPago" idVenta="${venta.id_venta}">
+                                <i class="text-primary fas fa-history fa-lg"></i>
                             </a>
-
-                            <a href="#" class="me-3 btnImprimirComprobanteV" idVenta="${venta.id_venta}" tipo_comprobante="${venta.tipo_comprobante}">
+                            <a href="#" class="me-3 btnImprimirComprobanteV" idVenta="${venta.id_venta}" tipo_comprobante="${venta.tipo_comprobante_sn}">
                                 <i class="fa fa-print fa-lg" style="color: #0084FF"></i>
                             </a>
-
-                            <a href="#" class="me-3 btnDescargarComprobanteV" idVenta="${venta.id_venta}" tipo_comprobante="${venta.tipo_comprobante}">
+                            <a href="#" class="me-3 btnDescargarComprobanteV" idVenta="${venta.id_venta}" tipo_comprobante="${venta.tipo_comprobante_sn}">
                                 <i class="fa fa-download fa-lg" style="color: #28C76F"></i>
                             </a>
-
                             <a href="#" class="me-3 confirm-text btnEliminarVenta" idVentaDelete="${venta.id_venta}">
                                 <i class="fa fa-trash fa-lg" style="color: #FF4D4D"></i>
                             </a>
-
                         </td>
                     </tr>`;
 
@@ -158,7 +149,6 @@ function mostrarVentas() {
 /*=============================================
 IMPRIMIR TICKET
 =============================================*/
-
 $("#data_lista_ventas").on("click", ".btnImprimirComprobanteV", function (e) {
   e.preventDefault();
   console.log("Imprimiendo comprobante");
@@ -172,7 +162,6 @@ $("#data_lista_ventas").on("click", ".btnImprimirComprobanteV", function (e) {
 /*=============================================
 DESCARGAR TICKET
 =============================================*/
-
 $("#data_lista_ventas").on("click", ".btnDescargarComprobanteV", function (e) {
   e.preventDefault();
   console.log("Descargando comprobante");
@@ -180,7 +169,6 @@ $("#data_lista_ventas").on("click", ".btnDescargarComprobanteV", function (e) {
   var documento = $(this).attr("tipo_comprobante");
   window.location.href = `extensiones/${documento}/${documento}_v.php?id_venta=${idVenta}&accion=descargar`;
 });
-
 
 /* ===========================================
 AGREGANDO PRODUCTO PARA EDITAR
@@ -260,90 +248,54 @@ $("#data_edit_productos_detalle_venta").on("click", ".btnAddEditProductoVenta", 
 /* ===========================================
 CALCULAR EL SUB TOTAL CON ACCION DE INPUT
 =========================================== */
-
 function calcularSubTotal() {
-
   $(".edit_cantidad_kg_v, .edit_precio_venta").on("input", function () {
-
     var fila = $(this).closest("tr");
-
     var cantidad_kg = parseFloat(fila.find(".edit_cantidad_kg_v").val());
-
     var precio_compra = parseFloat(fila.find(".edit_precio_venta").val());
-
     if (isNaN(cantidad_kg)) {
       cantidad_kg = 0;
     }
     if (isNaN(precio_compra)) {
       precio_compra = 0;
     }
-
     var subtotal = cantidad_kg * precio_compra;
-
     var formateadoSubTotal = formateoPrecio(subtotal.toFixed(2));
-
     fila.find(".edit_precio_sub_total_venta").text(formateadoSubTotal);
-
     // Calcular y mostrar el total
-
     calcularTotal();
-
   });
-
 }
 
 /* ===========================================
 MOSTRAR Y OCULAR EL TIPO DE PAGO
 =========================================== */
-
 $(".tipo_pago_venta").on("click", function () {
-
   let valor = $(this).val();
-
   if (valor == "credito") {
-
     $("#edit_venta_al_contado").hide();
-
   } else {
-
     $("#edit_venta_al_contado").show();
-
   }
-
 });
 
 /* ===========================================
 EDITANDO VENTA
 =========================================== */
-
 $("#data_lista_ventas").on("click", ".btnEditarVenta", function (e) {
-
   e.preventDefault();
-
   var idVenta = $(this).attr("idVenta");
-
   var datos = new FormData();
-
   datos.append("idVenta", idVenta);
-
   /* MOSTRANDO DATOS DE VENTA */
-
   $.ajax({
-
     url: "ajax/Lista.venta.ajax.php",
-
     method: "POST",
-
     data: datos,
-
     cache: false,
-
     contentType: false,
-
     processData: false,
-
     dataType: "json",
-
     success: function (respuesta) {
 
       $("#pos_venta").hide();
@@ -363,159 +315,97 @@ $("#data_lista_ventas").on("click", ".btnEditarVenta", function (e) {
       $("#edit_numero_venta").val(respuesta["num_comprobante"]);
       $("#edit_igv_venta").val(respuesta["impuesto"]);
 
-
-
       if (respuesta["tipo_pago"] === "contado") {
-
         $("input[type=radio][name=edit_forma_pago_v][value=contado]").prop("checked",true);
-
         $("#edit_venta_al_contado").show();
-
       } else if (respuesta["tipo_pago"] === "credito") {
-
         $("input[type=radio][name=edit_forma_pago_v][value=credito]").prop("checked",true);
-
         $("#edit_venta_al_contado").hide();
-
       }
 
 
       if (respuesta["pago_e_y"] === "efectivo") {
-
         $("input[type=radio][name=edit_pago_tipo_v][value=efectivo]").prop("checked",true);
-
-
       } else if (respuesta["pago_e_y"] === "yape") {
-
         $("input[type=radio][name=edit_pago_tipo_v][value=yape]").prop("checked",true);
-
       }
-
     },
     error: function (respuesta) {
-
       console.log(respuesta);
-
     },
-
   });
 
   /* MOSTRANDO DATOS DE DETALLE VENTA */
-
   $.ajax({
-
     url: "ajax/Detalle.venta.ajax.php",
-
     method: "POST",
-
     data: datos,
-
     cache: false,
-
     contentType: false,
-
     processData: false,
-
     dataType: "json",
-    
     success: function (productoDetalle) {
+      // Limpiar el contenido previo en la tabla
+      $("#edit_detalle_venta_producto").empty();
 
-      var nuevaFila = "";
-
+      // Generar filas dinámicamente
       productoDetalle.forEach((respuesta) => {
-
+        // Ajustar la ruta de la imagen
         respuesta.imagen_producto = respuesta.imagen_producto.substring(3);
 
-        nuevaFila = `
-                        <tr>
-                    
-                            <input type="hidden" class="edit_id_producto_venta" value="${respuesta.id_producto}">
+        const nuevaFila = `
+        <tr>
+          <input type="hidden" class="edit_id_producto_venta" value="${respuesta.id_producto}">
+          <th class="text-center align-middle d-none d-md-table-cell">
+            <a href="#" class="me-3 confirm-text btnEliminarAddProductoVentaEdit" idAddProducto="${respuesta.id_producto}">
+              <i class="fa fa-trash fa-lg" style="color: #F1666D"></i>
+            </a>
+          </th>
+          <td>
+            <img src="${respuesta.imagen_producto}" alt="Imagen de un pollo" width="50">
+          </td>
+          <td>${respuesta.nombre_producto}</td>
+          <td>
+            <input type="number" class="form-control form-control-sm edit_cantidad_u_v" value="${respuesta.cantidad_u}">
+          </td>
+          <td>
+            <input type="number" class="form-control form-control-sm edit_cantidad_kg_v" value="${respuesta.cantidad_kg}">
+          </td>
+          <td>
+            <input type="number" class="form-control form-control-sm edit_precio_venta" value="${respuesta.precio_venta}">
+          </td>
+          <td style="text-align: right;">
+            <p class="price">S/ <span class="edit_precio_sub_total_venta">0.00</span></p>
+          </td>
+        </tr>`;
 
-                            <th class="text-center align-middle d-none d-md-table-cell">
-
-                                <a href="#" class="me-3 confirm-text btnEliminarAddProductoVentaEdit" idAddProducto="${respuesta.id_producto}"">
-                                    <i class="fa fa-trash fa-lg" style="color: #F1666D"></i>
-                                </a>
-
-                            </th>
-
-                            <td>
-                                <img src="${respuesta.imagen_producto}" alt="Imagen de un pollo" width="50">
-                            </td>
-
-                            <td>${respuesta.nombre_producto}</td>
-
-                            <td>
-                                <input type="number" class="form-control form-control-sm edit_cantidad_u_v" value="${respuesta.cantidad_u}">
-                            </td>
-
-                            <td>
-                                <input type="number" class="form-control form-control-sm edit_cantidad_kg_v" value="${respuesta.cantidad_kg}">
-                            </td>
-
-                            <td>
-                                <input type="number" class="form-control form-control-sm edit_precio_venta" value="${respuesta.precio_venta}">
-                            </td>
-
-                            <td style="text-align: right;">
-                                <p class="price">S/ <span class="edit_precio_sub_total_venta">0.00</span></p>
-                            </td>
-                            
-                        </tr>`;
-
+        // Agregar la nueva fila a la tabla
         $("#edit_detalle_venta_producto").append(nuevaFila);
-
       });
 
-      // Función para realizar los cálculos
-
-      function calcularAutomaticamente() {
-
+      // Función para calcular subtotales y total automáticamente
+      const calcularAutomaticamente = () => {
         $(".edit_cantidad_kg_v, .edit_precio_venta").each(function () {
+          const fila = $(this).closest("tr");
+          let cantidad_kg = parseFloat(fila.find(".edit_cantidad_kg_v").val()) || 0;
+          let precio_venta = parseFloat(fila.find(".edit_precio_venta").val()) || 0;
 
-          var fila = $(this).closest("tr");
-
-          var cantidad_kg = parseFloat(fila.find(".edit_cantidad_kg_v").val());
-
-          var precio_venta = parseFloat(fila.find(".edit_precio_venta").val());
-
-          if (isNaN(cantidad_kg)) {
-
-            cantidad_kg = 0;
-
-          }
-
-          if (isNaN(precio_venta)) {
-
-            precio_venta = 0;
-
-          }
-
-          var subtotal = cantidad_kg * precio_venta;
-
-          var formateadoSubTotal = formateoPrecio(subtotal.toFixed(2));
+          const subtotal = cantidad_kg * precio_venta;
+          const formateadoSubTotal = formateoPrecio(subtotal.toFixed(2));
 
           fila.find(".edit_precio_sub_total_venta").text(formateadoSubTotal);
-
         });
 
-        // Calcular y mostrar el total
-
+        // Calcular y mostrar el total general
         calcularTotal();
+      };
 
-      }
-        
+      // Llamar a la función para realizar los cálculos iniciales
       calcularAutomaticamente();
-
-      calcularSubTotal();
-
     },
     error: function (respuesta) {
-
-      console.log(respuesta);
-
+      console.error("Error en la respuesta del servidor:", respuesta);
     },
-
   });
 
 });

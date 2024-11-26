@@ -1090,13 +1090,12 @@ $serieNumeroComprobante = ControladorSerieNumero::ctrMostrarSerieNumero($item, $
                         <thead>
                             <tr>
                                 <th class="text-center">N°</th>
-                                <th>Fecha</th>
                                 <th>Cliente</th>
-                                <th>Serie</th>
-                                <th>Número</th>
+                                <th>Serie número</th>
                                 <th>Tipo pago</th>
                                 <th>Total compra</th>
                                 <th>Total restante</th>
+                                <th>Fecha</th>
                                 <th class="text-center">Estado pago</th>
                                 <th class="text-center">Acción</th>
                             </tr>
