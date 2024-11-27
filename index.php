@@ -23,6 +23,7 @@ require_once "controladores/Vacaciones.controlador.php";
 require_once "controladores/Configuracion.ticket.controlador.php";
 require_once "controladores/Impresora.controlador.php";
 require_once "controladores/Serie.num.controlador.php";
+require_once "controladores/Historial.pago.controlador.php";
 
 /* MODELOS */
 
@@ -45,6 +46,7 @@ require_once "modelos/Vacaciones.modelo.php";
 require_once "modelos/Configuracion.ticket.modelo.php";
 require_once "modelos/Impresora.modelo.php";
 require_once "modelos/Serie.num.modelo.php";
+require_once "modelos/Historial.pago.modelo.php";
 
 
 $plantilla = new ControladorPlantilla();

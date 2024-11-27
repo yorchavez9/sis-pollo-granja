@@ -31,16 +31,16 @@ function mostrarProductoVenta() {
         var fila = `
                 <tr>
                     <td class="text-center">
-                        <a href="#" id="btnAddProductoVenta" class="hover_img_a btnAddEditProductoVenta" idProductoAdd="${producto.id_producto}" stockProducto="${producto.stock_producto}">
-                            <img class="hover_img" src="${producto.imagen_producto}" alt="${producto.imagen_producto}">
+                        <a href="#" id="btnAddProductoVenta" class="hover_img_a btnAddEditProductoVenta" idProductoAdd="${historial_pago.id_producto}" stockProducto="${historial_pago.stock_producto}">
+                            <img class="hover_img" src="${historial_pago.imagen_producto}" alt="${historial_pago.imagen_producto}">
                         </a>
                     </td>
-                    <td>${producto.nombre_categoria}</td>
-                    <td class="fw-bold">S/ ${producto.precio_producto}</td>
-                    <td>${producto.nombre_producto}</td>
+                    <td>${historial_pago.nombre_categoria}</td>
+                    <td class="fw-bold">S/ ${historial_pago.precio_producto}</td>
+                    <td>${historial_pago.nombre_producto}</td>
                     <td class="text-center">
                         <button type="button" class="btn btn-sm" style="${getButtonStyles(producto.stock_producto)}">
-                            ${producto.stock_producto}
+                            ${historial_pago.stock_producto}
                         </button>
                     </td>
                 </tr>`;
@@ -109,12 +109,11 @@ function mostrarVentas() {
                               : '<button class="btn btn-sm rounded" style="background: #FF4D4D; color:white;">Pendiente</button>'
                             }
                         </td>
-                        
                         <td class="text-center">
                             <a href="#" class="me-3 btnPagarVenta" idVenta="${venta.id_venta}" totalCompraVenta="${totalCompra}" pagoRestanteVenta="${formateadoPagoRestante}" restantePago="${restantePago}">
                                 <i class="fas fa-money-bill-alt fa-lg" style="color: #28C76F"></i>
                             </a>
-                            <a href="#" class="me-3 btnHistorialPago" idVenta="${venta.id_venta}">
+                            <a href="#" class="me-3 btnHistorialPago" idVenta="${venta.id_venta}" data-bs-toggle="modal" data-bs-target="#modal_mostrar_historial_pago">
                                 <i class="text-primary fas fa-history fa-lg"></i>
                             </a>
                             <a href="#" class="me-3 btnImprimirComprobanteV" idVenta="${venta.id_venta}" tipo_comprobante="${venta.tipo_comprobante_sn}">
@@ -145,6 +144,71 @@ function mostrarVentas() {
     },
   });
 }
+
+/* ===========================================
+MOSTRANDO HISTORIAL DE PAGO
+=========================================== */
+$("#data_lista_ventas").on("click", ".btnHistorialPago",function(e){
+  e.preventDefault();
+  let id_venta_historial = $(this).attr("idVenta");
+  const datos = new FormData();
+  datos.append("id_venta_historial", id_venta_historial);
+  $.ajax({
+    url: "ajax/Historial.pago.ajax.php",
+    method: "POST",
+    data: datos,
+    cache: false,
+    contentType: false,
+    processData: false,
+    dataType: "json",
+    success: function (historial_pagos) {
+      let tbody = $("#data_historial_pago");
+      tbody.empty();
+      historial_pagos.forEach(function (historial_pago, index) {
+        if (historial_pago.comprobante_imagen == null || historial_pago.comprobante_imagen == '' ){
+          historial_pago.comprobante_imagen = true;
+        }else{
+          historial_pago.comprobante_imagen = historial_pago.comprobante_imagen.substring(3);
+        }
+        var fila = `
+                        <tr>
+                            <td>${index + 1}</td>
+                            <td>${historial_pago.fecha_pago}</td>
+                            <td>${historial_pago.tipo_pago}</td>
+                            <td>${historial_pago.forma_pago}</td>
+                            <td>S/ ${historial_pago.monto_pago}</td>
+                            <td>
+                                <div>
+                                    <a href="javascript:void(0);" class="product-img">
+                                        ${historial_pago.comprobante_imagen === true
+                                        ? ''
+                                        : `<img src="${historial_pago.comprobante_imagen}" alt="${historial_pago.comprobante_imagen}">`}
+                                    </a>
+                                </div>
+                                <div>
+                                  ${historial_pago.numero_serie_pago != '' || historial_pago.numero_serie_pago != null ? `<small>${historial_pago.numero_serie_pago}</small>`: ''}
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <a href="#" class="me-3 btnEditarProducto" idProducto="${historial_pago.id_pago}" data-bs-toggle="modal" data-bs-target="#modalEditarProducto">
+                                    <i class="text-warning fas fa-edit fa-lg"></i>
+                                </a>
+                                <a href="#" class="me-3 btnVerProducto" idProducto="${historial_pago.id_pago}" data-bs-toggle="modal" data-bs-target="#modalVerProducto">
+                                    <i class="text-primary fa fa-eye fa-lg"></i>
+                                </a>
+                                <a href="#" class="me-3 confirm-text btnDeleteProducto" idProducto="${historial_pago.id_pago}" imagenProducto="${historial_pago.comprobante_imagen}">
+                                    <i class="fa fa-trash fa-lg" style="color: #FF4D4D"></i>
+                                </a>
+                            </td>
+                        </tr>`;
+        // Agregar la fila al tbody
+        tbody.append(fila);
+      });
+      // Inicializar DataTables después de cargar los datos
+      $('#tabla_historial_pago').DataTable();
+    },
+  })
+})
 
 /*=============================================
 IMPRIMIR TICKET

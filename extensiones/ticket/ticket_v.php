@@ -39,6 +39,7 @@ $respuesta = ControladorVenta::ctrMostrarListaVentas($item, $valor);
 
 $respuesta_de = ControladorVenta::ctrMostrarDetalleVenta($item, $valor);
 $fechaVenta = date("d/m/Y", strtotime($respuesta["fecha_venta"]));
+$serie_comprobante = $respuesta["serie_prefijo"];
 $numero_comprobante = $respuesta["num_comprobante"];
 $itemConfig = null;
 $valorConfig = null;
@@ -62,9 +63,9 @@ foreach ($tickets as $ticket) {
     $pdf->Ln(5);
 
     $pdf->MultiCell(0, 5, iconv("UTF-8", "ISO-8859-1", "Fecha: " . $fechaVenta . " " . $respuesta["hora_venta"]), 0, 'C', false);
-    $pdf->MultiCell(0, 5, iconv("UTF-8", "ISO-8859-1", "Cajero: " . $nombre_usuario . ""), 0, 'C', false);
+    $pdf->MultiCell(0, 5, iconv("UTF-8", "ISO-8859-1", "Emitido por: " . $nombre_usuario . ""), 0, 'C', false);
     $pdf->SetFont('Arial', 'B', 10);
-    $pdf->MultiCell(0, 5, iconv("UTF-8", "ISO-8859-1", strtoupper("Ticket N°: " . $respuesta["num_comprobante"] . "")), 0, 'C', false);
+    $pdf->MultiCell(0, 5, iconv("UTF-8", "ISO-8859-1", strtoupper("Ticket N°: " . $respuesta["serie_prefijo"] .'-'. $respuesta["num_comprobante"] ."")), 0, 'C', false);
     $pdf->SetFont('Arial', '', 9);
 
     $pdf->Ln(1);

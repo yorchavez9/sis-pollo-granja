@@ -1267,6 +1267,7 @@ $serieNumeroComprobante = ControladorSerieNumero::ctrMostrarSerieNumero($item, $
         </div>
     </div>
 </div>
+
 <!-- MODAL PAGAR COMPRA -->
 <div class="modal fade" id="modalPagarVenta" tabindex="-1" aria-labelledby="modalPagarVentaLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -1323,6 +1324,42 @@ $serieNumeroComprobante = ControladorSerieNumero::ctrMostrarSerieNumero($item, $
     </div>
 </div>
 
+<!-- MOSTRAR HISTORIAL DE PAGOS -->
+<div class="modal fade" id="modal_mostrar_historial_pago" tabindex="-1" aria-labelledby="modal_historial_pago_label" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Historial de pago <span id="nombre_historial_persona_modal"></span></h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+                <!-- TABLA DE LISTA DE PRODUCTOS -->
+                <div class="col-md-12">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered" style="width:100%" id="tabla_historial_pago">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">N°</th>
+                                    <th>Fecha pago</th>
+                                    <th>Tipo de pago</th>
+                                    <th>Forma</th>
+                                    <th>Monto</th>
+                                    <th>Comprobante | N° Operación</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="data_historial_pago">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="text-end mx-4 mb-2">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
     const btnCrearVenta = document.getElementById('btn_crear_nueva_venta');

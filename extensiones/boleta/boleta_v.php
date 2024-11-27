@@ -26,7 +26,8 @@ $item = "id_venta";
 $valor = $_GET["id_venta"];
 
 $respuesta = ControladorVenta::ctrMostrarListaVentas($item, $valor);
-$serieNumero = $respuesta["serie_comprobante"];
+$serieNumero = $respuesta["num_comprobante"];
+$seriePrefijo = $respuesta["serie_prefijo"];
 $horaVenta = $respuesta["hora_venta"];
 $respuesta_dv = ControladorVenta::ctrMostrarDetalleVenta($item, $valor);
 $fechaVenta = $respuesta["fecha_venta"];
@@ -50,6 +51,7 @@ foreach ($configuracion as $key => $value) {
 class PDF extends FPDF
 {
     private $serieNumero;
+    private $seriePrefijo;
     private $fechaVenta;
     private $horaVenta;
     private $nombreEmpresa;
@@ -61,10 +63,11 @@ class PDF extends FPDF
     private $mensaje;
 
     // Constructor que acepta los datos de la empresa y los de la venta
-    function __construct($serieNumero, $fechaVenta, $horaVenta, $nombreEmpresa, $ruc, $telefono, $correo, $direccion, $logo, $mensaje)
+    function __construct($seriePrefijo, $serieNumero, $fechaVenta, $horaVenta, $nombreEmpresa, $ruc, $telefono, $correo, $direccion, $logo, $mensaje)
     {
         parent::__construct(); // Llamada al constructor de la clase FPDF
         $this->serieNumero = $serieNumero;
+        $this->seriePrefijo = $seriePrefijo;
         $this->fechaVenta = $fechaVenta;
         $this->horaVenta = $horaVenta;
         $this->nombreEmpresa = $nombreEmpresa;
@@ -86,7 +89,7 @@ class PDF extends FPDF
         $this->SetX(10);
         $this->Cell(0, 7, 'BOLETA', 0, 1, 'L');
         $this->SetFont('Helvetica', 'B', 12);
-        $this->Cell(0, 7, utf8_decode('Boleta N° ' . $this->serieNumero), 0, 1, 'L');  // Accede a la propiedad
+        $this->Cell(0, 7, utf8_decode('Boleta N° ' . $this->seriePrefijo .'-'. $this->serieNumero), 0, 1, 'L');  // Accede a la propiedad
         $this->SetFont('Helvetica', '', 10);
         $this->Cell(0, 7, 'Fecha: ' . date("d/m/Y", strtotime($this->fechaVenta)), 0, 1, 'L');
         $this->Cell(0, 7, utf8_decode('Hora: ' . $this->horaVenta), 0, 1, 'L');
@@ -125,7 +128,7 @@ class PDF extends FPDF
 
 
 // Crear PDF
-$pdf = new PDF($serieNumero, $fechaVenta, $horaVenta, $nombreEmpresa, $ruc, $telefono, $correo, $direccion, $logo, $mensaje);
+$pdf = new PDF($seriePrefijo, $serieNumero, $fechaVenta, $horaVenta, $nombreEmpresa, $ruc, $telefono, $correo, $direccion, $logo, $mensaje);
 $pdf->AliasNbPages();
 $pdf->AddPage();
 $pdf->SetMargins(10, 10, 10);

@@ -16,13 +16,21 @@ class ModeloVenta
 						v.id_venta,
 						p.id_persona,
 						p.razon_social,
-						sn.tipo_comprobante_sn,
+						p.numero_documento,
+						p.direccion,
+						p.telefono,
+						p.email,
+						sn.tipo_comprobante_sn, 
 						sn.serie_prefijo,
-						v.num_comprobante, 
+						v.num_comprobante,
+						v.impuesto, 
 						v.tipo_pago, 
-						v.total_venta, 
+						v.total_venta,
+						v.sub_total,
+						v.igv, 
 						v.total_pago, 
 						v.fecha_venta, 
+						v.hora_venta, 
 						v.estado_pago
 					FROM 
 						$tablaSerieNumero AS sn 
@@ -43,20 +51,29 @@ class ModeloVenta
                     v.id_venta,
                     p.id_persona,
                     p.razon_social,
+					p.numero_documento,
+					p.direccion,
+					p.telefono,
+					p.email,
                     sn.tipo_comprobante_sn, 
                     sn.serie_prefijo,
-					v.num_comprobante, 
+					v.num_comprobante,
+					v.impuesto, 
                     v.tipo_pago, 
-                    v.total_venta, 
+                    v.total_venta,
+					v.sub_total,
+					v.igv, 
                     v.total_pago, 
                     v.fecha_venta, 
+                    v.hora_venta, 
                     v.estado_pago
                 FROM 
                     $tablaSerieNumero AS sn 
                 INNER JOIN 
                     $tablaVentas AS v ON sn.id_serie_num = v.id_serie_num 
                 INNER JOIN 
-                    $tablaPersonas AS p ON v.id_persona = p.id_persona";
+                    $tablaPersonas AS p ON v.id_persona = p.id_persona 
+					ORDER BY  v.id_venta DESC";
 
 			$stmt = Conexion::conectar()->prepare($sql);
 			$stmt->execute();
