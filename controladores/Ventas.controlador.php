@@ -1,5 +1,6 @@
 <?php
 
+
 class ControladorVenta
 {
 
@@ -244,6 +245,21 @@ class ControladorVenta
 			ModeloVenta::mdlActualizarStockProducto($tblProducto, $idProducto, $cantidad);
 		}
 
+		/* =========================================
+        ACTUALIZANDO EL MONTO DE VENTA DEL PAGO AL CREDITO
+        ========================================= */
+		$tablaActualizarVenta = "ventas";
+		$totalPago = $_POST["pago_cuota_venta"]; 
+		if (!empty($totalPago) || $totalPago == null || $pago_total = '') {
+			$datosAdelanto = array(
+				"id_venta" => $id_venta_ultimo,
+				"total_pago" => $totalPago
+			);
+
+			ModeloVenta::mdlActualizarPagoPendiente($tablaActualizarVenta, $datosAdelanto);
+
+		}
+
 		$ruta = "../vistas/img/comprobantes/";
 		if (isset($_FILES["recibo_de_pago_venta"]["tmp_name"])) {
 			$extension = pathinfo($_FILES["recibo_de_pago_venta"]["name"], PATHINFO_EXTENSION);
@@ -265,7 +281,6 @@ class ControladorVenta
 		$datosHistorialPago = array(
 			"id_venta" => $id_venta_ultimo,
 			"monto_pago" => (!empty($_POST["pago_cuota_venta"])) ? $_POST["pago_cuota_venta"] : $_POST["total"],
-			"tipo_pago" => $_POST["tipo_pago"],
 			"forma_pago" => $_POST["metodos_pago_venta"],
 			"numero_serie_pago" => !empty($_POST["serie_de_pago_venta"]) ? $_POST["serie_de_pago_venta"] : null,
 			"comprobante_imagen" => isset($_FILES["recibo_de_pago_venta"]["tmp_name"]) ? $ruta_imagen : null

@@ -495,6 +495,7 @@ $("#btn_crear_nueva_venta").click(function (e) {
       contentType: false,
       processData: false,
       success: function (respuesta) {
+
         const res = JSON.parse(respuesta);
 
         $("#form_venta_producto")[0].reset();

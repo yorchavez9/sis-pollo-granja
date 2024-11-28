@@ -2,50 +2,6 @@
 
 class ControladorHistorialPago
 {
-    /*=============================================
-	REGISTRO DE HISTORIAL PAGO
-	=============================================*/
-    static public function ctrCrearHistorialPago()
-    {
-        $ruta = "../vistas/img/productos/";
-        if (isset($_FILES["imagen_producto"]["tmp_name"])) {
-            $extension = pathinfo($_FILES["imagen_producto"]["name"], PATHINFO_EXTENSION);
-            $tipos_permitidos = array("jpg", "jpeg", "png", "gif");
-            if (in_array(strtolower($extension), $tipos_permitidos)) {
-                $nombre_imagen = date("YmdHis") . rand(1000, 9999);
-                $ruta_imagen = $ruta . $nombre_imagen . "." . $extension;
-                if (move_uploaded_file($_FILES["imagen_producto"]["tmp_name"], $ruta_imagen)) {
-                } else {
-                }
-            } else {
-            }
-        }
-        $tabla = "productos";
-        $datos = array(
-            "id_categoria" => $_POST["id_categoria_P"],
-            "codigo_producto" => $_POST["codigo_producto"],
-            "nombre_producto" => $_POST["nombre_producto"],
-            "precio_producto" => $_POST["precio_producto"],
-            "stock_producto" => $_POST["stock_producto"],
-            "fecha_vencimiento" => $_POST["fecha_vencimiento"],
-            "descripcion_producto" => $_POST["descripcion_producto"],
-            "imagen_producto" => $ruta_imagen
-        );
-        $respuesta = ModeloHistorialPago::mdlIngresarHistorialPago($tabla, $datos);
-        if ($respuesta == "ok") {
-            $response = array(
-                "mensaje" => "Producto guardado correctamente",
-                "estado" => "ok"
-            );
-            echo json_encode($response);
-        } else {
-            $response = array(
-                "mensaje" => "Error al guardar el producto",
-                "estado" => "error"
-            );
-            echo json_encode($response);
-        }
-    }
 
     /*=============================================
 	MOSTRAR HISTORIAL PAGO PDF O TICKET
@@ -87,7 +43,7 @@ class ControladorHistorialPago
             "total_pago" => $totalPago
         );
 
-        $respuesta = ModeloHistorialPago::mdlActualizarPagoPendiente($tabla, $datos);
+        ModeloHistorialPago::mdlActualizarPagoPendiente($tabla, $datos);
 
         /* =========================================
         INGRESANDO DATOS AL HISTORIAL DE PAGO
