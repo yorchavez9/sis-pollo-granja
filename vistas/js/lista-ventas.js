@@ -155,6 +155,11 @@ $("#data_lista_ventas").on("click", ".btnHistorialPago", function (e) {
   e.preventDefault();
 
   let id_venta_historial = $(this).attr("idVenta");
+  cargarHistorialPago(id_venta_historial);
+});
+
+// Función para cargar el historial de pagos
+function cargarHistorialPago(id_venta_historial) {
   const datos = new FormData();
   datos.append("id_venta_historial", id_venta_historial);
 
@@ -182,7 +187,6 @@ $("#data_lista_ventas").on("click", ".btnHistorialPago", function (e) {
 
       // Recorrer los datos del historial de pagos
       historial_pagos.forEach(function (historial_pago, index) {
-        // Validar y manejar campos vacíos o nulos
         let comprobanteImagen =
           historial_pago.comprobante_imagen && historial_pago.comprobante_imagen.trim() !== ""
             ? historial_pago.comprobante_imagen.substring(3)
@@ -203,27 +207,24 @@ $("#data_lista_ventas").on("click", ".btnHistorialPago", function (e) {
               <div>
                 ${comprobanteImagen
             ? `<a href="javascript:void(0);" class="product-img"><img src="${comprobanteImagen}" alt="Comprobante"></a>`
-            : `<small>Sin comprobante</small>`
-          }
+            : `<small>Sin comprobante</small>`}
               </div>
               <div>
                 <small>${numeroSerie}</small>
               </div>
             </td>
             <td class="text-center">
-              <a href="#" class="me-3 btnEditarProducto" idProducto="${historial_pago.id_pago}" data-bs-toggle="modal" data-bs-target="#modalEditarProducto">
+              <a href="#" class="me-3 btnEditarHistorialPago" idPago="${historial_pago.id_pago}" data-bs-toggle="modal" data-bs-target="#modal_editar_historial_pago">
                 <i class="text-warning fas fa-edit fa-lg"></i>
               </a>
-              <a href="#" class="me-3 confirm-text btnDeleteProducto" idProducto="${historial_pago.id_pago}" imagenProducto="${comprobanteImagen}">
+              <a href="#" class="me-3 confirm-text btnEliminarHistorialPago" idPago="${historial_pago.id_pago}" imagenHistorialPago="${comprobanteImagen}">
                 <i class="fa fa-trash fa-lg" style="color: #FF4D4D"></i>
               </a>
             </td>
           </tr>`;
-        // Agregar la fila al tbody
         tbody.append(fila);
       });
 
-      // Inicializar DataTables después de cargar los datos
       $("#tabla_historial_pago").DataTable();
     },
     error: function () {
@@ -233,6 +234,60 @@ $("#data_lista_ventas").on("click", ".btnHistorialPago", function (e) {
         icon: "error",
       });
     },
+  });
+}
+
+/*=============================================
+ELIMINAR HISTORIAL PAGO
+=============================================*/
+
+$("#data_historial_pago").on("click", ".btnEliminarHistorialPago", function (e) {
+  e.preventDefault();
+  var id_delete_pago_historial = $(this).attr("idPago");
+  var url_imagen_historial_pago = $(this).attr("imagenHistorialPago");
+  var datos = new FormData();
+  datos.append("id_delete_pago_historial", id_delete_pago_historial);
+  datos.append("url_imagen_historial_pago", url_imagen_historial_pago);
+
+  Swal.fire({
+    title: "¿Está seguro de borrar el pago?",
+    text: "¡Si no lo está puede cancelar la acción!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    cancelButtonText: "Cancelar",
+    confirmButtonText: "Si, borrar!",
+  }).then(function (result) {
+    if (result.value) {
+      $.ajax({
+        url: "ajax/Historial.pago.ajax.php",
+        method: "POST",
+        data: datos,
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function (respuesta) {
+          var res = JSON.parse(respuesta);
+          if (res === "ok") {
+            Swal.fire({
+              title: "¡Eliminado!",
+              text: "El pago se eliminó con éxito",
+              icon: "success",
+            }).then(() => {
+              let idVenta = $(this).closest("tr").find(".btnHistorialPago").attr("idVenta");
+              if (idVenta) {
+                console.log("Refrescando historial para la venta ID:", idVenta);
+                cargarHistorialPago(idVenta);
+              }
+            });
+          } else {
+            console.error("Error al eliminar los datos");
+          }
+        }
+
+      });
+    }
   });
 });
 

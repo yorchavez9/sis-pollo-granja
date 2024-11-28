@@ -77,9 +77,9 @@ elseif (isset($_POST["edit_id_producto"])) {
     $editProducto->ctrEditarHistorialPago();
 }
 /* BORRAR PRODUCTO */ 
-elseif (isset($_POST["idProductoDelete"])) {
-    $borrarProducto = new ControladorHistorialPago();
-    $borrarProducto->ctrBorrarHistorialPago();
+elseif (isset($_POST["id_delete_pago_historial"])) {
+    $borrarPago = new ControladorHistorialPago();
+    $borrarPago->ctrBorrarHistorialPago();
 }
 /* MOSTRAR PRODUCTOS EN LA TABLA */ 
 else {

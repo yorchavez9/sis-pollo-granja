@@ -14,6 +14,7 @@ class ModeloHistorialPago
                                                 hp.id_pago,
                                                 p.razon_social,
                                                 v.total_venta,
+                                                v.num_comprobante,
                                                 hp.id_venta,
                                                 hp.forma_pago,
                                                 hp.monto_pago, 
@@ -269,10 +270,6 @@ class ModeloHistorialPago
         }
     }
 
-    /*=============================================
-	ACTUALIZAR HISTORIAL PAGO
-	=============================================*/
-
 
     /*=============================================
 	BORRAR HISTORIAL PAGO
@@ -280,8 +277,8 @@ class ModeloHistorialPago
 
     static public function mdlBorrarHistorialPago($tabla, $datos)
     {
-        $stmt = Conexion::conectar()->prepare("DELETE FROM $tabla WHERE id_producto = :id_producto");
-        $stmt->bindParam(":id_producto", $datos, PDO::PARAM_INT);
+        $stmt = Conexion::conectar()->prepare("DELETE FROM $tabla WHERE id_pago = :id_pago");
+        $stmt->bindParam(":id_pago", $datos, PDO::PARAM_INT);
         if ($stmt->execute()) {
             return "ok";
         } else {

@@ -134,21 +134,20 @@ class ControladorHistorialPago
 
     static public function ctrBorrarHistorialPago()
     {
-        if (isset($_POST["idProductoDelete"])) {
-            $tabla = "productos";
-            $datos = $_POST["idProductoDelete"];
-            if ($_POST["deleteRutaImagenProducto"] != "") {
-                if (file_exists($_POST["deleteRutaImagenProducto"])) {
-                    unlink($_POST["deleteRutaImagenProducto"]);
-                } else {
-                    echo "El archivo a eliminar no existe.";
-                }
+        $tabla = "historial_pagos";
+        $datos = $_POST["id_delete_pago_historial"];
+        if ($_POST["url_imagen_historial_pago"] != "") {
+            // Verificar si el archivo existe y eliminarlo
+            if (file_exists($_POST["url_imagen_historial_pago"])) {
+                unlink($_POST["url_imagen_historial_pago"]);
+            } else {
+                // El archivo no existe
+                echo "El archivo a eliminar no existe.";
             }
-
-            $respuesta = ModeloHistorialPago::mdlBorrarHistorialPago($tabla, $datos);
-            if ($respuesta == "ok") {
-                echo json_encode("ok");
-            }
+        }
+        $respuesta = ModeloHistorialPago::mdlBorrarHistorialPago($tabla, $datos);
+        if ($respuesta == "ok") {
+            echo json_encode("ok");
         }
     }
 }
