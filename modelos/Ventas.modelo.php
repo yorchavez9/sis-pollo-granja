@@ -460,32 +460,23 @@ class ModeloVenta
 			// Preparar la consulta SQL
 			$stmt = Conexion::conectar()->prepare("INSERT INTO $tabla (
 													id_venta, 
-													fecha_pago, 
 													monto_pago, 
-													tipo_pago, 
 													forma_pago, 
 													numero_serie_pago, 
-													estado_pago, 
 													comprobante_imagen
 												) 
 												VALUES (
 													:id_venta, 
-													:fecha_pago, 
 													:monto_pago, 
-													:tipo_pago, 
 													:forma_pago, 
 													:numero_serie_pago, 
-													:estado_pago, 
 													:comprobante_imagen)");
 
 			// Vincular los valores a los parámetros de la consulta
 			$stmt->bindParam(":id_venta", $datos["id_venta"], PDO::PARAM_INT);
-			$stmt->bindParam(":fecha_pago", $datos["fecha_pago"], PDO::PARAM_STR);
 			$stmt->bindParam(":monto_pago", $datos["monto_pago"], PDO::PARAM_STR);
-			$stmt->bindParam(":tipo_pago", $datos["tipo_pago"], PDO::PARAM_STR);
 			$stmt->bindParam(":forma_pago", $datos["forma_pago"], PDO::PARAM_STR);
 			$stmt->bindParam(":numero_serie_pago", $datos["numero_serie_pago"], PDO::PARAM_STR);
-			$stmt->bindParam(":estado_pago", $datos["estado_pago"], PDO::PARAM_STR);
 			$stmt->bindParam(":comprobante_imagen", $datos["comprobante_imagen"], PDO::PARAM_STR);
 
 			// Ejecutar la consulta
@@ -502,53 +493,6 @@ class ModeloVenta
 		$stmt = null;
 	}
 
-
-
-	/*=============================================
-	ACTUALIZAR PAGO PENDIENTE
-	=============================================*/
-
-	static public function mdlActualizarPagoPendiente($tabla, $datos)
-	{
-		$respuesta = array();
-
-		// Obtener el total actual de pagos para este egreso
-		$stmt = Conexion::conectar()->prepare("SELECT total_pago FROM $tabla WHERE id_venta = :id_venta");
-		$stmt->bindParam(":id_venta", $datos["id_venta"], PDO::PARAM_STR);
-		$stmt->execute();
-		$totalActual = $stmt->fetchColumn();
-
-		// Calcular el nuevo total de pagos sumando el monto proporcionado
-		$nuevoTotal = $totalActual + $datos["total_pago"];
-
-		// Obtener el total de la compra
-		$stmt = Conexion::conectar()->prepare("SELECT total_venta FROM $tabla WHERE id_venta = :id_venta");
-		$stmt->bindParam(":id_venta", $datos["id_venta"], PDO::PARAM_STR);
-		$stmt->execute();
-		$totalCompra = $stmt->fetchColumn();
-
-		// Verificar si el nuevo total de pagos supera el total de la compra
-		if ($nuevoTotal > $totalCompra) {
-			// Si supera el total de la compra, retornar error
-			$respuesta["estado"] = "error";
-			$respuesta["mensaje"] = "El total de los pagos supera el total de la venta";
-		} else {
-			// Si no supera el total de la compra, proceder con la actualización
-			$stmt = Conexion::conectar()->prepare("UPDATE $tabla SET total_pago = :nuevo_total_pago WHERE id_venta = :id_venta");
-			$stmt->bindParam(":nuevo_total_pago", $nuevoTotal, PDO::PARAM_STR);
-			$stmt->bindParam(":id_venta", $datos["id_venta"], PDO::PARAM_STR);
-
-			if ($stmt->execute()) {
-				$respuesta["estado"] = "ok";
-				$respuesta["mensaje"] = "El pago se realizó correctamente";
-			} else {
-				$respuesta["estado"] = "error";
-				$respuesta["mensaje"] = "No se pudo realizar el total de pagos";
-			}
-		}
-
-		return $respuesta;
-	}
 
 
 	/*=============================================

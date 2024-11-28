@@ -80,10 +80,8 @@ function mostrarVentas() {
     type: "GET",
     dataType: "json",
     success: function (ventas) {
-
-      var tbody = $("#data_lista_ventas");
+      let tbody = $("#data_lista_ventas");
       tbody.empty();
-      // Inicializamos un conjunto vacío para almacenar los id_egreso ya procesados
       var ventasProcesados = new Set();
       ventas.forEach(function (venta, index) {
         // Verificar si el id_egreso ya ha sido procesado
@@ -110,7 +108,12 @@ function mostrarVentas() {
                             }
                         </td>
                         <td class="text-center">
-                            <a href="#" class="me-3 btnPagarVenta" idVenta="${venta.id_venta}" totalCompraVenta="${totalCompra}" pagoRestanteVenta="${formateadoPagoRestante}" restantePago="${restantePago}">
+                            <a href="#" class="me-3 btnPagarVenta" 
+                            idVenta="${venta.id_venta}" 
+                            totalCompraVenta="${totalCompra}" 
+                            pagoRestanteVenta="${formateadoPagoRestante}" 
+                            restantePago="${restantePago}"
+                            tipoPago= "${venta.tipo_pago}">
                                 <i class="fas fa-money-bill-alt fa-lg" style="color: #28C76F"></i>
                             </a>
                             <a href="#" class="me-3 btnHistorialPago" idVenta="${venta.id_venta}" data-bs-toggle="modal" data-bs-target="#modal_mostrar_historial_pago">
@@ -148,11 +151,13 @@ function mostrarVentas() {
 /* ===========================================
 MOSTRANDO HISTORIAL DE PAGO
 =========================================== */
-$("#data_lista_ventas").on("click", ".btnHistorialPago",function(e){
+$("#data_lista_ventas").on("click", ".btnHistorialPago", function (e) {
   e.preventDefault();
+
   let id_venta_historial = $(this).attr("idVenta");
   const datos = new FormData();
   datos.append("id_venta_historial", id_venta_historial);
+
   $.ajax({
     url: "ajax/Historial.pago.ajax.php",
     method: "POST",
@@ -164,51 +169,73 @@ $("#data_lista_ventas").on("click", ".btnHistorialPago",function(e){
     success: function (historial_pagos) {
       let tbody = $("#data_historial_pago");
       tbody.empty();
+
+      // Validar si el historial está vacío o no contiene datos
+      if (!historial_pagos || historial_pagos.length === 0) {
+        Swal.fire({
+          title: "Sin datos",
+          text: "No se encontraron pagos en el historial para esta venta.",
+          icon: "info",
+        });
+        return;
+      }
+
+      // Recorrer los datos del historial de pagos
       historial_pagos.forEach(function (historial_pago, index) {
-        if (historial_pago.comprobante_imagen == null || historial_pago.comprobante_imagen == '' ){
-          historial_pago.comprobante_imagen = true;
-        }else{
-          historial_pago.comprobante_imagen = historial_pago.comprobante_imagen.substring(3);
-        }
+        // Validar y manejar campos vacíos o nulos
+        let comprobanteImagen =
+          historial_pago.comprobante_imagen && historial_pago.comprobante_imagen.trim() !== ""
+            ? historial_pago.comprobante_imagen.substring(3)
+            : null;
+
+        let numeroSerie =
+          historial_pago.numero_serie_pago && historial_pago.numero_serie_pago.trim() !== ""
+            ? historial_pago.numero_serie_pago
+            : "Sin serie";
+
         var fila = `
-                        <tr>
-                            <td>${index + 1}</td>
-                            <td>${historial_pago.fecha_pago}</td>
-                            <td>${historial_pago.tipo_pago}</td>
-                            <td>${historial_pago.forma_pago}</td>
-                            <td>S/ ${historial_pago.monto_pago}</td>
-                            <td>
-                                <div>
-                                    <a href="javascript:void(0);" class="product-img">
-                                        ${historial_pago.comprobante_imagen === true
-                                        ? ''
-                                        : `<img src="${historial_pago.comprobante_imagen}" alt="${historial_pago.comprobante_imagen}">`}
-                                    </a>
-                                </div>
-                                <div>
-                                  ${historial_pago.numero_serie_pago != '' || historial_pago.numero_serie_pago != null ? `<small>${historial_pago.numero_serie_pago}</small>`: ''}
-                                </div>
-                            </td>
-                            <td class="text-center">
-                                <a href="#" class="me-3 btnEditarProducto" idProducto="${historial_pago.id_pago}" data-bs-toggle="modal" data-bs-target="#modalEditarProducto">
-                                    <i class="text-warning fas fa-edit fa-lg"></i>
-                                </a>
-                                <a href="#" class="me-3 btnVerProducto" idProducto="${historial_pago.id_pago}" data-bs-toggle="modal" data-bs-target="#modalVerProducto">
-                                    <i class="text-primary fa fa-eye fa-lg"></i>
-                                </a>
-                                <a href="#" class="me-3 confirm-text btnDeleteProducto" idProducto="${historial_pago.id_pago}" imagenProducto="${historial_pago.comprobante_imagen}">
-                                    <i class="fa fa-trash fa-lg" style="color: #FF4D4D"></i>
-                                </a>
-                            </td>
-                        </tr>`;
+          <tr>
+            <td>${index + 1}</td>
+            <td>${historial_pago.fecha_registro}</td>
+            <td>${historial_pago.forma_pago}</td>
+            <td>S/ ${historial_pago.monto_pago}</td>
+            <td class="text-center">
+              <div>
+                ${comprobanteImagen
+            ? `<a href="javascript:void(0);" class="product-img"><img src="${comprobanteImagen}" alt="Comprobante"></a>`
+            : `<small>Sin comprobante</small>`
+          }
+              </div>
+              <div>
+                <small>${numeroSerie}</small>
+              </div>
+            </td>
+            <td class="text-center">
+              <a href="#" class="me-3 btnEditarProducto" idProducto="${historial_pago.id_pago}" data-bs-toggle="modal" data-bs-target="#modalEditarProducto">
+                <i class="text-warning fas fa-edit fa-lg"></i>
+              </a>
+              <a href="#" class="me-3 confirm-text btnDeleteProducto" idProducto="${historial_pago.id_pago}" imagenProducto="${comprobanteImagen}">
+                <i class="fa fa-trash fa-lg" style="color: #FF4D4D"></i>
+              </a>
+            </td>
+          </tr>`;
         // Agregar la fila al tbody
         tbody.append(fila);
       });
+
       // Inicializar DataTables después de cargar los datos
-      $('#tabla_historial_pago').DataTable();
+      $("#tabla_historial_pago").DataTable();
     },
-  })
-})
+    error: function () {
+      Swal.fire({
+        title: "Error",
+        text: "Ocurrió un problema al obtener el historial de pagos.",
+        icon: "error",
+      });
+    },
+  });
+});
+
 
 /*=============================================
 IMPRIMIR TICKET
@@ -473,8 +500,6 @@ $("#data_lista_ventas").on("click", ".btnEditarVenta", function (e) {
   });
 
 });
-
-
 
 /*=============================================
 ELIMINAR VENTA
@@ -841,39 +866,58 @@ function calcularTotal() {
 ELIMINAR EL PRODUCTO AGREGADO DE LA LISTA
 =========================================== */
 
-$(document).on("click", ".btnEliminarAddProductoVentaEdit", function (e) {
-
+$("#data_lista_ventas").on("click", ".btnPagarVenta", function (e) {
   e.preventDefault();
 
-  var idProductoEliminar = $(this).attr("idAddProducto");
+  // Función para limpiar comas y convertir el número a flotante
+  const parseNumber = (numStr) => {
+    if (!numStr) return 0; // Manejar valores nulos o indefinidos
+    return parseFloat(numStr.replace(/,/g, "")); // Reemplazar comas y convertir a número
+  };
 
-  // Encuentra la fila que corresponde al producto a eliminar y elimínala
-
-  $("#edit_detalle_venta_producto")
-
-    .find("tr")
-
-    .each(function () {
-
-      var idProducto = $(this)
-
-        .find(".btnEliminarAddProductoVentaEdit")
-
-        .attr("idAddProducto");
-
-      if (idProducto == idProductoEliminar) {
-
-        $(this).remove();
-
-        // Una vez eliminada la fila, recalcular el total
-
-        calcularTotal();
-
-        return false; // Termina el bucle una vez que se ha encontrado y eliminado la fila
-      }
-
+  // Función para formatear un número en formato con comas
+  const formatNumber = (num) => {
+    return num.toLocaleString("en-US", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
     });
+  };
 
+  // Obtención de atributos de la venta
+  const idVenta = $(this).attr("idVenta");
+  const totalCompraVenta = parseNumber($(this).attr("totalCompraVenta"));
+  const pagoRestanteVenta = parseNumber($(this).attr("pagoRestanteVenta"));
+  const restantePago = parseNumber($(this).attr("restantePago"));
+  const tipoPago = $(this).attr("tipoPago");
+
+  // Validación si la venta no tiene deudas
+  if (restantePago <= 0) {
+    Swal.fire({
+      title: "¡Aviso!",
+      text: "Esta venta no tiene deudas pendientes.",
+      icon: "warning",
+    });
+    return; // Salir si no hay deudas pendientes
+  }
+
+  // Validaciones de los valores
+  if (!idVenta || isNaN(totalCompraVenta) || isNaN(pagoRestanteVenta)) {
+    Swal.fire({
+      title: "¡Error!",
+      text: "Información de la venta incompleta o inválida.",
+      icon: "error",
+    });
+    return; // Salir si la información no es válida
+  }
+
+  // Asignar valores a los elementos del formulario
+  $("#id_venta_pagar").val(idVenta);
+  $("#tipo_pago_historial_venta").val(tipoPago || ""); // Tipo de pago por defecto vacío si no existe
+  $("#total_venta_pagar").text(`S/ ${formatNumber(totalCompraVenta)}`);
+  $("#pago_restante_pagar").text(`S/ ${formatNumber(pagoRestanteVenta)}`);
+
+  // Mostrar el modal
+  $("#modalPagarVenta").modal("show");
 });
 
 /* ===========================================
@@ -881,220 +925,201 @@ MOSTRAR DEUDA A PAGAR
 =========================================== */
 
 $("#data_lista_ventas").on("click", ".btnPagarVenta", function (e) {
-
   e.preventDefault();
 
-  let idVenta = $(this).attr("idVenta");
+  // Función para limpiar comas y convertir el número a flotante
+  const parseNumber = (numStr) => {
+    if (!numStr) return 0; // Manejar valores nulos o indefinidos
+    return parseFloat(numStr.replace(/,/g, "")); // Reemplazar comas y convertir a número
+  };
 
-  let totalCompraVenta = $(this).attr("totalCompraVenta");
+  // Obtención de atributos de la venta
+  const idVenta = $(this).attr("idVenta");
+  const totalCompraVenta = parseNumber($(this).attr("totalCompraVenta"));
+  const pagoRestanteVenta = parseNumber($(this).attr("pagoRestanteVenta"));
+  const restantePago = parseNumber($(this).attr("restantePago"));
+  const tipoPago = $(this).attr("tipoPago");
 
-  let pagoRestanteVenta = $(this).attr("pagoRestanteVenta");
-
-  let restantePago = $(this).attr("restantePago");
-
-  if (restantePago == "0.00") {
-
+  // Validación si la venta no tiene deudas
+  if (restantePago <= 0) {
     Swal.fire({
       title: "¡Aviso!",
       text: "Esta venta no tiene deudas pendientes.",
       icon: "warning",
     });
-
-  } else {
-
-    // Configura los valores en el modal según los datos del botón pulsado
-
-    $("#id_venta_pagar").val(idVenta);
-
-    $("#total_venta_pagar").text("S/ " + totalCompraVenta);
-
-    $("#pago_restante_pagar").text("S/ " + pagoRestanteVenta);
-
-    // Ahora abre el modal manualmente con JavaScript
-
-    $("#modalPagarVenta").modal("show");
-
+    return; // Salir si no hay deudas pendientes
   }
 
+  // Validaciones de los valores
+  if (!idVenta || isNaN(totalCompraVenta) || isNaN(pagoRestanteVenta)) {
+    Swal.fire({
+      title: "¡Error!",
+      text: "Información de la venta incompleta o inválida.",
+      icon: "error",
+    });
+    return; // Salir si la información no es válida
+  }
+
+  // Asignar valores a los elementos del formulario
+  $("#id_venta_pagar").val(idVenta);
+  $("#tipo_pago_historial_venta").val(tipoPago || ""); // Tipo de pago por defecto vacío si no existe
+  $("#total_venta_pagar").text(`S/ ${totalCompraVenta.toFixed(2)}`);
+  $("#pago_restante_pagar").text(`S/ ${pagoRestanteVenta.toFixed(2)}`);
+
+  // Mostrar el modal
+  $("#modalPagarVenta").modal("show");
 });
+
 
 /* ===========================================
 PAGAR DEUDA
 =========================================== */
-
 $("#btn_pagar_deuda_venta").click(function (e) {
-
   e.preventDefault();
 
-  var isValid = true;
+  // Variables del formulario
+  const idVentaPagar = $("#id_venta_pagar").val();
+  const metodoPago = $("#metodos_pago_venta_historial").val();
+  const comprobantePago = $("#comprobante_pago_historial").get(0).files[0];
+  const serieNumeroPago = $("#serie_numero_pago_historial").val();
+  const montoPagar = parseFloat($("#monto_pagar_venta").val());
 
-  var id_venta_pagar = $("#id_venta_pagar").val();
+  // Bandera para verificar si el formulario es válido
+  let isValid = true;
 
-  var monto_pagar_venta = $("#monto_pagar_venta").val();
-
-  /* VALIDANDO EL TIPO DE DATOS */
-
-  if (monto_pagar_venta === "" || monto_pagar_venta == null) {
-
-    $("#error_monto_pagar_venta")
-      .html("Por favor, ingrese el monto")
-      .addClass("text-danger");
-
+  // Validaciones de los campos
+  if (!idVentaPagar) {
     isValid = false;
-
-  } else if (isNaN(monto_pagar_venta)) {
-
-    $("#error_monto_pagar_venta")
-      .html("El monto solo puede contener números")
-      .addClass("text-danger");
-
-    isValid = false;
-
-  } else {
-
-    $("#error_monto_pagar_venta").html("").removeClass("text-danger");
-
+    Swal.fire("Error", "El ID de la venta no es válido.", "error");
+    return;
   }
 
-  /*  ENVIAR LOS DATOS SI LA VALIDACION FUE VERDADERO */
+  if (!metodoPago || metodoPago == null || metodoPago == '') {
+    isValid = false;
+    $("#metodos_pago_venta_historial").addClass("is-invalid");
+    $("#error_metodos_pago_venta_historial").text("Debe seleccionar un método de pago.");
+  } else {
+    $("#metodos_pago_venta_historial").removeClass("is-invalid");
+    $("#error_metodos_pago_venta_historial").text("");
+  }
 
-  if (isValid) {
+  if (!montoPagar || montoPagar <= 0) {
+    isValid = false;
+    $("#monto_pagar_venta").addClass("is-invalid");
+    $("#error_monto_pagar_venta").text("El monto a pagar debe ser mayor a 0.");
+  } else {
+    $("#monto_pagar_venta").removeClass("is-invalid");
+    $("#error_monto_pagar_venta").text("");
+  }
 
-    var datos = new FormData();
+  if (!isValid) return;
 
-    datos.append("id_venta_pagar", id_venta_pagar);
+  // Crear objeto FormData con los datos
+  const datos = new FormData();
+  datos.append("id_venta_pagar", idVentaPagar);
+  datos.append("metodos_pago_venta_historial", metodoPago);
+  datos.append("comprobante_pago_historial", comprobantePago);
+  datos.append("serie_numero_pago_historial", serieNumeroPago);
+  datos.append("monto_pagar_venta", montoPagar);
 
-    datos.append("monto_pagar_venta", monto_pagar_venta);
+  // Enviar datos mediante AJAX
+  $.ajax({
+    url: "ajax/Historial.pago.ajax.php",
+    method: "POST",
+    data: datos,
+    cache: false,
+    contentType: false,
+    processData: false,
+    success: function (respuesta) {
+      try {
+        const res = JSON.parse(respuesta);
 
-    $.ajax({
+        if (res.message === "ok") {
+          // Restablecer formulario y cerrar modal
+          $("#frm_pagar_deuda_venta")[0].reset();
+          $("#modalPagarVenta").modal("hide");
+          Swal.fire("Éxito", "Pago registrado correctamente.", "success");
 
-      url: "ajax/Lista.venta.ajax.php",
+          // Mostrar en la consola el id_pago y el message
+          console.log("ID del pago:", res.id_pago);
+          console.log("Mensaje:", res.message);
 
-      method: "POST",
-
-      data: datos,
-
-      cache: false,
-
-      contentType: false,
-
-      processData: false,
-
-      success: function (respuesta) {
-
-        var res = JSON.parse(respuesta);
-
-        if (res.estado === "ok") {
-
+          // Mostrar alerta y preguntar acción
           Swal.fire({
-            title: "¡Correcto!",
-            text: res.mensaje,
-            icon: "success",
+            title: "¿Qué desea hacer con el comprobante?",
+            text: "Seleccione una opción.",
+            icon: "question",
             showCancelButton: true,
             confirmButtonColor: "#28C76F",
             cancelButtonColor: "#F52E2F",
-            confirmButtonText: "¡Imprimir!",
+            confirmButtonText: "Imprimir",
+            cancelButtonText: "Descargar",
+            footer: '<a href="#">Enviar por WhatsApp o correo</a>',
           }).then((result) => {
+            const id_pago = res.id_pago;  // ID del pago
+            const id_venta = idVentaPagar;  // ID de la venta
+
             if (result.isConfirmed) {
-
-
               Swal.fire({
                 title: "¡Imprimiendo!",
-                text: "Su comprobante se está imprimiento.",
+                text: "Su comprobante se está imprimiendo.",
                 icon: "success",
               });
-
-
-              $.ajax({
-                url: "extensiones/ticketPrint.php",
-                type: "GET",
-                data: { id_venta_pagar: id_venta_pagar },
-                success: function (response) {
-
-                  const $estado = document.querySelector("#section_imprimir_mensaje_ventas_pagado");
-
-                  $estado.textContent = "Imprimiendo ...";
-
-                  // URL del PDF
-                  var urlPDF = `http://localhost/sis_venta_pollo/vistas/ticket/ticket${id_venta_pagar}.pdf`;
-
-                  var nombreImpresora = '';
-
-                  $.ajax({
-                    url: "ajax/Impresora.ajax.php",
-                    type: "GET",
-                    dataType: "json",
-                    success: function (impresoras) {
-
-                      impresoras.forEach(function (impresora) {
-                        nombreImpresora = impresora.nombre;
-                      });
-
-                      // Asegúrate de codificar las partes de la URL
-                      var url = `http://127.0.0.1:5000/print/${encodeURIComponent(nombreImpresora)}/${encodeURIComponent(urlPDF)}`;
-
-                      fetch(url)
-                        .then(respuesta => {
-                          if (respuesta.ok) {
-                            respuesta.json().then(mensaje => {
-                              console.log("Impresión exitosa: ", mensaje);
-                            });
-                          } else {
-                            respuesta.json().then(mensaje => {
-                              $estado.textContent = "";
-
-                            });
-                          }
-                        })
-                        .catch(error => {
-                          $estado.textContent = "";
-
-                        });
-                    },
-                  });
-
-
-                },
-                error: function (error) {
-                  console.log("Error guardando el ticket: ", error);
-                }
+              // Construir la URL para imprimir el comprobante
+              const urlDocumento = `extensiones/ticket/pago.php?id_pago=${id_pago}&id_venta=${id_venta}`;
+              const ventana = window.open(urlDocumento, '_blank');
+              ventana.onload = () => ventana.print();
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+              Swal.fire({
+                title: "¡Descargando!",
+                text: "Su comprobante se está descargando.",
+                icon: "success",
+              });
+              // Construir la URL para descargar el comprobante
+              window.location.href = `extensiones/ticket/pago.php?id_pago=${id_pago}&id_venta=${id_venta}&accion=descargar`;
+            } else {
+              Swal.fire({
+                title: "¿Cómo desea enviar el comprobante?",
+                text: "Seleccione una opción.",
+                icon: "info",
+                showCancelButton: true,
+                cancelButtonText: "WhatsApp",
+                confirmButtonText: "Correo",
+              }).then((sendResult) => {
+                const mensaje = sendResult.isConfirmed ? "¡Enviando por correo!" : "¡Enviando por WhatsApp!";
+                Swal.fire({
+                  title: mensaje,
+                  text: `Su comprobante se está enviando por ${sendResult.isConfirmed ? "correo" : "WhatsApp"}.`,
+                  icon: "success",
+                });
               });
             }
           });
-
-          $("#frm_pagar_deuda_venta")[0].reset();
-
-          $("#modalPagarVenta").modal("hide");
-
         } else {
-
-          Swal.fire({
-            title: res.estado,
-            text: res.mensaje,
-            icon: "error",
-          });
-
+          Swal.fire("Error", res.mensaje || "Ocurrió un error al procesar el pago.", "error");
         }
 
         mostrarVentas();
-      },
+      } catch (error) {
+        Swal.fire("Error", "Respuesta del servidor inválida.", "error");
+      }
+    },
 
-    });
 
-  }
-
+    error: function () {
+      Swal.fire("Error", "No se pudo conectar al servidor.", "error");
+    },
+  });
 });
 
 /* ===========================================
 MOSTRAR VENTAS
 =========================================== */
 mostrarVentas();
-
 /* ===========================================
 CALCULAR EL TOTAL DE LA VENTA
 =========================================== */
 calcularTotal();
-
 /* ===========================================
 EXPORTANDO VENTA
 =========================================== */

@@ -225,7 +225,7 @@ $serieNumeroComprobante = ControladorSerieNumero::ctrMostrarSerieNumero($item, $
                                         </div>
                                         <!-- SECCION DE LISTA DE METODOS DE PAGO -->
                                         <div id="venta_al_contado mb-3">
-                                            <select name="metodos_pago_venta" id="metodos_pago_venta" class="js-example-basic-single select2">
+                                            <select name="metodos_pago_venta" id="metodos_pago_venta" class="js-example-basic-single select">
                                                 <option value="pago_efectivo">Pago Efectivo</option>
                                                 <option value="yape">Yape</option>
                                                 <option value="plin">Plin</option>
@@ -1278,47 +1278,84 @@ $serieNumeroComprobante = ControladorSerieNumero::ctrMostrarSerieNumero($item, $
             </div>
             <form enctype="multipart/form-data" id="frm_pagar_deuda_venta">
                 <div class="modal-body">
-
+                    <!-- Campo Oculto -->
                     <input type="hidden" id="id_venta_pagar" name="id_venta_pagar">
 
-                    <div class="row">
+                    <!-- Resumen de Venta -->
+                    <div class="row mb-3">
                         <div class="col-md-6 text-center">
-                            <!-- COMPRA TOTAL -->
                             <div class="form-group">
-                                <label><i class="fas fa-money-bill" style="color: #28C76F"></i> Compra total:</label>
+                                <label><i class="fas fa-money-bill" style="color: #28C76F"></i> Venta total:</label>
                                 <h3 class="fw-bold" id="total_venta_pagar"></h3>
                             </div>
-
                         </div>
                         <div class="col-md-6 text-center">
                             <div class="form-group">
                                 <label><i class="fas fa-money-bill" style="color: #FF4D4D"></i> Total restante:</label>
-                                <h3 class="fw-bold" style="color: #FF4D4D" id="pago_restante_pagar"></h3>
+                                <h3 class="fw-bold text-danger" id="pago_restante_pagar"></h3>
                             </div>
                         </div>
                     </div>
 
-                    <div class="row">
+                    <!-- Métodos de Pago -->
+                    <div class="row mb-3">
+                        <div class="form-group">
+                            <label for="metodos_pago_venta">Seleccione la forma de pago</label>
+                            <select name="metodos_pago_venta" id="metodos_pago_venta_historial" class="form-select js-example-basic-single select2">
+                                <option value="pago_efectivo">Pago Efectivo</option>
+                                <option value="yape">Yape</option>
+                                <option value="plin">Plin</option>
+                                <option value="tunki">Tunki</option>
+                                <option value="agora_pay">Agora PAY</option>
+                                <option value="bim">BIM</option>
+                                <option value="tarjeta_debito">Tarjeta de Débito</option>
+                                <option value="tarjeta_credito">Tarjeta de Crédito</option>
+                                <option value="transferencia_bancaria">Transferencia Bancaria</option>
+                            </select>
+                            <small id="error_metodos_pago_venta" class="text-danger"></small>
+                        </div>
+                    </div>
 
-                        <!-- FECHA DE PAGO -->
+                    <!-- Comprobante de Pago -->
+                    <div class="row mb-3">
+                        <div class="form-group">
+                            <label for="comprobante_pago_historial">Seleccione el comprobante</label>
+                            <input type="file" name="comprobante_pago_historial" id="comprobante_pago_historial" class="form-control">
+                        </div>
+                    </div>
+
+                    <!-- Serie o Número de Pago -->
+                    <div class="row mb-3">
+                        <div class="form-group">
+                            <label for="serie_numero_pago">Ingrese la serie o número de pago</label>
+                            <input type="text" name="serie_numero_pago_historial" id="serie_numero_pago_historial" class="form-control" placeholder="Ingrese número o serie de pago">
+                        </div>
+                    </div>
+
+                    <!-- Monto de Pago -->
+                    <div class="row mb-4">
                         <div class="col-md-3"></div>
                         <div class="col-md-6 text-center">
-                            <label class="form-label"><i class="fas fa-barcode text-danger"></i> Monto a pagar:</label>
-                            <input type="text" id="monto_pagar_venta" name="monto_pagar_venta" class="form-control" placeholder="Ingrese el monto a pagar">
-                            <small id="error_monto_pagar_venta"></small>
+                            <label for="monto_pagar_venta" class="form-label">
+                                <i class="fas fa-barcode text-danger"></i> Monto a pagar:
+                            </label>
+                            <input type="number" id="monto_pagar_venta" name="monto_pagar_venta" class="form-control" placeholder="Ingrese el monto a pagar" min="0">
+                            <small id="error_monto_pagar_venta" class="text-danger"></small>
                         </div>
                         <div class="col-md-3"></div>
                     </div>
-
-
                 </div>
 
+                <!-- Botones -->
                 <div class="text-end mx-4 mb-2">
-                    <button type="button" class="btn btn-primary" id="btn_pagar_deuda_venta"><i class="fa fa-save"></i> Pagar</button>
-                    <button type="button" class="btn btn-secondary btn_modal_ver_close_usuario" data-bs-dismiss="modal"> Cerrar</button>
+                    <button type="button" class="btn btn-primary" id="btn_pagar_deuda_venta">
+                        <i class="fa fa-save"></i> Pagar
+                    </button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        Cerrar
+                    </button>
                 </div>
             </form>
-
 
         </div>
     </div>
@@ -1341,11 +1378,10 @@ $serieNumeroComprobante = ControladorSerieNumero::ctrMostrarSerieNumero($item, $
                                 <tr>
                                     <th class="text-center">N°</th>
                                     <th>Fecha pago</th>
-                                    <th>Tipo de pago</th>
                                     <th>Forma</th>
                                     <th>Monto</th>
-                                    <th>Comprobante | N° Operación</th>
-                                    <th>Acciones</th>
+                                    <th class="text-center">Comprobante | N° Operación</th>
+                                    <th class="text-center">Acciones</th>
                                 </tr>
                             </thead>
                             <tbody id="data_historial_pago">
@@ -1364,26 +1400,6 @@ $serieNumeroComprobante = ControladorSerieNumero::ctrMostrarSerieNumero($item, $
 <script>
     const btnCrearVenta = document.getElementById('btn_crear_nueva_venta');
 
-    // Función para manejar el atajo Ctrl + M
-    function handleCtrlM(event) {
-        // Verificar si se presionó Ctrl + M
-        if (event.ctrlKey && event.key === 'm' || event.ctrlKey && event.key === 'M') {
-            // Simular el clic en el botón
-            btnCrearVenta.click();
-        }
-    }
-
-    // Agregar un event listener para el evento keydown en el documento
-    document.addEventListener('keydown', handleCtrlM);
-
-    // También puedes manejar el clic directamente
-    btnCrearVenta.addEventListener('click', function() {
-
-    });
-
-
-
-
     function manejarClickBotonesVentas() {
         $("#ver_ventas").click(function() {
             $("#pos_venta").hide();
@@ -1396,13 +1412,18 @@ $serieNumeroComprobante = ControladorSerieNumero::ctrMostrarSerieNumero($item, $
         });
     }
 
+    $(document).ready(manejarClickBotonesVentas);
+
     // Inicializar Select2 en todos los elementos
     $('.js-example-basic-single').select2({
         placeholder: "Select an option",
         allowClear: true,
     });
-
-
-
-    $(document).ready(manejarClickBotonesVentas);
+    // Reinicializar al abrir el modal
+    $('#modalPagarVenta').on('shown.bs.modal', function() {
+        $(this).find('.js-example-basic-single').select2({
+            placeholder: "Select an option",
+            dropdownParent: $('#modalPagarVenta')
+        });
+    });
 </script>

@@ -48,6 +48,19 @@ class ControladorHistorialPago
     }
 
     /*=============================================
+	MOSTRAR HISTORIAL PAGO PDF O TICKET
+	=============================================*/
+    static public function ctrMostrarHistorialPagoPdf($item, $valor)
+    {
+        $tabla_ventas = "ventas";
+        $tabla_historial_pago = "historial_pagos";
+        $tabla_personas = "personas";
+        $respuesta = ModeloHistorialPago::mdlMostrarHistorialPagoPDF($tabla_ventas, $tabla_historial_pago, $tabla_personas, $item, $valor);
+        return $respuesta;
+    }
+
+
+    /*=============================================
 	MOSTRAR HISTORIAL PAGO
 	=============================================*/
     static public function ctrMostrarHistorialPago($item, $valor)
@@ -58,6 +71,58 @@ class ControladorHistorialPago
         $respuesta = ModeloHistorialPago::mdlMostrarHistorialPago($tabla_ventas, $tabla_historial_pago, $tabla_personas, $item, $valor);
         return $respuesta;
     }
+
+    /*=============================================
+	ACTUALIZAR EL PAGO DE DEUDA EGRESO
+	=============================================*/
+    static public function ctrActualizarDeudaVenta()
+    {
+        /* =========================================
+        ACTUALIZANDO EL MONTO DE VENTA DEL PAGO AL CREDITO
+        ========================================= */
+        $tabla = "ventas";
+        $totalPago = number_format($_POST["monto_pagar_venta"], 2, '.', '');
+        $datos = array(
+            "id_venta" => $_POST["id_venta_pagar"],
+            "total_pago" => $totalPago
+        );
+
+        $respuesta = ModeloHistorialPago::mdlActualizarPagoPendiente($tabla, $datos);
+
+        /* =========================================
+        INGRESANDO DATOS AL HISTORIAL DE PAGO
+        ========================================= */
+
+        $ruta = "../vistas/img/comprobantes/";
+        if (isset($_FILES["comprobante_pago_historial"]["tmp_name"])) {
+            $extension = pathinfo($_FILES["comprobante_pago_historial"]["name"], PATHINFO_EXTENSION);
+            $tipos_permitidos = array("jpg", "jpeg", "png", "gif");
+            if (in_array(strtolower($extension), $tipos_permitidos)) {
+                $nombre_imagen = date("YmdHis") . rand(1000, 9999);
+                $ruta_imagen = $ruta . $nombre_imagen . "." . $extension;
+                if (move_uploaded_file($_FILES["comprobante_pago_historial"]["tmp_name"], $ruta_imagen)) {
+                } else {
+                }
+            } else {
+            }
+        }
+
+        /* ==========================================
+		HISTORIAL DE PAGO
+		========================================== */
+        $tablaHistorialPago = "historial_pagos";
+        $datosHistorialPago = array(
+            "id_venta" => $_POST["id_venta_pagar"],
+            "monto_pago" => $_POST["monto_pagar_venta"],
+            "forma_pago" => $_POST["metodos_pago_venta_historial"],
+            "numero_serie_pago" => !empty($_POST["serie_numero_pago_historial"]) ? $_POST["serie_numero_pago_historial"] : null,
+            "comprobante_imagen" => isset($_FILES["comprobante_pago_historial"]["tmp_name"]) ? $ruta_imagen : null
+        );
+
+        $responseHistoial = ModeloHistorialPago::mdlIngresoHistorialPago($tablaHistorialPago, $datosHistorialPago);
+        echo json_encode($responseHistoial);
+    }
+
 
     /*=============================================
 	EDITAR HISTORIAL PAGO

@@ -264,15 +264,12 @@ class ControladorVenta
 		$tablaHistorialPago = "historial_pagos";
 		$datosHistorialPago = array(
 			"id_venta" => $id_venta_ultimo,
-			"fecha_pago" => $_POST["fecha_venta"] . " " . $_POST["hora_venta"],
 			"monto_pago" => (!empty($_POST["pago_cuota_venta"])) ? $_POST["pago_cuota_venta"] : $_POST["total"],
 			"tipo_pago" => $_POST["tipo_pago"],
 			"forma_pago" => $_POST["metodos_pago_venta"],
 			"numero_serie_pago" => !empty($_POST["serie_de_pago_venta"]) ? $_POST["serie_de_pago_venta"] : null,
-			"estado_pago" => $_POST["estado_pago"],
 			"comprobante_imagen" => isset($_FILES["recibo_de_pago_venta"]["tmp_name"]) ? $ruta_imagen : null
 		);
-
 
 		ModeloVenta::mdlIngresoHistorialPago($tablaHistorialPago, $datosHistorialPago);
 
@@ -283,36 +280,6 @@ class ControladorVenta
 		if ($respuestaDatos) {
 			echo json_encode($respuestaDatos);
 		}
-	}
-
-
-	/*=============================================
-	ACTUALIZAR EL PAGO DE DEUDA EGRESO
-	=============================================*/
-	
-	static public function ctrActualizarDeudaVenta(){
-
-		$tabla = "ventas";
-
-		$totalPago = number_format($_POST["monto_pagar_venta"], 2, '.', '');
-
-		$datos = array(
-			"id_venta" => $_POST["id_venta_pagar"],
-			"total_pago" => $totalPago
-		);
-
-        $respuesta = ModeloVenta::mdlActualizarPagoPendiente($tabla, $datos);
-
-        if ($respuesta == "ok") {
-
-            echo json_encode($respuesta);
-
-        } else {
-
-            echo json_encode($respuesta);
-
-        }
-
 	}
 
 	/*=============================================
