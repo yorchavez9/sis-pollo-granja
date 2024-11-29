@@ -128,7 +128,6 @@ $permisosMenu = [
                             <li><a href="reporteRoles">Roles</a></li>
                             <li><a href="reporteProveedores">Proveedores</a></li>
                             <li><a href="reporteClientes">Clientes</a></li>
-                            <li><a href="reporteCategorias">Categorias</a></li>
                             <li><a href="reporteProductos">Productos</a></li>
                             <li><a href="reporteCompras">Compras</a></li>
                             <li><a href="reporteVentas">Ventas</a></li>
