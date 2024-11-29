@@ -98,6 +98,25 @@ class ControladorProducto
 		return $respuesta;
 	}
 
+	public static function ctrReporteProductosPDF()
+	{
+		$tabla_categoria = "categorias";
+		$tabla_producto = "productos";
+
+		// Capturamos los filtros
+		$filtro_categoria = isset($_GET['filtro_categoria']) ? $_GET['filtro_categoria'] : null;
+		$filtro_estado = isset($_GET['filtro_estado']) ? $_GET['filtro_estado'] : null;
+		$filtro_precio_min = isset($_GET['filtro_precio_min']) ? $_GET['filtro_precio_min'] : null;
+		$filtro_precio_max = isset($_GET['filtro_precio_max']) ? $_GET['filtro_precio_max'] : null;
+		$filtro_fecha_desde = isset($_GET['filtro_fecha_desde']) ? $_GET['filtro_fecha_desde'] : null;
+		$filtro_fecha_hasta = isset($_GET['filtro_fecha_hasta']) ? $_GET['filtro_fecha_hasta'] : null;
+
+		// Pasamos los filtros al modelo
+		$respuesta = ModeloProducto::mdlReporteProductos($tabla_categoria, $tabla_producto, $filtro_categoria, $filtro_estado, $filtro_precio_min, $filtro_precio_max, $filtro_fecha_desde, $filtro_fecha_hasta);
+
+		return $respuesta;
+	}
+
 
 	/*=============================================
 	MOSTRAR PRODUCTOS NUEVOS

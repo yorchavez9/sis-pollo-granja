@@ -76,6 +76,18 @@ mostrarProductos(datos);
  =============================================*/
 $("#seccion_productos_reporte").on("click", ".reporte_productos_pdf", (e) => {
     e.preventDefault();
-    const url = "extensiones/reportes/clientes.php";
+
+    // Obtenemos los valores de los filtros actuales
+    let filtro_categoria = $("#filtro_categoria").val();
+    let filtro_estado = $("#filtro_estado").val();
+    let filtro_precio_min = $("#filtro_precio_min").val();
+    let filtro_precio_max = $("#filtro_precio_max").val();
+    let filtro_fecha_desde = $("#filtro_fecha_desde").val();
+    let filtro_fecha_hasta = $("#filtro_fecha_hasta").val();
+
+    // Construir la URL con los filtros como parámetros
+    const url = `extensiones/reportes/productos.php?filtro_categoria=${filtro_categoria}&filtro_estado=${filtro_estado}&filtro_precio_min=${filtro_precio_min}&filtro_precio_max=${filtro_precio_max}&filtro_fecha_desde=${filtro_fecha_desde}&filtro_fecha_hasta=${filtro_fecha_hasta}`;
+
+    // Abrir el reporte PDF con los filtros aplicados
     window.open(url, "_blank");
 });
