@@ -106,4 +106,13 @@ $("#seccion_compras_reporte").on("click", ".reporte_compras_pdf", (e) => {
 
     // Abrir el reporte PDF con los filtros aplicados
     window.open(url, "_blank");
+
+    // Limpiar los campos de filtro después de abrir el reporte
+    $("#filtro_usuario_compra").val("");
+    $("#filtro_fecha_desde_compra").val("");
+    $("#filtro_fecha_hasta_compra").val("");
+    $("#filtro_tipo_comprobante_compra").val("");
+    $("#filtro_estado_pago_compra").val("");
+    $("#filtro_total_compra_min").val("");
+    $("#filtro_total_compra_max").val("");
 });

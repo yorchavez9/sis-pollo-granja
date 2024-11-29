@@ -1,7 +1,7 @@
 <?php
 require('../fpdf/fpdf.php');
-require_once "../../controladores/Producto.controlador.php";
-require_once "../../modelos/Producto.modelo.php";
+require_once "../../controladores/Compra.controlador.php";
+require_once "../../modelos/Compra.modelo.php";
 require_once "../../controladores/Configuracion.ticket.controlador.php";
 require_once "../../modelos/Configuracion.ticket.modelo.php";
 
@@ -16,16 +16,17 @@ $item = null;
 $valor = null;
 $configuraciones = ControladorConfiguracionTicket::ctrMostrarConfiguracionTicket($item, $valor);
 if (
-    (isset($_GET["filtro_categoria"]) && !empty($_GET["filtro_categoria"])) ||
-    (isset($_GET["filtro_estado"]) && ($_GET["filtro_estado"] !== '')) ||
-    (isset($_GET["filtro_precio_min"]) && !empty($_GET["filtro_precio_min"])) ||
-    (isset($_GET["filtro_precio_max"]) && !empty($_GET["filtro_precio_max"])) ||
-    (isset($_GET["filtro_fecha_desde"]) && !empty($_GET["filtro_fecha_desde"])) ||
-    (isset($_GET["filtro_fecha_hasta"]) && !empty($_GET["filtro_fecha_hasta"]))
+    (isset($_GET["filtro_usuario_compra"]) && !empty($_GET["filtro_usuario_compra"])) ||
+    (isset($_GET["filtro_fecha_desde_compra"]) && !empty($_GET["filtro_fecha_desde_compra"])) ||
+    (isset($_GET["filtro_fecha_hasta_compra"]) && !empty($_GET["filtro_fecha_hasta_compra"])) ||
+    (isset($_GET["filtro_tipo_comprobante_compra"]) && !empty($_GET["filtro_tipo_comprobante_compra"])) ||
+    (isset($_GET["filtro_estado_pago_compra"]) && !empty($_GET["filtro_estado_pago_compra"])) ||
+    (isset($_GET["filtro_total_compra_min"]) && !empty($_GET["filtro_total_compra_min"])) ||
+    (isset($_GET["filtro_total_compra_max"]) && !empty($_GET["filtro_total_compra_max"]))
 ) {
-    $productos = ControladorProducto::ctrReporteProductosPDF();
+    $compras = ControladorCompra::ctrReporteComprasPDF();
 } else {
-    $productos = ControladorProducto::ctrMostrarProductos($item, $valor);
+    $compras = ControladorCompra::ctrMostrarCompras($item, $valor);
 }
 
 
@@ -88,41 +89,46 @@ if (count($configuraciones) > 0) {
 
     // Título del reporte
     $pdf->SetFont('Arial', 'B', 14);
-    $pdf->Cell(0, 10, 'Reporte de productos', 0, 1, 'C');
+    $pdf->Cell(0, 10, 'Reporte de compras', 0, 1, 'C');
     $pdf->Ln(5);
 
     // Encabezado de la tabla
     $pdf->SetFont('Arial', 'B', 10);
     $pdf->SetFillColor(200, 220, 255);
 
-    // Calcular factor de escala
-    $totalWidth = $pdf->GetPageWidth() - $margen_izquierdo - $margen_derecho; // Ancho total disponible
-    $totalCellsWidth = 8 + 30 + 48 + 20 + 50 + 25 + 20; // Ancho total de las celdas de la tabla
-    $scalingFactor = $totalWidth / $totalCellsWidth; // Factor de escala
+    // Factor de escala ajustado al ancho disponible
+    $totalWidth = $pdf->GetPageWidth() - $margen_izquierdo - $margen_derecho;
+    $totalCellsWidth = 8 + 15 + 45 + 35 + 20 + 15 + 20 + 20 + 20;
+    $scalingFactor = $totalWidth / $totalCellsWidth;
 
-    // Aplicar el factor de escala a cada celda del encabezado
-    $pdf->Cell(10 * $scalingFactor, 10, utf8_decode('N°'), 1, 0, 'C', true);
-    $pdf->Cell(35 * $scalingFactor, 10, utf8_decode('Categoría'), 1, 0, 'C', true);
-    $pdf->Cell(50 * $scalingFactor, 10, 'Nombre', 1, 0, 'C', true);
-    $pdf->Cell(25 * $scalingFactor, 10, 'Precio', 1, 0, 'C', true);
-    $pdf->Cell(20 * $scalingFactor, 10, 'Stock', 1, 0, 'C', true);
-    $pdf->Cell(30 * $scalingFactor, 10, 'Fecha vencimiento', 1, 0, 'C', true);
-    $pdf->Cell(30 * $scalingFactor, 10, 'Estado', 1, 1, 'C', true);
+    // Encabezado
+    $pdf->Cell(8 * $scalingFactor, 10, utf8_decode('N°'), 1, 0, 'C', true);
+    $pdf->Cell(15 * $scalingFactor, 10, 'Fecha', 1, 0, 'C', true);
+    $pdf->Cell(45 * $scalingFactor, 10, 'Usuario', 1, 0, 'C', true);
+    $pdf->Cell(35 * $scalingFactor, 10, utf8_decode('Proveedor'), 1, 0, 'C', true);
+    $pdf->Cell(20 * $scalingFactor, 10, 'Comprobante', 1, 0, 'C', true);
+    $pdf->Cell(15 * $scalingFactor, 10, utf8_decode('Serie N°'), 1, 0, 'C', true);
+    $pdf->Cell(20 * $scalingFactor, 10, 'Total compra', 1, 0, 'C', true);
+    $pdf->Cell(20 * $scalingFactor, 10, 'Total pago', 1, 0, 'C', true);
+    $pdf->Cell(20 * $scalingFactor, 10, 'Estado pago', 1, 1, 'C', true); // Aquí se hace el salto de línea con `1`
 
     // Contenido de la tabla
     $pdf->SetFont('Arial', '', 10);
-    foreach ($productos as $producto) {
-        // Convertir el estado en texto legible (Activo / Inactivo)
-        $estado = ($producto['estado_producto'] == 1) ? 'Activo' : 'Inactivo';
+    foreach ($compras as $producto) {
+        $estado = ($producto['estado_pago'] == 'completado') ? 'Completado' : 'Pendiente';
 
-        $pdf->Cell(10 * $scalingFactor, 10, $producto['id_producto'], 1, 0, 'C');
-        $pdf->Cell(35 * $scalingFactor, 10, utf8_decode($producto['nombre_categoria']), 1, 0, 'L');
-        $pdf->Cell(50 * $scalingFactor, 10, utf8_decode($producto['nombre_producto']), 1, 0, 'L');
-        $pdf->Cell(25 * $scalingFactor, 10, 'S/ ' . number_format($producto['precio_producto'], 2), 1, 0, 'C'); // Formato de precio
-        $pdf->Cell(20 * $scalingFactor, 10, $producto['stock_producto'], 1, 0, 'C');
-        $pdf->Cell(30 * $scalingFactor, 10, $producto['fecha_vencimiento'], 1, 0, 'C');
-        $pdf->Cell(30 * $scalingFactor, 10, utf8_decode($estado), 1, 1, 'C');
+        // Ajuste del ancho dinámico según el factor de escala
+        $pdf->Cell(8 * $scalingFactor, 10, $producto['id_egreso'], 1, 0, 'C');
+        $pdf->Cell(15 * $scalingFactor, 10, $producto['fecha_egre'], 1, 0, 'C');
+        $pdf->Cell(45 * $scalingFactor, 10, utf8_decode($producto['nombre_usuario']), 1, 0, 'L');
+        $pdf->Cell(35 * $scalingFactor, 10, utf8_decode($producto['razon_social']), 1, 0, 'L');
+        $pdf->Cell(20 * $scalingFactor, 10, utf8_decode($producto['tipo_comprobante']), 1, 0, 'L');
+        $pdf->Cell(15 * $scalingFactor, 10, utf8_decode($producto['serie_comprobante'] . '-' . $producto["num_comprobante"]), 1, 0, 'C');
+        $pdf->Cell(20 * $scalingFactor, 10, 'S/ ' . number_format($producto['total_compra'], 2), 1, 0, 'R');
+        $pdf->Cell(20 * $scalingFactor, 10, 'S/ ' . number_format($producto['total_pago'], 2), 1, 0, 'R');
+        $pdf->Cell(20 * $scalingFactor, 10, $estado, 1, 1, 'C'); // Salto de línea
     }
+
 
 
     // Mostrar el PDF

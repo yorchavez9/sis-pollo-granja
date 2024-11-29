@@ -45,6 +45,11 @@ class ModeloCompra
 	{
 		// Crear la consulta base
 		$sql = "SELECT 
+					e.id_egreso,
+                    e.id_persona,
+                    p.razon_social,
+                    u.id_usuario,
+                    u.nombre_usuario,
 					p.id_persona,
 					p.razon_social,
 					u.id_usuario,
@@ -55,7 +60,8 @@ class ModeloCompra
 					e.num_comprobante,
 					e.total_compra,
 					e.total_pago,
-					e.tipo_pago
+					e.tipo_pago,
+					e.estado_pago
 				FROM 
 					$tabla_personas AS p INNER JOIN $tabla_egresos AS e ON  p.id_persona = e.id_persona
 					inner join $tabla_usuarios as u on u.id_usuario = e.id_usuario WHERE 1 = 1";  // Usamos WHERE 1 para facilitar la adición dinámica de condiciones
