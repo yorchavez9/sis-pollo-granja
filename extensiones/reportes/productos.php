@@ -101,7 +101,7 @@ if (count($configuraciones) > 0) {
     $scalingFactor = $totalWidth / $totalCellsWidth; // Factor de escala
 
     // Aplicar el factor de escala a cada celda del encabezado
-    $pdf->Cell(10 * $scalingFactor, 10, 'ID', 1, 0, 'C', true);
+    $pdf->Cell(10 * $scalingFactor, 10, utf8_decode('N°'), 1, 0, 'C', true);
     $pdf->Cell(35 * $scalingFactor, 10, utf8_decode('Categoría'), 1, 0, 'C', true);
     $pdf->Cell(50 * $scalingFactor, 10, 'Nombre', 1, 0, 'C', true);
     $pdf->Cell(25 * $scalingFactor, 10, 'Precio', 1, 0, 'C', true);
@@ -118,7 +118,7 @@ if (count($configuraciones) > 0) {
         $pdf->Cell(10 * $scalingFactor, 10, $producto['id_producto'], 1, 0, 'C');
         $pdf->Cell(35 * $scalingFactor, 10, utf8_decode($producto['nombre_categoria']), 1, 0, 'L');
         $pdf->Cell(50 * $scalingFactor, 10, utf8_decode($producto['nombre_producto']), 1, 0, 'L');
-        $pdf->Cell(25 * $scalingFactor, 10, number_format($producto['precio_producto'], 2), 1, 0, 'C'); // Formato de precio
+        $pdf->Cell(25 * $scalingFactor, 10, 'S/ '.number_format($producto['precio_producto'], 2), 1, 0, 'C'); // Formato de precio
         $pdf->Cell(20 * $scalingFactor, 10, $producto['stock_producto'], 1, 0, 'C');
         $pdf->Cell(30 * $scalingFactor, 10, $producto['fecha_vencimiento'], 1, 0, 'C');
         $pdf->Cell(30 * $scalingFactor, 10, utf8_decode($estado), 1, 1, 'C');
