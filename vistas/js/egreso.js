@@ -439,5 +439,4 @@ $(document).ready(function () {
 
   limpiarModales();
   mostrarProductos();
-  mostrarSerieNumero();
 });

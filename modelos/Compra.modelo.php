@@ -8,50 +8,112 @@ class ModeloCompra
 	/*=============================================
 	MOSTRAR COMPRA
 	=============================================*/
-	static public function mdlMostrarCompra($tablaE, $tablaDE, $tablaP, $item, $valor)
+	static public function mdlMostrarCompra($tablaE, $tablaDE, $tablaP, $tablaU, $item, $valor)
 	{
-
+		// Si el parámetro $item no es nulo, realiza la consulta con un filtro
 		if ($item != null) {
-
-			$stmt = Conexion::conectar()->prepare("SELECT * FROM $tablaDE as d INNER JOIN $tablaE as e on d.id_egreso = e.id_egreso INNER JOIN $tablaP as p ON p.id_persona = e.id_persona WHERE e.$item = :$item");
-
+			$stmt = Conexion::conectar()->prepare(
+												"SELECT * 
+												FROM $tablaDE as d 
+												INNER JOIN $tablaE as e ON d.id_egreso = e.id_egreso
+												INNER JOIN $tablaU as u ON u.id_usuario = e.id_usuario
+												INNER JOIN $tablaP as p ON p.id_persona = e.id_persona 
+												WHERE e.$item = :$item"
+												);
 			$stmt->bindParam(":" . $item, $valor, PDO::PARAM_STR);
-
 			$stmt->execute();
-
 			return $stmt->fetch();
 		} else {
-
-			$stmt = Conexion::conectar()->prepare("SELECT * FROM $tablaDE as d INNER JOIN $tablaE as e on d.id_egreso = e.id_egreso INNER JOIN $tablaP as p ON p.id_persona = e.id_persona  ORDER BY e.estado_pago DESC");
-
+			// Si no se pasa ningún parámetro de filtro, devuelve todos los registros ordenados
+			$stmt = Conexion::conectar()->prepare(
+												"SELECT * 
+												FROM $tablaDE as d 
+												INNER JOIN $tablaE as e ON d.id_egreso = e.id_egreso
+												INNER JOIN $tablaU as u ON u.id_usuario = e.id_usuario
+												INNER JOIN $tablaP as p ON p.id_persona = e.id_persona  
+												ORDER BY e.estado_pago DESC"
+												);
 			$stmt->execute();
-
 			return $stmt->fetchAll();
 		}
 	}
 
 	/*=============================================
+	MOSTRAR REPORTE DE COMPRAS
+	=============================================*/
+	public static function mdlReporteCompras($tabla_egresos, $tabla_personas, $tabla_usuarios, $filtros)
+	{
+		// Crear la consulta base
+		$sql = "SELECT 
+					p.id_persona,
+					p.razon_social,
+					u.id_usuario,
+					u.nombre_usuario,
+					e.fecha_egre,
+					e.tipo_comprobante,
+					e.serie_comprobante,
+					e.num_comprobante,
+					e.total_compra,
+					e.total_pago,
+					e.tipo_pago
+				FROM 
+					$tabla_personas AS p INNER JOIN $tabla_egresos AS e ON  p.id_persona = e.id_persona
+					inner join $tabla_usuarios as u on u.id_usuario = e.id_usuario WHERE 1 = 1";  // Usamos WHERE 1 para facilitar la adición dinámica de condiciones
+
+		// Arreglo de parámetros para la consulta
+		$params = [];
+
+		if (!empty($filtros['filtro_usuario_compra'])) {
+			$sql .= " AND u.id_usuario = :usuario";
+			$params[':usuario'] = $filtros['filtro_usuario_compra'];
+		}
+
+		// Filtro por rango de fecha de vencimiento
+		if (!empty($filtros['filtro_fecha_desde_compra']) && !empty($filtros['filtro_fecha_hasta_compra'])) {
+			$sql .= " AND e.fecha_egre BETWEEN :fecha_desde AND :fecha_hasta";
+			$params[':fecha_desde'] = $filtros['filtro_fecha_desde_compra'];
+			$params[':fecha_hasta'] = $filtros['filtro_fecha_hasta_compra'];
+		}
+		if (!empty($filtros['filtro_tipo_comprobante_compra'])) {
+			$sql .= " AND e.tipo_comprobante = :tipo_comprobante";
+			$params[':tipo_comprobante'] = $filtros['filtro_tipo_comprobante_compra'];
+		}
+		if (!empty($filtros['filtro_estado_pago_compra'])) {
+			$sql .= " AND e.estado_pago = :estado_pago";
+			$params[':estado_pago'] = $filtros['filtro_estado_pago_compra'];
+		}
+		// Filtro por rango de total de compra
+		if (!empty($filtros['filtro_total_compra_min']) && !empty($filtros['filtro_total_compra_max'])) {
+			$sql .= " AND e.total_compra BETWEEN :total_min AND :total_max";
+			$params[':total_min'] = $filtros['filtro_total_compra_min'];
+			$params[':total_max'] = $filtros['filtro_total_compra_max'];
+		}
+		// Ordenar por fecha de producto (DESC)
+		$sql .= " ORDER BY e.fecha_egre DESC";
+
+		// Preparar y ejecutar la consulta
+		$stmt = Conexion::conectar()->prepare($sql);
+		$stmt->execute($params);
+
+		// Retornar los resultados
+		return $stmt->fetchAll();
+	}
+
+
+
+	/*=============================================
 	MOSTRAR DETALLE VENTAS
 	=============================================*/
-
 	static public function mdlMostrarListaDetalleCompra($tablaDE, $tablaP, $item, $valor)
 	{
-
 		if ($item != null) {
-
 			$stmt = Conexion::conectar()->prepare("SELECT * FROM $tablaDE as de INNER JOIN $tablaP as p ON de.id_producto=p.id_producto WHERE $item = :$item");
-
 			$stmt->bindParam(":" . $item, $valor, PDO::PARAM_STR);
-
 			$stmt->execute();
-
 			return $stmt->fetchAll();
 		} else {
-
 			$stmt = Conexion::conectar()->prepare("SELECT * FROM $tablaDE as de INNER JOIN $tablaP as p ON p.id_producto = de.id_producto  ORDER BY de.id_egreso DESC");
-
 			$stmt->execute();
-
 			return $stmt->fetchAll();
 		}
 	}
@@ -62,100 +124,20 @@ class ModeloCompra
 
 	static public function mdlMostrarCompraTotalCantidad($tablaE, $tablaDE, $item, $valor)
 	{
-
 		$stmt = Conexion::conectar()->prepare("SELECT * from $tablaE");
-
 		$stmt->execute();
-
 		return $stmt->fetchAll();
 	}
 
 	/*=============================================
 	MOSTRAR TOTAL DE COMPRAS
 	=============================================*/
-
 	static public function mdlMostrarTotalCompras($tablaE, $tablaDE, $item, $valor)
 	{
-
 		$stmt = Conexion::conectar()->prepare("SELECT SUM(total_compra) AS total_compras FROM $tablaE");
-
 		$stmt->execute();
-
 		$result = $stmt->fetch(PDO::FETCH_ASSOC);
-
 		return $result['total_compras'];
-	}
-
-	/*=============================================
-	MOSTRAR SERIE Y NUMERO DE COMPRA O EGRESO
-	=============================================*/
-	static public function mdlMostrarSerieNumero($tabla, $item, $valor)
-	{
-		$tipo_comprobante = $valor;
-		$letra = '';
-
-		if ($tipo_comprobante == 'factura') {
-			$letra = "F";
-			$stmt = Conexion::conectar()->prepare("SELECT serie_comprobante, num_comprobante FROM $tabla WHERE tipo_comprobante = 'factura'");
-		} elseif ($tipo_comprobante == 'boleta') {
-			$letra = "B";
-			$stmt = Conexion::conectar()->prepare("SELECT serie_comprobante, num_comprobante FROM $tabla WHERE tipo_comprobante = 'boleta'");
-		} elseif ($tipo_comprobante == 'ticket') {
-			$letra = "T";
-			$stmt = Conexion::conectar()->prepare("SELECT serie_comprobante, num_comprobante FROM $tabla WHERE tipo_comprobante = 'ticket'");
-		} else {
-			$letra = "T";
-			$stmt = Conexion::conectar()->prepare("SELECT serie_comprobante, num_comprobante FROM $tabla ");
-		}
-
-		$stmt->execute();
-		$resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-		if ($resultado) {
-			$maxSerie = 0;
-			$maxNumero = 0;
-
-			foreach ($resultado as $row) {
-				// Extraer el número de serie y el número de comprobante
-				$currentSerie = intval(substr($row['serie_comprobante'], 1));
-				$currentNumero = intval($row['num_comprobante']);
-
-				// Comparar para encontrar el máximo
-				if ($currentSerie > $maxSerie) {
-					$maxSerie = $currentSerie;
-				}
-				if ($currentNumero > $maxNumero) {
-					$maxNumero = $currentNumero;
-				}
-			}
-
-			// Incrementar el número de serie y de comprobante
-			$maxSerie++;
-			$maxNumero++;
-
-			// Formatear la nueva serie y el nuevo número con ceros a la izquierda
-			$nuevoSerie = $letra . str_pad($maxSerie, 2, "0", STR_PAD_LEFT);
-			$nuevoNumero = str_pad($maxNumero, 2, "0", STR_PAD_LEFT);
-
-			// Retornar la nueva serie y número
-			$resultado = [
-				[
-					'serie_comprobante' => $nuevoSerie,
-					'num_comprobante' => $nuevoNumero
-				]
-			];
-		} else {
-			// Si no hay resultados, asignar los valores por defecto
-			$letraDefecto = $letra . '01';
-			$resultado = [
-				[
-					'serie_comprobante' => $letraDefecto,
-					'num_comprobante' => '01'
-				]
-			];
-		}
-
-		echo json_encode($resultado);
 	}
 
 
@@ -166,26 +148,16 @@ class ModeloCompra
 
 	static public function mdlMostrarEgreso($tabla, $item, $valor)
 	{
-
 		if ($item != null) {
-
 			$stmt = Conexion::conectar()->prepare("SELECT * from $tabla WHERE $item = :$item ORDER BY id_egreso DESC LIMIT 1");
-
 			$stmt->bindParam(":" . $item, $valor, PDO::PARAM_STR);
-
 			$stmt->execute();
-
 			return $stmt->fetch();
 		} else {
-
 			$stmt = Conexion::conectar()->prepare("SELECT * FROM $tabla ORDER BY id_egreso DESC LIMIT 1");
-
 			$stmt->execute();
-
 			return $stmt->fetchAll();
 		}
-
-
 		$stmt = null;
 	}
 
@@ -197,7 +169,6 @@ class ModeloCompra
 
 	static public function mdlIngresarCompra($tabla, $datos)
 	{
-
 		$stmt = Conexion::conectar()->prepare("INSERT INTO $tabla(
                                                                 id_persona,
                                                                 id_usuario, 
@@ -248,15 +219,10 @@ class ModeloCompra
 		$stmt->bindParam(":pago_e_y", $datos["pago_e_y"], PDO::PARAM_STR);
 
 		if ($stmt->execute()) {
-
 			return "ok";
 		} else {
-
 			return "error";
 		}
-
-
-		$stmt = null;
 	}
 
 	/*=============================================
@@ -265,8 +231,7 @@ class ModeloCompra
 
 	static public function mdlGuardarDetalleCompra($tabla, $datos)
 	{
-		$stmt = Conexion::conectar()->prepare("
-        INSERT INTO $tabla (id_egreso, id_producto, numero_javas, numero_aves, peso_promedio, peso_bruto, peso_tara, peso_merma, peso_neto, precio_compra, precio_venta) 
+		$stmt = Conexion::conectar()->prepare("INSERT INTO $tabla (id_egreso, id_producto, numero_javas, numero_aves, peso_promedio, peso_bruto, peso_tara, peso_merma, peso_neto, precio_compra, precio_venta) 
         VALUES (:id_egreso, :id_producto, :numero_javas, :numero_aves, :peso_promedio, :peso_bruto, :peso_tara, :peso_merma, :peso_neto, :precio_compra, :precio_venta)
     ");
 
@@ -308,7 +273,6 @@ class ModeloCompra
 
 	static public function mdlEditarCompra($tabla, $datos)
 	{
-
 		$stmt = Conexion::conectar()->prepare("UPDATE $tabla SET 
 																id_persona = :id_persona, 
 																id_usuario = :id_usuario, 
@@ -343,36 +307,25 @@ class ModeloCompra
 	/*=============================================
 	ACTUALIZAR COMPRA
 	=============================================*/
-
 	static public function mdlActualizarCompra($tabla, $item1, $valor1, $item2, $valor2)
 	{
-
 		$stmt = Conexion::conectar()->prepare("UPDATE $tabla SET $item1 = :$item1 WHERE $item2 = :$item2");
-
 		$stmt->bindParam(":" . $item1, $valor1, PDO::PARAM_STR);
 		$stmt->bindParam(":" . $item2, $valor2, PDO::PARAM_STR);
-
 		if ($stmt->execute()) {
-
 			return "ok";
 		} else {
-
 			return "error";
 		}
-
-
 		$stmt = null;
 	}
 
 	/*=============================================
 	ACTUALIZAR STOCK PRODUCTO
 	=============================================*/
-
 	static public function mdlActualizarStockProducto($tblProducto, $idProducto, $cantidad, $precio)
 	{
-
 		$stmt = Conexion::conectar()->prepare("UPDATE $tblProducto SET precio_producto = :precio, stock_producto = stock_producto + :cantidad WHERE id_producto = :id_producto");
-
 		$stmt->bindParam(":precio", $precio, PDO::PARAM_STR);
 		$stmt->bindParam(":cantidad", $cantidad, PDO::PARAM_INT);
 		$stmt->bindParam(":id_producto", $idProducto, PDO::PARAM_INT);
@@ -382,7 +335,6 @@ class ModeloCompra
 		} else {
 			return "error";
 		}
-
 		$stmt = null;
 	}
 
@@ -393,7 +345,6 @@ class ModeloCompra
 
 	static public function mdlBorrarCompra($tabla, $datos)
 	{
-
 		$stmt = Conexion::conectar()->prepare("DELETE FROM $tabla WHERE id_egreso = :id_egreso");
 		$stmt->bindParam(":id_egreso", $datos, PDO::PARAM_INT);
 		if ($stmt->execute()) {

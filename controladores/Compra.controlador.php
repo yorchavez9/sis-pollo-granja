@@ -11,9 +11,37 @@ class ControladorCompra
 		$tablaE = "egresos";
 		$tablaDE = "detalle_egreso";
 		$tablaP = "personas";
-		$respuesta = ModeloCompra::mdlMostrarCompra($tablaE, $tablaDE, $tablaP, $item, $valor);
+		$tablaU = "usuarios";
+		$respuesta = ModeloCompra::mdlMostrarCompra($tablaE, $tablaDE, $tablaP, $tablaU, $item, $valor);
 		return $respuesta;
 	}
+
+	/*=============================================
+    MOSTRAR REPORTE DE COMPRAS
+    =============================================*/
+	public static function ctrReporteCompras()
+	{
+		$tabla_egresos = "egresos";
+		$tabla_personas = "personas";
+		$tabla_usuarios = "usuarios";
+
+		// Capturamos los filtros
+		$filtros = [
+			"filtro_usuario_compra" => isset($_POST['filtro_usuario_compra']) ? $_POST['filtro_usuario_compra'] : null,
+			"filtro_fecha_desde_compra" => isset($_POST['filtro_fecha_desde_compra']) ? $_POST['filtro_fecha_desde_compra'] : null,
+			"filtro_fecha_hasta_compra" => isset($_POST['filtro_fecha_hasta_compra']) ? $_POST['filtro_fecha_hasta_compra'] : null,
+			"filtro_tipo_comprobante_compra" => isset($_POST['filtro_tipo_comprobante_compra']) ? $_POST['filtro_tipo_comprobante_compra'] : null,
+			"filtro_estado_pago_compra" => isset($_POST['filtro_estado_pago_compra']) ? $_POST['filtro_estado_pago_compra'] : null,
+			"filtro_total_compra_min" => isset($_POST['filtro_total_compra_min']) ? $_POST['filtro_total_compra_min'] : null,
+			"filtro_total_compra_max" => isset($_POST['filtro_total_compra_max']) ? $_POST['filtro_total_compra_max'] : null
+		];
+
+		// Pasamos los filtros al modelo
+		$respuesta = ModeloCompra::mdlReporteCompras($tabla_egresos, $tabla_personas, $tabla_usuarios, $filtros);
+
+		return $respuesta;
+	}
+
 
 	/*=============================================
     MOSTRAR DETALLE COMPRA
@@ -62,15 +90,6 @@ class ControladorCompra
 		return $respuesta;
 	}
 
-	/*=============================================
-    MOSTRAR SERIE NUMERO COMPRA
-    =============================================*/
-	static public function ctrMostrarSerieNumero($item, $valor)
-	{
-		$tabla = "egresos";
-		$respuesta = ModeloCompra::mdlMostrarSerieNumero($tabla, $item, $valor);
-		return $respuesta;
-	}
 
 	/*=============================================
 	REGISTRO DE COMPRA

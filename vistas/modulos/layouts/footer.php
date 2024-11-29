@@ -40,6 +40,7 @@
 <script src="vistas/js/config-ticket.js" type="module"></script>
 <script src="vistas/js/impresora.js" type="module"></script>
 <script src="vistas/js/reporte-productos.js" type="module"></script>
+<script src="vistas/js/reporte-compras.js" type="module"></script>
 
 </body>
 

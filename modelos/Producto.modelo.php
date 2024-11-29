@@ -24,7 +24,7 @@ class ModeloProducto{
 	}
 
 	/*=============================================
-	MOSTRAR PRODUCTOS
+	MOSTRAR REPORTE DE PRODUCTOS
 	=============================================*/
 	public static function mdlReporteProductos($tabla_categoria, $tabla_producto, $filtro_categoria, $filtro_estado, $filtro_precio_min, $filtro_precio_max, $filtro_fecha_desde, $filtro_fecha_hasta)
 	{
