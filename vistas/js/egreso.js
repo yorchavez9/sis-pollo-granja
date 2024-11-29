@@ -97,37 +97,6 @@ $(document).ready(function () {
     }
   };
 
-  // MOSTRAR SERIE Y NUMERO DEL COMPROBANTE
-  function mostrarSerieNumero(tipoComprobante) {
-    $.ajax({
-      url: "ajax/SerieNumero.ajax.php",
-      type: "POST",
-      data: { tipoComprobante },
-      success: function (respuesta) {
-        try {
-          if (respuesta.trim() !== "") {
-            let data = JSON.parse(respuesta);
-            $('#serie_comprobante').val(data[0].serie_comprobante); 
-            $('#num_comprobante').val(data[0].num_comprobante);
-          }
-        } catch (e) {
-          console.error("Error al parsear JSON:", e);
-        }
-      },
-      error: function (xhr, status, error) {
-        console.error(xhr, status, error);
-      }
-    });
-  }
-
-  // Llamada inicial
-  mostrarSerieNumero('ticket');
-
-  // Evento de cambio en el select
-  $('#tipo_comprobante_egreso').change(function () {
-    var tipoComprobante = $(this).val();
-    mostrarSerieNumero(tipoComprobante);
-  });
 
   // Agregar productos a la tabla detalle de la compra
   $("#tabla_add_producto").on("click", ".btnAddProducto", function (e) {

@@ -131,14 +131,14 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="serie_comprobante" class="form-label">Serie:</label>
-                                        <input type="text" id="serie_comprobante" name="serie_comprobante" placeholder="Ingrese la serie" readonly>
+                                        <input type="text" id="serie_comprobante" name="serie_comprobante" placeholder="Ingrese la serie">
                                     </div>
                                 </div>
                                 <!-- INGRESO DE NÚMERO -->
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="num_comprobante" class="form-label">Número:</label>
-                                        <input type="text" id="num_comprobante" name="num_comprobante" placeholder="Ingrese el número" readonly>
+                                        <input type="text" id="num_comprobante" name="num_comprobante" placeholder="Ingrese el número">
                                     </div>
                                 </div>
                                 <!-- INGRESO EL INPUESTO -->
@@ -222,7 +222,7 @@
                                             </div>
                                         </div>
                                         <!-- SECCION DE PAGO AL CONTADO -->
-                                        <div id="venta_al_contado">
+                                        <!-- <div id="venta_al_contado">
                                             <div class="setvaluecash">
                                                 <ul style="list-style-type: none;">
                                                     <li>
@@ -245,7 +245,7 @@
                                                     </li>
                                                 </ul>
                                             </div>
-                                        </div>
+                                        </div> -->
                                         <!-- SECCION DE CREAR COMPRA -->
                                         <div class="row mb-3">
                                             <button type="button" id="btn_crear_compra" class="btn btn-block" style="background:#7367F0; color:white">

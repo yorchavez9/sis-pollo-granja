@@ -24,7 +24,8 @@ $item = "id_egreso";
 $valor = $_GET["id_egreso"];
 
 $respuesta = ControladorCompra::ctrMostrarCompras($item, $valor);
-$serieNumero = $respuesta["serie_comprobante"];
+$prefijoComprobane = $respuesta["serie_comprobante"];
+$numeroComprobante = $respuesta["num_comprobante"];
 $horaEgreso = $respuesta["hora_egreso"];
 $respuesta_de = ControladorCompra::ctrMostrarDetalleCompra($item, $valor);
 $fechaEgreso = $respuesta["fecha_egre"];
@@ -47,7 +48,8 @@ foreach ($configuracion as $key => $value) {
 }
 class PDF extends FPDF
 {
-    private $serieNumero;
+    private $prefijoComprobane;
+    private $numeroComprobante;
     private $fechaEgreso;
     private $horaEgreso;
     private $nombreEmpresa;
@@ -59,10 +61,11 @@ class PDF extends FPDF
     private $mensaje;
 
     // Constructor que acepta los datos de la empresa y los de la venta
-    function __construct($serieNumero, $fechaEgreso, $horaEgreso, $nombreEmpresa, $ruc, $telefono, $correo, $direccion, $logo, $mensaje)
+    function __construct($prefijoComprobane, $numeroComprobante, $fechaEgreso, $horaEgreso, $nombreEmpresa, $ruc, $telefono, $correo, $direccion, $logo, $mensaje)
     {
         parent::__construct(); // Llamada al constructor de la clase FPDF
-        $this->serieNumero = $serieNumero;
+        $this->prefijoComprobane = $prefijoComprobane;
+        $this->numeroComprobante = $numeroComprobante;
         $this->fechaEgreso = $fechaEgreso;
         $this->horaEgreso = $horaEgreso;
         $this->nombreEmpresa = $nombreEmpresa;
@@ -84,7 +87,7 @@ class PDF extends FPDF
         $this->SetX(10);
         $this->Cell(0, 7, 'BOLETA', 0, 1, 'L');
         $this->SetFont('Helvetica', 'B', 12);
-        $this->Cell(0, 7, utf8_decode('Boleta N° ' . $this->serieNumero), 0, 1, 'L');  // Accede a la propiedad
+        $this->Cell(0, 7, utf8_decode('Boleta N° ' . $this->prefijoComprobane .'-'.$this->numeroComprobante), 0, 1, 'L');  // Accede a la propiedad
         $this->SetFont('Helvetica', '', 10);
         $this->Cell(0, 7, 'Fecha: ' . date("d/m/Y", strtotime($this->fechaEgreso)), 0, 1, 'L');
         $this->Cell(0, 7, utf8_decode('Hora: ' . $this->horaEgreso), 0, 1, 'L');
@@ -124,7 +127,7 @@ class PDF extends FPDF
 
 
 // Crear PDF
-$pdf = new PDF($serieNumero, $fechaEgreso, $horaEgreso, $nombreEmpresa, $ruc, $telefono, $correo, $direccion, $logo, $mensaje);
+$pdf = new PDF($prefijoComprobane, $numeroComprobante, $fechaEgreso, $horaEgreso, $nombreEmpresa, $ruc, $telefono, $correo, $direccion, $logo, $mensaje);
 $pdf->AliasNbPages();
 $pdf->AddPage();
 $pdf->SetMargins(10, 10, 10);
@@ -203,7 +206,7 @@ $pdf->Cell(40, 10, 'S/ ' . number_format($totalConImpuesto, 2), 'TB', 1, 'R'); /
 
 if (isset($_GET['accion']) && $_GET['accion'] === 'descargar') {
     // Descargar el PDF
-    $pdf->Output('D', 'boleta'. $serieNumero.'.pdf'); // 'D' fuerza la descarga con el nombre 'boleta.pdf'
+    $pdf->Output('D', 'boleta'. $prefijoComprobane.'-'.$numeroComprobante.'.pdf'); // 'D' fuerza la descarga con el nombre 'boleta.pdf'
 } else {
     // Mostrar el PDF en el navegador (imprimir)
     $pdf->Output(); // Muestra el archivo en el navegador

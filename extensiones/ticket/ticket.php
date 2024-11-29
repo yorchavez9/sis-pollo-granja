@@ -37,6 +37,7 @@ $respuesta = ControladorCompra::ctrMostrarCompras($item, $valor);
 
 $respuesta_de = ControladorCompra::ctrMostrarDetalleCompra($item, $valor);
 $fechaEgreso = date("d/m/Y", strtotime($respuesta["fecha_egre"]));
+$serie_comprobante = $respuesta["serie_comprobante"];
 $numero_comprobante = $respuesta["num_comprobante"];
 $itemConfig = null;
 $valorConfig = null;
@@ -144,7 +145,7 @@ foreach ($tickets as $ticket) {
 // Generando el PDF
 if (isset($_GET['accion']) && $_GET['accion'] === 'descargar') {
     // Descargar el PDF
-    $pdf->Output('D', 'ticket'. $numero_comprobante.'.pdf'); // 'D' fuerza la descarga con el nombre 'boleta.pdf'
+    $pdf->Output('D', 'ticket'. $serie_comprobante.'-'. $numero_comprobante.'.pdf'); // 'D' fuerza la descarga con el nombre 'boleta.pdf'
 } else {
     // Mostrar el PDF en el navegador (imprimir)
     $pdf->Output(); // Muestra el archivo en el navegador
