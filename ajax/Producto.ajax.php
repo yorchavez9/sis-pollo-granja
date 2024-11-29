@@ -100,17 +100,6 @@ elseif (isset($_POST["idProductoVer"])) {
     $verDetalle->ajaxVerProducto();
 }
 
-/* MOSTRAR PRODUCTO POR STOCK */
-elseif (isset($_POST["cantStock"])) {
-
-    $item = null;
-    $valor = $_POST["cantStock"];
-
-    $productos = ControladorProducto::ctrMostrarProductosStock($item, $valor);
-
-    echo json_encode($productos);
-
-}
 
 /* ACTIVAR PRODUCTO */
 elseif (isset($_POST["activarProducto"])) {

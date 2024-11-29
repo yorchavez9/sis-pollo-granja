@@ -3,7 +3,6 @@
 class ControladorProducto
 {
 
-
 	/*=============================================
 	REGISTRO DE PRODUCTO
 	=============================================*/
@@ -11,9 +10,7 @@ class ControladorProducto
 	static public function ctrCrearProducto()
 	{
 
-
 		/* VALIDANDO IMAGEN */
-
 		$ruta = "../vistas/img/productos/";
 		if (isset($_FILES["imagen_producto"]["tmp_name"])) {
 			$extension = pathinfo($_FILES["imagen_producto"]["name"], PATHINFO_EXTENSION);
@@ -72,14 +69,35 @@ class ControladorProducto
 
 	static public function ctrMostrarProductos($item, $valor)
 	{
-
 		$tablaC = "categorias";
 		$tablaP = "productos";
-
 		$respuesta = ModeloProducto::mdlMostrarProducto($tablaC, $tablaP, $item, $valor);
+		return $respuesta;
+	}
+
+	/*=============================================
+    MOSTRAR REPORTE DE PRODUCTOS
+    =============================================*/
+
+	public static function ctrReporteProductos()
+	{
+		$tabla_categoria = "categorias";
+		$tabla_producto = "productos";
+
+		// Capturamos los filtros
+		$filtro_categoria = isset($_POST['filtro_categoria']) ? $_POST['filtro_categoria'] : null;
+		$filtro_estado = isset($_POST['filtro_estado']) ? $_POST['filtro_estado'] : null;
+		$filtro_precio_min = isset($_POST['filtro_precio_min']) ? $_POST['filtro_precio_min'] : null;
+		$filtro_precio_max = isset($_POST['filtro_precio_max']) ? $_POST['filtro_precio_max'] : null;
+		$filtro_fecha_desde = isset($_POST['filtro_fecha_desde']) ? $_POST['filtro_fecha_desde'] : null;
+		$filtro_fecha_hasta = isset($_POST['filtro_fecha_hasta']) ? $_POST['filtro_fecha_hasta'] : null;
+
+		// Pasamos los filtros al modelo
+		$respuesta = ModeloProducto::mdlReporteProductos($tabla_categoria, $tabla_producto, $filtro_categoria, $filtro_estado, $filtro_precio_min, $filtro_precio_max, $filtro_fecha_desde, $filtro_fecha_hasta);
 
 		return $respuesta;
 	}
+
 
 	/*=============================================
 	MOSTRAR PRODUCTOS NUEVOS
@@ -87,42 +105,9 @@ class ControladorProducto
 
 	static public function ctrMostrarProductosNuevos($item, $valor)
 	{
-
 		$tablaC = "categorias";
 		$tablaP = "productos";
-
 		$respuesta = ModeloProducto::mdlMostrarProductoNuevos($tablaC, $tablaP, $item, $valor);
-
-		return $respuesta;
-	}
-
-	/*=============================================
-	MOSTRAR PRODUCTO PRO STOCK
-	=============================================*/
-
-	static public function ctrMostrarProductosStock($item, $valor)
-	{
-
-		$tablaC = "categorias";
-		$tablaP = "productos";
-
-		$respuesta = ModeloProducto::mdlMostrarProductoStock($tablaC, $tablaP, $item, $valor);
-
-		return $respuesta;
-	}
-
-	/*=============================================
-	MOSTRAR PRODUCTO POR FECHA DE VENCIMIENTO
-	=============================================*/
-
-	static public function ctrMostrarProductosFechaVencimientos($item, $valor)
-	{
-
-		$tablaC = "categorias";
-		$tablaP = "productos";
-
-		$respuesta = ModeloProducto::mdlMostrarProductoFechaVencimiento($tablaC, $tablaP, $item, $valor);
-
 		return $respuesta;
 	}
 

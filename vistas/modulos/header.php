@@ -61,17 +61,9 @@
 
 
         <li class="nav-item dropdown">
-            <?php
 
-            $item = null;
-            $valor = null;
-
-            $productosPorVencer = ControladorProducto::ctrMostrarProductosFechaVencimientos($item, $valor);
-
-            $totalProductosVencer = count($productosPorVencer);
-            ?>
             <a href="javascript:void(0);" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
-                <img src="vistas/assets/img/icons/notification-bing.svg" alt="img"> <span class="badge rounded-pill" id="cantidad_notificacion"><?php echo $totalProductosVencer ?></span>
+                <img src="vistas/assets/img/icons/notification-bing.svg" alt="img"> <span class="badge rounded-pill" id="cantidad_notificacion">67</span>
             </a>
             <div class="dropdown-menu notifications">
                 <div class="topnav-dropdown-header">
