@@ -17,7 +17,7 @@
                     <!-- Usuario -->
                     <div class="col-md-4 mb-2">
                         <label for="filtro_usuario" class="form-label">Usuario</label>
-                        <select id="filtro_usuario_compra" class="form-select">
+                        <select id="filtro_usuario_compra" class="select">
                             <option value="">Todos</option>
                             <!-- Aquí puedes cargar los usuarios dinámicamente desde la base de datos -->
                             <?php
@@ -49,7 +49,7 @@
                     <!-- Tipo de Comprobante -->
                     <div class="col-md-2 mb-2">
                         <label for="filtro_tipo_comprobante" class="form-label">Tipo de Comprobante</label>
-                        <select id="filtro_tipo_comprobante_compra" class="form-select">
+                        <select id="filtro_tipo_comprobante_compra" class="select">
                             <option value="">Todos</option>
                             <option value="ticket">Ticket</option>
                             <option value="boleta">Boleta</option>
@@ -61,10 +61,10 @@
                     <!-- Estado de Pago -->
                     <div class="col-md-2 mb-2">
                         <label for="filtro_estado_pago" class="form-label">Estado de Pago</label>
-                        <select id="filtro_estado_pago_compra" class="form-select">
+                        <select id="filtro_estado_pago_compra" class="select">
                             <option value="">Todos</option>
                             <option value="completado">Completado</option>
-                            <option value="pendiendte">Pendiente</option>
+                            <option value="pendiente">Pendiente</option>
                         </select>
                     </div>
                 </div>

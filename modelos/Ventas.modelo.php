@@ -8,12 +8,14 @@ class ModeloVenta
 	/*=============================================
 	MOSTRAR VENTAS
 	=============================================*/
-	static public function mdlMostrarListaVenta($tablaSerieNumero, $tablaVentas, $tablaPersonas, $item, $valor)
+	static public function mdlMostrarListaVenta($tabla_personas, $tabla_ventas, $tabla_usuarios, $tabla_s_n, $item, $valor)
 	{
 		// Si hay un filtro
 		if ($item != null) {
 			$sql = "SELECT  
 						v.id_venta,
+						u.nombre_usuario,
+						u.id_usuario,
 						p.id_persona,
 						p.razon_social,
 						p.numero_documento,
@@ -33,11 +35,12 @@ class ModeloVenta
 						v.hora_venta, 
 						v.estado_pago
 					FROM 
-						$tablaSerieNumero AS sn 
+						$tabla_s_n AS sn 
 					INNER JOIN 
-						$tablaVentas AS v ON sn.id_serie_num = v.id_serie_num 
+						$tabla_ventas AS v ON sn.id_serie_num = v.id_serie_num 
 					INNER JOIN 
-						$tablaPersonas AS p ON v.id_persona = p.id_persona
+						$tabla_personas AS p ON v.id_persona = p.id_persona
+					INNER JOIN $tabla_usuarios AS u ON u.id_usuario = v.id_usuario
 					WHERE 
 						$item = :$item";
 
@@ -49,6 +52,8 @@ class ModeloVenta
 			// Sin filtros
 			$sql = "SELECT 
                     v.id_venta,
+					u.nombre_usuario,
+					u.id_usuario,
                     p.id_persona,
                     p.razon_social,
 					p.numero_documento,
@@ -68,11 +73,12 @@ class ModeloVenta
                     v.hora_venta, 
                     v.estado_pago
                 FROM 
-                    $tablaSerieNumero AS sn 
+                    $tabla_s_n AS sn 
                 INNER JOIN 
-                    $tablaVentas AS v ON sn.id_serie_num = v.id_serie_num 
+                    $tabla_ventas AS v ON sn.id_serie_num = v.id_serie_num 
                 INNER JOIN 
-                    $tablaPersonas AS p ON v.id_persona = p.id_persona 
+                    $tabla_personas AS p ON v.id_persona = p.id_persona
+				INNER JOIN $tabla_usuarios AS u ON u.id_usuario = v.id_usuario 
 					ORDER BY  v.id_venta DESC";
 
 			$stmt = Conexion::conectar()->prepare($sql);
@@ -82,6 +88,81 @@ class ModeloVenta
 
 		// Cerrar conexión
 		$stmt = null;
+	}
+
+
+	/*=============================================
+	MOSTRAR REPORTE DE VENTAS
+	=============================================*/
+	public static function mdlReporteVentas($tabla_personas, $tabla_ventas, $tabla_usuarios, $tabla_s_n, $filtros)
+	{
+		// Crear la consulta base
+		$sql = "SELECT 
+						v.id_venta,
+						u.nombre_usuario,
+						u.id_usuario,
+						p.id_persona,
+						p.razon_social,
+						p.numero_documento,
+						p.direccion,
+						p.telefono,
+						p.email,
+						sn.tipo_comprobante_sn, 
+						sn.serie_prefijo,
+						v.num_comprobante,
+						v.impuesto, 
+						v.tipo_pago, 
+						v.total_venta,
+						v.sub_total,
+						v.igv, 
+						v.total_pago, 
+						v.fecha_venta, 
+						v.hora_venta, 
+						v.estado_pago
+					FROM 
+						$tabla_s_n AS sn 
+					INNER JOIN 	$tabla_ventas AS v ON sn.id_serie_num = v.id_serie_num 
+					INNER JOIN  $tabla_personas AS p ON v.id_persona = p.id_persona
+					INNER JOIN $tabla_usuarios AS u ON u.id_usuario = v.id_usuario
+					WHERE 1 = 1";
+
+		// Arreglo de parámetros para la consulta
+		$params = [];
+
+		if (!empty($filtros['filtro_usuario_venta'])) {
+			$sql .= " AND u.id_usuario = :usuario";
+			$params[':usuario'] = $filtros['filtro_usuario_venta'];
+		}
+
+		// Filtro por rango de fecha de vencimiento
+		if (!empty($filtros['filtro_fecha_desde_venta']) && !empty($filtros['filtro_fecha_hasta_venta'])) {
+			$sql .= " AND v.fecha_venta BETWEEN :fecha_desde AND :fecha_hasta";
+			$params[':fecha_desde'] = $filtros['filtro_fecha_desde_venta'];
+			$params[':fecha_hasta'] = $filtros['filtro_fecha_hasta_venta'];
+		}
+		if (!empty($filtros['filtro_tipo_comprobante_venta'])) {
+			$sql .= " AND sn.tipo_comprobante_sn = :tipo_comprobante";
+			$params[':tipo_comprobante'] = $filtros['filtro_tipo_comprobante_venta'];
+		}
+		if (!empty($filtros['filtro_estado_pago_venta'])) {
+			$sql .= " AND v.estado_pago = :estado_pago";
+			$params[':estado_pago'] = $filtros['filtro_estado_pago_venta'];
+		}
+		// Filtro por rango de total de compra
+		if (!empty($filtros['filtro_total_venta_min']) && !empty($filtros['filtro_total_venta_max'])) {
+			$sql .= " AND v.total_venta BETWEEN :total_min AND :total_max";
+			$params[':total_min'] = $filtros['filtro_total_venta_min'];
+			$params[':total_max'] = $filtros['filtro_total_venta_max'];
+		}
+		// Ordenar por fecha de producto (DESC)
+		$sql .= " ORDER BY v.fecha_venta DESC";
+
+		// Preparar y ejecutar la consulta
+		$stmt = Conexion::conectar()->prepare($sql);
+		$stmt->execute($params);
+
+		// Retornar los resultados
+		return $stmt->fetchAll();
 	}
 
 

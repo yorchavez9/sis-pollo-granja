@@ -11,10 +11,65 @@ class ControladorVenta
 
 	static public function ctrMostrarListaVentas($item, $valor)
 	{
-		$tablaSerieNumero = "serie_num_comprobante";
-		$tablaVentas = "ventas";
-		$tablaPersonas = "personas";
-		$respuesta = ModeloVenta::mdlMostrarListaVenta($tablaSerieNumero, $tablaVentas, $tablaPersonas, $item, $valor);
+		$tabla_personas = "personas";
+		$tabla_ventas = "ventas";
+		$tabla_usuarios = "usuarios";
+		$tabla_s_n = "serie_num_comprobante";
+		$respuesta = ModeloVenta::mdlMostrarListaVenta($tabla_personas, $tabla_ventas, $tabla_usuarios,$tabla_s_n, $item, $valor);
+		return $respuesta;
+	}
+
+	/*=============================================
+    MOSTRAR REPORTE DE VENTAS
+    =============================================*/
+	public static function ctrReporteVentas()
+	{
+		$tabla_personas = "personas";
+		$tabla_ventas = "ventas";
+		$tabla_usuarios = "usuarios";
+		$tabla_s_n = "serie_num_comprobante";
+
+		// Capturamos los filtros
+		$filtros = [
+			"filtro_usuario_venta" => isset($_POST['filtro_usuario_venta']) ? $_POST['filtro_usuario_venta'] : null,
+			"filtro_fecha_desde_venta" => isset($_POST['filtro_fecha_desde_venta']) ? $_POST['filtro_fecha_desde_venta'] : null,
+			"filtro_fecha_hasta_venta" => isset($_POST['filtro_fecha_hasta_venta']) ? $_POST['filtro_fecha_hasta_venta'] : null,
+			"filtro_tipo_comprobante_venta" => isset($_POST['filtro_tipo_comprobante_venta']) ? $_POST['filtro_tipo_comprobante_venta'] : null,
+			"filtro_estado_pago_venta" => isset($_POST['filtro_estado_pago_venta']) ? $_POST['filtro_estado_pago_venta'] : null,
+			"filtro_total_venta_min" => isset($_POST['filtro_total_venta_min']) ? $_POST['filtro_total_venta_min'] : null,
+			"filtro_total_venta_max" => isset($_POST['filtro_total_venta_max']) ? $_POST['filtro_total_venta_max'] : null
+		];
+
+		// Pasamos los filtros al modelo
+		$respuesta = ModeloVenta::mdlReporteVentas($tabla_personas, $tabla_ventas, $tabla_usuarios, $tabla_s_n, $filtros);
+
+		return $respuesta;
+	}
+
+	/*=============================================
+    MOSTRAR REPORTE DE VENTAS PDF
+    =============================================*/
+	public static function ctrReporteVentasPDF()
+	{
+		$tabla_personas = "personas";
+		$tabla_ventas = "ventas";
+		$tabla_usuarios = "usuarios";
+		$tabla_s_n = "serie_num_comprobante";
+
+		// Capturamos los filtros
+		$filtros = [
+			"filtro_usuario_venta" => isset($_GET['filtro_usuario_venta']) ? $_GET['filtro_usuario_venta'] : null,
+			"filtro_fecha_desde_venta" => isset($_GET['filtro_fecha_desde_venta']) ? $_GET['filtro_fecha_desde_venta'] : null,
+			"filtro_fecha_hasta_venta" => isset($_GET['filtro_fecha_hasta_venta']) ? $_GET['filtro_fecha_hasta_venta'] : null,
+			"filtro_tipo_comprobante_venta" => isset($_GET['filtro_tipo_comprobante_venta']) ? $_GET['filtro_tipo_comprobante_venta'] : null,
+			"filtro_estado_pago_venta" => isset($_GET['filtro_estado_pago_venta']) ? $_GET['filtro_estado_pago_venta'] : null,
+			"filtro_total_venta_min" => isset($_GET['filtro_total_venta_min']) ? $_GET['filtro_total_venta_min'] : null,
+			"filtro_total_venta_max" => isset($_GET['filtro_total_venta_max']) ? $_GET['filtro_total_venta_max'] : null
+		];
+
+		// Pasamos los filtros al modelo
+		$respuesta = ModeloVenta::mdlReporteVentas($tabla_personas, $tabla_ventas, $tabla_usuarios, $tabla_s_n, $filtros);
+
 		return $respuesta;
 	}
 
