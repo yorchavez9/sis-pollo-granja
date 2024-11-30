@@ -57,12 +57,61 @@ class ControladorAsistencia{
 
 	static public function ctrMostrarAsistencia($item, $valor)
 	{
-
 		$tablaT = "trabajadores";
-
 		$tablaA = "asistencia_trabajadores";
-
 		$respuesta = ModeloAsistencia::mdlMostrarAsistencia($tablaT, $tablaA, $item, $valor);
+		return $respuesta;
+	}
+
+	/*=============================================
+    MOSTRAR REPORTE DE ASISTENCIA 
+    =============================================*/
+	static public function ctrMostrarReporteAsistencia(){
+		$tablaT = "trabajadores";
+		$tablaA = "asistencia_trabajadores";
+		$respuesta = ModeloAsistencia::mdlMostrarReporteAsistencia($tablaT, $tablaA);
+		return $respuesta;
+	}
+
+	/*=============================================
+    MOSTRAR REPORTE DE PAGOS DE TRABAJADORES
+    =============================================*/
+
+	public static function ctrReporteAsistenciaTable()
+	{
+		$tablaT = "trabajadores";
+		$tablaA = "asistencia_trabajadores";
+		// Capturamos los filtros
+		$filtros = [
+			"filtro_trabajador_asistencia" => isset($_POST['filtro_trabajador_asistencia']) ? $_POST['filtro_trabajador_asistencia'] : null,
+			"filtro_estado_asistencia" => isset($_POST['filtro_estado_asistencia']) ? $_POST['filtro_estado_asistencia'] : null,
+			"filtro_fecha_desde_asistencia" => isset($_POST['filtro_fecha_desde_asistencia']) ? $_POST['filtro_fecha_desde_asistencia'] : null,
+			"filtro_fecha_hasta_asistencia" => isset($_POST['filtro_fecha_hasta_asistencia']) ? $_POST['filtro_fecha_hasta_asistencia'] : null
+			];
+
+		// Pasamos los filtros al modelo
+		$respuesta = ModeloAsistencia::mdlReporteAsistenciaPDF($tablaT, $tablaA, $filtros);
+
+		return $respuesta;
+	}
+	/*=============================================
+    MOSTRAR REPORTE DE PAGOS DE TRABAJADORES PDF
+    =============================================*/
+
+	public static function ctrReporteAsistenciaTablePDF()
+	{
+		$tablaT = "trabajadores";
+		$tablaA = "asistencia_trabajadores";
+		// Capturamos los filtros
+		$filtros = [
+			"filtro_trabajador_asistencia" => isset($_GET['filtro_trabajador_asistencia']) ? $_GET['filtro_trabajador_asistencia'] : null,
+			"filtro_estado_asistencia" => isset($_GET['filtro_estado_asistencia']) ? $_GET['filtro_estado_asistencia'] : null,
+			"filtro_fecha_desde_asistencia" => isset($_GET['filtro_fecha_desde_asistencia']) ? $_GET['filtro_fecha_desde_asistencia'] : null,
+			"filtro_fecha_hasta_asistencia" => isset($_GET['filtro_fecha_hasta_asistencia']) ? $_GET['filtro_fecha_hasta_asistencia'] : null
+			];
+
+		// Pasamos los filtros al modelo
+		$respuesta = ModeloAsistencia::mdlReporteAsistenciaPDF($tablaT, $tablaA, $filtros);
 
 		return $respuesta;
 	}

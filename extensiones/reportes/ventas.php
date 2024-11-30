@@ -89,7 +89,7 @@ if (count($configuraciones) > 0) {
 
     // Título del reporte
     $pdf->SetFont('Arial', 'B', 14);
-    $pdf->Cell(0, 10, 'Reporte de compras', 0, 1, 'C');
+    $pdf->Cell(0, 10, 'Reporte de ventas', 0, 1, 'C');
     $pdf->Ln(5);
 
     // Encabezado de la tabla

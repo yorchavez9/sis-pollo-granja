@@ -11,29 +11,100 @@ class ModeloAsistencia{
 	static public function mdlMostrarAsistencia($tablaT, $tablaA, $item, $valor){
 
 		if($item != null){
-
 			$stmt = Conexion::conectar()->prepare("SELECT * from $tablaT as t inner join $tablaA as a on t.id_trabajador = a.id_trabajador WHERE $item = :$item");
-
 			$stmt -> bindParam(":".$item, $valor, PDO::PARAM_STR);
-
 			$stmt -> execute();
-
 			return $stmt -> fetch();
-
 		}else{
-
 			$stmt = Conexion::conectar()->prepare("SELECT DISTINCT fecha_asistencia, t.*, a.* FROM $tablaT AS t INNER JOIN $tablaA AS a ON t.id_trabajador = a.id_trabajador  ORDER BY a.id_asistencia DESC");
-
 			$stmt -> execute();
-
 			return $stmt -> fetchAll();
-
 		}
-		
-
-
 		$stmt = null;
+	}
 
+	/*=============================================
+	MOSTRAR ASISTENCIAS REPORTE
+	=============================================*/
+
+	static public function mdlMostrarReporteAsistencia($tablaT, $tablaA){
+		$stmt = Conexion::conectar()->prepare("SELECT 
+													a.id_asistencia, 
+													t.nombre, 
+													a.fecha_asistencia, 
+													a.hora_entrada,
+													a.hora_salida,
+													a.estado,
+													a.observaciones
+												FROM 
+													$tablaA AS a
+												INNER JOIN 
+													$tablaT AS t 
+												ON 
+													a.id_trabajador = t.id_trabajador order by a.fecha_asistencia");
+		$stmt->execute();
+		return $stmt->fetchAll();
+	}
+
+	/*=============================================
+	MOSTRAR REPORTE DE PAGOS DE TRABAJADOR
+	=============================================*/
+	public static function mdlReporteAsistenciaPDF($tablaT, $tablaA, $filtros)
+	{
+		// Crear la consulta base
+		$sql = "SELECT 
+                a.id_asistencia, 
+                t.nombre, 
+                a.id_trabajador, 
+                a.fecha_asistencia, 
+                a.hora_entrada,
+                a.hora_salida,
+                a.estado,
+                a.observaciones
+            FROM 
+                $tablaA AS a
+            INNER JOIN 
+                $tablaT AS t 
+            ON 
+                a.id_trabajador = t.id_trabajador
+            WHERE 1 = 1";
+
+		// Inicializar array de parámetros
+		$params = [];
+
+		// Agregar filtros dinámicos
+		if (!empty($filtros['filtro_trabajador_asistencia'])) {
+			$sql .= " AND a.id_trabajador = :id_trabajador";
+			$params[':id_trabajador'] = $filtros['filtro_trabajador_asistencia'];
+		}
+
+		if (!empty($filtros['filtro_estado_asistencia'])) {
+			$sql .= " AND a.estado = :estado";
+			$params[':estado'] = $filtros['filtro_estado_asistencia'];
+		}
+
+		if (!empty($filtros['filtro_fecha_desde_asistencia']) && !empty($filtros['filtro_fecha_hasta_asistencia'])) {
+			$sql .= " AND a.fecha_asistencia BETWEEN :fecha_desde AND :fecha_hasta";
+			$params[':fecha_desde'] = $filtros['filtro_fecha_desde_asistencia'];
+			$params[':fecha_hasta'] = $filtros['filtro_fecha_hasta_asistencia'];
+		}
+
+		// Agregar el orden
+		$sql .= " ORDER BY a.fecha_asistencia";
+
+		try {
+			// Preparar la consulta
+			$stmt = Conexion::conectar()->prepare($sql);
+
+			// Ejecutar con los parámetros
+			$stmt->execute($params);
+
+			// Retornar los resultados
+			return $stmt->fetchAll();
+		} catch (PDOException $e) {
+			// Manejar errores
+			die("Error en la consulta: " . $e->getMessage());
+		}
 	}
 
 	/*=============================================
@@ -41,21 +112,13 @@ class ModeloAsistencia{
 	=============================================*/
 
 	static public function mdlMostrarListaAsistencia($tablaT, $tablaA, $item, $valor){
-
 		if($item != null){
-
 			$stmt = Conexion::conectar()->prepare("SELECT * from $tablaT as t inner join $tablaA as a on t.id_trabajador = a.id_trabajador WHERE $item = :$item ORDER BY t.nombre");
-
 			$stmt -> bindParam(":".$item, $valor, PDO::PARAM_STR);
-
 			$stmt -> execute();
-
 			return $stmt -> fetchAll();
-
 		}else{
-
 			$stmt = Conexion::conectar()->prepare("SELECT DISTINCT fecha_asistencia, t.*, a.* FROM $tablaT AS t INNER JOIN $tablaA AS a ON t.id_trabajador = a.id_trabajador  ORDER BY a.id_asistencia DESC");
-
 			$stmt -> execute();
 
 			return $stmt -> fetchAll();
@@ -67,6 +130,7 @@ class ModeloAsistencia{
 		$stmt = null;
 
 	}
+
 
 
     /*=============================================
