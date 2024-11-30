@@ -37,6 +37,50 @@ class ModeloPago{
 	}
 
 	/*=============================================
+	MOSTRAR REPORTE DE PAGOS DE TRABAJADOR
+	=============================================*/
+	public static function mdlReportePagoTrabajador($tabla_t, $tabla_contrato_t, $tabla_pago_t, $filtros)
+	{
+		// Crear la consulta base
+		$sql = "SELECT 
+						t.nombre,
+						pt.monto_pago,
+						pt.fecha_pago,
+						pt.estado_pago
+					FROM 
+						$tabla_t AS t 
+					INNER JOIN 	$tabla_contrato_t AS ct ON t.id_trabajador = ct.id_trabajador 
+					INNER JOIN  $tabla_pago_t AS pt ON ct.id_contrato = pt.id_contrato
+					WHERE 1 = 1";
+
+		// Arreglo de parámetros para la consulta
+		$params = [];
+
+		if (!empty($filtros['filtro_estado_pago_t'])) {
+			$sql .= " AND pt.estado_pago = :estado";
+			$params[':estado'] = $filtros['filtro_estado_pago_t'];
+		}
+
+		// Filtro por rango de fecha de vencimiento
+		if (!empty($filtros['filtro_fecha_desde_pago_t']) && !empty($filtros['filtro_fecha_hasta_pago_t'])) {
+			$sql .= " AND pt.fecha_pago BETWEEN :fecha_desde AND :fecha_hasta";
+			$params[':fecha_desde'] = $filtros['filtro_fecha_desde_pago_t'];
+			$params[':fecha_hasta'] = $filtros['filtro_fecha_hasta_pago_t'];
+		}
+
+		// Ordenar por fecha de producto (DESC)
+		$sql .= " ORDER BY pt.fecha_pago DESC";
+
+		// Preparar y ejecutar la consulta
+		$stmt = Conexion::conectar()->prepare($sql);
+		$stmt->execute($params);
+
+		// Retornar los resultados
+		return $stmt->fetchAll();
+	}
+
+
+	/*=============================================
 	REGISTRO DE PAGO
 	=============================================*/
 

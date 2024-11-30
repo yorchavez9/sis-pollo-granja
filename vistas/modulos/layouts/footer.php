@@ -42,6 +42,7 @@
 <script src="vistas/js/reporte-productos.js" type="module"></script>
 <script src="vistas/js/reporte-compras.js" type="module"></script>
 <script src="vistas/js/reporte-trabajadores.js" type="module"></script>
+<script src="vistas/js/reporte-pago-trabajador.js" type="module"></script>
 
 </body>
 
