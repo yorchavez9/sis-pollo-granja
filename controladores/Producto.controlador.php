@@ -116,7 +116,24 @@ class ControladorProducto
 
 		return $respuesta;
 	}
+	/*=============================================
+	MOSTRAR PRODUCTO POR FECHA DE VENCIMIENTO
+	=============================================*/
 
+	static public function ctrMostrarProductosFechaVencimientos($item, $valor)
+	{
+
+		$tablaC = "categorias";
+		$tablaP = "productos";
+
+		$respuesta = ModeloProducto::mdlMostrarProductoFechaVencimiento($tablaC,
+			$tablaP,
+			$item,
+			$valor
+		);
+
+		return $respuesta;
+	}
 
 	/*=============================================
 	MOSTRAR PRODUCTOS NUEVOS

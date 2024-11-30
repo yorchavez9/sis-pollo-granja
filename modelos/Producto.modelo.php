@@ -104,8 +104,24 @@ class ModeloProducto{
 		}
 		$stmt = null;
 	}
-	
 
+
+	/*=============================================
+	MOSTRAR PRODUCTOS FECHA DE VENCIMIENTO
+	=============================================*/
+
+	static public function mdlMostrarProductoFechaVencimiento($tablaC, $tablaP, $item, $valor)
+	{
+
+		if ($item == null && $valor == null) {
+
+			$stmt = Conexion::conectar()->prepare("SELECT * FROM $tablaC INNER JOIN  $tablaP ON $tablaC.id_categoria=$tablaP.id_categoria WHERE $tablaP.fecha_vencimiento BETWEEN CURRENT_DATE() AND DATE_ADD(CURRENT_DATE(), INTERVAL 10 DAY)");
+
+			$stmt->execute();
+
+			return $stmt->fetchAll();
+		}
+	}
 	/*=============================================
 	REGISTRO DE PRODUCTOS
 	=============================================*/
