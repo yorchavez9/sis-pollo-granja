@@ -21,16 +21,16 @@ function tieneRol($rolesPermitidos)
 // Configuración central de permisos
 $permisosMenu = [
     'ceo' => ['CEO'],
-    'sucursales' => ['ADMINISTRADOR', 'GERENTE', 'SUPERVISOR'],
-    'personas' => ['ADMINISTRADOR', 'GERENTE', 'SUPERVISOR'],
-    'inventario' => ['ADMINISTRADOR', 'GERENTE', 'SUPERVISOR'],
-    'compras' => ['ADMINISTRADOR', 'GERENTE', 'SUPERVISOR', 'VENDEDOR', 'VENDEDORA', 'CAJERO', 'CAJERA'],
-    'ventas' => ['ADMINISTRADOR', 'GERENTE', 'SUPERVISOR', 'VENDEDOR', 'VENDEDORA', 'CAJERO', 'CAJERA'],
-    'trabajadores' => ['ADMINISTRADOR', 'GERENTE'],
-    'reportes' => ['ADMINISTRADOR', 'GERENTE', 'FINANZAS', 'ANALISTA', 'CAJERA', 'CAJERO'],
-    'ajustes' => ['ADMINISTRADOR', 'GERENTE'],
-    'clientes' => ['ADMINISTRADOR', 'GERENTE', 'VENDEDOR', 'VENDEDORA', 'CAJERO', 'CAJERA', 'FINANZAS'],
-    'facturacion' => ['ADMINISTRADOR', 'GERENTE', 'FINANZAS', 'CAJERO', 'CAJERA']
+    'sucursales' => ['ADMINISTRADOR', 'GERENTE', 'CEO', 'SUPERVISOR'],
+    'personas' => ['ADMINISTRADOR', 'GERENTE','CEO', 'SUPERVISOR'],
+    'inventario' => ['ADMINISTRADOR', 'GERENTE','CEO', 'SUPERVISOR'],
+    'compras' => ['ADMINISTRADOR', 'GERENTE','CEO', 'SUPERVISOR', 'VENDEDOR', 'VENDEDORA', 'CAJERO', 'CAJERA'],
+    'ventas' => ['ADMINISTRADOR', 'GERENTE','CEO', 'SUPERVISOR', 'VENDEDOR', 'VENDEDORA', 'CAJERO', 'CAJERA'],
+    'trabajadores' => ['ADMINISTRADOR','CEO', 'GERENTE'],
+    'reportes' => ['ADMINISTRADOR','CEO', 'GERENTE', 'FINANZAS', 'ANALISTA', 'CAJERA', 'CAJERO'],
+    'ajustes' => ['ADMINISTRADOR','CEO', 'GERENTE'],
+    'clientes' => ['ADMINISTRADOR','CEO', 'GERENTE', 'VENDEDOR', 'VENDEDORA', 'CAJERO', 'CAJERA', 'FINANZAS'],
+    'facturacion' => ['ADMINISTRADOR','CEO', 'GERENTE', 'FINANZAS', 'CAJERO', 'CAJERA']
 ];
 ?>
 
