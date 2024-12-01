@@ -1,6 +1,21 @@
 
 import { mostrarVentas } from "./lista-ventas.js";
 
+/*=============================================
+ CALCULO DE IGV AUTOMATICAMENTE
+ =============================================*/
+$(document).ready(() => {
+  const manejarIGV = () => {
+    const checkbox = $("#igv_checkbox");
+    const igVenta = $("#igv_venta");
+    const valorIGV = checkbox.is(":checked") ? 18 : 0;
+    igVenta.val(valorIGV);
+    calcularTotal(valorIGV);
+  };
+  $("#igv_checkbox").change(manejarIGV);
+  manejarIGV();
+});
+
 
 /*=============================================
  RELOJ AUTOMATICO PARA LA VENTA
@@ -89,20 +104,6 @@ $('#comprobante_venta').change(function () {
 });
 showSection();
 
-// Función reutilizable con Arrow Function
-const manejarIGV = () => {
-  const checkbox = $("#igv_checkbox");
-  const igVenta = $("#igv_venta");
-
-  // Asignar valor basado en el estado del checkbox
-  const valorIGV = checkbox.is(":checked") ? 18 : 0;
-  igVenta.val(valorIGV);
-};
-
-// Asociar la función al evento
-$(document).ready(() => {
-  $("#igv_checkbox").change(manejarIGV);
-});
 
 
 /*=============================================
@@ -308,6 +309,8 @@ $("#tabla_add_producto_venta").on("click", ".btnAddProductoVenta", function (e) 
         let value = parseFloat($(this).val());
         if (value < 0) $(this).val(0);
       });
+
+
 
       $(".numero_aves_v, .peso_promedio_v, .peso_bruto_v, .peso_tara_v, .peso_merma_v, .peso_neto_v, .precio_venta, #igv_venta").on("input", function () {
         const fila = $(this).closest("tr");
