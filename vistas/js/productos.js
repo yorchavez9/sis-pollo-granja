@@ -60,7 +60,6 @@ $(document).ready(function () {
           // Agregar la fila al tbody
           tbody.append(fila);
         });
-        // Inicializar DataTables después de cargar los datos
         $('#tabla_productos').DataTable();
       },
       error: function (xhr, status, error) {
@@ -163,8 +162,6 @@ $(document).ready(function () {
     let descripcion_producto = $("#descripcion_producto").val();
     let imagen_producto = $("#imagen_producto").get(0).files[0];
 
-
-
     // Validar la categoria
     if (id_categoria_P == "" || id_categoria_P == null) {
       $("#error_id_categoria_p")
@@ -209,7 +206,7 @@ $(document).ready(function () {
     // Si el formulario es válido, envíalo
     if (isValid) {
 
-      let  datos = new FormData();
+      let datos = new FormData();
       datos.append("id_categoria_P", id_categoria_P);
       datos.append("codigo_producto", codigo_producto);
       datos.append("nombre_producto", nombre_producto);
@@ -617,7 +614,7 @@ $(document).ready(function () {
   MOSTRANDO TODOS LOS PRODUCTOS PARA EL REPORTE
   ============================================ */
 
- 
+
   var reporteProductos = function mostrarReporteProductos() {
 
     $.ajax({
@@ -646,8 +643,8 @@ $(document).ready(function () {
                     <td>${producto.fecha_vencimiento}</td>
                     <td>
                         ${producto.estado_producto != 0 ? '<button class="btn bg-lightgreen badges btn-sm rounded btnActivar" idUsuario="' + producto.id_producto + '" estadoUsuario="0">Activado</button>'
-                                              : '<button class="btn bg-lightred badges btn-sm rounded btnActivar" idUsuario="' + producto.id_producto + '" estadoUsuario="1">Desactivado</button>'
-                         }
+              : '<button class="btn bg-lightred badges btn-sm rounded btnActivar" idUsuario="' + producto.id_producto + '" estadoUsuario="1">Desactivado</button>'
+            }
                     </td>
                     
                 </tr>`;
@@ -662,7 +659,7 @@ $(document).ready(function () {
         });
 
         // Inicializar DataTables después de cargar los datos
-        
+
         $('#tabla_reporte_producto').DataTable();
 
       },
@@ -696,11 +693,11 @@ $(document).ready(function () {
 
     if ($("#show_fecha_vencimiento").prop("checked")) {
 
-        seleccion_fecha_r = $("#show_fecha_vencimiento").val();
+      seleccion_fecha_r = $("#show_fecha_vencimiento").val();
 
     } else {
 
-        seleccion_fecha_r = "";
+      seleccion_fecha_r = "";
 
     }
 
@@ -719,7 +716,7 @@ $(document).ready(function () {
   MOSTRANDO TODOS LOS PRODUCTOS PARA EL REPORTE
   ============================================= */
 
- 
+
   function mostrarReporteProductosStock(stock) {
 
     var cantStock = stock;
@@ -760,8 +757,8 @@ $(document).ready(function () {
                     <td>${producto.fecha_vencimiento}</td>
                     <td>
                         ${producto.estado_producto != 0 ? '<button class="btn bg-lightgreen badges btn-sm rounded btnActivar" idUsuario="' + producto.id_producto + '" estadoUsuario="0">Activado</button>'
-                                              : '<button class="btn bg-lightred badges btn-sm rounded btnActivar" idUsuario="' + producto.id_producto + '" estadoUsuario="1">Desactivado</button>'
-                         }
+              : '<button class="btn bg-lightred badges btn-sm rounded btnActivar" idUsuario="' + producto.id_producto + '" estadoUsuario="1">Desactivado</button>'
+            }
                     </td>
                     
                 </tr>`;
@@ -776,7 +773,7 @@ $(document).ready(function () {
         });
 
         // Inicializar DataTables después de cargar los datos
-        
+
         $('#tabla_reporte_producto').DataTable();
 
       },
@@ -799,21 +796,21 @@ $(document).ready(function () {
 
   });
 
-  
+
 
   // Condición para verificar si se hizo clic en el botón
   if (clicEnBoton == true) {
 
     reporteProductos = null;
-    
+
     $('#tabla_reporte_producto').DataTable();
 
-  }else if(clicEnBoton == false){
+  } else if (clicEnBoton == false) {
 
     reporteProductos();
-    
+
   }
-  
+
 
   /* =====================================
   MSOTRANDO DATOS
@@ -821,7 +818,7 @@ $(document).ready(function () {
 
   mostrarProductos();
 
-  
+
 
 
 

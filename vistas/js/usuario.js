@@ -121,13 +121,6 @@ $(document).ready(function () {
     validarCampo(campos.correo, "CorreoUsuario", "Correo", /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/); // Validación de correo
     validarCampo(campos.contrasena, "Contrasena", "Contraseña", /^.{6,}$/); // Contraseña con mínimo 6 caracteres
 
-    // Validación de imagen
-    if (!campos.imagen) {
-      $("#errorImagenUsuario").html("Por favor, selecciona una imagen").addClass("text-danger");
-      isValid = false;
-    } else {
-      $("#errorImagenUsuario").html("").removeClass("text-danger");
-    }
 
     // Si es válido, enviar formulario
     if (isValid) {
@@ -147,21 +140,32 @@ $(document).ready(function () {
         contentType: false,
         processData: false,
         success: (respuesta) => {
+ 
           const res = JSON.parse(respuesta);
-          if (res === "ok") {
+          if (res.status === "ok") {
             $("#nuevoUsuario")[0].reset();
             $(".vistaPreviaImagenUsuario").attr("src", "");
             $("#modalNuevoUsuario").modal("hide");
 
             Swal.fire({
               title: "¡Correcto!",
-              text: "El usuario ha sido guardado",
+              text: res.message,
               icon: "success",
             });
 
             mostrarUsuarios();
-          } else {
-            console.error("La carga y guardado de la imagen ha fallado.");
+          } else if(res.status === "warning") {
+            Swal.fire({
+              title: "¡Correcto!",
+              text: res.message,
+              icon: "warning",
+            });
+          }else{
+            Swal.fire({
+              title: "¡Error!",
+              text: res.message,
+              icon: "error",
+            });
           }
         },
       });
@@ -181,47 +185,61 @@ $(document).ready(function () {
         var tbody = $("#dataUsuarios");
         tbody.empty();
 
-        usuarios.forEach(function (usuario) {
-          usuario.imagen_usuario = usuario.imagen_usuario.substring(3);
-          var fila = `
-          <tr>
-            <td>
-              <a href="javascript:void(0);" class="product-img">
-                <img src="${usuario.imagen_usuario}" alt="${usuario.nombre_usuario}">
-              </a>
-            </td>
-            <td>${usuario.nombre_sucursal}</td>
-            <td>${usuario.nombre_usuario}</td>
-            <td>${usuario.usuario}</td>
-            <td>${usuario.telefono}</td>
-            <td>${usuario.correo}</td>
-            <td>
-              ${usuario.estado_usuario != 0 ? '<button class="btn bg-lightgreen badges btn-sm rounded btnActivar" idUsuario="' + usuario.id_usuario + '" estadoUsuario="0">Activado</button>'
-              : '<button class="btn bg-lightred badges btn-sm rounded btnActivar" idUsuario="' + usuario.id_usuario + '" estadoUsuario="1">Desactivado</button>'}
-            </td>
-            <td>
-              <a href="#" class="me-3 btnEditarUsuario" idUsuario="${usuario.id_usuario}" data-bs-toggle="modal" data-bs-target="#modalEditarUsuario">
-                <i class="text-warning fas fa-edit fa-lg"></i>
-              </a>
-              <a href="#" class="me-3 btnVerUsuario" idUsuario="${usuario.id_usuario}" data-bs-toggle="modal" data-bs-target="#modalVerUsuario">
-                <i class="text-primary fa fa-eye fa-lg"></i>
-              </a>
-              <a href="#" class="me-3 confirm-text btnEliminarUsuario" idUsuario="${usuario.id_usuario}" fotoUsuario="${usuario.imagen_usuario}">
-                <i class="fa fa-trash fa-lg" style="color: #F52E2F"></i>
-              </a>
-            </td>
-          </tr>`;
+        if (usuarios.length > 0) {
+          usuarios.forEach(function (usuario) {
+            // Validar si imagen_usuario existe y es una cadena
+            usuario.imagen_usuario = usuario.imagen_usuario
+              ? usuario.imagen_usuario.substring(3)
+              : "vistas/img/usuarios/default.jpeg";
 
-          tbody.append(fila);
-        });
+            var fila = `
+                    <tr>
+                        <td>
+                            <a href="javascript:void(0);" class="product-img">
+                                <img src="${usuario.imagen_usuario}" alt="${usuario.nombre_usuario}">
+                            </a>
+                        </td>
+                        <td>${usuario.nombre_sucursal}</td>
+                        <td>${usuario.nombre_usuario}</td>
+                        <td>${usuario.usuario}</td>
+                        <td>${usuario.telefono}</td>
+                        <td>${usuario.correo}</td>
+                        <td>
+                            ${usuario.estado_usuario != 0 ? '<button class="btn bg-lightgreen badges btn-sm rounded btnActivar" idUsuario="' + usuario.id_usuario + '" estadoUsuario="0">Activado</button>'
+                : '<button class="btn bg-lightred badges btn-sm rounded btnActivar" idUsuario="' + usuario.id_usuario + '" estadoUsuario="1">Desactivado</button>'}
+                        </td>
+                        <td>
+                            <a href="#" class="me-3 btnEditarUsuario" idUsuario="${usuario.id_usuario}" data-bs-toggle="modal" data-bs-target="#modalEditarUsuario">
+                                <i class="text-warning fas fa-edit fa-lg"></i>
+                            </a>
+                            <a href="#" class="me-3 btnVerUsuario" idUsuario="${usuario.id_usuario}" data-bs-toggle="modal" data-bs-target="#modalVerUsuario">
+                                <i class="text-primary fa fa-eye fa-lg"></i>
+                            </a>
+                            <a href="#" class="me-3 confirm-text btnEliminarUsuario" idUsuario="${usuario.id_usuario}" fotoUsuario="${usuario.imagen_usuario}">
+                                <i class="fa fa-trash fa-lg" style="color: #F52E2F"></i>
+                            </a>
+                        </td>
+                    </tr>`;
 
-        $('#tabla_usuarios').DataTable()
+            tbody.append(fila);
+          });
+
+          $('#tabla_usuarios').DataTable();
+        } else {
+          // Mostrar mensaje si no hay registros
+          tbody.append(`
+                    <tr>
+                        <td colspan="8" class="text-center">No se encontraron usuarios registrados.</td>
+                    </tr>
+                `);
+        }
       },
       error: function (xhr, status, error) {
         console.error("Error al recuperar los usuarios:", error);
       },
     });
   }
+
 
 
   /*=============================================
@@ -243,7 +261,6 @@ $(document).ready(function () {
       contentType: false,
       processData: false,
       success: function (respuesta) {
-        console.log(respuesta);
         if (window.matchMedia("(max-width:767px)").matches) {
 
           swal({
@@ -584,7 +601,9 @@ $(document).ready(function () {
         var tbody = $("#data_usuarios_reporte");
         tbody.empty();
         usuarios.forEach(function (usuario, index) {
-          usuario.imagen_usuario = usuario.imagen_usuario.substring(3);
+          usuario.imagen_usuario = usuario.imagen_usuario
+            ? usuario.imagen_usuario.substring(3)
+            : "vistas/img/usuarios/default.jpeg";
           var fila = `
         <tr>
             <td>${index + 1}</td> <!-- Mostrar el índice sumando 1 para comenzar desde 1 -->

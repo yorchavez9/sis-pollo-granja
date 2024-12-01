@@ -58,22 +58,43 @@ class ModeloUsuarios{
 	REGISTRO DE USUARIO
 	=============================================*/
 
-	static public function mdlIngresarUsuario($tabla, $datos){
+	static public function mdlIngresarUsuario($tabla, $datos)
+	{
+		// Conexión a la base de datos
+		$conexion = Conexion::conectar();
 
-		$stmt = Conexion::conectar()->prepare("INSERT INTO $tabla(id_sucursal, 
-																nombre_usuario, 
-																telefono, 
-																correo, 
-																usuario, 
-																contrasena,
-																imagen_usuario) 
-														VALUES (:id_sucursal, 
-																:nombre_usuario, 
-																:telefono, 
-																:correo, 
-																:usuario, 
-																:contrasena, 
-																:imagen_usuario)");
+		// Verificar si el usuario ya existe (por usuario o correo)
+		$stmt = $conexion->prepare("SELECT COUNT(*) FROM $tabla WHERE usuario = :usuario OR correo = :correo");
+		$stmt->bindParam(":usuario", $datos["usuario"], PDO::PARAM_STR);
+		$stmt->bindParam(":correo", $datos["correo"], PDO::PARAM_STR);
+
+		$stmt->execute();
+		$usuarioExistente = $stmt->fetchColumn();
+
+		if ($usuarioExistente > 0) {
+			return [
+				"status" => "warning",
+				"message" => "El usuario o correo ya están registrados."
+			];
+		}
+
+		// Si el usuario no existe, proceder con la inserción
+		$stmt = $conexion->prepare("INSERT INTO $tabla(
+            id_sucursal, 
+            nombre_usuario, 
+            telefono, 
+            correo, 
+            usuario, 
+            contrasena, 
+            imagen_usuario) 
+        VALUES (
+            :id_sucursal, 
+            :nombre_usuario, 
+            :telefono, 
+            :correo, 
+            :usuario, 
+            :contrasena, 
+            :imagen_usuario)");
 
 		$stmt->bindParam(":id_sucursal", $datos["id_sucursal"], PDO::PARAM_INT);
 		$stmt->bindParam(":nombre_usuario", $datos["nombre_usuario"], PDO::PARAM_STR);
@@ -83,13 +104,21 @@ class ModeloUsuarios{
 		$stmt->bindParam(":contrasena", $datos["contrasena"], PDO::PARAM_STR);
 		$stmt->bindParam(":imagen_usuario", $datos["imagen_usuario"], PDO::PARAM_STR);
 
-		if($stmt->execute()){
-			return "ok";	
-		}else{
-			return "error";
+		if ($stmt->execute()) {
+			return [
+				"status" => "ok",
+				"message" => "Usuario registrado exitosamente."
+			];
+		} else {
+			return [
+				"status" => "error",
+				"message" => "Ocurrió un error al registrar el usuario."
+			];
 		}
-		$stmt = null;
+
+		$stmt = null; // Liberar la conexión
 	}
+
 
 	/*=============================================
 	EDITAR USUARIO

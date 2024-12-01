@@ -88,13 +88,19 @@ class ControladorUsuarios
 			"correo" => $_POST["correo"],
 			"usuario" => $_POST["usuario"],
 			"contrasena" => $encriptar,
-			"imagen_usuario" => $ruta_imagen
+			"imagen_usuario" => empty($ruta_imagen) ? null : $ruta_imagen,
 		);
 		$respuesta = ModeloUsuarios::mdlIngresarUsuario($tabla,	$datos);
-		if ($respuesta == "ok") {
-			echo json_encode("ok");
+		if ($respuesta["status"] == "ok") {
+			echo json_encode([
+				'status' => $respuesta["status"],
+				'message' => $respuesta["message"]
+			]);
 		} else {
-			echo json_encode("error");
+			echo json_encode([
+				'status' => $respuesta["status"],
+				'message' => $respuesta["message"]
+			]);
 		}
 	}
 

@@ -22,15 +22,15 @@ function tieneRol($rolesPermitidos)
 $permisosMenu = [
     'ceo' => ['CEO'],
     'sucursales' => ['ADMINISTRADOR', 'GERENTE', 'CEO', 'SUPERVISOR'],
-    'personas' => ['ADMINISTRADOR', 'GERENTE','CEO', 'SUPERVISOR'],
-    'inventario' => ['ADMINISTRADOR', 'GERENTE','CEO', 'SUPERVISOR'],
-    'compras' => ['ADMINISTRADOR', 'GERENTE','CEO', 'SUPERVISOR', 'VENDEDOR', 'VENDEDORA', 'CAJERO', 'CAJERA'],
-    'ventas' => ['ADMINISTRADOR', 'GERENTE','CEO', 'SUPERVISOR', 'VENDEDOR', 'VENDEDORA', 'CAJERO', 'CAJERA'],
-    'trabajadores' => ['ADMINISTRADOR','CEO', 'GERENTE'],
-    'reportes' => ['ADMINISTRADOR','CEO', 'GERENTE', 'FINANZAS', 'ANALISTA', 'CAJERA', 'CAJERO'],
-    'ajustes' => ['ADMINISTRADOR','CEO', 'GERENTE'],
-    'clientes' => ['ADMINISTRADOR','CEO', 'GERENTE', 'VENDEDOR', 'VENDEDORA', 'CAJERO', 'CAJERA', 'FINANZAS'],
-    'facturacion' => ['ADMINISTRADOR','CEO', 'GERENTE', 'FINANZAS', 'CAJERO', 'CAJERA']
+    'personas' => ['ADMINISTRADOR', 'GERENTE', 'CEO', 'SUPERVISOR'],
+    'inventario' => ['ADMINISTRADOR', 'GERENTE', 'CEO', 'SUPERVISOR'],
+    'compras' => ['ADMINISTRADOR', 'GERENTE', 'CEO', 'SUPERVISOR', 'VENDEDOR', 'VENDEDORA', 'CAJERO', 'CAJERA'],
+    'ventas' => ['ADMINISTRADOR', 'GERENTE', 'CEO', 'SUPERVISOR', 'VENDEDOR', 'VENDEDORA', 'CAJERO', 'CAJERA'],
+    'trabajadores' => ['ADMINISTRADOR', 'CEO', 'GERENTE'],
+    'reportes' => ['ADMINISTRADOR', 'CEO', 'GERENTE', 'FINANZAS', 'ANALISTA', 'CAJERA', 'CAJERO'],
+    'ajustes' => ['ADMINISTRADOR', 'CEO', 'GERENTE'],
+    'clientes' => ['ADMINISTRADOR', 'CEO', 'GERENTE', 'VENDEDOR', 'VENDEDORA', 'CAJERO', 'CAJERA', 'FINANZAS'],
+    'facturacion' => ['ADMINISTRADOR', 'CEO', 'GERENTE', 'FINANZAS', 'CAJERO', 'CAJERA']
 ];
 ?>
 
@@ -58,8 +58,8 @@ $permisosMenu = [
                     <ul>
                         <?php if (tieneRol($permisosMenu['personas'])): ?>
                             <li><a href="tipoDocumento">Tipo documento</a></li>
-                            <li><a href="usuarios">Usuarios</a></li>
                             <li><a href="roles">Roles</a></li>
+                            <li><a href="usuarios">Usuarios</a></li>
                             <li><a href="establecerRoles">Establecer roles</a></li>
                             <li><a href="proveedores">Proveedores</a></li>
                         <?php endif; ?>

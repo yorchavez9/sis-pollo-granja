@@ -51,103 +51,109 @@ $totalProveedores = ControladorProveedores::ctrMostrarTotalProveedores($item, $v
 <div class="page-wrapper">
     <div class="content">
         <?php
+        $bool_role = false;
         if (isset($_SESSION["roles"]) && is_array($_SESSION["roles"])) {
             foreach ($_SESSION["roles"] as $rol) {
                 if ($rol == 'ADMINISTRADOR' || $rol == 'GERENTE' || $rol == 'CEO') {
-                    ?>
-                    <div class="row">
-                        <div class="col-lg-3 col-sm-6 col-12">
-                            <div class="dash-widget dash1">
-                                <div class="dash-widgetimg">
-                                    <span><img src="vistas/assets/img/icons/dash2.svg" alt="img"></span>
-                                </div>
-                                <div class="dash-widgetcontent">
-                                    <h5>S/ <span class="counters"><?php echo $precioFormateado ?></span></h5>
-                                    <h6>Total de ventas</h6>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-6 col-12">
-                            <div class="dash-widget">
-                                <div class="dash-widgetimg">
-                                    <span><img src="vistas/assets/img/icons/dash1.svg" alt="img"></span>
-                                </div>
-                                <div class="dash-widgetcontent">
-                                    <h5>S/ <span class="counters"><?php echo $precioFormateadoCompra; ?></span></h5>
-                                    <h6>Total de compras</h6>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-6 col-12">
-                            <div class="dash-widget dash2">
-                                <div class="dash-widgetimg">
-                                    <span><img src="vistas/assets/img/icons/dash3.svg" alt="img"></span>
-                                </div>
-                                <div class="dash-widgetcontent">
-                                    <h5>S/ <span class="counters"><?php echo number_format($sumaTotalVentaContado, 2, '.', ''); ?></span></h5>
-                                    <h6>Ventas al contado</h6>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-6 col-12">
-                            <div class="dash-widget dash3">
-                                <div class="dash-widgetimg">
-                                    <span><img src="vistas/assets/img/icons/dash4.svg" alt="img"></span>
-                                </div>
-                                <div class="dash-widgetcontent">
-                                    <h5>S/ <span class="counters"><?php echo $precioFormateadoCredito ?></span></h5>
-                                    <h6>Ventas al crédito</h6>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-6 col-12 d-flex">
-                            <div class="dash-count">
-                                <div class="dash-counts">
-                                    <h4><?php echo $totalClientes ?></h4>
-                                    <h5>Clientes</h5>
-                                </div>
-                                <div class="dash-imgs">
-                                    <i data-feather="user"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-6 col-12 d-flex">
-                            <div class="dash-count das1">
-                                <div class="dash-counts">
-                                    <h4><?php echo $totalProveedores ?></h4>
-                                    <h5>Proveedores</h5>
-                                </div>
-                                <div class="dash-imgs">
-                                    <i data-feather="user-check"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-6 col-12 d-flex">
-                            <div class="dash-count das3">
-                                <div class="dash-counts">
-                                    <h4><?php echo $totalVentasCantidad ?></h4>
-                                    <h5>Ventas</h5>
-                                </div>
-                                <div class="dash-imgs">
-                                    <i data-feather="file"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-6 col-12 d-flex">
-                            <div class="dash-count das2">
-                                <div class="dash-counts">
-                                    <h4><?php echo $totalComprasCantidad ?></h4>
-                                    <h5>Compras</h5>
-                                </div>
-                                <div class="dash-imgs">
-                                    <i data-feather="file-text"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                <?php
+                    $bool_role = true;
                 }
             }
+        }
+        ?>
+        <?php
+        if($bool_role == true){
+        ?>
+        <div class="row">
+            <div class="col-lg-3 col-sm-6 col-12">
+                <div class="dash-widget dash1">
+                    <div class="dash-widgetimg">
+                        <span><img src="vistas/assets/img/icons/dash2.svg" alt="img"></span>
+                    </div>
+                    <div class="dash-widgetcontent">
+                        <h5>S/ <span class="counters"><?php echo $precioFormateado ?></span></h5>
+                        <h6>Total de ventas</h6>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-6 col-12">
+                <div class="dash-widget">
+                    <div class="dash-widgetimg">
+                        <span><img src="vistas/assets/img/icons/dash1.svg" alt="img"></span>
+                    </div>
+                    <div class="dash-widgetcontent">
+                        <h5>S/ <span class="counters"><?php echo $precioFormateadoCompra; ?></span></h5>
+                        <h6>Total de compras</h6>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-6 col-12">
+                <div class="dash-widget dash2">
+                    <div class="dash-widgetimg">
+                        <span><img src="vistas/assets/img/icons/dash3.svg" alt="img"></span>
+                    </div>
+                    <div class="dash-widgetcontent">
+                        <h5>S/ <span class="counters"><?php echo number_format($sumaTotalVentaContado, 2, '.', ''); ?></span></h5>
+                        <h6>Ventas al contado</h6>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-6 col-12">
+                <div class="dash-widget dash3">
+                    <div class="dash-widgetimg">
+                        <span><img src="vistas/assets/img/icons/dash4.svg" alt="img"></span>
+                    </div>
+                    <div class="dash-widgetcontent">
+                        <h5>S/ <span class="counters"><?php echo $precioFormateadoCredito ?></span></h5>
+                        <h6>Ventas al crédito</h6>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-6 col-12 d-flex">
+                <div class="dash-count">
+                    <div class="dash-counts">
+                        <h4><?php echo $totalClientes ?></h4>
+                        <h5>Clientes</h5>
+                    </div>
+                    <div class="dash-imgs">
+                        <i data-feather="user"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-6 col-12 d-flex">
+                <div class="dash-count das1">
+                    <div class="dash-counts">
+                        <h4><?php echo $totalProveedores ?></h4>
+                        <h5>Proveedores</h5>
+                    </div>
+                    <div class="dash-imgs">
+                        <i data-feather="user-check"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-6 col-12 d-flex">
+                <div class="dash-count das3">
+                    <div class="dash-counts">
+                        <h4><?php echo $totalVentasCantidad ?></h4>
+                        <h5>Ventas</h5>
+                    </div>
+                    <div class="dash-imgs">
+                        <i data-feather="file"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-6 col-12 d-flex">
+                <div class="dash-count das2">
+                    <div class="dash-counts">
+                        <h4><?php echo $totalComprasCantidad ?></h4>
+                        <h5>Compras</h5>
+                    </div>
+                    <div class="dash-imgs">
+                        <i data-feather="file-text"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php
         }
         ?>
         <div class="row">
