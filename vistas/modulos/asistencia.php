@@ -160,7 +160,7 @@ MODAL EDITAR ASISTENCIA
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Crear asistencia de trabajadores</h5>
+                <h5 class="modal-title">Editar la asistencia de los trabajadores</h5>
                 <button type="button" class="close close_modal_asistencia" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
             </div>
             <form enctype="multipart/form-data" id="form_editar_asistencia">
@@ -218,11 +218,10 @@ MODAL EDITAR ASISTENCIA
                 </div>
 
                 <div class="text-end mx-4 mb-2">
-
-                    <button type="button" id="btn_guardar_asistencia" class="btn btn-primary mx-2"><i class="fas fa-save"></i> Guardar</button>
-
+                    <button type="button" id="btn_guardar_asistencia" class="btn btn-primary mx-2">
+                        <i class="fas fa-sync"></i> Actualizar
+                    </button>
                     <button type="button" class="btn btn-secondary close_modal_asistencia" data-bs-dismiss="modal">Cerrar</button>
-
                 </div>
 
             </form>

@@ -2,8 +2,8 @@
     <div class="content">
         <div class="page-header">
             <div class="page-title">
-                <h4>Configuración del ticket</h4>
-                <h6>Administrar ticket</h6>
+                <h4>Configuración de los comprobantes</h4>
+                <h6>Administrar comprobantes</h6>
             </div>
             <div class="page-btn">
                 <?php

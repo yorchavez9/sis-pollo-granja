@@ -239,7 +239,7 @@ $serieNumeroComprobante = ControladorSerieNumero::ctrMostrarSerieNumero($item, $
                                         </div>
                                         <!-- SECCION DE PAGO DE LA CUOTA -->
                                         <div class="mb-3 mt-3">
-                                            <input type="number" name="pago_cuota_venta" id="pago_cuota_venta" class="form-control" placeholder="Ingrese un monto de la cuota a pagar">
+                                            <input type="number" name="pago_cuota_venta" id="pago_cuota_venta" class="form-control" value="0.00" placeholder="Ingrese un monto de la cuota a pagar">
                                         </div>
                                         <!-- SECCION DE SUBIR RECIBO DE PAGO Y DE SERIO O NUMERO D PAGO -->
                                         <div class="mt-3">
