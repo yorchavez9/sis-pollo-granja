@@ -372,8 +372,6 @@ function calcularTotal(igv_venta) {
   $("#total_precio_venta").text(formateoPrecio(total.toFixed(2)));
 }
 
-
-
 /*=============================================
 ELIMINANDO EL PRODUCTO AGREGADO AL DETALLE VENT.
 =============================================*/
@@ -399,7 +397,6 @@ $(document).on("click", ".btnEliminarAddProductoVenta", function (e) {
 /*=============================================
  MOSTRANDO Y ESCONDIENDO EL TIPO DE PAGO 
  =============================================*/
-
 $(".tipo_pago_venta").on("click", function () {
   let valor = $(this).val();
   if (valor == "credito") {
@@ -591,8 +588,6 @@ function limpiarModales() {
   });
 }
 
-
-
 /*=============================================
 MOSTRAR CLIENTES EN EL SELECT
 =============================================*/
@@ -621,7 +616,6 @@ MOSTRAR SERIE Y NUMERO DEL COMPROBANTE
 
 limpiarModales();
 mostrarProductoVenta();
-
 
 
 export {

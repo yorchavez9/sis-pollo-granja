@@ -37,46 +37,61 @@ class ControladorHistorialPago
         ACTUALIZANDO EL MONTO DE VENTA DEL PAGO AL CREDITO
         ========================================= */
         $tabla = "ventas";
-        $totalPago = number_format($_POST["monto_pagar_venta"], 2, '.', '');
+        $totalPago = number_format($_POST["monto_pagar_venta"], 2,'.','');
         $datos = array(
             "id_venta" => $_POST["id_venta_pagar"],
             "total_pago" => $totalPago
         );
 
-        ModeloHistorialPago::mdlActualizarPagoPendiente($tabla, $datos);
+        $response_save_update = ModeloHistorialPago::mdlActualizarPagoPendiente($tabla, $datos);
+        if ($response_save_update["estado"] == "ok") {
 
-        /* =========================================
-        INGRESANDO DATOS AL HISTORIAL DE PAGO
-        ========================================= */
+            /* ==========================================
+            HISTORIAL DE PAGO
+            ========================================== */
 
-        $ruta = "../vistas/img/comprobantes/";
-        if (isset($_FILES["comprobante_pago_historial"]["tmp_name"])) {
-            $extension = pathinfo($_FILES["comprobante_pago_historial"]["name"], PATHINFO_EXTENSION);
-            $tipos_permitidos = array("jpg", "jpeg", "png", "gif");
-            if (in_array(strtolower($extension), $tipos_permitidos)) {
-                $nombre_imagen = date("YmdHis") . rand(1000, 9999);
-                $ruta_imagen = $ruta . $nombre_imagen . "." . $extension;
-                if (move_uploaded_file($_FILES["comprobante_pago_historial"]["tmp_name"], $ruta_imagen)) {
+            $ruta = "../vistas/img/comprobantes/";
+            if (isset($_FILES["comprobante_pago_historial"]["tmp_name"])) {
+                $extension = pathinfo($_FILES["comprobante_pago_historial"]["name"], PATHINFO_EXTENSION);
+                $tipos_permitidos = array("jpg",
+                    "jpeg",
+                    "png",
+                    "gif"
+                );
+                if (in_array(strtolower($extension), $tipos_permitidos)) {
+                    $nombre_imagen = date("YmdHis") . rand(1000, 9999);
+                    $ruta_imagen = $ruta . $nombre_imagen . "." . $extension;
+                    if (move_uploaded_file($_FILES["comprobante_pago_historial"]["tmp_name"], $ruta_imagen)) {
+                    } else {
+                    }
                 } else {
                 }
-            } else {
             }
+
+            $tablaHistorialPago = "historial_pagos";
+            $datosHistorialPago = array(
+                    "id_venta" => $_POST["id_venta_pagar"],
+                    "monto_pago" => $_POST["monto_pagar_venta"],
+                    "forma_pago" => $_POST["metodos_pago_venta_historial"],
+                    "numero_serie_pago" => !empty($_POST["serie_numero_pago_historial"]) ? $_POST["serie_numero_pago_historial"] : null,
+                    "comprobante_imagen" => isset($_FILES["comprobante_pago_historial"]["tmp_name"]) ? $ruta_imagen : null
+                );
+
+            $response_save_historial = ModeloHistorialPago::mdlIngresoHistorialPago($tablaHistorialPago, $datosHistorialPago);
+
+            if($response_save_historial['message'] == "ok"){
+                echo json_encode([
+                    'estado' => $response_save_update["estado"],
+                    'message' => $response_save_update["mensaje"],
+                    'data' => $response_save_historial
+                ]);
+            }
+        }else{
+            echo json_encode([
+                'estado' => $response_save_update["estado"],
+                'message' => $response_save_update["mensaje"]
+            ]);
         }
-
-        /* ==========================================
-		HISTORIAL DE PAGO
-		========================================== */
-        $tablaHistorialPago = "historial_pagos";
-        $datosHistorialPago = array(
-            "id_venta" => $_POST["id_venta_pagar"],
-            "monto_pago" => $_POST["monto_pagar_venta"],
-            "forma_pago" => $_POST["metodos_pago_venta_historial"],
-            "numero_serie_pago" => !empty($_POST["serie_numero_pago_historial"]) ? $_POST["serie_numero_pago_historial"] : null,
-            "comprobante_imagen" => isset($_FILES["comprobante_pago_historial"]["tmp_name"]) ? $ruta_imagen : null
-        );
-
-        $responseHistoial = ModeloHistorialPago::mdlIngresoHistorialPago($tablaHistorialPago, $datosHistorialPago);
-        echo json_encode($responseHistoial);
     }
 
 
@@ -85,46 +100,76 @@ class ControladorHistorialPago
 	=============================================*/
     static public function ctrEditarHistorialPago()
     {
-        if (preg_match('/^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ ]+$/', $_POST["edit_nombre_producto"])) {
+
+        /* =========================================
+        EDITANDO EL PAGO
+        ========================================= */
+        $tabla = "ventas";
+        $pagoTotal = number_format($_POST["edit_monto_actual_pago"], 2, '.', ''); // Monto por defecto
+        $pagoEditado = number_format($_POST["edit_monto_pagar_venta"], 2, '.', ''); // Monto editado
+        $datos = array(
+            "id_venta" => $_POST["edit_id_venta_pagar"],
+            "total_pago" => $pagoTotal,
+            "total_actual" => $pagoEditado
+        );
+
+        $response_pago_edit = ModeloHistorialPago::mdlActualizarPagoPendienteEdit($tabla, $datos);
+
+        if ($response_pago_edit["estado"] == "ok") {
+
             /* ============================
             VALIDANDO IMAGEN
             ============================ */
-            $ruta = "../vistas/img/productos/";
-            $ruta_imagen = $_POST["edit_imagen_actual_p"];
-            if (isset($_FILES["edit_imagen_producto"]["tmp_name"]) && !empty($_FILES["edit_imagen_producto"]["tmp_name"])) {
+            $ruta = "../vistas/img/comprobantes/";
+            $ruta_imagen = $_POST["actual_comprobante_pago_historial"];
+            if (isset($_FILES["edit_comprobante_pago_historial"]["tmp_name"]) && !empty($_FILES["edit_comprobante_pago_historial"]["tmp_name"])) {
                 if (file_exists($ruta_imagen)) {
                     unlink($ruta_imagen);
                 }
-                $extension = pathinfo($_FILES["edit_imagen_producto"]["name"], PATHINFO_EXTENSION);
+                $extension = pathinfo($_FILES["edit_comprobante_pago_historial"]["name"], PATHINFO_EXTENSION);
                 $tipos_permitidos = array("jpg", "jpeg", "png", "gif");
                 if (in_array(strtolower($extension), $tipos_permitidos)) {
                     $nombre_imagen = date("YmdHis") . rand(1000, 9999);
                     $ruta_imagen = $ruta . $nombre_imagen . "." . $extension;
-                    if (move_uploaded_file($_FILES["edit_imagen_producto"]["tmp_name"], $ruta_imagen)) {
+                    if (move_uploaded_file($_FILES["edit_comprobante_pago_historial"]["tmp_name"], $ruta_imagen)) {
                     } else {
                     }
                 } else {
                 }
             }
 
-            $tabla = "productos";
-            $datos = array(
-                "id_producto" => $_POST["edit_id_producto"],
-                "id_categoria" => $_POST["edit_id_categoria_p"],
-                "codigo_producto" => $_POST["edit_codigo_producto"],
-                "nombre_producto" => $_POST["edit_nombre_producto"],
-                "precio_producto" => $_POST["edit_precio_producto"],
-                "stock_producto" => $_POST["edit_stock_producto"],
-                "fecha_vencimiento" => $_POST["edit_fecha_vencimiento"],
-                "descripcion_producto" => $_POST["edit_descripcion_producto"],
-                "imagen_producto" => $ruta_imagen
-            );
-            $respuesta = ModeloHistorialPago::mdlEditarHistorialPago($tabla, $datos);
-            if ($respuesta == "ok") {
-                echo json_encode("ok");
+            /* ==========================================
+            EDITANDO HISTORIAL DE PAGO
+            ========================================== */
+            $monto_pago = '';
+            if ($pagoEditado != 0.00 || $pagoEditado !== '' || $pagoEditado != null) {
+                $monto_pago = $pagoEditado;
+            } else {
+                $monto_pago = $pagoTotal;
             }
-        } else {
-            echo json_encode("error");
+            $tablaHistorialPago = "historial_pagos";
+            $datos = array(
+                "id_venta" => $_POST["edit_id_venta_pagar"],
+                "id_pago" => $_POST["edit_edit_pago_historial"],
+                "monto_pago" => $monto_pago,
+                "forma_pago" => $_POST["edit_metodos_pago_venta_historial"],
+                "numero_serie_pago" => !empty($_POST["edit_serie_numero_pago_historial"]) ? $_POST["edit_serie_numero_pago_historial"] : null,
+                "comprobante_imagen" => (isset($_FILES["edit_comprobante_pago_historial"]["tmp_name"])) || isset($_POST["actual_comprobante_pago_historial"]) ? $ruta_imagen : null
+            );
+
+            $response_historial = ModeloHistorialPago::mdlEditarHistorialPago($tablaHistorialPago, $datos);
+            if($response_historial == "ok"){
+                echo json_encode([
+                    'estado' => $response_pago_edit["estado"],
+                    'message' => $response_pago_edit["mensaje"]
+                ]);
+            }
+
+        }else{
+            echo json_encode([
+                'estado' => $response_pago_edit["estado"],
+                'message' => $response_pago_edit["mensaje"]
+            ]);
         }
     }
 
@@ -142,7 +187,7 @@ class ControladorHistorialPago
                 unlink($_POST["url_imagen_historial_pago"]);
             } else {
                 // El archivo no existe
-                echo "El archivo a eliminar no existe.";
+                /* echo "El archivo a eliminar no existe."; */
             }
         }
         $respuesta = ModeloHistorialPago::mdlBorrarHistorialPago($tabla, $datos);

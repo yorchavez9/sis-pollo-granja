@@ -188,7 +188,6 @@ class ModeloHistorialPago
     /*=============================================
 	ACTUALIZAR PAGO PENDIENTE
 	=============================================*/
-
     static public function mdlActualizarPagoPendiente($tabla, $datos)
     {
         $respuesta = array();
@@ -214,7 +213,7 @@ class ModeloHistorialPago
         // Verificar si el nuevo total de pagos supera el total de la compra
         if ($nuevoTotal > $totalCompra) {
             // Si supera el total de la compra, retornar error
-            $respuesta["estado"] = "error";
+            $respuesta["estado"] = "warning";
             $respuesta["mensaje"] = "El total de los pagos supera el total de la venta";
         } else {
             // Si no supera el total de la compra, proceder con la actualización
@@ -234,35 +233,73 @@ class ModeloHistorialPago
         return $respuesta;
     }
 
+    /*=============================================
+	EDITAR PAGO PENDIENTE
+	=============================================*/
+    static public function mdlActualizarPagoPendienteEdit($tabla, $datos)
+    {
+        $respuesta = array();
+
+        // Obtener el total actual de pagos para este egreso
+        $stmt = Conexion::conectar()->prepare("SELECT total_pago FROM $tabla WHERE id_venta = :id_venta");
+        $stmt->bindParam(":id_venta", $datos["id_venta"], PDO::PARAM_STR);
+        $stmt->execute();
+        $totalActual = $stmt->fetchColumn();
+        $totalActualEdit = $totalActual - $datos["total_pago"];
+        // Calcular el nuevo total de pagos sumando el monto proporcionado
+        $nuevoTotal = $totalActualEdit + $datos["total_actual"];
+
+        // Obtener el total de la compra
+        $stmt = Conexion::conectar()->prepare("SELECT total_venta FROM $tabla WHERE id_venta = :id_venta");
+        $stmt->bindParam(":id_venta",
+            $datos["id_venta"],
+            PDO::PARAM_STR
+        );
+        $stmt->execute();
+        $totalCompra = $stmt->fetchColumn();
+
+        // Verificar si el nuevo total de pagos supera el total de la compra
+        if ($nuevoTotal > $totalCompra) {
+            // Si supera el total de la compra, retornar error
+            $respuesta["estado"] = "error";
+            $respuesta["mensaje"] = "El total de los pagos supera el total de la venta";
+        } else {
+            // Si no supera el total de la compra, proceder con la actualización
+            $stmt = Conexion::conectar()->prepare("UPDATE $tabla SET total_pago = :nuevo_total_pago WHERE id_venta = :id_venta");
+            $stmt->bindParam(":nuevo_total_pago", $nuevoTotal, PDO::PARAM_STR);
+            $stmt->bindParam(":id_venta", $datos["id_venta"], PDO::PARAM_STR);
+
+            if ($stmt->execute()) {
+                $respuesta["estado"] = "ok";
+                $respuesta["mensaje"] = "El pago se actualizó correctamente";
+            } else {
+                $respuesta["estado"] = "error";
+                $respuesta["mensaje"] = "No se pudo realizar el total de pagos";
+            }
+        }
+
+        return $respuesta;
+    }
+
 
     /*=============================================
 	EDITAR HISTORIAL PAGO
 	=============================================*/
     static public function mdlEditarHistorialPago($tabla, $datos)
     {
-        if (empty($datos["fecha_vencimiento"])) {
-            $datos["fecha_vencimiento"] = NULL; // Asignar NULL si no se proporciona fecha
-        }
-        $stmt = Conexion::conectar()->prepare("UPDATE $tabla SET 
-																id_categoria = :id_categoria, 
-																codigo_producto = :codigo_producto, 
-																nombre_producto = :nombre_producto, 
-																precio_producto = :precio_producto, 
-																stock_producto = :stock_producto, 
-																fecha_vencimiento = :fecha_vencimiento, 
-																descripcion_producto = :descripcion_producto, 
-																imagen_producto = :imagen_producto
-																WHERE id_producto = :id_producto");
 
-        $stmt->bindParam(":id_categoria", $datos["id_categoria"], PDO::PARAM_INT);
-        $stmt->bindParam(":codigo_producto", $datos["codigo_producto"], PDO::PARAM_STR);
-        $stmt->bindParam(":nombre_producto", $datos["nombre_producto"], PDO::PARAM_STR);
-        $stmt->bindParam(":precio_producto", $datos["precio_producto"], PDO::PARAM_STR);
-        $stmt->bindParam(":stock_producto", $datos["stock_producto"], PDO::PARAM_INT);
-        $stmt->bindParam(":fecha_vencimiento", $datos["fecha_vencimiento"], PDO::PARAM_STR);
-        $stmt->bindParam(":descripcion_producto", $datos["descripcion_producto"], PDO::PARAM_STR);
-        $stmt->bindParam(":imagen_producto", $datos["imagen_producto"], PDO::PARAM_STR);
-        $stmt->bindParam(":id_producto", $datos["id_producto"], PDO::PARAM_INT);
+        $stmt = Conexion::conectar()->prepare("UPDATE $tabla SET 
+																monto_pago = :monto_pago, 
+																forma_pago = :forma_pago, 
+																numero_serie_pago = :numero_serie_pago, 
+																comprobante_imagen = :comprobante_imagen
+																WHERE id_pago = :id_pago");
+
+        $stmt->bindParam(":monto_pago", $datos["monto_pago"], PDO::PARAM_STR);
+        $stmt->bindParam(":forma_pago", $datos["forma_pago"], PDO::PARAM_STR);
+        $stmt->bindParam(":numero_serie_pago", $datos["numero_serie_pago"], PDO::PARAM_STR);
+        $stmt->bindParam(":comprobante_imagen", $datos["comprobante_imagen"], PDO::PARAM_STR);
+        $stmt->bindParam(":id_pago", $datos["id_pago"], PDO::PARAM_INT);
         if ($stmt->execute()) {
             return "ok";
         } else {

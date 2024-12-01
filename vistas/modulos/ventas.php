@@ -535,7 +535,7 @@ $serieNumeroComprobante = ControladorSerieNumero::ctrMostrarSerieNumero($item, $
     </div>
 </div>
 
-<!-- MODAL PAGAR COMPRA -->
+<!-- MODAL PAGAR VENTA (COMPRA) -->
 <div class="modal fade" id="modalPagarVenta" tabindex="-1" aria-labelledby="modalPagarVentaLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -589,6 +589,9 @@ $serieNumeroComprobante = ControladorSerieNumero::ctrMostrarSerieNumero($item, $
                             <label for="comprobante_pago_historial">Seleccione el comprobante</label>
                             <input type="file" name="comprobante_pago_historial" id="comprobante_pago_historial" class="form-control">
                         </div>
+                        <div class="mb-2 justify-content-center text-center">
+                            <img src="" alt="" class="vista_previa_comprobante_pago">
+                        </div>
                     </div>
 
                     <!-- Serie o Número de Pago -->
@@ -606,6 +609,7 @@ $serieNumeroComprobante = ControladorSerieNumero::ctrMostrarSerieNumero($item, $
                             <label for="monto_pagar_venta" class="form-label">
                                 <i class="fas fa-barcode text-danger"></i> Monto a pagar:
                             </label>
+
                             <input type="number" id="monto_pagar_venta" name="monto_pagar_venta" class="form-control" placeholder="Ingrese el monto a pagar" min="0">
                             <small id="error_monto_pagar_venta" class="text-danger"></small>
                         </div>
@@ -617,6 +621,86 @@ $serieNumeroComprobante = ControladorSerieNumero::ctrMostrarSerieNumero($item, $
                 <div class="text-end mx-4 mb-2">
                     <button type="button" class="btn btn-primary" id="btn_pagar_deuda_venta">
                         <i class="fa fa-save"></i> Pagar
+                    </button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        Cerrar
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<!-- MODAL EDITAR PAGO -->
+<div class="modal fade" id="modal_editar_historial_pago" tabindex="-1" aria-labelledby="modal_editar_historial_pago_label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Editar historial de pago</h5>
+                <button type="button" class="close btn_modal_ver_close_usuario" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            </div>
+            <form enctype="multipart/form-data" id="edit_frm_pagar_deuda_venta">
+                <div class="modal-body">
+                    <!-- Campo Oculto -->
+                    <input type="hidden" id="edit_id_venta_pagar" name="edit_id_venta_pagar">
+                    <input type="hidden" id="edit_edit_pago_historial" name="edit_edit_pago_historial">
+                    <!-- Métodos de Pago -->
+                    <div class="row mb-3">
+                        <div class="form-group">
+                            <label for="metodos_pago_venta">Seleccione la forma de pago</label>
+                            <select name="edit_metodos_pago_venta_historial" id="edit_metodos_pago_venta_historial" class="form-select js-example-basic-single select2">
+                                <option value="pago_efectivo">Pago Efectivo</option>
+                                <option value="yape">Yape</option>
+                                <option value="plin">Plin</option>
+                                <option value="tunki">Tunki</option>
+                                <option value="agora_pay">Agora PAY</option>
+                                <option value="bim">BIM</option>
+                                <option value="tarjeta_debito">Tarjeta de Débito</option>
+                                <option value="tarjeta_credito">Tarjeta de Crédito</option>
+                                <option value="transferencia_bancaria">Transferencia Bancaria</option>
+                            </select>
+                            <small id="edit_error_metodos_pago_venta" class="text-danger"></small>
+                        </div>
+                    </div>
+
+                    <!-- Comprobante de Pago -->
+                    <div class="row mb-3">
+                        <div class="form-group mb-2">
+                            <input type="hidden" name="actual_comprobante_pago_historial" id="actual_comprobante_pago_historial">
+                            <label for="edit_comprobante_pago_historial">Seleccione el comprobante</label>
+                            <input type="file" name="edit_comprobante_pago_historial" id="edit_comprobante_pago_historial" class="form-control">
+                        </div>
+                        <div class="mb-2 justify-content-center text-center">
+                            <img src="" alt="" class="edit_vista_previa_comprobante_pago">
+                        </div>
+                    </div>
+
+                    <!-- Serie o Número de Pago -->
+                    <div class="row mb-3">
+                        <div class="form-group">
+                            <label for="serie_numero_pago">Ingrese la serie o número de pago</label>
+                            <input type="text" name="edit_serie_numero_pago_historial" id="edit_serie_numero_pago_historial" class="form-control" placeholder="Ingrese número o serie de pago">
+                        </div>
+                    </div>
+
+                    <!-- Monto de Pago -->
+                    <div class="row mb-4">
+                        <div class="col-md-3"></div>
+                        <div class="col-md-6 text-center">
+                            <input type="hidden" name="edit_monto_actual_pago" id="edit_monto_actual_pago">
+                            <label for="monto_pagar_venta" class="form-label"><i class="fas fa-barcode text-danger"></i> Monto a pagar:</label>
+                            <input type="number" id="edit_monto_pagar_venta" name="edit_monto_pagar_venta" class="form-control" placeholder="Ingrese el monto a pagar" min="0">
+                            <small id="edit_error_monto_pagar_venta" class="text-danger"></small>
+                        </div>
+                        <div class="col-md-3"></div>
+                    </div>
+                </div>
+
+                <!-- Botones -->
+                <div class="text-end mx-4 mb-2">
+                    <button type="button" class="btn btn-primary" id="btn_update_pagar_deuda_venta">
+                        <i class="fa fa-save"></i> Actualizar pago
                     </button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                         Cerrar
@@ -691,6 +775,13 @@ $serieNumeroComprobante = ControladorSerieNumero::ctrMostrarSerieNumero($item, $
         $(this).find('.js-example-basic-single').select2({
             placeholder: "Select an option",
             dropdownParent: $('#modalPagarVenta')
+        });
+    });
+    // Reinicializar al abrir el modal
+    $('#modal_editar_historial_pago').on('shown.bs.modal', function() {
+        $(this).find('.js-example-basic-single').select2({
+            placeholder: "Select an option",
+            dropdownParent: $('#modal_editar_historial_pago')
         });
     });
 </script>

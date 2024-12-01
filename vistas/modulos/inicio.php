@@ -1,6 +1,5 @@
 <?php
 
-
 function formatearPrecio($precio)
 {
     return number_format($precio, 2, '.', ',');
@@ -11,66 +10,46 @@ $valor = null;
 
 /* TOTAL DE VENTAS */
 $sumaTotalVenta = ControladorVenta::ctrMostrarSumaTotalVenta($item, $valor);
-
 $sumaTotalVenta = (float) $sumaTotalVenta;
-
 $precioFormateado = formatearPrecio($sumaTotalVenta);
-
 
 /* TOTAL DE COMPRAS */
 $sumaTotalCompra = ControladorCompra::ctrMostrarTotalCompra($item, $valor);
-
 $sumaTotalCompra = (float) $sumaTotalCompra;
-
 $precioFormateadoCompra = formatearPrecio($sumaTotalCompra);
-
 
 /* TOTAL DE VENTA AL CONTADO */
 $sumaTotalVentaContado = ControladorVenta::ctrMostrarSumaTotalVentaContado($item, $valor);
-
 $sumaTotalVentaContado = (float) $sumaTotalVentaContado;
-
 $precioFormateadoContado = formatearPrecio($sumaTotalVentaContado);
-
 
 /* TOTAL DE VENTA AL CREDITO */
 $sumaTotalVentaCredito = ControladorVenta::ctrMostrarSumaTotalVentaCredito($item, $valor);
-
 $sumaTotalVentaCredito = (float) $sumaTotalVentaCredito;
-
 $precioFormateadoCredito = formatearPrecio($sumaTotalVentaCredito);
-
 
 /* TOTAL DE VENTAS */
 $totalVentas = ControladorVenta::ctrMostrarListaVentas($item, $valor);
-
 $totalVentasCantidad = count($totalVentas);
-
 
 /* TOTAL DE COMPRAS */
 $totalCompras = ControladorCompra::ctrMostrarTotalComprasCantidad($item, $valor);
-
 $totalComprasCantidad = count($totalCompras);
 
 /* TOTAL DE COMPRAS */
 $totalCompras = ControladorCompra::ctrMostrarTotalComprasCantidad($item, $valor);
-
 $totalComprasCantidad = count($totalCompras);
 
 /* MOSTRAR TOTAL DE CLIENTES */
 $totalClientes = ControladorCliente::ctrMostrarTotalCliente($item, $valor);
 
-
 /* MOSTRAR TOTAL DE PROVEEDORES */
 $totalProveedores = ControladorProveedores::ctrMostrarTotalProveedores($item, $valor);
-
-
 
 ?>
 
 <div class="page-wrapper">
     <div class="content">
-
         <?php
         if (isset($_SESSION["roles"]) && is_array($_SESSION["roles"])) {
             foreach ($_SESSION["roles"] as $rol) {
@@ -88,7 +67,6 @@ $totalProveedores = ControladorProveedores::ctrMostrarTotalProveedores($item, $v
                                 </div>
                             </div>
                         </div>
-
                         <div class="col-lg-3 col-sm-6 col-12">
                             <div class="dash-widget">
                                 <div class="dash-widgetimg">
@@ -100,7 +78,6 @@ $totalProveedores = ControladorProveedores::ctrMostrarTotalProveedores($item, $v
                                 </div>
                             </div>
                         </div>
-
                         <div class="col-lg-3 col-sm-6 col-12">
                             <div class="dash-widget dash2">
                                 <div class="dash-widgetimg">
@@ -112,7 +89,6 @@ $totalProveedores = ControladorProveedores::ctrMostrarTotalProveedores($item, $v
                                 </div>
                             </div>
                         </div>
-
                         <div class="col-lg-3 col-sm-6 col-12">
                             <div class="dash-widget dash3">
                                 <div class="dash-widgetimg">
@@ -124,7 +100,6 @@ $totalProveedores = ControladorProveedores::ctrMostrarTotalProveedores($item, $v
                                 </div>
                             </div>
                         </div>
-
                         <div class="col-lg-3 col-sm-6 col-12 d-flex">
                             <div class="dash-count">
                                 <div class="dash-counts">
@@ -136,7 +111,6 @@ $totalProveedores = ControladorProveedores::ctrMostrarTotalProveedores($item, $v
                                 </div>
                             </div>
                         </div>
-
                         <div class="col-lg-3 col-sm-6 col-12 d-flex">
                             <div class="dash-count das1">
                                 <div class="dash-counts">
@@ -148,7 +122,6 @@ $totalProveedores = ControladorProveedores::ctrMostrarTotalProveedores($item, $v
                                 </div>
                             </div>
                         </div>
-
                         <div class="col-lg-3 col-sm-6 col-12 d-flex">
                             <div class="dash-count das3">
                                 <div class="dash-counts">
@@ -160,7 +133,6 @@ $totalProveedores = ControladorProveedores::ctrMostrarTotalProveedores($item, $v
                                 </div>
                             </div>
                         </div>
-
                         <div class="col-lg-3 col-sm-6 col-12 d-flex">
                             <div class="dash-count das2">
                                 <div class="dash-counts">
@@ -172,17 +144,12 @@ $totalProveedores = ControladorProveedores::ctrMostrarTotalProveedores($item, $v
                                 </div>
                             </div>
                         </div>
-
-
-
                     </div>
                 <?php
                 }
             }
         }
         ?>
-
-
         <div class="row">
 
             <div class="col-lg-8 col-sm-12 col-12 d-flex">
@@ -231,10 +198,10 @@ $totalProveedores = ControladorProveedores::ctrMostrarTotalProveedores($item, $v
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                 <li>
-                                    <a href="productlist.html" class="dropdown-item">Lista de productos</a>
+                                    <a href="productos" class="dropdown-item">Lista de productos</a>
                                 </li>
                                 <li>
-                                    <a href="addproduct.html" class="dropdown-item">Agregar producto</a>
+                                    <a href="productos" class="dropdown-item">Agregar producto</a>
                                 </li>
                             </ul>
                         </div>

@@ -9,17 +9,10 @@ $(document).ready(function () {
       type: "GET",
       dataType: "json",
       success: function (productos) {
-
-
         var tbody = $("#data_productos");
-
         tbody.empty();
-
         productos.forEach(function (producto, index) {
-
           producto.imagen_producto = producto.imagen_producto.substring(3);
-
-
           var fila = `
                         <tr>
                             <td>${index + 1}</td>
@@ -64,8 +57,6 @@ $(document).ready(function () {
             }
           }
 
-
-
           // Agregar la fila al tbody
           tbody.append(fila);
         });
@@ -83,16 +74,12 @@ $(document).ready(function () {
   ===================================== */
   $("#imagen_producto").change(function () {
     const file = this.files[0];
-
     if (file) {
       const reader = new FileReader();
-
       reader.onload = function (e) {
         $(".vistaPreviaImagenProducto").attr("src", e.target.result);
-
         $(".vistaPreviaImagenProducto").show();
       };
-
       reader.readAsDataURL(file);
     }
   });
@@ -102,16 +89,12 @@ $(document).ready(function () {
   ===================================== */
   $("#edit_imagen_producto").change(function () {
     const file = this.files[0];
-
     if (file) {
       const reader = new FileReader();
-
       reader.onload = function (e) {
         $(".edit_vista_previa_imagen_p").attr("src", e.target.result);
-
         $(".edit_vista_previa_imagen_p").show();
       };
-
       reader.readAsDataURL(file);
     }
   });
@@ -121,7 +104,6 @@ $(document).ready(function () {
   ===================================== */
   $("#imagen_producto").change(function () {
     var imagen = $(this).get(0).files[0];
-
     if (imagen) {
       var maxSize = 5 * 1024 * 1024;
 
@@ -322,12 +304,9 @@ $(document).ready(function () {
   EDITAR EL PRODUCTO
   =============================================*/
   $("#tabla_productos").on("click", ".btnEditarProducto", function () {
-
     var idProducto = $(this).attr("idProducto");
-
     var datos = new FormData();
     datos.append("idProducto", idProducto);
-
     $.ajax({
       url: "ajax/Producto.ajax.php",
       method: "POST",
@@ -337,10 +316,8 @@ $(document).ready(function () {
       processData: false,
       dataType: "json",
       success: function (respuesta) {
-
         $("#edit_id_producto").val(respuesta["id_producto"]);
         $("#edit_id_categoria_p").val(respuesta["id_categoria"]);
-
         $("#edit_codigo_producto").val(respuesta["codigo_producto"]);
         $("#edit_nombre_producto").val(respuesta["nombre_producto"]);
         $("#edit_precio_producto").val(respuesta["precio_producto"]);
@@ -348,9 +325,7 @@ $(document).ready(function () {
         $("#edit_fecha_vencimiento").val(respuesta["fecha_vencimiento"]);
         $("#edit_descripcion_producto").val(respuesta["descripcion_producto"]);
         $("#edit_imagen_actual_p").val(respuesta["imagen_producto"]);
-
         var imagenUsuario = respuesta["imagen_producto"].substring(3);
-
         if (respuesta["imagen_producto"] != "") {
           $(".edit_vista_previa_imagen_p").attr("src", imagenUsuario);
         } else {
@@ -359,8 +334,6 @@ $(document).ready(function () {
             "vistas/img/usuarios/default/anonymous.png"
           );
         }
-
-
       },
     });
   });

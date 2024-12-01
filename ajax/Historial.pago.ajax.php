@@ -9,50 +9,11 @@ class AjaxHistorialPago
     /*=============================================
 	EDITAR PRODUCTO
 	=============================================*/
-    public $idProducto;
+    public $idPago;
     public function ajaxEditarProducto()
     {
-        $item = "id_producto";
-        $valor = $this->idProducto;
-        $respuesta = ControladorHistorialPago::ctrMostrarHistorialPago($item, $valor);
-        echo json_encode($respuesta);
-    }
-
-    /*=============================================
-	MOSTRAR DETALLE PRODUCTO
-	=============================================*/
-    public $idProductoVer;
-    public function ajaxVerProducto()
-    {
-        $item = "id_producto";
-        $valor = $this->idProductoVer;
-        $respuesta = ControladorHistorialPago::ctrMostrarHistorialPago($item, $valor);
-        echo json_encode($respuesta);
-    }
-
-    /*=============================================
-	ACTIVAR PRODUCTO
-	=============================================*/
-    public $activarProducto;
-    public $activarId;
-    public function ajaxActivarProducto()
-    {
-        $tabla = "productos";
-        $item1 = "estado_producto";
-        $valor1 = $this->activarProducto;
-        $item2 = "id_producto";
-        $valor2 = $this->activarId;
-        $respuesta = ModeloProducto::mdlActualizarProducto($tabla, $item1, $valor1, $item2, $valor2);
-    }
-
-    /*=============================================
-	VALIDAR NO REPETIR PRODUCTO
-	=============================================*/
-    public $validarUsuario;
-    public function ajaxValidarUsuario()
-    {
-        $item = "usuario";
-        $valor = $this->validarUsuario;
+        $item = "id_pago";
+        $valor = $this->idPago;
         $respuesta = ControladorHistorialPago::ctrMostrarHistorialPago($item, $valor);
         echo json_encode($respuesta);
     }
@@ -61,9 +22,9 @@ class AjaxHistorialPago
 /*=============================================
 EDITAR PRODUCTO
 =============================================*/
-if (isset($_POST["idProducto"])) {
+if (isset($_POST["idPago"])) {
     $editar = new AjaxHistorialPago();
-    $editar->idProducto = $_POST["idProducto"];
+    $editar->idPago = $_POST["idPago"];
     $editar->ajaxEditarProducto();
 }
 
@@ -72,9 +33,9 @@ elseif (isset($_POST["id_venta_pagar"])) {
     ControladorHistorialPago::ctrActualizarDeudaVenta();
 }
 /* ACTUALIZAR PRODUCTO */ 
-elseif (isset($_POST["edit_id_producto"])) {
-    $editProducto = new ControladorHistorialPago();
-    $editProducto->ctrEditarHistorialPago();
+elseif (isset($_POST["edit_edit_pago_historial"])) {
+    $editPago = new ControladorHistorialPago();
+    $editPago->ctrEditarHistorialPago();
 }
 /* BORRAR PRODUCTO */ 
 elseif (isset($_POST["id_delete_pago_historial"])) {
@@ -82,7 +43,7 @@ elseif (isset($_POST["id_delete_pago_historial"])) {
     $borrarPago->ctrBorrarHistorialPago();
 }
 /* MOSTRAR PRODUCTOS EN LA TABLA */ 
-else {
+elseif(isset($_POST["id_venta_historial"])) {
     $item = "id_venta";
     $valor = $_POST["id_venta_historial"];
     $mostrar_historial_pagos = ControladorHistorialPago::ctrMostrarHistorialPago($item, $valor);
