@@ -61,9 +61,17 @@
 
 
         <li class="nav-item dropdown">
-
+            <?php
+            $item = null;
+            $valor = null;
+            $productosPorVencer = ControladorProducto::ctrMostrarProductosFechaVencimientos($item, $valor);
+            $cantidadNotificaciones = count($productosPorVencer); // Contar el número de notificaciones
+            ?>
             <a href="javascript:void(0);" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
-                <img src="vistas/assets/img/icons/notification-bing.svg" alt="img"> <span class="badge rounded-pill" id="cantidad_notificacion">67</span>
+                <img src="vistas/assets/img/icons/notification-bing.svg" alt="img">
+                <span class="badge rounded-pill" id="cantidad_notificacion">
+                    <?php echo $cantidadNotificaciones; ?>
+                </span>
             </a>
             <div class="dropdown-menu notifications">
                 <div class="topnav-dropdown-header">
@@ -72,35 +80,32 @@
                 </div>
                 <div class="noti-content">
                     <ul class="notification-list" id="notification-list">
-
-                        <?php
-
-                        foreach ($productosPorVencer as $producto) {
-                        ?>
-
-                            <li class="notification-message">
-                                <a href="activities.html">
-                                    <div class="media d-flex">
-                                        <span class="avatar flex-shrink-0">
-                                            <img alt="" src="<?php echo substr($producto["imagen_producto"], 3) ?>">
-                                        </span>
-                                        <div class="media-body flex-grow-1">
-                                            <p class="noti-details"><span class="noti-title"><?php echo $producto["nombre_producto"] ?></span> <?php echo $producto["nombre_categoria"] ?>
-
-                                            </p>
-                                            <p class="noti-time"><span class="notification-time"><?php echo $producto["fecha_vencimiento"] ?></span>
-                                            </p>
+                        <?php if ($cantidadNotificaciones > 0): ?>
+                            <?php foreach ($productosPorVencer as $producto): ?>
+                                <li class="notification-message">
+                                    <a href="activities.html">
+                                        <div class="media d-flex">
+                                            <span class="avatar flex-shrink-0">
+                                                <img alt="" src="<?php echo substr($producto["imagen_producto"], 3); ?>">
+                                            </span>
+                                            <div class="media-body flex-grow-1">
+                                                <p class="noti-details">
+                                                    <span class="noti-title"><?php echo $producto["nombre_producto"]; ?></span>
+                                                    <?php echo $producto["nombre_categoria"]; ?>
+                                                </p>
+                                                <p class="noti-time">
+                                                    <span class="notification-time"><?php echo $producto["fecha_vencimiento"]; ?></span>
+                                                </p>
+                                            </div>
                                         </div>
-                                    </div>
-                                </a>
+                                    </a>
+                                </li>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <li class="notification-message m-3 justify-content-center">
+                                <p class="noti-details text-center">No hay notificaciones disponibles.</p>
                             </li>
-
-
-                        <?php
-                        }
-                        ?>
-
-
+                        <?php endif; ?>
                     </ul>
                 </div>
                 <div class="topnav-dropdown-footer">
@@ -108,6 +113,7 @@
                 </div>
             </div>
         </li>
+
 
         <li class="nav-item dropdown has-arrow main-drop">
             <a href="javascript:void(0);" class="dropdown-toggle nav-link userset" data-bs-toggle="dropdown">
