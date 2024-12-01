@@ -28,7 +28,7 @@
                 </a>
                 <form action="#">
                     <div class="searchinputs">
-                        <input type="text" placeholder="Search Here ...">
+                        <input type="text" placeholder="Buscar ...">
                         <div class="search-addon">
                             <span><img src="vistas/assets/img/icons/closes.svg" alt="img"></span>
                         </div>
