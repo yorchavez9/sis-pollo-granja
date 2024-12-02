@@ -164,8 +164,8 @@ $serieNumeroComprobante = ControladorSerieNumero::ctrMostrarSerieNumero($item, $
                                                 <th scope="col" class="text-white">Opc</th>
                                                 <th scope="col" class="text-white">Img</th>
                                                 <th scope="col" class="text-white">Prod</th>
-                                                <th scope="col" class="text-white">N° javas</th>
-                                                <th scope="col" class="text-white">N° aves</th>
+                                                <th scope="col" class="text-white">Javas</th>
+                                                <th scope="col" class="text-white">Unidades</th>
                                                 <th scope="col" class="text-white">P. Prom</th>
                                                 <th scope="col" class="text-white">P. Brut</th>
                                                 <th scope="col" class="text-white">P. Tara</th>

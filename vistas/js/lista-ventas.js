@@ -859,13 +859,13 @@ $("#tabla_historial_pago").on("click", ".btnEditarHistorialPago", function (e) {
       $("#edit_monto_pagar_venta").val(respuesta["monto_pago"]);
       $("#edit_monto_actual_pago").val(respuesta["monto_pago"]);
 
-      if (respuesta["comprobante_imagen"] != "") {
+      if (respuesta["comprobante_imagen"] && respuesta["comprobante_imagen"] !== "") {
         let img_comprobante = respuesta["comprobante_imagen"].substring(3);
         $(".edit_vista_previa_comprobante_pago").attr("src", img_comprobante);
       } else {
         $(".edit_vista_previa_comprobante_pago").attr(
           "src",
-          "vistas/img/usuarios/default/anonymous.png"
+          "vistas/img/comprobantes/default.png"
         );
       }
     },

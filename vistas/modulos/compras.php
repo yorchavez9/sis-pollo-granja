@@ -163,8 +163,8 @@
                                                 <th scope="col" class="text-white">Acc.</th>
                                                 <th scope="col" class="text-white">Img.</th>
                                                 <th scope="col" class="text-white">Prod.</th>
-                                                <th scope="col" class="text-white">N° Javas</th>
-                                                <th scope="col" class="text-white">N° Aves</th>
+                                                <th scope="col" class="text-white">Javas</th>
+                                                <th scope="col" class="text-white">Unidades</th>
                                                 <th scope="col" class="text-white">Peso Prom.</th>
                                                 <th scope="col" class="text-white">Peso Bruto</th>
                                                 <th scope="col" class="text-white">Peso Tara</th>

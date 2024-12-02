@@ -283,6 +283,13 @@ $(document).ready(function () {
       $("#error_egreso_proveedor").html("").removeClass("text-danger");
     }
 
+    if (!fecha_egreso){
+      $("#error_egreso_fecha").html("Por favor, seleccione el proveedor").addClass("text-danger");
+      isValid = false;
+    }else{
+      $("#error_egreso_fecha").html("").removeClass("text-danger");
+    }
+
     // Si falta el tipo de comprobante
     if (!tipo_comprobante_egreso) {
       $("#error_compra_comprobante").html("Por favor, selecione el tipo de comprobante").addClass("text-danger");
@@ -411,7 +418,6 @@ $(document).ready(function () {
 
             // Llamar funciones adicionales
             mostrarProductos();
-            mostrarSerieNumero('ticket');
           } else {
             Swal.fire({
               title: "¡Error!",
