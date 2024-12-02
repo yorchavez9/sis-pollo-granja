@@ -390,6 +390,7 @@ $(document).ready(function () {
             $("#subtotal_egreso").text("00.00");
             $("#igv_egreso").text("00.00");
             $("#total_precio_egreso").text("00.00");
+            setDateToToday('fecha_egreso');
 
             // Mostrar alerta y preguntar acción
             Swal.fire({
@@ -442,6 +443,7 @@ $(document).ready(function () {
             });
 
             // Llamar funciones adicionales
+            setDateToToday('fecha_egreso');
             mostrarProductos();
           } else {
             Swal.fire({

@@ -440,6 +440,32 @@ $("#btn_crear_nueva_venta").click(function (e) {
     $("#error_cliente_venta").html("").removeClass("text-danger");
   }
 
+  if (comprobante_venta == "" || comprobante_venta == null) {
+    $("#error_comprobante_venta")
+      .html("Por favor, selecione el comprobante")
+      .addClass("text-danger");
+    isValid = false;
+  } else {
+    $("#error_comprobante_venta").html("").removeClass("text-danger");
+  }
+
+  if (serie_venta == "" || serie_venta == null) {
+    $("#error_serie_venta")
+      .html("Por favor, ingrese la serie")
+      .addClass("text-danger");
+    isValid = false;
+  } else {
+    $("#error_serie_venta").html("").removeClass("text-danger");
+  }
+  if (numero_venta == "" || numero_venta == null) {
+    $("#error_numero_venta")
+      .html("Por favor, ingrese el número")
+      .addClass("text-danger");
+    isValid = false;
+  } else {
+    $("#error_numero_venta").html("").removeClass("text-danger");
+  }
+
   const valoresProductos = [];
 
   $("#detalle_venta_producto tr").each(function () {
@@ -514,7 +540,7 @@ $("#btn_crear_nueva_venta").click(function (e) {
         $("#subtotal_venta").text("00.00");
         $("#igv_venta_show").text("00.00");
         $("#total_precio_venta").text("00.00");
-
+        setDateToToday('fecha_venta');
         // Mostrar alerta y preguntar acción
         Swal.fire({
           title: "¿Qué desea hacer con el comprobante?",
@@ -564,7 +590,7 @@ $("#btn_crear_nueva_venta").click(function (e) {
             });
           }
         });
-
+        setDateToToday('fecha_venta');
         mostrarProductoVenta();
         mostrarSerieNumero('ticket');
         mostrarVentas();

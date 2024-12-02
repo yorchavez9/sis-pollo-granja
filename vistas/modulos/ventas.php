@@ -127,6 +127,7 @@ $serieNumeroComprobante = ControladorSerieNumero::ctrMostrarSerieNumero($item, $
                                     <div class="form-group">
                                         <label for="serie_venta" class="form-label">Serie:</label>
                                         <input type="text" id="serie_venta" name="serie_venta" placeholder="Serie">
+                                        <small id="error_serie_venta" class="text-danger"></small>
                                     </div>
                                 </div>
                                 <!-- INGRESO DE NÚMERO -->
@@ -134,6 +135,7 @@ $serieNumeroComprobante = ControladorSerieNumero::ctrMostrarSerieNumero($item, $
                                     <div class="form-group">
                                         <label for="numero_venta" class="form-label">Número:</label>
                                         <input type="text" id="numero_venta" name="numero_venta" placeholder="Número">
+                                        <small id="error_numero_venta" class="text-danger"></small>
                                     </div>
                                 </div>
                                 <!-- INGRESO EL INPUESTO -->
