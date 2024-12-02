@@ -2,7 +2,7 @@
 CONTENIDO PRINCIPAL
 ======================================== -->
 
-<div class="page-wrapper">
+<div class="page-wrapper" id="section_contrato_trabajador">
     <div class="content">
         <div class="page-header">
             <div class="page-title">
@@ -80,7 +80,7 @@ MODAL NUEVO CONTRATO DEL TRABAJADOR
 
                         <label>Ingrese el nombre completo (<span class="text-danger">*</span>)</label>
 
-                        <select id="id_trabajador_contrato" class="form-select form-select-sm">
+                        <select id="id_trabajador_contrato" class="js-example-basic-single select2 select">
                             <option selected disabled>Selecione</option>
                             <?php
 
@@ -110,7 +110,7 @@ MODAL NUEVO CONTRATO DEL TRABAJADOR
 
                             <label for="" class="form-label">Tipo de sueldo (<span class="text-danger">*</span>)</label>
 
-                            <select id="tipo_sueldo_c" class="form-select form-select-sm">
+                            <select id="tipo_sueldo_c" class="select">
 
                                 <option selected disabled>Seleccione</option>
                                 <option value="diaria">Diario</option>
@@ -200,7 +200,7 @@ MODAL EDITAR CONTRATO DEL TRABAJADOR
 
                         <label>Ingrese el nombre completo (<span class="text-danger">*</span>)</label>
 
-                        <select id="edit_id_trabajador_contrato" class="form-select form-select-sm">
+                        <select id="edit_id_trabajador_contrato" class="js-example-basic-single select2 select">
 
                             <?php
 
@@ -229,7 +229,7 @@ MODAL EDITAR CONTRATO DEL TRABAJADOR
 
                             <label for="" class="form-label">Tipo de sueldo (<span class="text-danger">*</span>)</label>
 
-                            <select id="edit_tipo_sueldo_c" class="form-select form-select-sm">
+                            <select id="edit_tipo_sueldo_c" class="select">
 
                                 <option selected disabled>Seleccione</option>
                                 <option value="diaria">Diario</option>
@@ -296,3 +296,34 @@ MODAL EDITAR CONTRATO DEL TRABAJADOR
         </div>
     </div>
 </div>
+<script>
+    $('#form_nuevo_contrato_trabajador input').on('focus', function() {
+        // Limpiar el valor del input
+        $(this).val('');
+    });
+    $('#form_editar_contrato_trabajador input').on('focus', function() {
+        // Limpiar el valor del input
+        $(this).val('');
+    });
+
+    // Inicializar Select2 en todos los elementos
+    $('.js-example-basic-single').select2({
+        placeholder: "Select an option",
+        allowClear: true,
+    });
+
+    // Reinicializar al abrir el modal nuevo
+    $('#modalNuevoContratoTrabajador').on('shown.bs.modal', function() {
+        $(this).find('.js-example-basic-single').select2({
+            placeholder: "Select an option",
+            dropdownParent: $('#modalNuevoContratoTrabajador')
+        });
+    });
+    // Reinicializar al abrir el modal editar
+    $('#modalEditarContratoTrabajador').on('shown.bs.modal', function() {
+        $(this).find('.js-example-basic-single').select2({
+            placeholder: "Select an option",
+            dropdownParent: $('#modalEditarContratoTrabajador')
+        });
+    });
+</script>

@@ -16,6 +16,7 @@ class ControladorPagos
 			"fecha_pago" => $_POST["fecha_pago_t"]
 		);
 		$respuesta = ModeloPago::mdlIngresarPagos($tabla, $datos);
+
 		if ($respuesta == "ok") {
 			echo json_encode("ok");
 		} else {

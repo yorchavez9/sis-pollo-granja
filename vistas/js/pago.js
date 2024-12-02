@@ -3,50 +3,31 @@ $(document).ready(function () {
   /* =====================================
   SELECIONANDO LA FECHA AUTOMATICAMENTE
   ===================================== */
-
   function obtenerFechaActual() {
-
     var today = new Date();
-
     var dd = String(today.getDate()).padStart(2, "0");
-
     var mm = String(today.getMonth() + 1).padStart(2, "0"); // Enero es 0
-
     var yyyy = today.getFullYear();
-
     return yyyy + "-" + mm + "-" + dd;
-
   }
-
   let fechaActual = obtenerFechaActual();
-
   $('#fecha_pago_t').val(fechaActual);
-
 
   /*=============================================
   FORMATEO DE PRECIOS DE LA VENTA
   =============================================*/
-
   function formateoPrecio(numero) {
-
     return numero.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-
   }
 
   /* ===========================================
   OBTENER EL MONTO DEL PAGO DEL TRABAJADOR
   ===========================================*/
-
   $("#id_contrato_pago").change(function (e) {
-
     e.preventDefault();
-
     let idContratoSelect = $(this).val();
-
     let datos = new FormData();
-
     datos.append("idContratoSelect", idContratoSelect);
-
     $.ajax({
       url: "ajax/Pago.trabajador.ajax.php",
       method: "POST",
@@ -62,33 +43,21 @@ $(document).ready(function () {
   });
 
 
-
   /* ===========================================
   GUARDAR PAGO DEL TRABAJADOR
   ===========================================*/
-
   $("#btn_guardar_pago_trabajador").click(function (e) {
-
     e.preventDefault();
-
     var isValid = true;
-
     var id_contrato_pago = $("#id_contrato_pago").val();
-
     var monto_pago_t = $("#monto_pago_t").val();
-
     var fecha_pago_t = $("#fecha_pago_t").val();
-
     /* VALIDANDO EL ID TRABAJADOR */
 
     if (id_contrato_pago == "" || id_contrato_pago == null) {
-
       $("#error_id_trabjador_pago").html("Por favor, selecione el trabajador").addClass("text-danger");
-
       isValid = false;
-
     } else {
-
       $("#error_id_trabjador_pago").html("").removeClass("text-danger");
     }
 
@@ -96,14 +65,10 @@ $(document).ready(function () {
     /* SI EL FORMULARIO ES VALIDO ENVIAR */
 
     if (isValid) {
-
       var datos = new FormData();
-
       datos.append("id_contrato_pago", id_contrato_pago);
       datos.append("monto_pago_t", monto_pago_t);
       datos.append("fecha_pago_t", fecha_pago_t);
-
-
       $.ajax({
         url: "ajax/Pago.trabajador.ajax.php",
         method: "POST",
@@ -112,27 +77,18 @@ $(document).ready(function () {
         contentType: false,
         processData: false,
         success: function (respuesta) {
-
           var res = JSON.parse(respuesta);
-
           if (res === "ok") {
-
             $("#form_nuevo_pago_trabajador")[0].reset();
-
             $("#modalNuevoPagoTrabajador").modal("hide");
-
             Swal.fire({
               title: "¡Correcto!",
               text: "El pago se realizó correctamente",
               icon: "success",
             });
-
             mostrarPagoTrabajador();
-
           } else {
-
             console.error("Erro al guardar los datos");
-
           }
         },
       });
@@ -144,13 +100,11 @@ $(document).ready(function () {
   =========================================*/
 
   function mostrarPagoTrabajador() {
-
     $.ajax({
       url: "ajax/Pago.trabajador.ajax.php",
       type: "GET",
       dataType: "json",
       success: function (pagos) {
-
         //OBTENIENDO LA FECHA ACTUAL
 
         var fechaActual = new Date();

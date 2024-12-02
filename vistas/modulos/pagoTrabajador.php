@@ -61,7 +61,6 @@ CONTENIDO PRINCIPAL
 <!-- ========================================
 MODAL NUEVO PAGO DEL TRABAJADOR
 ======================================== -->
-
 <div class="modal fade" id="modalNuevoPagoTrabajador" tabindex="-1" aria-labelledby="modalNuevoPagoTrabajadorLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -155,7 +154,6 @@ MODAL NUEVO PAGO DEL TRABAJADOR
 <!-- ========================================
 MODAL NUEVO PAGO DEL TRABAJADOR
 ======================================== -->
-
 <div class="modal fade" id="modalNuevoPagoTrabajador" tabindex="-1" aria-labelledby="modalNuevoPagoTrabajadorLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -244,6 +242,8 @@ MODAL NUEVO PAGO DEL TRABAJADOR
         </div>
     </div>
 </div>
+
+
 <script>
     // Inicializar Select2 en todos los elementos
     $('.js-example-basic-single').select2({
