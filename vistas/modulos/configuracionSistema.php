@@ -11,7 +11,7 @@
                 $valor = null;
                 $configuracion = ControladorConfiguracionSistema::ctrMostrarConfiguracionSistema($item, $valor);
                 $count = count($configuracion);
-                if ($count < 0) {
+                if ($count === 0) {
                 ?>
                     <a href="#" class="btn btn-added" data-bs-toggle="modal" data-bs-target="#modal_nuevo_configuracion_sistema"><img src="vistas/assets/img/icons/plus.svg" alt="img" class="me-2">Crear configuración</a>
                 <?php
@@ -22,6 +22,10 @@
 
         <div class="card">
             <div class="card-body">
+                <div class="text-center my-4">
+                    <h3>¡Aviso!</h3>
+                    <h4>Una vez configurado inicie sesión nuevamente 😊</h4>
+                </div>
                 <div class="table-top">
                     <div class="search-set">
                         <div class="search-path">
@@ -109,20 +113,20 @@ MODAL NUEVA CONFIGURACION
                         <div class="col-md-6">
                             <!-- Campo Nombre -->
                             <div class="mb-3">
-                                <label for="nombre" class="form-label"><i class="fa fa-tag text-primary"></i> Nombre del negocio</label>
+                                <label for="nombre" class="form-label"><i class="fa fa-tag text-primary"></i> Nombre del negocio o de la tienda</label>
                                 <input type="text" class="form-control" id="nombre_sis" name="nombre" placeholder="Nombre del sistema" required>
                             </div>
 
                             <!-- Campo Icono de pestaña -->
                             <div class="mb-3">
-                                <label for="icon_pestana" class="form-label"><i class="fa fa-window-maximize text-success"></i> Icono de pestaña de boscador (Google)</label>
+                                <label for="icon_pestana" class="form-label"><i class="fa fa-window-maximize text-success"></i> Icono de pestaña del boscador (Google)</label>
                                 <input type="file" class="form-control" id="icon_pestana_sis" name="icon_pestana" accept="image/*" required onchange="previewImage(event, 'preview_icon_pestana')">
                                 <img id="preview_icon_pestana" src="" alt="Vista previa" class="img-thumbnail mt-2" style="display: none; max-height: 150px;">
                             </div>
 
                             <!-- Campo Imagen Sidebar -->
                             <div class="mb-3">
-                                <label for="img_sidebar" class="form-label"><i class="fa fa-bars text-danger"></i> Imagen Sidebar (Modo escritorio)</label>
+                                <label for="img_sidebar" class="form-label"><i class="fa fa-bars text-danger"></i> Imagen para el menu lateral (Modo escritorio)</label>
                                 <input type="file" class="form-control" id="img_sidebar_sis" name="img_sidebar" accept="image/*" required onchange="previewImage(event, 'preview_img_sidebar')">
                                 <img id="preview_img_sidebar" src="" alt="Vista previa" class="img-thumbnail mt-2" style="display: none; max-height: 150px;">
                             </div>
@@ -132,7 +136,7 @@ MODAL NUEVA CONFIGURACION
                         <div class="col-md-6">
                             <!-- Campo Imagen Sidebar Mínima -->
                             <div class="mb-3">
-                                <label for="img_sidebar_min" class="form-label"><i class="fa fa-compress text-info"></i> Imagen Sidebar (para el modo movil)</label>
+                                <label for="img_sidebar_min" class="form-label"><i class="fa fa-compress text-info"></i> Imagen para el menu lateral movil (para el modo movil)</label>
                                 <input type="file" class="form-control" id="img_sidebar_min" name="img_sidebar_min" accept="image/*" required onchange="previewImage(event, 'preview_img_sidebar_min')">
                                 <img id="preview_img_sidebar_min" src="" alt="Vista previa" class="img-thumbnail mt-2" style="display: none; max-height: 150px;">
                             </div>
