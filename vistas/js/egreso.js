@@ -179,11 +179,20 @@ $(document).ready(function () {
           let precio_compra = parseFloat(fila.find(".precio_compra").val()) || 0;
           let impuesto_egreso = parseFloat($("#impuesto_egreso").val()) || 0;
 
-          // Calcular peso_bruto, peso_neto y precio_sub_total
-          const peso_neto_f = peso_bruto - peso_tara - peso_merma;
-          const peso_promedio_f = peso_neto_f / numero_aves;
-          const precio_sub_total_f = peso_neto_f *  precio_compra;
+          // Variables para cálculos
+          let peso_neto_f = 0;
+          let peso_promedio_f = 0;
+          let precio_sub_total_f = 0;
           
+          if(peso_bruto === 0 || peso_bruto == 0.00){
+            precio_sub_total_f = numero_aves * precio_compra;
+          }else{
+            // Calcular peso_bruto, peso_neto y precio_sub_total
+            peso_neto_f = peso_bruto - peso_tara - peso_merma;
+            peso_promedio_f = peso_neto_f / numero_aves;
+            precio_sub_total_f = peso_neto_f * precio_compra;
+          }
+
           // Formatear los valores
           const format_peso_promedio = formateoPrecio(peso_promedio_f.toFixed(2));
           const format_peso_neto = formateoPrecio(peso_neto_f.toFixed(2));
