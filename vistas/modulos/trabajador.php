@@ -1,4 +1,3 @@
-
 <!-- ========================================
 CONTENIDO PRINCIPAL
 ======================================== -->
@@ -111,7 +110,7 @@ MODAL NUEVO TRABAJADOR
 
                     <!-- INGRESO DE CORREO -->
                     <div class="form-group">
-                        <label for="correo" class="form-label">Ingrese el correo electrónico(<span class="text-danger">*</span>)</label>
+                        <label for="correo" class="form-label">Ingrese el correo electrónico</label>
                         <input type="email" id="correo_t" class="form-control" placeholder="Ingrese el correo electrónico">
                         <small id="error_correo_t"></small>
                     </div>
@@ -152,9 +151,15 @@ MODAL NUEVO TRABAJADOR
                                 <label for="tipo_pago" class="form-label">Ingrese el tipo de pago</label>
                                 <select id="tipo_pago_t" class="form-select">
                                     <option value="" selected disabled>Seleccione</option>
-                                    <option value="efectivo">Efectivo</option>
-                                    <option value="targetaDebito">Targeta de débito</option>
-                                    <option value="targetaCredito">Targeta de crédito</option>
+                                    <option value="pago_efectivo">Pago Efectivo</option>
+                                    <option value="yape">Yape</option>
+                                    <option value="plin">Plin</option>
+                                    <option value="tunki">Tunki</option>
+                                    <option value="agora_pay">Agora PAY</option>
+                                    <option value="bim">BIM</option>
+                                    <option value="tarjeta_debito">Tarjeta de Débito</option>
+                                    <option value="tarjeta_credito">Tarjeta de Crédito</option>
+                                    <option value="transferencia_bancaria">Transferencia Bancaria</option>
                                 </select>
                             </div>
                         </div>
@@ -250,7 +255,7 @@ MODAL EDITAR TRABAJADOR
                                 <label for="foto_trabajador" class="form-label">Ingrese la foto</label>
                                 <input type="file" class="form-control" id="edit_foto_t" class="form-control foto_t" accept="image/*">
                                 <div class="text-center mt-3">
-                                    <img src="" class="edit_vista_previa_foto_trabajador img img-fluid rounded-circle" width="150" height="200"  alt="">
+                                    <img src="" class="edit_vista_previa_foto_trabajador img img-fluid rounded-circle" width="150" height="200" alt="">
                                 </div>
                                 <input type="hidden" id="foto_actual_t">
                             </div>
@@ -279,9 +284,15 @@ MODAL EDITAR TRABAJADOR
                                 <label for="tipo_pago" class="form-label">Ingrese el tipo de pago</label>
                                 <select id="edit_tipo_pago_t" class="form-select">
                                     <option value="" selected disabled>Seleccione</option>
-                                    <option value="efectivo">Efectivo</option>
-                                    <option value="targetaDebito">Targeta de débito</option>
-                                    <option value="targetaCredito">Targeta de crédito</option>
+                                    <option value="pago_efectivo">Pago Efectivo</option>
+                                    <option value="yape">Yape</option>
+                                    <option value="plin">Plin</option>
+                                    <option value="tunki">Tunki</option>
+                                    <option value="agora_pay">Agora PAY</option>
+                                    <option value="bim">BIM</option>
+                                    <option value="tarjeta_debito">Tarjeta de Débito</option>
+                                    <option value="tarjeta_credito">Tarjeta de Crédito</option>
+                                    <option value="transferencia_bancaria">Transferencia Bancaria</option>
                                 </select>
                             </div>
                         </div>
@@ -402,14 +413,25 @@ MODAL VER DETALLES DEL TRABAJADOR
                         <!-- MOSTRAR NUMERO DE CUENTA -->
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="usuario" class="form-label"><i class="fas fa-credit-card text-danger"></i> Número de cuenta bancaria:</label>
-                                <P id="mostrar_numero_cuenta_trabajador"></P>
+                                <label for="usuario" class="form-label me-2"><i class="fas fa-credit-card text-danger"></i> Número de cuenta bancaria:</label>
+                                <div class="d-flex align-items-center">
+                                    <p id="mostrar_numero_cuenta_trabajador" class="mb-0 me-2">123456789</p> <!-- Muestra el número de cuenta -->
+                                    <!-- Icono para copiar -->
+                                    <button id="copiar_numero_cuenta" class="btn btn-light position-relative">
+                                        <i class="fas fa-copy"></i> Copiar
+                                        <!-- Texto "Copiado" que aparecerá encima del ícono -->
+                                        <span id="copiado_texto" class="position-absolute top-0 start-50 translate-middle-x badge rounded-pill bg-success" style="display: none; font-size: 0.75rem; padding: 0.25rem 0.5rem;">¡Copiado!</span>
+                                    </button>
+                                </div>
                             </div>
                         </div>
+
+
+
                     </div>
 
 
-                  
+
 
 
                 </div>
@@ -422,3 +444,25 @@ MODAL VER DETALLES DEL TRABAJADOR
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function() {
+        $('#copiar_numero_cuenta').on('click', function(event) {
+            event.preventDefault();
+
+            // Obtener el número de cuenta
+            var numeroCuenta = $('#mostrar_numero_cuenta_trabajador').text();
+
+            // Usar la API Clipboard para copiar al portapapeles
+            navigator.clipboard.writeText(numeroCuenta).then(function() {
+                // Mostrar el texto "Copiado" encima del icono
+                $('#copiado_texto').fadeIn(200).delay(1000).fadeOut(200); // Mostrar y ocultar el mensaje
+
+                // (Opcional) Puedes agregar una notificación adicional aquí si lo deseas
+                // alert('Número de cuenta copiado al portapapeles: ' + numeroCuenta);
+            }).catch(function(err) {
+                console.error('Error al copiar al portapapeles: ', err);
+            });
+        });
+    });
+</script>

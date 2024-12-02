@@ -43,11 +43,8 @@ $(document).ready(function () {
   =========================================== */
 
   $("#btn_guardar_trabajador").click(function (e) {
-
     e.preventDefault();
-
     var isValid = true;
-
     var nombre = $("#nombre_t").val();
     var num_documento = $("#numero_documento_t").val();
     var telefono = $("#telefono_t").val();
@@ -57,70 +54,44 @@ $(document).ready(function () {
     var tipo_pago = $("#tipo_pago_t").val();
     var num_cuenta = $("#numero_cuenta").val();
 
-
     /* VALIDANDO EL NOMBRE DEL TRABAJADOR */
-
     if (nombre == "") {
-
       $("#error_nombre_t").html("Por favor, ingrese el nombre completo").addClass("text-danger");
-
       isValid = false;
-
     } else {
-
       $("#error_nombre_t").html("").removeClass("text-danger");
-
     }
 
     /* VALIDANDO EL NUMERO DE DOCUCUMENTO */
-
     if (num_documento == "" || num_documento.length < 8 || num_documento.length > 8 || isNaN(num_documento)) {
-
         $("#error_numero_documento_t").html("Por favor, ingrese un número de documento válido de exactamente 8 dígitos numéricos").addClass("text-danger");
-        
         isValid = false;
-
     } else {
-
         $("#error_numero_documento_t").html("").removeClass("text-danger");
-
     }
 
      /* VALIDANDO EL TELEFONO */
-
      if (telefono == "") {
-
         $("#error_telefono_t").html("Por favor, ingrese el teléfono").addClass("text-danger");
-  
         isValid = false;
-  
       } else {
-  
         $("#error_telefono_t").html("").removeClass("text-danger");
-  
       }
 
-     /* VALIDANDO EL CORREO */
-
-     var correoRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
+    /* VALIDANDO EL CORREO */
+    var correoRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (correo == "") {
-
-        $("#error_correo_t").html("Por favor, ingrese el correo").addClass("text-danger");
-
-        isValid = false;
-
+      // No se muestra ningún error si el correo está vacío.
+      $("#error_correo_t").html("").removeClass("text-danger");
     } else if (!correoRegex.test(correo)) {
-
-        $("#error_correo_t").html("Por favor, ingrese un correo válido").addClass("text-danger");
-
-         isValid = false;
-
+      // Si el correo no es válido, se muestra el error.
+      $("#error_correo_t").html("Por favor, ingrese un correo válido").addClass("text-danger");
+      isValid = false;
     } else {
-
-        $("#error_correo_t").html("").removeClass("text-danger");
-
+      // Si el correo es válido, se limpia el error.
+      $("#error_correo_t").html("").removeClass("text-danger");
     }
+
 
 
     /* SI EL FORMULARIO ES VALIDO ENVIAR */
@@ -147,7 +118,6 @@ $(document).ready(function () {
         contentType: false,
         processData: false,
         success: function (respuesta) {
-
           var res = JSON.parse(respuesta);
 
           if (res === "ok") {
@@ -218,12 +188,12 @@ $(document).ready(function () {
                       <td>${trabajador.nombre}</td>
                       <td>${trabajador.num_documento}</td>
                       <td>${trabajador.telefono}</td>
-                      <td>${trabajador.correo}</td>
+                      <td>${trabajador.correo && trabajador.correo.trim() !== '' ? trabajador.correo : 'No tiene'}</td>
                      <td>
                         ${trabajador.cv && trabajador.cv.trim() !== '' ? `<a href="${trabajador.cv}" class="product-img" download><img src="vistas/pdf/pdf.png" alt="${trabajador.cv}"></a>` :'<span>No tiene</span>'}
                       </td>
                       <td>
-                      ${trabajador.tipo_pago}
+                      ${trabajador.tipo_pago == null || trabajador.tipo_pago == '' ? '<span>Ninguno</span>' : trabajador.tipo_pago}
                       </td>
                       <td>
                           ${

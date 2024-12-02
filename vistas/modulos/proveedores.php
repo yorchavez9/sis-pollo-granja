@@ -102,7 +102,7 @@
                             $tiposDocumentos = ControladorTipoDocumento::ctrMostrarTipoDocumento($item, $valor);
                             ?>
                             <select class="select" id="id_doc_proveedor">
-                                <option disabled  selected>Seleccione</option>
+                                <option disabled selected>Seleccione</option>
                                 <?php
                                 foreach ($tiposDocumentos as $key => $value) {
                                 ?>
@@ -193,14 +193,15 @@
                                 <label for="tipo_banco" class="form-label">Selecione el tipo de banco</label>
                                 <select class="select" id="tipo_banco_proveedor">
                                     <option disabled selected>Selecione</option>
-                                    <option value="BCRP">Banco Central de Reserva del Perú</option>
-                                    <option value="BCP">Banco de Crédito del Perú (BCP)</option>
-                                    <option value="SBP">Scotiabank Perú</option>
-                                    <option value="IB">Interbank</option>
-                                    <option value="BBVA">BBVA Perú</option>
-                                    <option value="BR">Banco Rural</option>
-                                    <option value="BN">Banco de la Nación</option>
-                                    <option value="BF">Banco Falabella</option>
+                                    <option value="pago_efectivo">Pago Efectivo</option>
+                                    <option value="yape">Yape</option>
+                                    <option value="plin">Plin</option>
+                                    <option value="tunki">Tunki</option>
+                                    <option value="agora_pay">Agora PAY</option>
+                                    <option value="bim">BIM</option>
+                                    <option value="tarjeta_debito">Tarjeta de Débito</option>
+                                    <option value="tarjeta_credito">Tarjeta de Crédito</option>
+                                    <option value="transferencia_bancaria">Transferencia Bancaria</option>
                                 </select>
                                 <small id="tipo_banco_proveedor"></small>
                             </div>
@@ -290,14 +291,15 @@
 
                                 <div class="form-group">
                                     <select class="form-select form-select-sm text-muted fs-6" id="ver_tipo_banco_p">
-                                        <option value="BCRP">Banco Central de Reserva del Perú</option>
-                                        <option value="BCP">Banco de Crédito del Perú (BCP)</option>
-                                        <option value="SBP">Scotiabank Perú</option>
-                                        <option value="IB">Interbank</option>
-                                        <option value="BBVA">BBVA Perú</option>
-                                        <option value="BR">Banco Rural</option>
-                                        <option value="BN">Banco de la Nación</option>
-                                        <option value="BF">Banco Falabella</option>
+                                        <option value="pago_efectivo">Pago Efectivo</option>
+                                        <option value="yape">Yape</option>
+                                        <option value="plin">Plin</option>
+                                        <option value="tunki">Tunki</option>
+                                        <option value="agora_pay">Agora PAY</option>
+                                        <option value="bim">BIM</option>
+                                        <option value="tarjeta_debito">Tarjeta de Débito</option>
+                                        <option value="tarjeta_credito">Tarjeta de Crédito</option>
+                                        <option value="transferencia_bancaria">Transferencia Bancaria</option>
                                     </select>
 
                                 </div>
