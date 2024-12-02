@@ -44,6 +44,7 @@
 <script src="vistas/js/reporte-trabajadores.js" type="module"></script>
 <script src="vistas/js/reporte-pago-trabajador.js" type="module"></script>
 <script src="vistas/js/reporte-asistencia.js" type="module"></script>
+<script src="vistas/js/config-sistema.js" type="module"></script>
 
 </body>
 

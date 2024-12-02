@@ -154,36 +154,23 @@ class ControladorProducto
 	static public function ctrEditarProducto()
 	{
 		if (preg_match('/^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ ]+$/', $_POST["edit_nombre_producto"])) {
-
 			/* ============================
             VALIDANDO IMAGEN
             ============================ */
-
             $ruta = "../vistas/img/productos/";
-
             $ruta_imagen = $_POST["edit_imagen_actual_p"];
-
             if (isset($_FILES["edit_imagen_producto"]["tmp_name"]) && !empty($_FILES["edit_imagen_producto"]["tmp_name"])) {
-
                 if (file_exists($ruta_imagen)) {
                     unlink($ruta_imagen);
                 }
-
                 $extension = pathinfo($_FILES["edit_imagen_producto"]["name"], PATHINFO_EXTENSION);
-
                 $tipos_permitidos = array("jpg", "jpeg", "png", "gif");
-
                 if (in_array(strtolower($extension), $tipos_permitidos)) {
-
                     $nombre_imagen = date("YmdHis") . rand(1000, 9999);
-
                     $ruta_imagen = $ruta . $nombre_imagen . "." . $extension;
-
                     if (move_uploaded_file($_FILES["edit_imagen_producto"]["tmp_name"], $ruta_imagen)) {
-
                         /* echo "Imagen subida correctamente."; */
                     } else {
-
                         /* echo "Error al subir la imagen."; */
                     }
                 } else {
@@ -192,11 +179,7 @@ class ControladorProducto
                 }
             }
 
-
-
 			$tabla = "productos";
-
-
 			$datos = array(
 				"id_producto" => $_POST["edit_id_producto"],
 				"id_categoria" => $_POST["edit_id_categoria_p"],
@@ -212,7 +195,6 @@ class ControladorProducto
 			$respuesta = ModeloProducto::mdlEditarProducto($tabla, $datos);
 
 			if ($respuesta == "ok") {
-
 				echo json_encode("ok");
 			}
 

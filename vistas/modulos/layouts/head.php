@@ -3,11 +3,13 @@
 
 <head>
     <meta charset="utf-8">
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
-    <meta name="description" content="POS - Bootstrap Admin Template">
-    <meta name="keywords" content="admin, estimates, bootstrap, business, corporate, creative, management, minimal, modern,  html5, responsive">
-    <meta name="author" content="Dreamguys - Bootstrap Admin Template">
-    <meta name="robots" content="noindex, nofollow">
+    <meta name="description" content="Sistema de gestión para tiendas de pollos, pescados y mariscos. Administra ventas, inventarios y distribución de manera eficiente.">
+    <meta name="keywords" content="pollos, pescados, mariscos, tienda, distribución, ventas, administración, inventario, negocio, comercio, gestión">
+    <meta name="author" content="Distribuidor de Pollos y Mariscos - Tienda Online">
+    <meta name="robots" content="index, follow">
+
     <title>Apuuray</title>
 
     <link rel="shortcut icon" type="image/x-icon" href="vistas/img/sistema/favicon.png">

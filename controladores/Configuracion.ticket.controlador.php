@@ -11,33 +11,20 @@ class ControladorConfiguracionTicket
 	static public function ctrCrearConfiguracionTicket()
 	{
 
-
 		/* VALIDANDO IMAGEN LOGO */
-
 		$ruta = "../vistas/img/ticket/";
-
 		if (isset($_FILES["logo_ticket"]["tmp_name"])) {
-
 			$extension = pathinfo($_FILES["logo_ticket"]["name"], PATHINFO_EXTENSION);
-
 			$tipos_permitidos = array("jpg", "jpeg", "png", "gif");
-
 			if (in_array(strtolower($extension), $tipos_permitidos)) {
-
 				$nombre_imagen = date("YmdHis") . rand(1000, 9999);
-
-				$ruta_imagen = $ruta . $nombre_imagen . "." . $extension;
-
-				if (move_uploaded_file($_FILES["logo_ticket"]["tmp_name"], $ruta_imagen)) {
-
-					/* echo "Imagen subida correctamente."; */
+				$ruta_imagen_actual = $ruta . $nombre_imagen . "." . $extension;
+				if (move_uploaded_file($_FILES["logo_ticket"]["tmp_name"], $ruta_imagen_actual)) {
 				} else {
 
-					/* echo "Error al subir la imagen."; */
 				}
 			} else {
 
-				/* echo "Solo se permiten archivos de imagen JPG, JPEG, PNG o GIF."; */
 			}
 		}
 
@@ -51,7 +38,7 @@ class ControladorConfiguracionTicket
 			"telefono" => $_POST["telefono_ticket"],
 			"correo" => $_POST["correo_ticket"],
 			"direccion" => $_POST["direccion_ticket"],
-			"logo" => $ruta_imagen,
+			"logo" => $ruta_imagen_actual,
 			"mensaje" => $_POST["mensaje_ticket"]
 		);
 
@@ -100,72 +87,67 @@ class ControladorConfiguracionTicket
 
 	static public function ctrEditarConfiguracionTicket()
 	{
-		if (preg_match('/^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ ]+$/', $_POST["edit_nombre_empresa_ticket"])) {
 
-			/* ============================
+
+		/* ============================
             VALIDANDO IMAGEN
             ============================ */
 
-            $ruta = "../vistas/img/ticket/";
+		$ruta = "../vistas/img/ticket/";
 
-            $ruta_imagen = $_POST["edit_foto_actual_ticket"];
+		$ruta_imagen_actual = $_POST["edit_foto_actual_ticket"];
 
-            if (isset($_FILES["edit_logo_ticket"]["tmp_name"]) && !empty($_FILES["edit_logo_ticket"]["tmp_name"])) {
+		if (isset($_FILES["edit_logo_ticket"]["tmp_name"]) && !empty($_FILES["edit_logo_ticket"]["tmp_name"])) {
 
-                if (file_exists($ruta_imagen)) {
-                    unlink($ruta_imagen);
-                }
-
-                $extension = pathinfo($_FILES["edit_logo_ticket"]["name"], PATHINFO_EXTENSION);
-
-                $tipos_permitidos = array("jpg", "jpeg", "png", "gif");
-
-                if (in_array(strtolower($extension), $tipos_permitidos)) {
-
-                    $nombre_imagen = date("YmdHis") . rand(1000, 9999);
-
-                    $ruta_imagen = $ruta . $nombre_imagen . "." . $extension;
-
-                    if (move_uploaded_file($_FILES["edit_logo_ticket"]["tmp_name"], $ruta_imagen)) {
-
-                        /* echo "Imagen subida correctamente."; */
-                    } else {
-
-                        /* echo "Error al subir la imagen."; */
-                    }
-                } else {
-
-                    /* echo "Solo se permiten archivos de imagen JPG, JPEG, PNG o GIF."; */
-                }
-            }
-
-
-
-			$tabla = "config_ticket";
-
-
-            $datos = array(
-                "id_config_ticket" => $_POST["edit_id_config_ticket"],
-                "nombre_empresa" => $_POST["edit_nombre_empresa_ticket"],
-                "ruc" => $_POST["edit_ruc_ticket"],
-                "telefono" => $_POST["edit_telefono_ticket"],
-                "correo" => $_POST["edit_correo_ticket"],
-                "direccion" => $_POST["edit_direccion_ticket"],
-                "logo" => $ruta_imagen,
-                "mensaje" => $_POST["edit_mensaje_ticket"]
-            );
-    
-
-			$respuesta = ModeloConfiguracionTicket::mdlEditarConfiguracionTicket($tabla, $datos);
-
-			if ($respuesta == "ok") {
-
-				echo json_encode("ok");
+			if (file_exists($ruta_imagen_actual)) {
+				unlink($ruta_imagen_actual);
 			}
 
-		} else {
+			$extension = pathinfo($_FILES["edit_logo_ticket"]["name"], PATHINFO_EXTENSION);
 
-			echo json_encode("error");
+			$tipos_permitidos = array("jpg", "jpeg", "png", "gif");
+
+			if (in_array(strtolower($extension), $tipos_permitidos)) {
+
+				$nombre_imagen = date("YmdHis") . rand(1000, 9999);
+
+				$ruta_imagen_actual = $ruta . $nombre_imagen . "." . $extension;
+
+				if (move_uploaded_file($_FILES["edit_logo_ticket"]["tmp_name"], $ruta_imagen_actual)) {
+
+					/* echo "Imagen subida correctamente."; */
+				} else {
+
+					/* echo "Error al subir la imagen."; */
+				}
+			} else {
+
+				/* echo "Solo se permiten archivos de imagen JPG, JPEG, PNG o GIF."; */
+			}
+		}
+
+
+
+		$tabla = "config_ticket";
+
+
+		$datos = array(
+			"id_config_ticket" => $_POST["edit_id_config_ticket"],
+			"nombre_empresa" => $_POST["edit_nombre_empresa_ticket"],
+			"ruc" => $_POST["edit_ruc_ticket"],
+			"telefono" => $_POST["edit_telefono_ticket"],
+			"correo" => $_POST["edit_correo_ticket"],
+			"direccion" => $_POST["edit_direccion_ticket"],
+			"logo" => $ruta_imagen_actual,
+			"mensaje" => $_POST["edit_mensaje_ticket"]
+		);
+
+
+		$respuesta = ModeloConfiguracionTicket::mdlEditarConfiguracionTicket($tabla, $datos);
+
+		if ($respuesta == "ok") {
+
+			echo json_encode("ok");
 		}
 	}
 

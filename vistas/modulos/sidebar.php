@@ -38,6 +38,7 @@ $permisosMenu = [
     <div class="sidebar-inner slimscroll">
         <div id="sidebar-menu" class="sidebar-menu">
             <ul>
+                <!-- Panel principal -->
                 <li class="active">
                     <a href="inicio"><img src="vistas/assets/img/icons/dashboard.svg" alt="img"><span>Panel</span></a>
                 </li>
@@ -48,7 +49,6 @@ $permisosMenu = [
                             <i class="fas fa-store" style="color: #808080;"></i> <!-- Color plomo -->
                             <span>Sucursales</span>
                         </a>
-
                     </li>
                 <?php } ?>
 
@@ -143,6 +143,7 @@ $permisosMenu = [
                     <li class="submenu">
                         <a href="javascript:void(0);"><img src="vistas/assets/img/icons/settings.svg" alt="img"><span>Ajustes</span> <span class="menu-arrow"></span></a>
                         <ul>
+                            <li><a href="configuracionSistema">Config sistema</a></li>
                             <li><a href="configuracionTicket">Config. comprobante</a></li>
                             <li><a href="numFolio">Config Número y Folios</a></li>
                         </ul>
