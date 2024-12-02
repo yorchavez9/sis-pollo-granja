@@ -132,6 +132,7 @@
                                     <div class="form-group">
                                         <label for="serie_comprobante" class="form-label">Serie:</label>
                                         <input type="text" id="serie_comprobante" name="serie_comprobante" placeholder="Ingrese la serie">
+                                        <small id="error_compra_serie_comprobante"></small>
                                     </div>
                                 </div>
                                 <!-- INGRESO DE NÚMERO -->
@@ -139,6 +140,7 @@
                                     <div class="form-group">
                                         <label for="num_comprobante" class="form-label">Número:</label>
                                         <input type="text" id="num_comprobante" name="num_comprobante" placeholder="Ingrese el número">
+                                        <small id="error_compra_cnum_omprobante"></small>
                                     </div>
                                 </div>
                                 <!-- INGRESO EL INPUESTO -->

@@ -110,12 +110,9 @@ class ControladorUsuarios
 
 	static public function ctrMostrarUsuarios($item, $valor)
 	{
-
 		$tablaSucursal = "sucursales";
 		$tablausuario = "usuarios";
-
 		$respuesta = ModeloUsuarios::MdlMostrarUsuarios($tablaSucursal, $tablausuario, $item, $valor);
-
 		return $respuesta;
 	}
 

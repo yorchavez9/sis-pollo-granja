@@ -5,25 +5,21 @@ $(document).ready(function () {
   GUARDAR USUARIO
   =========================================== */
   $("#guardar_proveedor").click(function (e) {
-
     e.preventDefault();
-
     var isValid = true;
 
-    var tipo_persona = $("#tipo_persona_proveedor").val();
-    var razon_social = $("#razon_social_proveedor").val();
-    var id_doc = $("#id_doc_proveedor").val();
-    var numero_documento = $("#numero_documento_proveedor").val();
-    var direccion = $("#direccion_proveedor").val();
-    var ciudad = $("#ciudad_proveedor").val();
-    var codigo_postal = $("#codigo_postal_proveedor").val();
-    var telefono = $("#telefono_proveedor").val();
-    var email = $("#correo_proveedor").val();
-    var sitio_web = $("#sitio_web_proveedor").val();
-    var tipo_banco = $("#tipo_banco_proveedor").val();
-    var numero_cuenta = $("#numero_cuenta_proveedor").val();
-
-
+    let tipo_persona = $("#tipo_persona_proveedor").val();
+    let razon_social = $("#razon_social_proveedor").val();
+    let id_doc = $("#id_doc_proveedor").val();
+    let numero_documento = $("#numero_documento_proveedor").val();
+    let direccion = $("#direccion_proveedor").val();
+    let ciudad = $("#ciudad_proveedor").val();
+    let codigo_postal = $("#codigo_postal_proveedor").val();
+    let telefono = $("#telefono_proveedor").val();
+    let email = $("#correo_proveedor").val();
+    let sitio_web = $("#sitio_web_proveedor").val();
+    let tipo_banco = $("#tipo_banco_proveedor").val();
+    let numero_cuenta = $("#numero_cuenta_proveedor").val();
 
     // Validar el nombre de usuario
     if (razon_social === "") {
@@ -54,8 +50,6 @@ $(document).ready(function () {
     } else {
       $("#validate_tipo_documento_proveedor").html("").removeClass("text-danger");
     }
-
-
 
     // Validar el número de documento
     if (numero_documento === "") {
@@ -147,7 +141,6 @@ $(document).ready(function () {
 
           if (res === "ok") {
             $("#nuevoProveedor")[0].reset();
-
             $("#modalNuevoProveedor").modal("hide");
             Swal.fire({
               title: "¡Correcto!",

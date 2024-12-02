@@ -348,16 +348,13 @@ $(document).ready(function () {
   });
 
   /*=============================================
-  MOSTRAR DETALLE DEL USUARIO
+  MOSTRAR DETALLES DEL USUARIO
   =============================================*/
-  $("#tabla_usuarios").on("click", ".btnVerUsuario", function () {
-
-    var idUsuarioVer = $(this).attr("idUsuario");
-
-
-    var datos = new FormData();
+  $("#tabla_usuarios").on("click", ".btnVerUsuario", function (e) {
+    e.preventDefault();
+    let idUsuarioVer = $(this).attr("idUsuario");
+    const datos = new FormData();
     datos.append("idUsuarioVer", idUsuarioVer);
-
     $.ajax({
       url: "ajax/Usuario.ajax.php",
       method: "POST",

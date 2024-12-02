@@ -102,7 +102,7 @@
                             $tiposDocumentos = ControladorTipoDocumento::ctrMostrarTipoDocumento($item, $valor);
                             ?>
                             <select class="select" id="id_doc_proveedor">
-                                <option disabled selected>Seleccione</option>
+                                <option disabled  selected>Seleccione</option>
                                 <?php
                                 foreach ($tiposDocumentos as $key => $value) {
                                 ?>

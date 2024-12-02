@@ -81,7 +81,7 @@
                     </div>
                     <!-- INGRESO DE LA DESCRIPCION -->
                     <div class="form-group">
-                        <label for="descripcion_rol" class="form-label">Ingrese la descripcion (<span class="text-danger">*</span>)</label>
+                        <label for="descripcion_rol" class="form-label">Ingrese la descripcion</label>
                         <textarea name="descripcion_rol" id="descripcion_rol" placeholder="Ingrese la descripción" class="form-control"></textarea>
                         <small id="error_descripcion_rol"></small>
                     </div>
@@ -116,7 +116,7 @@
                     <!-- INGRESO DE LA DESCRIPCION -->
                     <div class="form-group">
                         <label for="edit_direccion" class="form-label">Ingrese la descripción (<span class="text-danger">*</span>)</label>
-                        <textarea name="edit_descripcion_rol" id="edit_descripcion_rol" class="form-control"></textarea>
+                        <textarea name="edit_descripcion_rol" id="edit_descripcion_rol" class="form-control" placeholder="Ingrese la descripción"></textarea>
                         <small id="error_edit_descripcion_rol"></small>
                     </div>
                 </div>

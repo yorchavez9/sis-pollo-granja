@@ -298,6 +298,22 @@ $(document).ready(function () {
       $("#error_compra_comprobante").html("").removeClass("text-danger");
     }
 
+    // Si falta la serie
+    if (!serie_comprobante) {
+      $("#error_compra_serie_comprobante").html("Por favor, ingrese la serie").addClass("text-danger");
+      isValid = false;
+    } else {
+      $("#error_compra_serie_comprobante").html("").removeClass("text-danger");
+    }
+
+    // Si falta la serie
+    if (!num_comprobante) {
+      $("#error_compra_cnum_omprobante").html("Por favor, ingrese el número").addClass("text-danger");
+      isValid = false;
+    } else {
+      $("#error_compra_cnum_omprobante").html("").removeClass("text-danger");
+    }
+
     // Capturar los productos de la compra
     const valoresProductos = [];
     $("#detalle_egreso_producto tr").each(function () {

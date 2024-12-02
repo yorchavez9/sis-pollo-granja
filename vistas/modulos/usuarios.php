@@ -330,18 +330,7 @@
                             <img src="" class="mostrarFotoUsuario img img-fluid rounded-circle" width="250" alt="">
                         </div>
                     </div>
-
-
-                    <!-- ROLES -->
-                    <div class="form-group">
-                        <h5 class="fw-bold mb-2"><i class="fas fa-users text-warning"></i> Roles:</h5>
-                        <div id="mostrar_roles">
-                            <!-- Aquí puedes mostrar los roles -->
-                        </div>
-                    </div>
-
                 </div>
-
                 <div class="text-end mx-4 mb-2">
                     <button type="button" class="btn btn-secondary btn_modal_ver_close_usuario" data-bs-dismiss="modal"> Cerrar</button>
                 </div>
