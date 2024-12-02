@@ -315,6 +315,7 @@ $("#tabla_add_producto_venta").on("click", ".btnAddProductoVenta", function (e) 
       $(".numero_aves_v, .peso_promedio_v, .peso_bruto_v, .peso_tara_v, .peso_merma_v, .peso_neto_v, .precio_venta, #igv_venta").on("input", function () {
         const fila = $(this).closest("tr");
 
+        // Obtener valores de los campos
         let numero_aves = parseFloat(fila.find(".numero_aves_v").val()) || 0;
         let peso_bruto = parseFloat(fila.find(".peso_bruto_v").val()) || 0;
         let peso_tara = parseFloat(fila.find(".peso_tara_v").val()) || 0;
@@ -322,15 +323,26 @@ $("#tabla_add_producto_venta").on("click", ".btnAddProductoVenta", function (e) 
         let precio_venta = parseFloat(fila.find(".precio_venta").val()) || 0;
         let igv_venta = parseFloat($("#igv_venta").val()) || 0;
 
-        // Calcular peso_bruto, peso_neto y precio_sub_total
-        const peso_neto_f = peso_bruto - peso_tara - peso_merma;
-        const peso_promedio_f = peso_neto_f / numero_aves;
-        const precio_sub_total_f = peso_neto_f * precio_venta;
+        // Variables para cálculos
+        let peso_neto_f = 0;
+        let peso_promedio_f = 0;
+        let precio_sub_total_f = 0;
 
-        // Formatear los valores
+        // Validar y calcular según peso_bruto
+        if (peso_bruto === 0 || peso_bruto === 0.00) {
+          precio_sub_total_f = numero_aves * precio_venta;
+        } else {
+          // Calcular peso_neto, peso_promedio y precio_sub_total
+          peso_neto_f = peso_bruto - peso_tara - peso_merma;
+          peso_promedio_f = peso_neto_f / numero_aves;
+          precio_sub_total_f = peso_neto_f * precio_venta;
+        }
+
+        // Formatear los valores para mostrar
         const format_peso_promedio = formateoPrecio(peso_promedio_f.toFixed(2));
         const format_peso_neto = formateoPrecio(peso_neto_f.toFixed(2));
         const format_precio_sub_total = formateoPrecio(precio_sub_total_f.toFixed(2));
+
 
         // Actualizar los inputs
         fila.find(".peso_promedio_v").val(format_peso_promedio);
