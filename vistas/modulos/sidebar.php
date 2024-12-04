@@ -99,7 +99,6 @@ $permisosMenu = [
                     <li class="submenu">
                         <a href="javascript:void(0);"><img src="vistas/assets/img/icons/sales1.svg" alt="img"><span>Ventas</span> <span class="menu-arrow"></span></a>
                         <ul>
-                            <li><a href="clientes">Clientes</a></li>
                             <li><a href="ventas">Punto de venta</a></li>
                         </ul>
                     </li>

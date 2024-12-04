@@ -152,7 +152,7 @@ $pdf->SetFillColor(240, 240, 240);
 $pdf->SetX(10);
 $pdf->Cell(20, 10, 'Prod.', 'T B', 0, 'C', true);
 $pdf->Cell(15, 10, 'Javas', 'T B', 0, 'C', true);
-$pdf->Cell(15, 10, 'Aves', 'T B', 0, 'C', true);
+$pdf->Cell(15, 10, 'Uni.', 'T B', 0, 'C', true);
 $pdf->Cell(20, 10, 'Peso Prom.', 'T B', 0, 'C', true);
 $pdf->Cell(20, 10, 'Peso Br.', 'T B', 0, 'C', true);
 $pdf->Cell(20, 10, 'Peso Tara', 'T B', 0, 'C', true);
@@ -170,7 +170,15 @@ usort($respuesta_de, fn($a, $b) => strcmp($a['nombre_producto'], $b['nombre_prod
 $totalCompra = 0;
 
 foreach ($respuesta_de as $index => $producto) {
-    $totalProducto = $producto['peso_neto'] * $producto['precio_compra'];
+    // Verificar si el peso bruto es cero
+    if ($producto['peso_bruto'] == 0) {
+        // Si el peso bruto es cero, sumar el número de aves por el precio de compra
+        $totalProducto = $producto['numero_aves'] * $producto['precio_compra'];
+    } else {
+        // Si el peso bruto no es cero, calcular con peso bruto por el precio de compra
+        $totalProducto = $producto['peso_bruto'] * $producto['precio_compra'];
+    }
+
     $totalCompra += $totalProducto;
     $borde = ($index === count($respuesta_de) - 1) ? 'B' : 0;
 
@@ -187,7 +195,6 @@ foreach ($respuesta_de as $index => $producto) {
     $pdf->Cell(20, 10, 'S/ ' . number_format($producto['precio_compra'], 2), $borde, 0, 'C');
     $pdf->Cell(25, 10, 'S/ ' . number_format($totalProducto, 2), $borde, 1, 'C');
 }
-
 
 // Cálculo del impuesto y el total
 $impuestoTotal = $totalCompra * ($impuesto / 100);
@@ -206,7 +213,7 @@ $pdf->Cell(40, 10, 'S/ ' . number_format($totalConImpuesto, 2), 'TB', 1, 'R'); /
 
 if (isset($_GET['accion']) && $_GET['accion'] === 'descargar') {
     // Descargar el PDF
-    $pdf->Output('D', 'boleta'. $prefijoComprobane.'-'.$numeroComprobante.'.pdf'); // 'D' fuerza la descarga con el nombre 'boleta.pdf'
+    $pdf->Output('D', 'boleta' . $prefijoComprobane . '-' . $numeroComprobante . '.pdf'); // 'D' fuerza la descarga con el nombre 'boleta.pdf'
 } else {
     // Mostrar el PDF en el navegador (imprimir)
     $pdf->Output(); // Muestra el archivo en el navegador
