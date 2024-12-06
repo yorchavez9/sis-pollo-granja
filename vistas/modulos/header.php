@@ -3,41 +3,57 @@
     $item = null;
     $valor = null;
     $images = ControladorConfiguracionSistema::ctrMostrarConfiguracionSistema($item, $valor);
-    foreach ($images as $key => $value) {
+
+    // Comprobar si no hay registros
+    if (empty($images)) {
     ?>
         <div class="header-left active">
             <a href="#" class="logo">
-                <?php
-                if ($value["img_sidebar"] !== '' && $value["img_sidebar"] !== null) {
-                    // Recortar los tres primeros caracteres de la URL
-                    $imageUrl = substr($value["img_sidebar"], 3);
-                ?>
-                    <img src="<?php echo $imageUrl; ?>" alt="">
-                <?php
-                } else {
-                    echo '<img src="vistas/img/sistema/logo-apuuray.png" alt="">';
-                }
-                ?>
+                <img src="vistas/img/sistema/logo-apuuray.png" alt="">
             </a>
             <a href="#" class="logo-small">
-                <?php
-                if ($value["img_sidebar_min"] !== '' && $value["img_sidebar_min"] !== null) {
-                    // Recortar los tres primeros caracteres de la URL
-                    $imageUrl = substr($value["img_sidebar_min"], 3);
-                ?>
-                    <img src="<?php echo $imageUrl; ?>" alt="">
-                <?php
-                } else {
-                    echo '<img src="vistas/img/sistema/logo-small.png" alt="">';
-                }
-                ?>
+                <img src="vistas/img/sistema/logo-small.png" alt="">
             </a>
             <a id="toggle_btn" href="javascript:void(0);"></a>
         </div>
-
+        <?php
+    } else {
+        foreach ($images as $key => $value) {
+        ?>
+            <div class="header-left active">
+                <a href="#" class="logo">
+                    <?php
+                    if ($value["img_sidebar"] !== '' && $value["img_sidebar"] !== null) {
+                        // Recortar los tres primeros caracteres de la URL
+                        $imageUrl = substr($value["img_sidebar"], 3);
+                    ?>
+                        <img src="<?php echo $imageUrl; ?>" alt="">
+                    <?php
+                    } else {
+                        echo '<img src="vistas/img/sistema/logo-apuuray.png" alt="">';
+                    }
+                    ?>
+                </a>
+                <a href="#" class="logo-small">
+                    <?php
+                    if ($value["img_sidebar_min"] !== '' && $value["img_sidebar_min"] !== null) {
+                        // Recortar los tres primeros caracteres de la URL
+                        $imageUrl = substr($value["img_sidebar_min"], 3);
+                    ?>
+                        <img src="<?php echo $imageUrl; ?>" alt="">
+                    <?php
+                    } else {
+                        echo '<img src="vistas/img/sistema/logo-small.png" alt="">';
+                    }
+                    ?>
+                </a>
+                <a id="toggle_btn" href="javascript:void(0);"></a>
+            </div>
     <?php
+        }
     }
     ?>
+
     <a id="mobile_btn" class="mobile_btn" href="#sidebar">
         <span class="bar-icon">
             <span></span>

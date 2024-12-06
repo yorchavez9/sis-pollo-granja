@@ -10,9 +10,27 @@
     <meta name="author" content="Distribuidor de Pollos y Mariscos - Tienda Online">
     <meta name="robots" content="index, follow">
 
-    <title>Apuuray</title>
+    <?php
+    $item = null;
+    $valor = null;
+    $sistema = ControladorConfiguracionSistema::ctrMostrarConfiguracionSistema($item, $valor);
 
-    <link rel="shortcut icon" type="image/x-icon" href="vistas/img/sistema/favicon.png">
+    if (!empty($sistema)) {
+        $value = $sistema[0];
+        $nombre = isset($value["nombre"]) && !empty($value["nombre"]) ? $value["nombre"] : 'Nombre Predeterminado';
+        $favicon = isset($value["icon_pestana"]) ? substr($value["icon_pestana"], 3) : 'vistas/img/sistema/favicon.png';
+    ?>
+        <title><?php echo htmlspecialchars($nombre); ?></title>
+        <link rel="shortcut icon" type="image/x-icon" href="<?php echo htmlspecialchars($favicon); ?>">
+    <?php
+    } else {
+    ?>
+        <title>Apuuray</title>
+        <link rel="shortcut icon" type="image/x-icon" href="vistas/img/sistema/favicon.png">
+    <?php
+    }
+    ?>
+
     <link rel="stylesheet" href="vistas/assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="vistas/assets/plugins/select2/css/select2.min.css">
     <link rel="stylesheet" href="vistas/assets/css/animate.css">

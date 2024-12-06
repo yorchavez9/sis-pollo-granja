@@ -3,7 +3,7 @@ class Conexion
 {
 	static public function conectar()
 	{
-		try {
+		/* try {
 			$link = new PDO(
 				"mysql:host=127.0.0.1;port=3308;dbname=sis_granja_pollo",
 				"root",
@@ -13,10 +13,10 @@ class Conexion
 			return $link;
 		} catch (PDOException $e) {
 			die("Error de conexión: " . $e->getMessage());
-		}
-		/* try {
+		} */
+		try {
 			$link = new PDO(
-				"mysql:host=localhost;dbname=sis_pollo_granja",
+				"mysql:host=localhost;dbname=bd_sis_pollo",
 				"root",
 				""
 			);
@@ -24,6 +24,6 @@ class Conexion
 			return $link;
 		} catch (PDOException $e) {
 			die("Error de conexión: " . $e->getMessage());
-		} */
+		}
 	}
 }
