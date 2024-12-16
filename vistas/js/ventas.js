@@ -333,7 +333,7 @@ $("#tabla_add_producto_venta").on("click", ".btnAddProductoVenta", function (e) 
           precio_sub_total_f = numero_aves * precio_venta;
         } else {
           // Calcular peso_neto, peso_promedio y precio_sub_total
-          peso_neto_f = peso_bruto - peso_tara - peso_merma;
+          peso_neto_f = peso_bruto - peso_tara + peso_merma;
           peso_promedio_f = peso_neto_f / numero_aves;
           precio_sub_total_f = peso_neto_f * precio_venta;
         }
