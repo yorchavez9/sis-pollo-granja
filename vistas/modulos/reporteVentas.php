@@ -2,8 +2,8 @@
     <div class="content">
         <div class="page-header">
             <div class="page-title">
-                <h4>Reporte de compras</h4>
-                <h6>Genere su reporte de compras</h6>
+                <h4>Reporte de ventas</h4>
+                <h6>Genere su reporte de ventas</h6>
             </div>
             <div class="page-btn">
                 <a href="#" class="btn btn-added reporte_ventas_pdf"><i class="fas fa-file-alt me-2"></i>Generar reporte</a>
@@ -100,7 +100,7 @@
                                 <th>Fecha </th>
                                 <th>Tipo Comprobante</th>
                                 <th>Serie y número</th>
-                                <th>Total Compra</th>
+                                <th>Total venta</th>
                                 <th>Total Pago</th>
                                 <th>Estado Pago</th>
                             </tr>
