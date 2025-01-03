@@ -12,40 +12,50 @@ $(document).ready(function () {
         var tbody = $("#data_productos");
         tbody.empty();
         productos.forEach(function (producto, index) {
-          producto.imagen_producto = producto.imagen_producto.substring(3);
+          producto.imagen_producto = producto.imagen_producto ? producto.imagen_producto.substring(3) : ''; // Verifica si la imagen existe
+
+          // Si no tiene imagen, no mostrar la columna de imagen
+          var imagenColumna = producto.imagen_producto ?
+            `<td class="text-center">
+              <a href="javascript:void(0);" class="product-img">
+                <img src="${producto.imagen_producto}" alt="${producto.nombre_producto}">
+              </a>
+          </td>` :
+            `<td class="text-center">
+              <a href="javascript:void(0);" class="product-img">
+                <img src="vistas/img/productos/default.png" alt="${producto.nombre_producto}">
+              </a>
+          </td>`; 
+
           var fila = `
-                        <tr>
-                            <td>${index + 1}</td>
-                            <td>${producto.codigo_producto}</td>
-                            <td class="text-center">
-                                <a href="javascript:void(0);" class="product-img">
-                                    <img src="${producto.imagen_producto}" alt="${producto.imagen_producto}">
-                                </a>
-                            </td>
-                            <td>${producto.nombre_categoria}</td>
-                            <td>${producto.nombre_producto}</td>
-                            <td>S/ ${producto.precio_producto}</td>
-                            <td class="text-center"><button type="button" class="btn btn-sm" style="${getButtonStyles(producto.stock_producto)}">${producto.stock_producto}</button></td>
-                            <td>${producto.fecha_vencimiento ? producto.fecha_vencimiento : 'No tiene fecha de vencimiento'}</td>
-
-
-                            <td>
-                              ${producto.estado_producto != 0 ? '<button class="btn bg-lightgreen badges btn-sm rounded btnActivar" idProducto="' + producto.id_producto + '" estadoProducto="0">Activado</button>'
-              : '<button class="btn bg-lightred badges btn-sm rounded btnActivar" idProducto="' + producto.id_producto + '" estadoProducto="1">Desactivado</button>'}
-                            </td>
-                            
-                            <td class="text-center">
-                                <a href="#" class="me-3 btnEditarProducto" idProducto="${producto.id_producto}" data-bs-toggle="modal" data-bs-target="#modalEditarProducto">
-                                    <i class="text-warning fas fa-edit fa-lg"></i>
-                                </a>
-                                <a href="#" class="me-3 btnVerProducto" idProducto="${producto.id_producto}" data-bs-toggle="modal" data-bs-target="#modalVerProducto">
-                                    <i class="text-primary fa fa-eye fa-lg"></i>
-                                </a>
-                                <a href="#" class="me-3 confirm-text btnDeleteProducto" idProducto="${producto.id_producto}" imagenProducto="${producto.imagen_producto}">
-                                    <i class="fa fa-trash fa-lg" style="color: #FF4D4D"></i>
-                                </a>
-                            </td>
-                        </tr>`;
+          <tr>
+            <td>${index + 1}</td>
+            <td>${producto.codigo_producto}</td>
+            ${imagenColumna}
+            <td>${producto.nombre_categoria}</td>
+            <td>${producto.nombre_producto}</td>
+            <td>S/ ${producto.precio_producto}</td>
+            <td class="text-center"><button type="button" class="btn btn-sm" style="${getButtonStyles(producto.stock_producto)}">${producto.stock_producto}</button></td>
+            <td>${producto.fecha_vencimiento ? producto.fecha_vencimiento : 'No tiene fecha de vencimiento'}</td>
+            <td>
+              ${producto.estado_producto != 0 ?
+              '<button class="btn bg-lightgreen badges btn-sm rounded btnActivar" idProducto="' + producto.id_producto + '" estadoProducto="0">Activado</button>'
+              :
+              '<button class="btn bg-lightred badges btn-sm rounded btnActivar" idProducto="' + producto.id_producto + '" estadoProducto="1">Desactivado</button>'
+            }
+            </td>
+            <td class="text-center">
+              <a href="#" class="me-3 btnEditarProducto" idProducto="${producto.id_producto}" data-bs-toggle="modal" data-bs-target="#modalEditarProducto">
+                <i class="text-warning fas fa-edit fa-lg"></i>
+              </a>
+              <a href="#" class="me-3 btnVerProducto" idProducto="${producto.id_producto}" data-bs-toggle="modal" data-bs-target="#modalVerProducto">
+                <i class="text-primary fa fa-eye fa-lg"></i>
+              </a>
+              <a href="#" class="me-3 confirm-text btnDeleteProducto" idProducto="${producto.id_producto}" imagenProducto="${producto.imagen_producto}">
+                <i class="fa fa-trash fa-lg" style="color: #FF4D4D"></i>
+              </a>
+            </td>
+          </tr>`;
 
           function getButtonStyles(stock) {
             if (stock > 20) {
@@ -224,6 +234,7 @@ $(document).ready(function () {
         contentType: false,
         processData: false,
         success: function (respuesta) {
+       
           var res = JSON.parse(respuesta);
           if (res.estado === "ok") {
             $("#form_nuevo_producto")[0].reset();

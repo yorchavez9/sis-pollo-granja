@@ -12,6 +12,7 @@ class ControladorProducto
 
 		/* VALIDANDO IMAGEN */
 		$ruta = "../vistas/img/productos/";
+		$ruta_imagen = "";
 		if (isset($_FILES["imagen_producto"]["tmp_name"])) {
 			$extension = pathinfo($_FILES["imagen_producto"]["name"], PATHINFO_EXTENSION);
 			$tipos_permitidos = array("jpg", "jpeg", "png", "gif");
