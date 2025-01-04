@@ -215,9 +215,9 @@ DESCARGAR COMPROBANTE
 $("#data_lista_cotizacion").on("click", ".btnDescargarComprobanteC", function (e) {
     e.preventDefault();
     console.log("Descargando comprobante");
-    var idVenta = $(this).attr("idVenta");
+    var idCotizacion = $(this).attr("idCotizacion");
     var documento = $(this).attr("tipo_comprobante");
-    window.location.href = `extensiones/${documento}/${documento}_v.php?id_venta=${idVenta}&accion=descargar`;
+    window.location.href = `extensiones/${documento}/${documento}_c.php?id_cotizacion=${idCotizacion}&accion=descargar`;
 });
 
 /* ===========================================
