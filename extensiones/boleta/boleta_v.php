@@ -97,9 +97,9 @@ class PDF extends FPDF
 
         // Logotipo
         $this->SetX(170);
-        $this->Image('../' . $this->logo, 170, 5, 30);
-        $this->SetFont('Arial', 'B', 16);  // Establece la fuente 'Arial', en negrita ('B'), con tamaño 16
-        $this->Cell(0, 0, utf8_decode($this->nombreEmpresa), 0, 1, 'C');
+        $this->Image('../' . $this->logo, 158, 5, 30);
+        $this->SetFont('Arial', 'B', 14);  // Establece la fuente 'Arial', en negrita ('B'), con tamaño 16
+        $this->Cell(10, 0, utf8_decode($this->nombreEmpresa), 0, 1, 'C');
     }
 
     // Pie de página

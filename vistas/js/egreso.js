@@ -105,7 +105,7 @@ $(document).ready(function () {
 
 
   // Agregar productos a la tabla detalle de la compra
-  $("#tabla_add_producto").on("click", ".btnAddProducto", function (e) {
+  $("#tabla_add_producto").on("click touchstart", ".btnAddProducto", function (e) {
     e.preventDefault();
 
     const idProductoAdd = $(this).attr("idProductoAdd");
@@ -225,7 +225,7 @@ $(document).ready(function () {
   });
 
   // ELIMINAR EL PRODUCTO AGREGADO A LA TABLA DETALLE
-  $(document).on("click", ".btnEliminarAddProducto", function (e) {
+  $(document).on("click touchstart", ".btnEliminarAddProducto", function (e) {
     e.preventDefault();
     let idProductoEliminar = $(this).attr("idAddProducto");
     $("#detalle_egreso_producto").find("tr").each(function () {

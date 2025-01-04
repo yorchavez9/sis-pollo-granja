@@ -1,52 +1,4 @@
 
-/* =====================================
- VISTA PREVIA DE IMAGEN PRODUCTO
- ===================================== */
-$("#comprobante_pago_historial").change(function () {
-    const file = this.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            $(".vista_previa_comprobante_pago").attr("src", e.target.result);
-            $(".vista_previa_comprobante_pago").show();
-        };
-        reader.readAsDataURL(file);
-    }
-});
-
-
-/* =====================================
- VISTA PREVIA DEL COMPROBANTE EDITADO
- ===================================== */
-$("#edit_comprobante_pago_historial").change(function () {
-    const file = this.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            $(".edit_vista_previa_comprobante_pago").attr("src", e.target.result);
-            $(".edit_vista_previa_comprobante_pago").show();
-        };
-        reader.readAsDataURL(file);
-    }
-});
-
-
-
-/*=============================================
-SELECCIONANDO LA SECCCION DE LA VENTA
-=============================================*/
-function showSection() {
-    $(".seccion_lista_venta").on("click", function () {
-        $("#ventas_lista").show();
-        $("#pos_venta").hide();
-        $("#ver_pos_venta").hide();
-        $("#edit_pos_venta").hide();
-        $("#edit_detalle_venta_producto").empty();
-        $("#ver_detalle_venta_producto").empty();
-    });
-}
-
-showSection();
 
 /*=============================================
 MOSTRANDO PRODUCTOS DE LA VENTA
@@ -129,10 +81,15 @@ function mostrarCotizaciones() {
                         <td>S/ ${totalCotizacion}</td>
                         <td>${cotizacion.fecha_cotizacion}</td>
                         <td>${cotizacion.hora_cotizacion}</td>
-                       <td class="text-center">
-                            ${cotizacion.estado === 0? '<button class="btn bg-lightgreen badges btn-sm rounded btnActivar" idProducto="' + cotizacion.id_producto + '" estadoProducto="0">Enviado</button>': cotizacion.estado === 2
-                            ? '<button class="btn bg-lightyellow badges btn-sm rounded btnActivar" idProducto="' + cotizacion.id_producto + '" estadoProducto="2">Pendiente</button>': cotizacion.estado === 3
-                            ? '<button class="btn bg-lightblue badges btn-sm rounded btnActivar" idProducto="' + cotizacion.id_producto + '" estadoProducto="3">Completado</button>': '<button class="btn bg-lightred badges btn-sm rounded btnActivar" idProducto="' + cotizacion.id_producto + '" estadoProducto="1">Desactivado</button>'
+                        <td class="text-center">
+                            ${
+                                cotizacion.estado === 0
+                                ? `<button class="btn btn-sm rounded btnActivar bg-success text-white" idProducto="${cotizacion.id_producto}" estadoProducto="0"> Enviado</button>`
+                                : cotizacion.estado === 1
+                                ? `<button class="btn btn-sm rounded btnActivar bg-warning text-dark" idProducto="${cotizacion.id_producto}" estadoProducto="1">Pendiente</button>`
+                                : cotizacion.estado === 2
+                                ? `<button class="btn btn-sm rounded btnActivar bg-info text-white" idProducto="${cotizacion.id_producto}" estadoProducto="2">Completado</button>`
+                                : `<button class="btn btn-sm rounded btnActivar bg-danger text-white" idProducto="${cotizacion.id_producto}" estadoProducto="3">Desactivado</button>`
                             }
                         </td>
                         <td class="text-center">
@@ -187,7 +144,6 @@ function mostrarCotizaciones() {
     });
 }
 
-
 /*=============================================
 IMPRIMIR COMPROBANTE
 =============================================*/
@@ -212,12 +168,66 @@ $("#data_lista_cotizacion").on("click", ".btnDescargarComprobanteC", function (e
     window.location.href = `extensiones/${documento}/${documento}_c.php?id_cotizacion=${idCotizacion}&accion=descargar`;
 });
 
+/*=============================================
+ESTADO DE LA COTIZACION
+=============================================*/
+$("#tabla_lista_cotizaciones").on("click", ".btnActivar", function () {
+    var idProducto = $(this).attr("idProducto");
+    var estadoProducto = parseInt($(this).attr("estadoProducto")); // Convertir a entero
+
+    var nuevoEstado;
+    var nuevoTexto;
+    var nuevaClase;
+
+    // Definir el siguiente estado
+    if (estadoProducto === 0) {
+        nuevoEstado = 1;
+        nuevoTexto = "Pendiente";
+        nuevaClase = "bg-warning text-dark";
+    } else if (estadoProducto === 1) {
+        nuevoEstado = 2;
+        nuevoTexto = "Completado";
+        nuevaClase = "bg-info text-white";
+    } else if (estadoProducto === 2) {
+        nuevoEstado = 0;
+        nuevoTexto = "Enviado";
+        nuevaClase = "bg-success text-white";
+    } else {
+        nuevoEstado = 3;
+        nuevoTexto = "Desactivado";
+        nuevaClase = "bg-danger text-white";
+    }
+
+    // Enviar el nuevo estado por AJAX
+    var datos = new FormData();
+    datos.append("activarId", idProducto);
+    datos.append("activarProducto", nuevoEstado);
+
+    $.ajax({
+        url: "ajax/Producto.ajax.php",
+        method: "POST",
+        data: datos,
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function (respuesta) {
+            console.log(respuesta);
+        },
+    });
+
+    // Actualizar la interfaz del botón
+    $(this)
+        .removeClass("bg-success bg-warning bg-info bg-danger text-white text-dark") // Quitar todas las clases previas
+        .addClass(nuevaClase) // Agregar la nueva clase
+        .html(nuevoTexto); // Cambiar el texto
+    $(this).attr("estadoProducto", nuevoEstado); // Actualizar el atributo
+});
+
 
 
 /*=============================================
 ELIMINAR VENTA
 =============================================*/
-
 $("#data_lista_cotizacion").on("click", ".btnEliminarCotizacion", function (e) {
     e.preventDefault();
     let idCotizacionDelete = $(this).attr("idCotizacionDelete");

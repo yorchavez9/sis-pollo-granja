@@ -225,7 +225,7 @@ function formateoPrecio(numero) {
 /*=============================================
 AGREGANDO EL PRODUCTO AL DETALLE VENTA
 =============================================*/
-$("#tabla_add_producto_venta").on("click", ".btnAddProductoVenta", function (e) {
+$("#tabla_add_producto_venta").on("click touchstart", ".btnAddProductoVenta", function (e) {
   e.preventDefault();
 
   let idProductoAdd = $(this).attr("idProductoAdd");
@@ -258,7 +258,12 @@ $("#tabla_add_producto_venta").on("click", ".btnAddProductoVenta", function (e) 
     processData: false,
     dataType: "json",
     success: function (respuesta) {
-      respuesta.imagen_producto = respuesta.imagen_producto.substring(3);
+      if(respuesta.imagen_producto){
+        respuesta.imagen_producto = respuesta.imagen_producto.substring(3);
+      }else{
+        respuesta.imagen_producto = "vistas/img/productos/default.png";
+      }
+      
       // Crear una nueva fila
       let nuevaFila = `
         <tr>
@@ -395,9 +400,10 @@ function calcularTotal(igv_venta) {
 /*=============================================
 ELIMINANDO EL PRODUCTO AGREGADO AL DETALLE VENT.
 =============================================*/
-$(document).on("click", ".btnEliminarAddProductoVenta", function (e) {
+$(document).on("click touchstart", ".btnEliminarAddProductoVenta", function (e) {
   e.preventDefault();
   var idProductoEliminar = $(this).attr("idAddProducto");
+
   // Encuentra la fila que corresponde al producto a eliminar y elimínala
   $("#detalle_venta_producto")
     .find("tr")
@@ -413,6 +419,7 @@ $(document).on("click", ".btnEliminarAddProductoVenta", function (e) {
       }
     });
 });
+
 
 /*=============================================
  MOSTRANDO Y ESCONDIENDO EL TIPO DE PAGO 
