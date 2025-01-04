@@ -103,8 +103,8 @@ elseif (isset($_POST["idProductoDelete"])) {
     ControladorProducto::ctrBorrarProducto();
 }
 // Borrar venta
-elseif (isset($_POST["ventaIdDelete"])) {
-    ControladorCotizacion::ctrBorrarVenta();
+elseif (isset($_POST["idCotizacionDelete"])) {
+    ControladorCotizacion::ctrBorrarCotizacion();
 }
 // Mostrar todas las ventas en la tabla
 else {

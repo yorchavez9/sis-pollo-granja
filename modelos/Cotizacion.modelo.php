@@ -641,8 +641,8 @@ class ModeloCotizacion
 	=============================================*/
     static public function mdlBorrarCotizacion($tabla, $datos)
     {
-        $stmt = Conexion::conectar()->prepare("DELETE FROM $tabla WHERE id_venta = :id_venta");
-        $stmt->bindParam(":id_venta", $datos, PDO::PARAM_INT);
+        $stmt = Conexion::conectar()->prepare("DELETE FROM $tabla WHERE id_cotizacion = :id_cotizacion");
+        $stmt->bindParam(":id_cotizacion", $datos, PDO::PARAM_INT);
         if ($stmt->execute()) {
             return "ok";
         } else {
@@ -656,8 +656,8 @@ class ModeloCotizacion
 	=============================================*/
     static public function mdlBorrarDetalleCotizacion($tabla, $datos)
     {
-        $stmt = Conexion::conectar()->prepare("DELETE FROM $tabla WHERE id_venta = :id_venta");
-        $stmt->bindParam(":id_venta", $datos, PDO::PARAM_INT);
+        $stmt = Conexion::conectar()->prepare("DELETE FROM $tabla WHERE id_cotizacion = :id_cotizacion");
+        $stmt->bindParam(":id_cotizacion", $datos, PDO::PARAM_INT);
         if ($stmt->execute()) {
             return "ok";
         } else {

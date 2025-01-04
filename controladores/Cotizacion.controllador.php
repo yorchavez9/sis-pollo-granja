@@ -390,23 +390,14 @@ class ControladorCotizacion
 	BORRAR VENTA
 	=============================================*/
 
-    static public function ctrBorrarVenta()
+    static public function ctrBorrarCotizacion()
     {
-
-        if (isset($_POST["ventaIdDelete"])) {
-
-            $tablaV = "ventas";
-
-            $datos = $_POST["ventaIdDelete"];
-
-            $respuesta = ModeloCotizacion::mdlBorrarVenta($tablaV, $datos);
-
-
-            $tablaD = "detalle_venta";
-
-            $respuestaDetalle = ModeloCotizacion::mdlBorrarDetalleVenta($tablaD, $datos);
-
-            echo json_encode($respuestaDetalle);
-        }
+        $tablaV = "cotizaciones";
+        $datos = $_POST["idCotizacionDelete"];
+        $respuesta = ModeloCotizacion::mdlBorrarCotizacion($tablaV, $datos);
+        $tablaD = "detalle_cotizacion";
+        $respuestaDetalle = ModeloCotizacion::mdlBorrarDetalleCotizacion($tablaD, $datos);
+        echo json_encode($respuestaDetalle);
+    
     }
 }
