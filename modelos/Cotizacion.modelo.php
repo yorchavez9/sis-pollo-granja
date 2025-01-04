@@ -13,7 +13,7 @@ class ModeloCotizacion
         // Si hay un filtro
         if ($item != null) {
             $sql = "SELECT  
-						c.id_venta,
+						c.id_cotizacion,
 						u.nombre_usuario,
 						u.id_usuario,
 						p.id_persona,
@@ -23,26 +23,23 @@ class ModeloCotizacion
 						p.telefono,
 						p.email,
 						sn.tipo_comprobante_sn, 
-						sn.serie_prefijo,
-						c.num_comprobante,
 						c.impuesto, 
 						c.tipo_pago, 
-						c.total_venta,
+						c.total_cotizacion,
 						c.sub_total,
-						c.igv, 
+						c.igv_total, 
 						c.total_pago, 
-						c.fecha_venta, 
-						c.hora_venta, 
+						c.fecha_cotizacion, 
+						c.hora_cotizacion,  
 						c.estado_pago
 					FROM 
 						$tabla_s_n AS sn 
 					INNER JOIN 
-						$tabla_ventas AS v ON sn.id_serie_num = c.id_serie_num 
+						$tabla_cotizacion AS c ON sn.id_serie_num = c.id_serie_num 
 					INNER JOIN 
 						$tabla_personas AS p ON c.id_persona = p.id_persona
 					INNER JOIN $tabla_usuarios AS u ON u.id_usuario = c.id_usuario
-					WHERE 
-						$item = :$item";
+					WHERE $item = :$item";
 
             $stmt = Conexion::conectar()->prepare($sql);
             $stmt->bindParam(":" . $item, $valor, PDO::PARAM_STR);
@@ -262,15 +259,15 @@ class ModeloCotizacion
 	MOSTRAR DETALLE VENTAS
 	=============================================*/
 
-    static public function mdlMostrarListaDetalleCotizacion($tablaDV, $tablaP, $item, $valor)
+    static public function mdlMostrarListaDetalleCotizacion($tablaDC, $tablaP, $item, $valor)
     {
         if ($item != null) {
-            $stmt = Conexion::conectar()->prepare("SELECT * FROM $tablaDV as dv INNER JOIN $tablaP as p ON dc.id_producto=p.id_producto WHERE $item = :$item");
+            $stmt = Conexion::conectar()->prepare("SELECT * FROM $tablaDC as dc INNER JOIN $tablaP as p ON dc.id_producto=p.id_producto WHERE $item = :$item");
             $stmt->bindParam(":" . $item, $valor, PDO::PARAM_STR);
             $stmt->execute();
             return $stmt->fetchAll();
         } else {
-            $stmt = Conexion::conectar()->prepare("SELECT * FROM $tablaDV as dv INNER JOIN $tablaP as p ON p.id_producto = dc.id_producto  ORDER BY c.id_venta DESC");
+            $stmt = Conexion::conectar()->prepare("SELECT * FROM $tablaDC as dc INNER JOIN $tablaP as p ON p.id_producto = dc.id_producto  ORDER BY c.id_cotizacion DESC");
             $stmt->execute();
             return $stmt->fetchAll();
         }

@@ -179,13 +179,13 @@ class ControladorCotizacion
 	MOSTRAR DETALLE VENTA
 	=============================================*/
 
-    static public function ctrMostrarDetalleVenta($item, $valor)
+    static public function ctrMostrarDetalleCotizacion($item, $valor)
     {
 
-        $tablaDV = "detalle_venta";
+        $tablaDC = "detalle_cotizacion";
         $tablaP = "productos";
 
-        $respuesta = ModeloCotizacion::mdlMostrarListaDetalleVenta($tablaDV, $tablaP, $item, $valor);
+        $respuesta = ModeloCotizacion::mdlMostrarListaDetalleCotizacion($tablaDC, $tablaP, $item, $valor);
 
         return $respuesta;
     }

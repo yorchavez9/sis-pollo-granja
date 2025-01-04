@@ -543,8 +543,8 @@ $("#btn_crear_cotizacion").click(function (e) {
                    }).then((result) => {
                        if (result.isConfirmed) {
                            Swal.fire({
-                               title: "¡Imprimiendo!",
-                               text: "Su comprobante se está imprimiendo.",
+                               title: "¡Impreso con éxito 👍!",
+                               text: "Su comprobante se ha impreso.",
                                icon: "success",
                            });
                            const documento = res.tipo_comprobante;
@@ -554,8 +554,8 @@ $("#btn_crear_cotizacion").click(function (e) {
                            ventana.onload = () => ventana.print();
                        } else if (result.dismiss === Swal.DismissReason.cancel) {
                            Swal.fire({
-                               title: "¡Descargando!",
-                               text: "Su comprobante se está descargando.",
+                               title: "¡Descargado con éxito 👍!",
+                               text: "Su comprobante se descargó.",
                                icon: "success",
                            });
                            const documento = res.tipo_comprobante;

@@ -142,27 +142,27 @@ function mostrarCotizaciones() {
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                     <li>
-                                        <a href="#" class="dropdown-item btnImprimirComprobanteV" idVenta="${cotizacion.id_cotizacion}" tipo_comprobante="${cotizacion.tipo_comprobante_sn}">
+                                        <a href="#" class="dropdown-item btnGenerarVenta" idCotizacion="${cotizacion.id_cotizacion}">
                                             <i class="fa fa-cart-plus fa-lg me-2" style="color: #1B2850"></i> Generar venta
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="#" class="dropdown-item btnImprimirComprobanteV" idVenta="${cotizacion.id_cotizacion}" tipo_comprobante="${cotizacion.tipo_comprobante_sn}">
+                                        <a href="#" class="dropdown-item btnEditarCotizacion" idCotizacion="${cotizacion.id_cotizacion}">
                                             <i class="fa fa-edit fa-lg me-2" style="color: #FF9F43"></i> Editar
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="#" class="dropdown-item btnImprimirComprobanteV" idVenta="${cotizacion.id_cotizacion}" tipo_comprobante="${cotizacion.tipo_comprobante_sn}">
+                                        <a href="#" class="dropdown-item btnImprimirComprobanteC" idCotizacion="${cotizacion.id_cotizacion}" tipo_comprobante="${cotizacion.tipo_comprobante_sn}">
                                             <i class="fa fa-print fa-lg me-2" style="color: #0084FF"></i> Imprimir
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="#" class="dropdown-item btnDescargarComprobanteV" idVenta="${cotizacion.id_cotizacion}" tipo_comprobante="${cotizacion.tipo_comprobante_sn}">
+                                        <a href="#" class="dropdown-item btnDescargarComprobanteC" idCotizacion="${cotizacion.id_cotizacion}" tipo_comprobante="${cotizacion.tipo_comprobante_sn}">
                                             <i class="fa fa-download fa-lg me-2" style="color: #28C76F"></i> Descargar
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="#" class="dropdown-item confirm-text btnEliminarVenta" idVentaDelete="${cotizacion.id_cotizacion}">
+                                        <a href="#" class="dropdown-item confirm-text btnEliminarCotizacion" idCotizacionDelete="${cotizacion.id_cotizacion}">
                                             <i class="fa fa-trash fa-lg me-2" style="color: #FF4D4D"></i> Eliminar
                                         </a>
                                     </li>
@@ -196,160 +196,23 @@ $("#data_lista_cotizacion").on("click", ".btnHistorialPago", function (e) {
     cargarHistorialPago(id_venta_historial);
 });
 
-// Función para cargar el historial de pagos
-function cargarHistorialPago(id_venta_historial) {
-    const datos = new FormData();
-    datos.append("id_venta_historial", id_venta_historial);
-    $.ajax({
-        url: "ajax/Historial.pago.ajax.php",
-        method: "POST",
-        data: datos,
-        cache: false,
-        contentType: false,
-        processData: false,
-        dataType: "json",
-        success: function (historial_pagos) {
-            let tbody = $("#data_historial_pago");
-            tbody.empty();
-
-            // Validar si el historial está vacío o no contiene datos
-            if (!historial_pagos || historial_pagos.length === 0) {
-                Swal.fire({
-                    title: "Sin datos",
-                    text: "No se encontraron pagos en el historial para esta cotizacion.",
-                    icon: "info",
-                });
-                return;
-            }
-
-            // Recorrer los datos del historial de pagos
-            historial_pagos.forEach(function (historial_pago, index) {
-                let comprobanteImagen =
-                    historial_pago.comprobante_imagen && historial_pago.comprobante_imagen.trim() !== ""
-                        ? historial_pago.comprobante_imagen.substring(3)
-                        : null;
-
-                let numeroSerie =
-                    historial_pago.numero_serie_pago && historial_pago.numero_serie_pago.trim() !== ""
-                        ? historial_pago.numero_serie_pago
-                        : "Sin serie";
-
-                var fila = `
-          <tr>
-            <td>${index + 1}</td>
-            <td>${historial_pago.fecha_registro}</td>
-            <td>${historial_pago.forma_pago}</td>
-            <td>S/ ${historial_pago.monto_pago}</td>
-            <td class="text-center">
-              <div>
-                ${comprobanteImagen
-                        ? `<a href="javascript:void(0);" class="product-img"><img src="${comprobanteImagen}" alt="Comprobante"></a>`
-                        : `<small>Sin comprobante</small>`}
-              </div>
-              <div>
-                <small>${numeroSerie}</small>
-              </div>
-            </td>
-            <td class="text-center">
-              <a href="#" class="me-3 btnEditarHistorialPago" idPago="${historial_pago.id_pago}" idVenta="${historial_pago.id_cotizacion}" data-bs-toggle="modal" data-bs-target="#modal_editar_historial_pago">
-                <i class="text-warning fas fa-edit fa-lg"></i>
-              </a>
-              <a href="#" class="me-3 confirm-text btn_print_pago_historial" idPago="${historial_pago.id_pago}" idVenta="${historial_pago.id_cotizacion}"">
-                <i class="fa fa-print fa-lg" style="color: #0084FF"></i>
-              </a>
-              <a href="#" class="me-3 confirm-text btnEliminarHistorialPago" idPago="${historial_pago.id_pago}" idVenta="${historial_pago.id_cotizacion}" imagenHistorialPago="${comprobanteImagen}">
-                <i class="fa fa-trash fa-lg" style="color: #FF4D4D"></i>
-              </a>
-            </td>
-          </tr>`;
-                tbody.append(fila);
-            });
-
-            $("#tabla_historial_pago").DataTable();
-        },
-        error: function () {
-            Swal.fire({
-                title: "Error",
-                text: "Ocurrió un problema al obtener el historial de pagos.",
-                icon: "error",
-            });
-        },
-    });
-}
-
-
 /*=============================================
-ELIMINAR HISTORIAL PAGO
+IMPRIMIR COMPROBANTE
 =============================================*/
-$("#data_historial_pago").on("click", ".btnEliminarHistorialPago", function (e) {
-    e.preventDefault();
-    let id_delete_pago_historial = $(this).attr("idPago");
-    var id_venta_historial = $(this).attr("idVenta");
-    let url_imagen_historial_pago = $(this).attr("imagenHistorialPago");
-    const datos = new FormData();
-    datos.append("id_delete_pago_historial", id_delete_pago_historial);
-    datos.append("url_imagen_historial_pago", url_imagen_historial_pago);
-
-    Swal.fire({
-        title: "¿Está seguro de borrar el pago?",
-        text: "¡Si no lo está puede cancelar la acción!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        cancelButtonText: "Cancelar",
-        confirmButtonText: "Si, borrar!",
-    }).then(function (result) {
-        if (result.value) {
-            $.ajax({
-                url: "ajax/Historial.pago.ajax.php",
-                method: "POST",
-                data: datos,
-                cache: false,
-                contentType: false,
-                processData: false,
-                success: function (respuesta) {
-                    var res = JSON.parse(respuesta);
-                    if (res === "ok") {
-                        Swal.fire({
-                            title: "¡Eliminado!",
-                            text: "El pago se eliminó con éxito",
-                            icon: "success",
-                        }).then(() => {
-                            if (id_venta_historial) {
-                                console.log("Refrescando historial para la venta ID:", id_venta_historial);
-                                cargarHistorialPago(id_venta_historial);
-                            }
-                        });
-                        $("#tabla_historial_pago").DataTable();
-                    } else {
-                        console.error("Error al eliminar los datos");
-                    }
-                }
-
-            });
-        }
-    });
-});
-
-
-/*=============================================
-IMPRIMIR TICKET
-=============================================*/
-$("#data_lista_cotizacion").on("click", ".btnImprimirComprobanteV", function (e) {
+$("#data_lista_cotizacion").on("click", ".btnImprimirComprobanteC", function (e) {
     e.preventDefault();
     console.log("Imprimiendo comprobante");
-    var idVenta = $(this).attr("idVenta");
+    var idCotizacion = $(this).attr("idCotizacion");
     var documento = $(this).attr("tipo_comprobante");
-    const urlDocumento = `extensiones/${documento}/${documento}_v.php?id_venta=${idVenta}`;
+    const urlDocumento = `extensiones/${documento}/${documento}_c.php?id_cotizacion=${idCotizacion}`;
     const ventana = window.open(urlDocumento, '_blank');
     ventana.onload = () => ventana.print();
 });
 
 /*=============================================
-DESCARGAR TICKET
+DESCARGAR COMPROBANTE
 =============================================*/
-$("#data_lista_cotizacion").on("click", ".btnDescargarComprobanteV", function (e) {
+$("#data_lista_cotizacion").on("click", ".btnDescargarComprobanteC", function (e) {
     e.preventDefault();
     console.log("Descargando comprobante");
     var idVenta = $(this).attr("idVenta");

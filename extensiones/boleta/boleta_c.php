@@ -5,8 +5,8 @@ session_start();
 
 $nombre_usuario = $_SESSION["nombre_usuario"];
 
-require_once "../../controladores/Ventas.controlador.php";
-require_once "../../modelos/Ventas.modelo.php";
+require_once "../../controladores/Cotizacion.controllador.php";
+require_once "../../modelos/Cotizacion.modelo.php";
 
 require_once "../../controladores/Producto.controlador.php";
 require_once "../../modelos/Producto.modelo.php";
@@ -22,17 +22,16 @@ function formatearPrecio($precio)
 /* ========================================
 MOSTRANDO DATOS DE LA VENTA
 ======================================== */
-$item = "id_venta";
-$valor = $_GET["id_venta"];
+$item = "id_cotizacion";
+$valor = $_GET["id_cotizacion"];
 
-$respuesta = ControladorVenta::ctrMostrarListaVentas($item, $valor);
-$serieNumero = $respuesta["num_comprobante"];
-$seriePrefijo = $respuesta["serie_prefijo"];
-$horaVenta = $respuesta["hora_venta"];
-$respuesta_dv = ControladorVenta::ctrMostrarDetalleVenta($item, $valor);
-$fechaVenta = $respuesta["fecha_venta"];
+$respuesta = ControladorCotizacion::ctrMostrarListaCotizaciones($item, $valor);
+$horaCotizacion = $respuesta["hora_cotizacion"];
+$respuesta_dc = ControladorCotizacion::ctrMostrarDetalleCotizacion($item, $valor);
+$fechaCotizacion = $respuesta["fecha_cotizacion"];
+$numeroCotizacion = $respuesta["id_cotizacion"];
 $impuesto = $respuesta["impuesto"];  // Obtenemos el valor del impuesto
-$horaFormateada = date("h:i A", strtotime($fechaVenta));
+$horaFormateada = date("h:i A", strtotime($fechaCotizacion));
 
 $itemConfig = null;
 $valorConfig = null;
@@ -50,10 +49,10 @@ foreach ($configuracion as $key => $value) {
 }
 class PDF extends FPDF
 {
-    private $serieNumero;
-    private $seriePrefijo;
-    private $fechaVenta;
-    private $horaVenta;
+
+    private $numeroCotizacion;
+    private $fechaCotizacion;
+    private $horaCotizacion;
     private $nombreEmpresa;
     private $ruc;
     private $telefono;
@@ -63,13 +62,12 @@ class PDF extends FPDF
     private $mensaje;
 
     // Constructor que acepta los datos de la empresa y los de la venta
-    function __construct($seriePrefijo, $serieNumero, $fechaVenta, $horaVenta, $nombreEmpresa, $ruc, $telefono, $correo, $direccion, $logo, $mensaje)
+    function __construct($numeroCotizacion, $fechaCotizacion, $horaCotizacion, $nombreEmpresa, $ruc, $telefono, $correo, $direccion, $logo, $mensaje)
     {
         parent::__construct(); // Llamada al constructor de la clase FPDF
-        $this->serieNumero = $serieNumero;
-        $this->seriePrefijo = $seriePrefijo;
-        $this->fechaVenta = $fechaVenta;
-        $this->horaVenta = $horaVenta;
+        $this->numeroCotizacion = $numeroCotizacion;
+        $this->fechaCotizacion = $fechaCotizacion;
+        $this->horaCotizacion = $horaCotizacion;
         $this->nombreEmpresa = $nombreEmpresa;
         $this->ruc = $ruc;
         $this->telefono = $telefono;
@@ -87,12 +85,12 @@ class PDF extends FPDF
 
         // Información de la factura
         $this->SetX(10);
-        $this->Cell(0, 7, 'BOLETA', 0, 1, 'L');
+        $this->Cell(0, 7, 'BOLETA COTIZACION', 0, 1, 'L');
         $this->SetFont('Helvetica', 'B', 12);
-        $this->Cell(0, 7, utf8_decode('Boleta N° ' . $this->seriePrefijo . '-' . $this->serieNumero), 0, 1, 'L');  // Accede a la propiedad
+        $this->Cell(0, 7, utf8_decode('Cotización N°'. $this->numeroCotizacion), 0, 1, 'L');  // Accede a la propiedad
         $this->SetFont('Helvetica', '', 10);
-        $this->Cell(0, 7, 'Fecha: ' . date("d/m/Y", strtotime($this->fechaVenta)), 0, 1, 'L');
-        $this->Cell(0, 7, utf8_decode('Hora: ' . $this->horaVenta), 0, 1, 'L');
+        $this->Cell(0, 7, 'Fecha: ' . date("d/m/Y", strtotime($this->fechaCotizacion)), 0, 1, 'L');
+        $this->Cell(0, 7, utf8_decode('Hora: ' . $this->horaCotizacion), 0, 1, 'L');
         $this->Ln(5);
 
         // Logotipo
@@ -128,7 +126,7 @@ class PDF extends FPDF
 
 
 // Crear PDF
-$pdf = new PDF($seriePrefijo, $serieNumero, $fechaVenta, $horaVenta, $nombreEmpresa, $ruc, $telefono, $correo, $direccion, $logo, $mensaje);
+$pdf = new PDF($numeroCotizacion, $fechaCotizacion, $horaCotizacion, $nombreEmpresa, $ruc, $telefono, $correo, $direccion, $logo, $mensaje);
 $pdf->AliasNbPages();
 $pdf->AddPage();
 $pdf->SetMargins(10, 10, 10);
@@ -166,10 +164,10 @@ $pdf->Cell(25, 10, 'Total', 'T B', 1, 'C', true);
 $pdf->SetFont('Helvetica', '', 10);
 
 $subtotal = 0;
-usort($respuesta_dv, fn($a, $b) => strcmp($a['nombre_producto'], $b['nombre_producto']));
+usort($respuesta_dc, fn($a, $b) => strcmp($a['nombre_producto'], $b['nombre_producto']));
 $totalCompra = 0;
 
-foreach ($respuesta_dv as $index => $producto) {
+foreach ($respuesta_dc as $index => $producto) {
     // Verificar si el peso bruto es cero
     if ($producto['peso_bruto'] == 0) {
         // Si el peso bruto es cero, sumar el número de aves por el precio
@@ -180,7 +178,7 @@ foreach ($respuesta_dv as $index => $producto) {
     }
 
     $totalCompra += $totalProducto;
-    $borde = ($index === count($respuesta_dv) - 1) ? 'B' : 0;
+    $borde = ($index === count($respuesta_dc) - 1) ? 'B' : 0;
 
     // Ajusta el ancho de las celdas según sea necesario
     $pdf->SetX(10);
