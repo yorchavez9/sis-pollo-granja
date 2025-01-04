@@ -169,23 +169,30 @@ function mostrarProductoVenta() {
       var tbody = $("#data_productos_detalle_venta");
       tbody.empty();
       productos.forEach(function (producto) {
-        producto.imagen_producto = producto.imagen_producto.substring(3);
+
+        // Asegurarse de que la imagen existe y tiene un valor válido
+        if (producto.imagen_producto) {
+          producto.imagen_producto = producto.imagen_producto.substring(3);
+        } else {
+          producto.imagen_producto = "vistas/img/productos/default.png"; // Ruta a la imagen predeterminada
+        }
+
         var fila = `
-                  <tr>
-                      <td class="text-center">
-                          <a href="#" id="btnAddProductoVenta" class="hover_img_a btnAddProductoVenta" idProductoAdd="${producto.id_producto}" stockProducto="${producto.stock_producto}">
-                              <img class="hover_img" src="${producto.imagen_producto}" alt="${producto.imagen_producto}">
-                          </a>
-                      </td>
-                      <td>${producto.nombre_categoria}</td>
-                      <td class="fw-bold">S/ ${producto.precio_producto}</td>
-                      <td>${producto.nombre_producto}</td>
-                      <td class="text-center">
-                          <button type="button" class="btn btn-sm" style="${getButtonStyles(producto.stock_producto)}">
-                              ${producto.stock_producto}
-                          </button>
-                      </td>
-                  </tr>`;
+          <tr>
+              <td class="text-center">
+                  <a href="#" id="btnAddProductoVenta" class="hover_img_a btnAddProductoVenta" idProductoAdd="${producto.id_producto}" stockProducto="${producto.stock_producto}">
+                      <img class="hover_img" src="${producto.imagen_producto}" alt="${producto.nombre_producto}">
+                  </a>
+              </td>
+              <td>${producto.nombre_categoria}</td>
+              <td class="fw-bold">S/ ${producto.precio_producto}</td>
+              <td>${producto.nombre_producto}</td>
+              <td class="text-center">
+                  <button type="button" class="btn btn-sm" style="${getButtonStyles(producto.stock_producto)}">
+                      ${producto.stock_producto}
+                  </button>
+              </td>
+          </tr>`;
 
         function getButtonStyles(stock) {
           if (stock > 20) {
@@ -196,6 +203,7 @@ function mostrarProductoVenta() {
             return "background-color: #FF4D4D; color: white; border: none;";
           }
         }
+
         tbody.append(fila);
       });
       $("#tabla_add_producto_venta").DataTable();

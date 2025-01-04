@@ -15,7 +15,13 @@ $(document).ready(function () {
         tbody.empty();
 
         productos.forEach(function (producto, index) {
-          producto.imagen_producto = producto.imagen_producto.substring(3);
+          // Asegurarse de que la imagen existe y tiene un valor válido
+          if (producto.imagen_producto) {
+            producto.imagen_producto = producto.imagen_producto.substring(3);
+          } else {
+            producto.imagen_producto = "vistas/img/productos/default.png"; // Ruta a la imagen predeterminada
+          }
+
 
           var fila = `
                         <tr>

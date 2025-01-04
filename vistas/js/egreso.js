@@ -55,12 +55,18 @@ $(document).ready(function () {
         const tbody = $("#data_productos_detalle");
         tbody.empty();
         productos.forEach((producto) => {
-          const imagen = producto.imagen_producto.substring(3);
+          // Asegurarse de que la imagen existe y tiene un valor válido
+          if (producto.imagen_producto) {
+            producto.imagen_producto = producto.imagen_producto.substring(3);
+          } else {
+            producto.imagen_producto = "vistas/img/productos/default.png"; // Ruta a la imagen predeterminada
+          }
+
           const fila = `
           <tr>
             <td class="text-center">
               <a href="#" class="hover_img_a btnAddProducto" idProductoAdd="${producto.id_producto}">
-                <img class="hover_img" src="${imagen}" alt="${producto.imagen_producto}">
+                <img class="hover_img" src="${producto.imagen_producto}" alt="${producto.imagen_producto}">
               </a>
             </td>
             <td>${producto.nombre_categoria}</td>
