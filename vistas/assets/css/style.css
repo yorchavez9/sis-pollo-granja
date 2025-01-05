@@ -1,4 +1,33 @@
 /* @import "../../../../css2"; */
+
+/* ===================================
+ESTILOS DE ESTADO DE COTIZACION
+=================================== */
+
+.btn-enviado {
+  background: #28C76F;
+  color: white;
+}
+
+.btn-pendiente {
+  background: #ffce2b;
+  color: #333;
+}
+
+.btn-completado {
+  background: #5b6fdd;
+  color: white;
+}
+
+.btn-desactivado {
+  background: #dc3545;
+  color: white;
+}
+
+/* ==================================
+ESTILOS GENERALES
+================================== */
+
 .css-equal-content,
 .css-equal-heights {
   display: flex;

@@ -84,12 +84,12 @@ function mostrarCotizaciones() {
                         <td class="text-center">
                             ${
                                 cotizacion.estado === 0
-                                ? `<button class="btn btn-sm rounded btnActivar bg-success text-white" idProducto="${cotizacion.id_producto}" estadoProducto="0"> Enviado</button>`
+                                ? `<button class="btn btn-sm rounded btnActivar btn-enviado" idCotizacion="${cotizacion.id_cotizacion}" estadoCotizacion="0">Enviado</button>`
                                 : cotizacion.estado === 1
-                                ? `<button class="btn btn-sm rounded btnActivar bg-warning text-dark" idProducto="${cotizacion.id_producto}" estadoProducto="1">Pendiente</button>`
+                                ? `<button class="btn btn-sm rounded btnActivar btn-pendiente" idCotizacion="${cotizacion.id_cotizacion}" estadoCotizacion="1">Pendiente</button>`
                                 : cotizacion.estado === 2
-                                ? `<button class="btn btn-sm rounded btnActivar bg-info text-white" idProducto="${cotizacion.id_producto}" estadoProducto="2">Completado</button>`
-                                : `<button class="btn btn-sm rounded btnActivar bg-danger text-white" idProducto="${cotizacion.id_producto}" estadoProducto="3">Desactivado</button>`
+                                ? `<button class="btn btn-sm rounded btnActivar btn-completado" idCotizacion="${cotizacion.id_cotizacion}" estadoCotizacion="2">Completado</button>`
+                                : `<button class="btn btn-sm rounded btnActivar btn-desactivado" idCotizacion="${cotizacion.id_cotizacion}" estadoCotizacion="3">Desactivado</button>`
                             }
                         </td>
                         <td class="text-center">
@@ -172,39 +172,43 @@ $("#data_lista_cotizacion").on("click", ".btnDescargarComprobanteC", function (e
 ESTADO DE LA COTIZACION
 =============================================*/
 $("#tabla_lista_cotizaciones").on("click", ".btnActivar", function () {
-    var idProducto = $(this).attr("idProducto");
-    var estadoProducto = parseInt($(this).attr("estadoProducto")); // Convertir a entero
+    var idCotizacion = $(this).attr("idCotizacion");
+    var estadoCotizacion = parseInt($(this).attr("estadoCotizacion"));
+
+    if (estadoCotizacion === 2) {
+        Swal.fire({
+            title: "¡Completado!",
+            text: "La cotización ya ha sido completado",
+            icon: "warning",
+        });
+        return;
+    }
 
     var nuevoEstado;
     var nuevoTexto;
     var nuevaClase;
 
-    // Definir el siguiente estado
-    if (estadoProducto === 0) {
+    if (estadoCotizacion === 0) {
         nuevoEstado = 1;
         nuevoTexto = "Pendiente";
-        nuevaClase = "bg-warning text-dark";
-    } else if (estadoProducto === 1) {
+        nuevaClase = "btn-pendiente";
+    } else if (estadoCotizacion === 1) {
         nuevoEstado = 2;
         nuevoTexto = "Completado";
-        nuevaClase = "bg-info text-white";
-    } else if (estadoProducto === 2) {
+        nuevaClase = "btn-completado";
+    } else {
         nuevoEstado = 0;
         nuevoTexto = "Enviado";
-        nuevaClase = "bg-success text-white";
-    } else {
-        nuevoEstado = 3;
-        nuevoTexto = "Desactivado";
-        nuevaClase = "bg-danger text-white";
+        nuevaClase = "btn-enviado";
     }
 
     // Enviar el nuevo estado por AJAX
     var datos = new FormData();
-    datos.append("activarId", idProducto);
-    datos.append("activarProducto", nuevoEstado);
+    datos.append("activarId", idCotizacion);
+    datos.append("activarCotizacion", nuevoEstado);
 
     $.ajax({
-        url: "ajax/Producto.ajax.php",
+        url: "ajax/Lista.cotizacion.ajax.php",
         method: "POST",
         data: datos,
         cache: false,
@@ -217,10 +221,10 @@ $("#tabla_lista_cotizaciones").on("click", ".btnActivar", function () {
 
     // Actualizar la interfaz del botón
     $(this)
-        .removeClass("bg-success bg-warning bg-info bg-danger text-white text-dark") // Quitar todas las clases previas
+        .removeClass("btn-enviado btn-pendiente btn-completado btn-desactivado") // Quitar todas las clases previas
         .addClass(nuevaClase) // Agregar la nueva clase
         .html(nuevoTexto); // Cambiar el texto
-    $(this).attr("estadoProducto", nuevoEstado); // Actualizar el atributo
+    $(this).attr("estadoCotizacion", nuevoEstado); // Actualizar el atributo
 });
 
 

@@ -175,17 +175,6 @@ $totalProveedores = ControladorProveedores::ctrMostrarTotalProveedores($item, $v
                                 <button class="btn btn-white btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                                     2024 <img src="vistas/assets/img/icons/dropdown.svg" alt="img" class="ms-2">
                                 </button>
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <li>
-                                        <a href="javascript:void(0);" class="dropdown-item">2023</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0);" class="dropdown-item">2022</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0);" class="dropdown-item">2021</a>
-                                    </li>
-                                </ul>
                             </div>
                         </div>
                     </div>

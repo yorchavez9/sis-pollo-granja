@@ -174,7 +174,6 @@ class ControladorCotizacion
         return $respuesta;
     }
 
-
     /*=============================================
 	MOSTRAR DETALLE VENTA
 	=============================================*/
@@ -362,10 +361,6 @@ class ControladorCotizacion
             // Actualizar el stock del producto
             $respStock = ModeloCotizacion::mdlActualizarStockProducto($tblProducto, $idProducto, $cantidad);
         }
-
-
-
-
 
         if ($respuestaDatos == "ok") {
 

@@ -47,19 +47,19 @@ class AjaxListaCotizacion
     }
 
     /*=============================================
-    ACTIVAR PRODUCTOS
+    ACTIVAR COTIZACIONES
     =============================================*/
-    public $activarProducto;
+    public $activarCotizacion;
     public $activarId;
 
-    public function ajaxActivarProducto()
+    public function ajaxActivarCotizacion()
     {
-        $tabla = "productos";
-        $item1 = "estado_producto";
-        $valor1 = $this->activarProducto;
-        $item2 = "id_producto";
+        $tabla = "cotizaciones";
+        $item1 = "estado";
+        $valor1 = $this->activarCotizacion;
+        $item2 = "id_cotizacion";
         $valor2 = $this->activarId;
-        ModeloProducto::mdlActualizarProducto($tabla, $item1, $valor1, $item2, $valor2);
+        ModeloCotizacion::mdlActualizarCotizacion($tabla, $item1, $valor1, $item2, $valor2);
     }
 }
 
@@ -72,6 +72,16 @@ if (isset($_POST["id_producto_edit"])) {
     $editar = new AjaxListaCotizacion();
     $editar->id_producto_edit = $_POST["id_producto_edit"];
     $editar->ajaxAddProducto();
+}
+
+/*=============================================
+ESTADOS DE ACTIVACION DE LA COTIZACION
+=============================================*/
+ elseif (isset($_POST["activarCotizacion"])) {
+    $activarCotizacion = new AjaxListaCotizacion();
+    $activarCotizacion->activarCotizacion = $_POST["activarCotizacion"];
+    $activarCotizacion->activarId = $_POST["activarId"];
+    $activarCotizacion->ajaxActivarCotizacion();
 }
 // Editar venta
 elseif (isset($_POST["idVenta"])) {
