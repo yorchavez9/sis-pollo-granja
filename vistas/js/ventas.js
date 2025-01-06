@@ -76,6 +76,7 @@ function mostrarSerieNumero() {
       type: "POST",
       data: datos,
       success: function (respuesta) {
+        console.log(respuesta);
         try {
           let data = JSON.parse(respuesta);
           if (data) {
@@ -102,6 +103,8 @@ $('#comprobante_venta').change(function () {
   var tipoComprobante = $(this).val();
   mostrarSerieNumero(tipoComprobante);
 });
+
+
 showSection();
 
 
@@ -267,7 +270,7 @@ $("#tabla_add_producto_venta").on("click touchstart", ".btnAddProductoVenta", fu
       // Crear una nueva fila
       let nuevaFila = `
         <tr>
-          <input type="hidden" class="id_producto_venta" value="${respuesta.id_producto}">
+          <input type="hidden" class="id_producto" value="${respuesta.id_producto}">
           <th class="text-center align-middle d-none d-md-table-cell">
             <a href="#" class="me-3 confirm-text btnEliminarAddProductoVenta" idAddProducto="${respuesta.id_producto}">
               <i class="fa fa-trash fa-lg" style="color: #F1666D"></i>
@@ -486,7 +489,7 @@ $("#btn_crear_nueva_venta").click(function (e) {
   $("#detalle_venta_producto tr").each(function () {
     const fila = $(this);
     const producto = {
-      id_producto_venta: fila.find(".id_producto_venta").val(),
+      id_producto: fila.find(".id_producto").val(),
       numero_javas: fila.find(".numero_javas_v").val(),
       numero_aves: fila.find(".numero_aves_v").val(),
       peso_promedio: fila.find(".peso_promedio_v").val(),
@@ -549,7 +552,6 @@ $("#btn_crear_nueva_venta").click(function (e) {
       processData: false,
       success: function (respuesta) {
         const res = JSON.parse(respuesta);
-
         $("#form_venta_producto")[0].reset();
         $("#detalle_venta_producto").empty();
         $("#subtotal_venta").text("00.00");
@@ -617,6 +619,7 @@ $("#btn_crear_nueva_venta").click(function (e) {
       },
     });
   }
+
 });
 
 /*=============================================

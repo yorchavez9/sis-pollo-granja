@@ -18,7 +18,8 @@ class ModeloCotizacion
                         u.id_usuario,
                         c.fecha_cotizacion, 
                         c.hora_cotizacion,
-                        sn.id_serie_num, 
+                        sn.id_serie_num,
+                        c.serie_cotizacion, 
                         c.impuesto, 
                         c.total_cotizacion,
                         c.total_pago, 
@@ -151,7 +152,8 @@ class ModeloCotizacion
                                                                 id_usuario, 
                                                                 fecha_cotizacion, 
                                                                 hora_cotizacion, 
-                                                                id_serie_num, 
+                                                                id_serie_num,
+                                                                serie_cotizacion, 
                                                                 validez,
                                                                 impuesto,
                                                                 total_cotizacion,
@@ -167,7 +169,8 @@ class ModeloCotizacion
                                                                 :id_usuario, 
                                                                 :fecha_cotizacion, 
                                                                 :hora_cotizacion, 
-                                                                :id_serie_num, 
+                                                                :id_serie_num,
+                                                                :serie_cotizacion, 
                                                                 :validez,
                                                                 :impuesto,
                                                                 :total_cotizacion,
@@ -183,6 +186,7 @@ class ModeloCotizacion
         $stmt->bindParam(":fecha_cotizacion", $datos["fecha_cotizacion"], PDO::PARAM_STR);
         $stmt->bindParam(":hora_cotizacion", $datos["hora_cotizacion"], PDO::PARAM_STR);
         $stmt->bindParam(":id_serie_num", $datos["id_serie_num"], PDO::PARAM_INT);
+        $stmt->bindParam(":serie_cotizacion", $datos["serie_cotizacion"], PDO::PARAM_STR);
         $stmt->bindParam(":validez", $datos["validez"], PDO::PARAM_STR);
         $stmt->bindParam(":impuesto", $datos["impuesto"], PDO::PARAM_STR);
         $stmt->bindParam(":total_cotizacion", $datos["total_cotizacion"], PDO::PARAM_STR);

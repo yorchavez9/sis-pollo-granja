@@ -108,7 +108,7 @@ $serieNumeroComprobante = ControladorSerieNumero::ctrMostrarSerieNumero($item, $
 
                             <div class="row">
                                 <!-- INGRESO DE TIPO DE COMPROBANTE -->
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <label for="comprobante_venta" class="form-label">Tipo de comprobante(<span class="text-danger">*</span>):</label>
                                     <select name="comprobante_venta" id="comprobante_venta" class="form-control">
                                         <option selected disabled>Selecione el comprobante</option>
@@ -122,8 +122,18 @@ $serieNumeroComprobante = ControladorSerieNumero::ctrMostrarSerieNumero($item, $
                                     </select>
                                     <small id="error_comprobante_venta"></small>
                                 </div>
+                                <!-- INGRESO DE LA SERIE -->
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="serie_venta" class="form-label">Serie:</label>
+                                        <input type="text" id="serie_venta" name="serie_venta" placeholder="Serie">
+                                        <small id="error_serie_venta" class="text-danger"></small>
+                                    </div>
+                                </div>
+                                <!-- INGRESO DE NÚMERO -->
+                                <input type="hidden" id="numero_venta" name="numero_venta" placeholder="Número">
                                 <!-- VALIDEZ DE LA COTIZACIÓN -->
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="numero_venta" class="form-label">Validez:</label>
                                         <div class="d-flex align-items-center">
@@ -134,7 +144,7 @@ $serieNumeroComprobante = ControladorSerieNumero::ctrMostrarSerieNumero($item, $
                                     </div>
                                 </div>
                                 <!-- INGRESO EL INPUESTO -->
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="igv_venta" class="form-label me-2">Impuesto (%):</label>
                                         <div class="d-flex align-items-center">
@@ -234,7 +244,7 @@ $serieNumeroComprobante = ControladorSerieNumero::ctrMostrarSerieNumero($item, $
                                                 <option value="transferencia_bancaria">Transferencia Bancaria</option>
                                             </select>
                                         </div>
-       
+
                                         <!-- SECCION DE CREAR VENTA -->
                                         <div class="row mb-3 mt-3">
                                             <button type="button" id="btn_crear_cotizacion" class="btn btn-block" style="background:#7367F0; color:white">

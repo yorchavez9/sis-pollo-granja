@@ -440,6 +440,7 @@ $("#btn_crear_cotizacion").click(function (e) {
     let fecha_venta = $("#fecha_venta").val();
     let hora_venta = $("#hora_venta").val();
     let comprobante_venta = $("#comprobante_venta").val();
+    let serie_cotizacion = $("#serie_venta").val();
     let validez_contizacion = $("#validez_contizacion").val();
     let igv_venta = $("#igv_venta").val();
 
@@ -504,6 +505,7 @@ $("#btn_crear_cotizacion").click(function (e) {
         datos.append("fecha_venta", fecha_venta);
         datos.append("hora_venta", hora_venta);
         datos.append("comprobante_venta", comprobante_venta);
+        datos.append("serie_cotizacion", serie_cotizacion);
         datos.append("validez_contizacion", validez_contizacion);
         datos.append("igv_venta", igv_venta);
         datos.append("productoAddVenta", productoAddVenta);

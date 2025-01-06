@@ -115,6 +115,7 @@ class ControladorCotizacion
             "fecha_cotizacion" => $_POST["fecha_venta"],
             "hora_cotizacion" => $_POST["hora_venta"],
             "id_serie_num" => $_POST["comprobante_venta"],
+            "serie_cotizacion" => $_POST["serie_cotizacion"],
             "validez" => $_POST["validez_contizacion"],
             "impuesto" => $_POST["igv_venta"],
             "total_cotizacion" => $_POST["total"],

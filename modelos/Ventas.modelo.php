@@ -586,7 +586,7 @@ class ModeloVenta
 		$totalActual = $stmt->fetchColumn();
 
 		// Calcular el nuevo total de pagos sumando el monto proporcionado
-		$nuevoTotal = $totalActual + $datos["total_pago"];
+		$nuevoTotal = floatval($totalActual) + floatval($datos["total_pago"]);
 
 		// Obtener el total de la compra
 		$stmt = Conexion::conectar()->prepare("SELECT total_venta FROM $tabla WHERE id_venta = :id_venta");

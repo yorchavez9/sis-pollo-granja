@@ -1,3 +1,22 @@
+/*=============================================
+TRAER EL ULTIMO NUMERO DE VENTA
+=============================================*/
+function ultimoNumeroVenta() {
+    $.ajax({
+        url: "ajax/Lista.venta.ajax.php",
+        type: "GET",
+        dataType: "json",
+        success: function (respuesta) {
+            const primerRegistro = respuesta[0];
+            localStorage.setItem('numero_comprobante', parseInt(primerRegistro.num_comprobante) + 1);
+        },
+        error: function (xhr, status, error) {
+            console.error("Error al obtener el número de venta:", error);
+        }
+    });
+}
+
+ultimoNumeroVenta();
 
 
 /*=============================================
@@ -244,7 +263,110 @@ $("#data_lista_cotizacion").on("click", ".btnGenerarVenta", function(e){
         processData: false,
         dataType: "json",
         success: function (respuesta) {
-            console.log(respuesta);
+            if(respuesta && Array.isArray(respuesta) && respuesta.length > 1){
+                let cotizacion = respuesta[0];
+                let detalles = respuesta[1];
+                let productoAddVenta = JSON.stringify(detalles);
+                let numero_venta = localStorage.getItem('numero_comprobante');
+
+                var estado_pago = "";
+                if (cotizacion.tipo_pago == "contado") {
+                    estado_pago = "completado";
+                } else {
+                    estado_pago = "pendiente";
+                }
+                let metodos_pago_venta = "pago_efectivo";
+
+                const datos = new FormData();
+                datos.append("id_usuario_venta", cotizacion.id_usuario);
+                datos.append("id_cliente_venta", cotizacion.id_persona);
+                datos.append("fecha_venta", cotizacion.fecha_cotizacion);
+                datos.append("hora_venta", cotizacion.hora_cotizacion);
+                datos.append("comprobante_venta", cotizacion.id_serie_num);
+                datos.append("serie_venta", cotizacion.serie_cotizacion);
+                datos.append("numero_venta", numero_venta);
+                datos.append("igv_venta", cotizacion.igv_venta);
+                datos.append("productoAddVenta", productoAddVenta);
+                datos.append("subtotal", cotizacion.sub_total);
+                datos.append("igv", cotizacion.igv_total);
+                datos.append("total", cotizacion.total_cotizacion);
+                datos.append("tipo_pago", cotizacion.tipo_pago);
+                datos.append("estado_pago", estado_pago);
+                datos.append("metodos_pago_venta", metodos_pago_venta);
+                datos.append("pago_cuota_venta", cotizacion.pago_cuota_venta);
+                datos.append("recibo_de_pago_venta", cotizacion.recibo_de_pago_venta);
+                datos.append("serie_de_pago_venta", cotizacion.serie_de_pago_venta);
+
+
+                $.ajax({
+                    url: "ajax/ventas.ajax.php",
+                    method: "POST",
+                    data: datos,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function (respuesta) {
+                        const res = JSON.parse(respuesta);
+                        $("#detalle_venta_producto").empty();
+                        $("#subtotal_venta").text("00.00");
+                        $("#igv_venta_show").text("00.00");
+                        $("#total_precio_venta").text("00.00");
+                        // Mostrar alerta y preguntar acción
+                        Swal.fire({
+                            title: "¿Qué desea hacer con el comprobante?",
+                            text: "Seleccione una opción.",
+                            icon: "question",
+                            showCancelButton: true,
+                            confirmButtonColor: "#28C76F",
+                            cancelButtonColor: "#F52E2F",
+                            confirmButtonText: "Imprimir",
+                            cancelButtonText: "Descargar",
+                            footer: '<a href="#">Enviar por WhatsApp o correo</a>',
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                Swal.fire({
+                                    title: "¡Imprimiendo!",
+                                    text: "Su comprobante se está imprimiendo.",
+                                    icon: "success",
+                                });
+                                const documento = res.tipo_comprobante;
+                                const id_venta = res.id_venta;
+                                const urlDocumento = `extensiones/${documento}/${documento}_v.php?id_venta=${id_venta}`;
+                                const ventana = window.open(urlDocumento, '_blank');
+                                ventana.onload = () => ventana.print();
+                            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                                Swal.fire({
+                                    title: "¡Descargando!",
+                                    text: "Su comprobante se está descargando.",
+                                    icon: "success",
+                                });
+                                const documento = res.tipo_comprobante;
+                                window.location.href = `extensiones/${documento}/${documento}_v.php?id_venta=${res.id_venta}&accion=descargar`;
+                            } else {
+                                Swal.fire({
+                                    title: "¿Cómo desea enviar el comprobante?",
+                                    text: "Seleccione una opción.",
+                                    icon: "info",
+                                    showCancelButton: true,
+                                    cancelButtonText: "WhatsApp",
+                                    confirmButtonText: "Correo",
+                                }).then((sendResult) => {
+                                    const mensaje = sendResult.isConfirmed ? "¡Enviando por correo!" : "¡Enviando por WhatsApp!";
+                                    Swal.fire({
+                                        title: mensaje,
+                                        text: `Su comprobante se está enviando por ${sendResult.isConfirmed ? "correo" : "WhatsApp"}.`,
+                                        icon: "success",
+                                    });
+                                });
+                            }
+                        });
+                        setDateToToday('fecha_venta');
+                        mostrarProductoVenta();
+                        mostrarSerieNumero('ticket');
+                        mostrarVentas();
+                    },
+                });
+            }
         }
     })
 })

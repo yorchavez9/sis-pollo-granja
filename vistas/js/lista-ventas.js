@@ -48,54 +48,6 @@ function showSection(){
 
 showSection();
 
-/*=============================================
-MOSTRANDO PRODUCTOS DE LA VENTA
-=============================================*/
-function mostrarProductoVenta() {
-  $.ajax({
-    url: "ajax/Producto.ajax.php",
-    type: "GET",
-    dataType: "json",
-    success: function (productos) {
-      var tbody = $("#data_edit_productos_detalle_venta");
-      tbody.empty();
-      productos.forEach(function (producto) {
-        producto.imagen_producto = producto.imagen_producto.substring(3);
-        var fila = `
-                <tr>
-                    <td class="text-center">
-                        <a href="#" id="btnAddProductoVenta" class="hover_img_a btnAddEditProductoVenta" idProductoAdd="${historial_pago.id_producto}" stockProducto="${historial_pago.stock_producto}">
-                            <img class="hover_img" src="${historial_pago.imagen_producto}" alt="${historial_pago.imagen_producto}">
-                        </a>
-                    </td>
-                    <td>${historial_pago.nombre_categoria}</td>
-                    <td class="fw-bold">S/ ${historial_pago.precio_producto}</td>
-                    <td>${historial_pago.nombre_producto}</td>
-                    <td class="text-center">
-                        <button type="button" class="btn btn-sm" style="${getButtonStyles(producto.stock_producto)}">
-                            ${historial_pago.stock_producto}
-                        </button>
-                    </td>
-                </tr>`;
-
-        function getButtonStyles(stock) {
-          if (stock > 20) {
-            return "background-color: #28C76F; color: white; border: none;";
-          } else if (stock >= 10 && stock <= 20) {
-            return "background-color: #FF9F43; color: white; border: none;";
-          } else {
-            return "background-color: #FF4D4D; color: white; border: none;";
-          }
-        }
-        tbody.append(fila);
-      });
-      $("#tabla_edit_add_producto_venta").DataTable();
-    },
-    error: function (xhr, status, error) {
-      console.error("Error al recuperar los usuarios:", error.mensaje);
-    },
-  });
-}
 
 /* ===========================================
 FORMATEO DE PRECIOS

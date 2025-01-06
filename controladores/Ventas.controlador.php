@@ -274,7 +274,7 @@ class ControladorVenta
 		foreach ($productos as $dato) {
 			$nuevo_dato = array(
 				'id_venta' => $id_venta_ultimo,
-				'id_producto' => $dato['id_producto_venta'],
+				'id_producto' => $dato['id_producto'],
 				'numero_javas' => $dato['numero_javas'],
 				'numero_aves' => $dato['numero_aves'],
 				'peso_promedio' => $dato['peso_promedio'],
@@ -294,7 +294,7 @@ class ControladorVenta
 		$tblProducto = "productos";
 		$stocks = json_decode($_POST["productoAddVenta"], true);
 		foreach ($stocks as $value) {
-			$idProducto = $value['id_producto_venta'];
+			$idProducto = $value['id_producto'];
 			$cantidad = $value['numero_aves'];
 			// Actualizar el stock del producto
 			ModeloVenta::mdlActualizarStockProducto($tblProducto, $idProducto, $cantidad);
