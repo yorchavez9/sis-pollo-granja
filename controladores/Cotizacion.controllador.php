@@ -73,119 +73,27 @@ class ControladorCotizacion
         return $respuesta;
     }
 
+  
     /*=============================================
-	MOSTRAR SUMA TOTAL DE COTIZACION
-	=============================================*/
-    static public function ctrMostrarSumaTotalCotizacion($item, $valor)
-    {
-        $tablaD = "detalle_venta";
-        $tablaV = "ventas";
-        $tablaP = "personas";
-        $respuesta = ModeloCotizacion::mdlMostrarSumaTotalVenta($tablaD, $tablaV, $tablaP, $item, $valor);
-        return $respuesta;
-    }
-
-    /*=============================================
-	MOSTRAR SUMA TOTAL DE COTIZACION
-	=============================================*/
-    static public function ctrMostrarSumaTotalVentaContado($item, $valor)
-    {
-        $tablaD = "detalle_venta";
-        $tablaV = "ventas";
-        $tablaP = "personas";
-        $respuesta = ModeloCotizacion::mdlMostrarSumaTotalVentaContado($tablaD, $tablaV, $tablaP, $item, $valor);
-        return $respuesta;
-    }
-
-
-    /*=============================================
-	MOSTRAR SUMA TOTAL DE VENTA
+	MOSTRAR DETALLE VENTA
 	=============================================*/
 
-    static public function ctrMostrarSumaTotalVentaCredito($item, $valor)
+    static public function ctrMostrarDetalleCotizacionVenta($item, $valor)
     {
-        $tablaD = "detalle_venta";
-        $tablaV = "ventas";
-        $tablaP = "personas";
-        $respuesta = ModeloCotizacion::mdlMostrarSumaTotalCredito($tablaD, $tablaV, $tablaP, $item, $valor);
+        $tablaDC = "detalle_cotizacion";
+        $respuesta = ModeloCotizacion::mdlMostrarListaDetalleCotizacionVenta($tablaDC, $item, $valor);
         return $respuesta;
     }
-
-    /*=============================================
-	MOSTRAR REPORTE VENTAS
-	=============================================*/
-
-    static public function ctrMostrarReporteVentas($fecha_desde, $fecha_hasta, $id_usuario, $tipo_pago, $descuento_producto)
-    {
-        $tablaVentas = "ventas";
-        $tablaDetalleV = "detalle_venta";
-        $tablaProducto = "productos";
-        $tablaUsuario = "usuarios";
-        $tablaPersona = "personas";
-        $respuesta = ModeloCotizacion::mdlMostrarReporteVenta($tablaVentas, $tablaDetalleV, $tablaProducto, $tablaUsuario, $tablaPersona, $fecha_desde, $fecha_hasta, $id_usuario, $tipo_pago, $descuento_producto);
-        return $respuesta;
-    }
-
-    /*=============================================
-	MOSTRAR REPORTE VENTAS RANGO DE FECHAS
-	=============================================*/
-
-    static public function ctrMostrarReporteVentasRangoFechas($fecha_desde, $fecha_hasta, $id_usuario, $tipo_pago, $descuento_producto)
-    {
-        $tablaVentas = "ventas";
-        $tablaDetalleV = "detalle_venta";
-        $tablaProducto = "productos";
-        $tablaUsuario = "usuarios";
-        $tablaPersona = "personas";
-        $respuesta = ModeloCotizacion::mdlMostrarReporteVentaRangoFechas($tablaVentas, $tablaDetalleV, $tablaProducto, $tablaUsuario, $tablaPersona, $fecha_desde, $fecha_hasta, $id_usuario, $tipo_pago, $descuento_producto);
-        return $respuesta;
-    }
-
-    /*=============================================
-	MOSTRAR REPORTE CREDITOS POR CLIENTE
-	=============================================*/
-
-    static public function ctrMostrarReporteVentasCreditoCliente($fecha_desde, $fecha_hasta, $id_usuario, $tipo_pago, $descuento_producto, $id_cliente_reporte)
-    {
-        $tablaVentas = "ventas";
-        $tablaDetalleV = "detalle_venta";
-        $tablaProducto = "productos";
-        $tablaUsuario = "usuarios";
-        $tablaPersona = "personas";
-        $respuesta = ModeloCotizacion::mdlMostrarReporteVentaCreditosCliente($tablaVentas, $tablaDetalleV, $tablaProducto, $tablaUsuario, $tablaPersona, $fecha_desde, $fecha_hasta, $id_usuario, $tipo_pago, $descuento_producto, $id_cliente_reporte);
-        return $respuesta;
-    }
-
-    /*=============================================
-	MOSTRAR REPORTE PRECIOS MODIFICADO EN LA VENTA
-	=============================================*/
-
-    static public function ctrMostrarReporteVentasPrecioProducto($fecha_desde, $fecha_hasta, $id_usuario, $tipo_pago, $descuento_producto)
-    {
-
-        $tablaVentas = "ventas";
-        $tablaDetalleV = "detalle_venta";
-        $tablaProducto = "productos";
-        $tablaUsuario = "usuarios";
-        $tablaPersona = "personas";
-
-        $respuesta = ModeloCotizacion::mdlMostrarReporteVentaPrecioProducto($tablaVentas, $tablaDetalleV, $tablaProducto, $tablaUsuario, $tablaPersona, $fecha_desde, $fecha_hasta, $id_usuario, $tipo_pago, $descuento_producto);
-
-        return $respuesta;
-    }
-
+  
     /*=============================================
 	MOSTRAR DETALLE VENTA
 	=============================================*/
 
     static public function ctrMostrarDetalleCotizacion($item, $valor)
     {
-
         $tablaDC = "detalle_cotizacion";
         $tablaP = "productos";
-
         $respuesta = ModeloCotizacion::mdlMostrarListaDetalleCotizacion($tablaDC, $tablaP, $item, $valor);
-
         return $respuesta;
     }
 
@@ -274,117 +182,8 @@ class ControladorCotizacion
     }
 
     /*=============================================
-	EDITAR VENTA
-	=============================================*/
-
-    static public function ctrEditarVenta()
-    {
-
-
-
-        $tabla = "ventas";
-
-        $pago_total = 0;
-
-        if ($_POST["tipo_pago"] == "contado") {
-
-            $pago_total = $_POST["total"];
-        } else {
-            $pago_total = 0;
-        }
-
-
-
-
-        $datos = array(
-            "id_venta" => $_POST["edit_id_venta"],
-            "id_persona" => $_POST["id_cliente_venta"],
-            "id_usuario" => $_POST["id_usuario_venta"],
-            "fecha_venta" => $_POST["fecha_venta"],
-            "tipo_comprobante" => $_POST["comprobante_venta"],
-            "serie_comprobante" => $_POST["serie_venta"],
-            "num_comprobante" => $_POST["numero_venta"],
-            "impuesto" => $_POST["igv_venta"],
-            "total_venta" => $_POST["total"],
-            "total_pago" => $pago_total,
-            "sub_total" => $_POST["subtotal"],
-            "igv" => $_POST["igv"],
-            "tipo_pago" => $_POST["tipo_pago"],
-            "estado_pago" => $_POST["estado_pago"],
-            "pago_e_y" => $_POST["pago_e_y"]
-        );
-
-
-
-        $respuesta = ModeloCotizacion::mdlEditarVenta($tabla, $datos);
-
-
-        /* ==========================================
-		ACTUALIZANDO LOS DATOS DEL DETALLE PRODUCTO
-		========================================== */
-
-        $tblDetalleVenta = "detalle_venta";
-
-        $productos = json_decode($_POST["productoAddVenta"], true);
-
-
-
-        $datos = array();
-
-        foreach ($productos as $dato) {
-            $nuevo_dato = array(
-                "id_venta" => $_POST["edit_id_venta"],
-                'id_producto' => $dato['id_producto'],
-                'precio_venta' => $dato['precio_venta'],
-                'cantidad_u' => $dato['cantidad_u'],
-                'cantidad_kg' => $dato['cantidad_kg']
-            );
-
-            $datos[] = $nuevo_dato;
-
-            $respuestaDatos = ModeloCotizacion::mdlEditarDetalleVenta($tblDetalleVenta, $nuevo_dato);
-        }
-
-        /* ==========================================
-		ACTUALIZANDO EL STOCK DEL PRODUCTO
-		========================================== */
-
-        $tblProducto = "productos";
-
-        $stocks = json_decode($_POST["productoAddVenta"], true);
-
-        foreach ($stocks as $value) {
-
-            $idProducto = $value['id_producto'];
-            $cantidad = $value['cantidad_u'];
-
-            // Actualizar el stock del producto
-            $respStock = ModeloCotizacion::mdlActualizarStockProducto($tblProducto, $idProducto, $cantidad);
-        }
-
-        if ($respuestaDatos == "ok") {
-
-            $response = array(
-                "mensaje" => "La venta se actualizó con éxito",
-                "estado" => "ok"
-            );
-
-            echo json_encode($response);
-        } else {
-
-            $response = array(
-                "mensaje" => "Error al actualizar la venta",
-                "estado" => "error"
-            );
-
-            echo json_encode($response);
-        }
-    }
-
-    /*=============================================
 	BORRAR VENTA
 	=============================================*/
-
     static public function ctrBorrarCotizacion()
     {
         $tablaV = "cotizaciones";

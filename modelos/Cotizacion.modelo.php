@@ -14,24 +14,23 @@ class ModeloCotizacion
         if ($item != null) {
             $sql = "SELECT  
 						c.id_cotizacion,
-						u.nombre_usuario,
-						u.id_usuario,
-						p.id_persona,
-						p.razon_social,
-						p.numero_documento,
-						p.direccion,
-						p.telefono,
-						p.email,
-						sn.tipo_comprobante_sn, 
-						c.impuesto, 
-						c.tipo_pago, 
-						c.total_cotizacion,
-						c.sub_total,
-						c.igv_total, 
-						c.total_pago, 
-						c.fecha_cotizacion, 
-						c.hora_cotizacion,  
-						c.estado_pago
+                        p.id_persona,
+                        u.id_usuario,
+                        c.fecha_cotizacion, 
+                        c.hora_cotizacion,
+                        sn.id_serie_num, 
+                        c.impuesto, 
+                        c.total_cotizacion,
+                        c.total_pago, 
+                        c.sub_total,
+                        c.igv_total, 
+                        c.tipo_pago, 
+                        c.forma_pago,
+                        p.razon_social,
+                        p.numero_documento,
+                        p.direccion,
+                        p.telefono,
+                        p.email
 					FROM 
 						$tabla_s_n AS sn 
 					INNER JOIN 
@@ -84,179 +83,28 @@ class ModeloCotizacion
         }
     }
 
-    /*=============================================
-	MOSTRAR REPORTE DE COTIZACIONES
-	=============================================*/
-    public static function mdlReporteCotizaciones($tabla_personas, $tabla_ventas, $tabla_usuarios, $tabla_s_n, $filtros)
-    {
-        // Crear la consulta base
-        $sql = "SELECT 
-						c.id_venta,
-						u.nombre_usuario,
-						u.id_usuario,
-						p.id_persona,
-						p.razon_social,
-						p.numero_documento,
-						p.direccion,
-						p.telefono,
-						p.email,
-						sn.tipo_comprobante_sn, 
-						sn.serie_prefijo,
-						c.num_comprobante,
-						c.impuesto, 
-						c.tipo_pago, 
-						c.total_venta,
-						c.sub_total,
-						c.igv, 
-						c.total_pago, 
-						c.fecha_venta, 
-						c.hora_venta, 
-						c.estado_pago
-					FROM 
-						$tabla_s_n AS sn 
-					INNER JOIN 	$tabla_ventas AS v ON sn.id_serie_num = c.id_serie_num 
-					INNER JOIN  $tabla_personas AS p ON c.id_persona = p.id_persona
-					INNER JOIN $tabla_usuarios AS u ON u.id_usuario = c.id_usuario
-					WHERE 1 = 1";
-
-        // Arreglo de parámetros para la consulta
-        $params = [];
-
-        if (!empty($filtros['filtro_usuario_venta'])) {
-            $sql .= " AND u.id_usuario = :usuario";
-            $params[':usuario'] = $filtros['filtro_usuario_venta'];
-        }
-
-        // Filtro por rango de fecha de vencimiento
-        if (!empty($filtros['filtro_fecha_desde_venta']) && !empty($filtros['filtro_fecha_hasta_venta'])) {
-            $sql .= " AND c.fecha_venta BETWEEN :fecha_desde AND :fecha_hasta";
-            $params[':fecha_desde'] = $filtros['filtro_fecha_desde_venta'];
-            $params[':fecha_hasta'] = $filtros['filtro_fecha_hasta_venta'];
-        }
-        if (!empty($filtros['filtro_tipo_comprobante_venta'])) {
-            $sql .= " AND sn.tipo_comprobante_sn = :tipo_comprobante";
-            $params[':tipo_comprobante'] = $filtros['filtro_tipo_comprobante_venta'];
-        }
-        if (!empty($filtros['filtro_estado_pago_venta'])) {
-            $sql .= " AND c.estado_pago = :estado_pago";
-            $params[':estado_pago'] = $filtros['filtro_estado_pago_venta'];
-        }
-        // Filtro por rango de total de compra
-        if (!empty($filtros['filtro_total_venta_min']) && !empty($filtros['filtro_total_venta_max'])) {
-            $sql .= " AND c.total_venta BETWEEN :total_min AND :total_max";
-            $params[':total_min'] = $filtros['filtro_total_venta_min'];
-            $params[':total_max'] = $filtros['filtro_total_venta_max'];
-        }
-        // Ordenar por fecha de producto (DESC)
-        $sql .= " ORDER BY c.fecha_venta DESC";
-
-        // Preparar y ejecutar la consulta
-        $stmt = Conexion::conectar()->prepare($sql);
-        $stmt->execute($params);
-
-        // Retornar los resultados
-        return $stmt->fetchAll();
-    }
 
     /*=============================================
-	MOSTRAR SUMA TOTAL DE COTIZACIONES
+	MOSTRAR DETALLE COTIZACION PARA LA VENTA    
 	=============================================*/
-    static public function mdlMostrarSumaTotalCotizacion($tablaD, $tablaV, $tablaP, $item, $valor)
+
+    static public function mdlMostrarListaDetalleCotizacionVenta($tablaDC, $item, $valor)
     {
-        $stmt = Conexion::conectar()->prepare("SELECT SUM(total_venta) AS total_ventas FROM $tablaV");
-        $stmt->execute();
-
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $result['total_ventas'];
-    }
-
-    /*=============================================
-	MOSTRAR SUMA TOTAL DE COTIZACION AL CONTADO
-	=============================================*/
-    static public function mdlMostrarSumaTotalCotizacionContado($tablaD, $tablaV, $tablaP, $item, $valor)
-    {
-
-        $stmt = Conexion::conectar()->prepare("SELECT SUM(total_venta) AS total_ventas_contado FROM $tablaV WHERE tipo_pago = 'contado'");
-        $stmt->execute();
-
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        return $result['total_ventas_contado'];
-    }
-
-    /*=============================================
-	MOSTRAR SUMA TOTAL DE VENTAS AL CRÉDITO
-	=============================================*/
-    static public function mdlMostrarSumaTotalCredito($tablaD, $tablaV, $tablaP, $item, $valor)
-    {
-
-        $stmt = Conexion::conectar()->prepare("SELECT SUM(total_venta) AS total_ventas_credito FROM $tablaV WHERE tipo_pago = 'credito'");
-
-        $stmt->execute();
-
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        return $result['total_ventas_credito'];
-    }
-
-    /*=============================================
-	MOSTRAR REPORTE DE COTIZACIONES
-	=============================================*/
-    static public function mdlMostrarReporteCotizaciones($tablaVentas, $tablaDetalleV, $tablaProducto, $tablaUsuario, $tablaPersona, $fecha_desde,    $fecha_hasta, $id_usuario, $tipo_pago, $descuento_producto)
-    {
-
-        if ($fecha_desde != "" && $fecha_hasta != "" && $id_usuario != null && $tipo_pago == null) {
-
-
-            $stmt = Conexion::conectar()->prepare("SELECT * FROM $tablaPersona AS p INNER JOIN $tablaVentas AS v ON p.id_persona = c.id_persona	WHERE c.fecha_venta BETWEEN '$fecha_desde' AND '$fecha_hasta' AND c.id_usuario = $id_usuario");
-
+        if ($item != null) {
+            $stmt = Conexion::conectar()->prepare("SELECT * FROM $tablaDC WHERE $item = :$item");
+            $stmt->bindParam(":" . $item, $valor, PDO::PARAM_STR);
             $stmt->execute();
-
-            return $stmt->fetchAll();
-        } else if ($fecha_desde != "" && $fecha_hasta != "" && $id_usuario != null && $tipo_pago != null) {
-
-            $stmt = Conexion::conectar()->prepare("SELECT * FROM $tablaPersona AS p INNER JOIN $tablaVentas AS v ON p.id_persona = c.id_persona WHERE c.fecha_venta BETWEEN '$fecha_desde' AND '$fecha_hasta' AND c.id_usuario = $id_usuario AND c.tipo_pago = '$tipo_pago'");
-
-            $stmt->execute();
-
             return $stmt->fetchAll();
         } else {
-
-            $stmt = Conexion::conectar()->prepare("SELECT * FROM $tablaPersona as p INNER JOIN $tablaVentas AS v ON p.id_persona = c.id_persona");
-
+            $stmt = Conexion::conectar()->prepare("SELECT * FROM $tablaDC  ORDER BY c.id_cotizacion DESC");
             $stmt->execute();
-
             return $stmt->fetchAll();
         }
     }
 
-    /*=============================================
-	MOSTRAR REPORTE DE COTIZACION DE RANGO DE FECHAS
-	=============================================*/
-    static public function mdlMostrarReporteCotizacionRangoFechas($tablaVentas, $tablaDetalleV, $tablaProducto, $tablaUsuario, $tablaPersona, $fecha_desde,    $fecha_hasta, $id_usuario, $tipo_pago, $descuento_producto)
-    {
-
-        $stmt = Conexion::conectar()->prepare("SELECT * FROM $tablaPersona AS p INNER JOIN $tablaVentas AS v ON p.id_persona = c.id_persona	WHERE c.fecha_venta BETWEEN '$fecha_desde' AND '$fecha_hasta' AND c.id_usuario = $id_usuario");
-
-        $stmt->execute();
-
-        return $stmt->fetchAll();
-    }
-
 
     /*=============================================
-	MOSTRAR REPORTE DE VENTAS POR PRECIOS DE PRODUCTOS
-	=============================================*/
-    static public function mdlMostrarReporteCotizacionPrecioProducto($tablaVentas, $tablaDetalleV, $tablaProducto, $tablaUsuario, $tablaPersona, $fecha_desde,    $fecha_hasta, $id_usuario, $tipo_pago, $descuento_producto)
-    {
-        $stmt = Conexion::conectar()->prepare("SELECT $tablaProducto.nombre_producto, $tablaProducto.precio_producto, $tablaDetallec.precio_venta, $tablaVentas.fecha_venta, $tablaUsuario.nombre_usuario FROM $tablaProducto INNER JOIN $tablaDetalleV ON $tablaProducto.id_producto = $tablaDetallec.id_producto INNER JOIN $tablaVentas ON $tablaVentas.id_venta = $tablaDetallec.id_venta INNER JOIN $tablaUsuario ON $tablaUsuario.id_usuario = $tablaVentas.id_usuario WHERE $tablaProducto.precio_producto != $tablaDetallec.precio_venta AND $tablaVentas.id_usuario = $id_usuario");
-        $stmt->execute();
-        return $stmt->fetchAll();
-    }
-
-
-    /*=============================================
-	MOSTRAR DETALLE VENTAS
+	MOSTRAR DETALLE COTIZACION
 	=============================================*/
 
     static public function mdlMostrarListaDetalleCotizacion($tablaDC, $tablaP, $item, $valor)
@@ -273,35 +121,7 @@ class ModeloCotizacion
         }
     }
 
-    /*=============================================
-	MOSTRAR SERIE Y NUMERO DE COMPRA O EGRESO
-	=============================================*/
-    static public function mdlMostrarSerieNumero($tablaSerieNumero, $tablaVentas, $item, $valor)
-    {
-        $stmt = Conexion::conectar()->prepare("	SELECT 
-													sn.id_serie_num,
-													sn.folio_inicial,
-													sn.folio_final, 
-													sn.serie_prefijo, 
-													c.num_comprobante 
-												FROM $tablaSerieNumero AS sn 
-												INNER JOIN $tablaVentas AS v 
-												ON sn.id_serie_num = c.id_serie_num 
-												WHERE sn.id_serie_num = :id_serie_num
-												ORDER BY c.id_venta DESC 
-												LIMIT 1
-											");
 
-        $stmt->bindParam(":id_serie_num", $valor, PDO::PARAM_INT);
-
-        if ($stmt->execute()) {
-            $resultado = $stmt->fetch(PDO::FETCH_ASSOC); // Obtenemos un solo registro
-            return $resultado; // Retornamos el último registro
-        } else {
-            print_r($stmt->errorInfo()); // Depurar errores si falla
-            return null;
-        }
-    }
 
     /*=============================================
 	MOSTRAR COTIZACION
@@ -436,93 +256,7 @@ class ModeloCotizacion
         }
     }
 
-    /*=============================================
-	HISTORIAL DE PAGOS
-	=============================================*/
-    static public function mdlIngresoHistorialPago($tabla, $datos)
-    {
-        try {
-            // Preparar la consulta SQL
-            $stmt = Conexion::conectar()->prepare("INSERT INTO $tabla (
-													id_venta, 
-													monto_pago, 
-													forma_pago, 
-													numero_serie_pago, 
-													comprobante_imagen
-												) 
-												VALUES (
-													:id_venta, 
-													:monto_pago, 
-													:forma_pago, 
-													:numero_serie_pago, 
-													:comprobante_imagen)");
-
-            // Vincular los valores a los parámetros de la consulta
-            $stmt->bindParam(":id_venta", $datos["id_venta"], PDO::PARAM_INT);
-            $stmt->bindParam(":monto_pago", $datos["monto_pago"], PDO::PARAM_STR);
-            $stmt->bindParam(":forma_pago", $datos["forma_pago"], PDO::PARAM_STR);
-            $stmt->bindParam(":numero_serie_pago", $datos["numero_serie_pago"], PDO::PARAM_STR);
-            $stmt->bindParam(":comprobante_imagen", $datos["comprobante_imagen"], PDO::PARAM_STR);
-
-            // Ejecutar la consulta
-            if ($stmt->execute()) {
-                return "ok";
-            } else {
-                return "error";
-            }
-        } catch (PDOException $e) {
-            // Manejo de errores
-            return "Error: " . $e->getMessage();
-        }
-        // Cerrar la conexión
-        $stmt = null;
-    }
-
-    static public function mdlActualizarPagoPendiente($tabla, $datos)
-    {
-        $respuesta = array();
-
-        // Obtener el total actual de pagos para este egreso
-        $stmt = Conexion::conectar()->prepare("SELECT total_pago FROM $tabla WHERE id_venta = :id_venta");
-        $stmt->bindParam(":id_venta", $datos["id_venta"], PDO::PARAM_STR);
-        $stmt->execute();
-        $totalActual = $stmt->fetchColumn();
-
-        // Calcular el nuevo total de pagos sumando el monto proporcionado
-        $nuevoTotal = $totalActual + $datos["total_pago"];
-
-        // Obtener el total de la compra
-        $stmt = Conexion::conectar()->prepare("SELECT total_venta FROM $tabla WHERE id_venta = :id_venta");
-        $stmt->bindParam(
-            ":id_venta",
-            $datos["id_venta"],
-            PDO::PARAM_STR
-        );
-        $stmt->execute();
-        $totalCompra = $stmt->fetchColumn();
-
-        // Verificar si el nuevo total de pagos supera el total de la compra
-        if ($nuevoTotal > $totalCompra) {
-            // Si supera el total de la compra, retornar error
-            $respuesta["estado"] = "error";
-            $respuesta["mensaje"] = "El total de los pagos supera el total de la venta";
-        } else {
-            // Si no supera el total de la compra, proceder con la actualización
-            $stmt = Conexion::conectar()->prepare("UPDATE $tabla SET total_pago = :nuevo_total_pago WHERE id_venta = :id_venta");
-            $stmt->bindParam(":nuevo_total_pago", $nuevoTotal, PDO::PARAM_STR);
-            $stmt->bindParam(":id_venta", $datos["id_venta"], PDO::PARAM_STR);
-
-            if ($stmt->execute()) {
-                $respuesta["estado"] = "ok";
-                $respuesta["mensaje"] = "El pago se realizó correctamente";
-            } else {
-                $respuesta["estado"] = "error";
-                $respuesta["mensaje"] = "No se pudo realizar el total de pagos";
-            }
-        }
-
-        return $respuesta;
-    }
+ 
 
     /*=============================================
 	EDITAR VENTA
@@ -606,11 +340,13 @@ class ModeloCotizacion
         $stmt = null;
     }
 
+
     /*=============================================
-	ACTUALIZAR VENTA
+	ACTUALIZAR ESTADOS DE LA COTIZACION
 	=============================================*/
-    static public function mdlActualizarCotizacion($tabla, $item1, $valor1, $item2, $valor2)
-    {
+    static public function mdlActualizarCotizacion($tabla, $item1, $valor1, $item2,
+        $valor2
+    ) {
         $stmt = Conexion::conectar()->prepare("UPDATE $tabla SET $item1 = :$item1 WHERE $item2 = :$item2");
         $stmt->bindParam(":" . $item1, $valor1, PDO::PARAM_STR);
         $stmt->bindParam(":" . $item2, $valor2, PDO::PARAM_STR);
@@ -621,21 +357,8 @@ class ModeloCotizacion
         }
     }
 
-    /*=============================================
-	ACTUALIZAR STOCK PRODUCTO
-	=============================================*/
-    static public function mdlActualizarStockProducto($tblProducto, $idProducto, $cantidad)
-    {
-        $stmt = Conexion::conectar()->prepare("UPDATE $tblProducto SET stock_producto = stock_producto - :cantidad WHERE id_producto = :id_producto");
-        $stmt->bindParam(":cantidad", $cantidad, PDO::PARAM_INT);
-        $stmt->bindParam(":id_producto", $idProducto, PDO::PARAM_INT);
-        if ($stmt->execute()) {
-            return "ok";
-        } else {
-            return "error";
-        }
-    }
 
+ 
     /*=============================================
 	BORRAR VENTA
 	=============================================*/

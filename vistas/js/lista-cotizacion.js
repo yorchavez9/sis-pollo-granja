@@ -227,7 +227,27 @@ $("#tabla_lista_cotizaciones").on("click", ".btnActivar", function () {
     $(this).attr("estadoCotizacion", nuevoEstado); // Actualizar el atributo
 });
 
-
+/*=============================================
+ELIMINAR VENTA
+=============================================*/
+$("#data_lista_cotizacion").on("click", ".btnGenerarVenta", function(e){
+    e.preventDefault();
+    let idCotizacion = $(this).attr("idCotizacion");
+    const datos = new FormData();
+    datos.append("idCotizacionDatos", idCotizacion)
+    $.ajax({
+        url: "ajax/Lista.cotizacion.ajax.php",
+        method: "POST",
+        data: datos,
+        cache: false,
+        contentType: false,
+        processData: false,
+        dataType: "json",
+        success: function (respuesta) {
+            console.log(respuesta);
+        }
+    })
+})
 
 /*=============================================
 ELIMINAR VENTA

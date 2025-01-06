@@ -21,6 +21,21 @@ class AjaxListaCotizacion
     }
 
     /*=============================================
+    TRAER DATOS DE LA COTIZACION
+    =============================================*/
+    public $idCotizacionDatos;
+
+    public function ajaxTraerDatosCotizacion()
+    {
+        $item = "id_cotizacion";
+        $valor = $this->idCotizacionDatos;
+        $respuesta = ControladorCotizacion::ctrMostrarListaCotizaciones($item, $valor);
+        $respuesta2 = ControladorCotizacion::ctrMostrarDetalleCotizacionVenta($item, $valor);
+        echo json_encode([$respuesta, $respuesta2]);
+
+    }
+
+    /*=============================================
     EDITAR VENTA
     =============================================*/
     public $idVenta;
@@ -83,16 +98,25 @@ ESTADOS DE ACTIVACION DE LA COTIZACION
     $activarCotizacion->activarId = $_POST["activarId"];
     $activarCotizacion->ajaxActivarCotizacion();
 }
-// Editar venta
+
+/*=============================================
+TRAER DATOS DE LA COTIZACION
+=============================================*/ 
+elseif (isset($_POST["idCotizacionDatos"])) {
+    $datos = new AjaxListaCotizacion();
+    $datos->idCotizacionDatos = $_POST["idCotizacionDatos"];
+    $datos->ajaxTraerDatosCotizacion();
+}
+
+/*=============================================
+EDITAR VENTA
+=============================================*/ 
 elseif (isset($_POST["idVenta"])) {
     $editar = new AjaxListaCotizacion();
     $editar->idVenta = $_POST["idVenta"];
     $editar->ajaxEditarVenta();
 }
-// Actualizar venta
-elseif (isset($_POST["edit_id_venta"])) {
-    ControladorCotizacion::ctrEditarVenta();
-}
+
 // Ver detalle de producto
 elseif (isset($_POST["idProductoVer"])) {
     $verDetalle = new AjaxListaCotizacion();
