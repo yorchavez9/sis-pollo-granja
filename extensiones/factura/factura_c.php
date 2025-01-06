@@ -1,4 +1,5 @@
 <?php
+
 require('../fpdf/fpdf.php');
 
 session_start();
@@ -208,10 +209,17 @@ $pdf->Cell(40, 10, 'S/ ' . number_format($impuestoTotal, 2), 0, 1, 'R');
 $pdf->Cell(150, 10, 'Total:', 'TB', 0, 'R'); // Borde superior e inferior en la celda de "Total"
 $pdf->Cell(40, 10, 'S/ ' . number_format($totalConImpuesto, 2), 'TB', 1, 'R'); // Borde superior e inferior en la celda del total
 
-if (isset($_GET['accion']) && $_GET['accion'] === 'descargar') {
-    // Descargar el PDF
-    $pdf->Output('D', 'factura' . $numeroCotizacion . '_cotizacion.pdf'); // 'D' fuerza la descarga con el nombre 'factura.pdf'
+/* ======================================================
+GUARDANDO EL COMPROBANTE EN EL DIRECTORIO FACTURA
+====================================================== */
+$directorio = "factura/cotizacion/";
+$nombreArchivo = 'factura_c_' . $numeroCotizacion . '.pdf';
+$rutaArchivo = $directorio . $nombreArchivo;
+if (!file_exists($rutaArchivo)) {
+    if (!file_exists($directorio)) {
+        mkdir($directorio, 0777, true);
+    }
+    $pdf->Output('F', $rutaArchivo);
 } else {
-    // Mostrar el PDF en el navegador (imprimir)
-    $pdf->Output(); // Muestra el archivo en el navegador
+    echo "El archivo PDF ya existe.";
 }

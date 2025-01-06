@@ -31,7 +31,8 @@ class ModeloCotizacion
                         p.numero_documento,
                         p.direccion,
                         p.telefono,
-                        p.email
+                        p.email,
+                        sn.tipo_comprobante_sn
 					FROM 
 						$tabla_s_n AS sn 
 					INNER JOIN 

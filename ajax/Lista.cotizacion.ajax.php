@@ -19,6 +19,18 @@ class AjaxListaCotizacion
         $respuesta = ControladorProducto::ctrMostrarProductos($item, $valor);
         echo json_encode($respuesta);
     }
+    /*=============================================
+    ENVIANDO DATOS PARA EL ENVIO POR WHATS APP:
+    =============================================*/
+    public $id_cotizacion_whatsapp;
+
+    public function ajaxGetCotizacion()
+    {
+        $item = "id_cotizacion";
+        $valor = $this->id_cotizacion_whatsapp;
+        $respuesta = ControladorCotizacion::ctrMostrarListaCotizaciones($item, $valor);
+        echo json_encode($respuesta);
+    }
 
     /*=============================================
     TRAER DATOS DE LA COTIZACION
@@ -87,6 +99,13 @@ if (isset($_POST["id_producto_edit"])) {
     $editar = new AjaxListaCotizacion();
     $editar->id_producto_edit = $_POST["id_producto_edit"];
     $editar->ajaxAddProducto();
+}
+
+// Agregar producto a la lista de ventas
+else if (isset($_GET["id_cotizacion_whatsapp"])) {
+    $editar = new AjaxListaCotizacion();
+    $editar->id_cotizacion_whatsapp = $_GET["id_cotizacion_whatsapp"];
+    $editar->ajaxGetCotizacion();
 }
 
 /*=============================================

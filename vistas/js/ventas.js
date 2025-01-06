@@ -76,7 +76,6 @@ function mostrarSerieNumero() {
       type: "POST",
       data: datos,
       success: function (respuesta) {
-        console.log(respuesta);
         try {
           let data = JSON.parse(respuesta);
           if (data) {

@@ -16,7 +16,6 @@ $(document).ready(() => {
     manejarIGV();
 });
 
-
 /*=============================================
  RELOJ AUTOMATICO PARA LA VENTA
  =============================================*/
@@ -178,21 +177,21 @@ function mostrarProductoVenta() {
                 }
 
                 var fila = `
-          <tr>
-              <td class="text-center">
-                  <a href="#" id="btnAddProductoVenta" class="hover_img_a btnAddProductoVenta" idProductoAdd="${producto.id_producto}" stockProducto="${producto.stock_producto}">
-                      <img class="hover_img" src="${producto.imagen_producto}" alt="${producto.nombre_producto}">
-                  </a>
-              </td>
-              <td>${producto.nombre_categoria}</td>
-              <td class="fw-bold">S/ ${producto.precio_producto}</td>
-              <td>${producto.nombre_producto}</td>
-              <td class="text-center">
-                  <button type="button" class="btn btn-sm" style="${getButtonStyles(producto.stock_producto)}">
-                      ${producto.stock_producto}
-                  </button>
-              </td>
-          </tr>`;
+                        <tr>
+                            <td class="text-center">
+                                <a href="#" id="btnAddProductoVenta" class="hover_img_a btnAddProductoVenta" idProductoAdd="${producto.id_producto}" stockProducto="${producto.stock_producto}">
+                                    <img class="hover_img" src="${producto.imagen_producto}" alt="${producto.nombre_producto}">
+                                </a>
+                            </td>
+                            <td>${producto.nombre_categoria}</td>
+                            <td class="fw-bold">S/ ${producto.precio_producto}</td>
+                            <td>${producto.nombre_producto}</td>
+                            <td class="text-center">
+                                <button type="button" class="btn btn-sm" style="${getButtonStyles(producto.stock_producto)}">
+                                    ${producto.stock_producto}
+                                </button>
+                            </td>
+                        </tr>`;
 
                 function getButtonStyles(stock) {
                     if (stock > 20) {
@@ -220,7 +219,6 @@ FORMATEO DE PRECIOS DE LA VENTA
 function formateoPrecio(numero) {
     return numero.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
-
 
 /*=============================================
 AGREGANDO EL PRODUCTO AL DETALLE VENTA
@@ -258,12 +256,12 @@ $("#tabla_add_producto_cotizacion").on("click", ".btnAddProductoVenta", function
         processData: false,
         dataType: "json",
         success: function (respuesta) {
-            if(respuesta.imagen_producto){
+            if (respuesta.imagen_producto) {
                 respuesta.imagen_producto = respuesta.imagen_producto.substring(3);
-            }else{
+            } else {
                 respuesta.imagen_producto = "vistas/img/productos/default.png";
             }
-            
+
             // Crear una nueva fila
             let nuevaFila = `
                             <tr>
@@ -378,7 +376,6 @@ $("#tabla_add_producto_cotizacion").on("click", ".btnAddProductoVenta", function
 /*=============================================
 CALCULAR EL TOTAL DE LA VENTA
 =============================================*/
-
 function calcularTotal(igv_venta) {
     let subtotalTotal = 0;
 
@@ -431,172 +428,325 @@ $(".tipo_pago_venta").on("click", function () {
     }
 });
 
-// CREAR VENTA
+/*=============================================
+ CREAR COTIZACION
+ =============================================*/
 $("#btn_crear_cotizacion").click(function (e) {
     e.preventDefault();
-    let isValid = true;
-    let id_usuario_cotizacion = $("#id_usuario_cotizacion").val();
-    let id_cliente_venta = $("#id_cliente_venta").val();
-    let fecha_venta = $("#fecha_venta").val();
-    let hora_venta = $("#hora_venta").val();
-    let comprobante_venta = $("#comprobante_venta").val();
-    let serie_cotizacion = $("#serie_venta").val();
-    let validez_contizacion = $("#validez_contizacion").val();
-    let igv_venta = $("#igv_venta").val();
-
-    if (id_cliente_venta == "" || id_cliente_venta == null) {
-        $("#error_cliente_venta")
-            .html("Por favor, selecione el cliente")
-            .addClass("text-danger");
-        isValid = false;
-    } else {
-        $("#error_cliente_venta").html("").removeClass("text-danger");
-    }
-
-    if (comprobante_venta == "" || comprobante_venta == null) {
-        $("#error_comprobante_venta")
-            .html("Por favor, selecione el comprobante")
-            .addClass("text-danger");
-        isValid = false;
-    } else {
-        $("#error_comprobante_venta").html("").removeClass("text-danger");
-    }
-
-    const valoresProductos = [];
-
-    $("#detalle_cotizacion_producto tr").each(function () {
-        const fila = $(this);
-        const producto = {
-            id_producto_venta: fila.find(".id_producto_venta").val(),
-            numero_javas: fila.find(".numero_javas_v").val(),
-            numero_aves: fila.find(".numero_aves_v").val(),
-            peso_promedio: fila.find(".peso_promedio_v").val(),
-            peso_bruto: fila.find(".peso_bruto_v").val(),
-            peso_tara: fila.find(".peso_tara_v").val(),
-            peso_merma: fila.find(".peso_merma_v").val(),
-            peso_neto: fila.find(".peso_neto_v").val(),
-            precio_venta: fila.find(".precio_venta").val()
-        };
-        valoresProductos.push(producto);
-
-    });
-
-    const productoAddVenta = JSON.stringify(valoresProductos);
-
-    //Datos para la venta
-    const subtotal = $("#subtotal_venta").text().replace(/,/g, "");
-    const igv = $("#igv_venta_show").text().replace(/,/g, "");
-    const total = $("#total_precio_venta").text().replace(/,/g, "");
-    let tipo_pago = $("input[name='forma_pago_v']:checked").val();
-    let metodos_pago_venta = $("#metodos_pago_venta").val();
-
-    var estado_pago;
-    if (tipo_pago == "contado") {
-        estado_pago = "completado";
-    } else {
-        estado_pago = "pendiente";
-    }
-
-    if (isValid) {
-
-        const datos = new FormData();
-        datos.append("id_usuario_cotizacion", id_usuario_cotizacion);
-        datos.append("id_cliente_venta", id_cliente_venta);
-        datos.append("fecha_venta", fecha_venta);
-        datos.append("hora_venta", hora_venta);
-        datos.append("comprobante_venta", comprobante_venta);
-        datos.append("serie_cotizacion", serie_cotizacion);
-        datos.append("validez_contizacion", validez_contizacion);
-        datos.append("igv_venta", igv_venta);
-        datos.append("productoAddVenta", productoAddVenta);
-        datos.append("subtotal", subtotal);
-        datos.append("igv", igv);
-        datos.append("total", total);
-        datos.append("tipo_pago", tipo_pago);
-        datos.append("estado_pago", estado_pago);
-        datos.append("metodos_pago_venta", metodos_pago_venta);
-        $.ajax({
-            url: "ajax/Cotizacion.ajax.php",
-            method: "POST",
-            data: datos,
-            cache: false,
-            contentType: false,
-            processData: false,
-            success: function (respuesta) {
-                const res = JSON.parse(respuesta);
-                $("#form_contizacion_venta")[0].reset();
-                $("#detalle_cotizacion_producto").empty();
-                $("#subtotal_venta").text("00.00");
-                $("#igv_venta_show").text("00.00");
-                $("#total_precio_venta").text("00.00");
-                setDateToToday('fecha_venta');
-                // Mostrar alerta y preguntar acción
-               if(res.status == true){
-                   Swal.fire({
-                       title: res.message,
-                       text: "¿Qué desea hacer con el comprobante?",
-                       icon: "success",
-                       showCancelButton: true,
-                       confirmButtonColor: "#28C76F",
-                       cancelButtonColor: "#F52E2F",
-                       confirmButtonText: "Imprimir",
-                       cancelButtonText: "Descargar",
-                       footer: '<a href="#">Enviar por WhatsApp o correo</a>',
-                   }).then((result) => {
-                       if (result.isConfirmed) {
-                           Swal.fire({
-                               title: "¡Impreso con éxito 👍!",
-                               text: "Su comprobante se ha impreso.",
-                               icon: "success",
-                           });
-                           const documento = res.tipo_comprobante;
-                           const id_cotizacion = res.id_cotizacion;
-                           const urlDocumento = `extensiones/${documento}/${documento}_c.php?id_cotizacion=${id_cotizacion}`;
-                           const ventana = window.open(urlDocumento, '_blank');
-                           ventana.onload = () => ventana.print();
-                       } else if (result.dismiss === Swal.DismissReason.cancel) {
-                           Swal.fire({
-                               title: "¡Descargado con éxito 👍!",
-                               text: "Su comprobante se descargó.",
-                               icon: "success",
-                           });
-                           const documento = res.tipo_comprobante;
-                           window.location.href = `extensiones/${documento}/${documento}_c.php?id_cotizacion=${res.id_cotizacion}&accion=descargar`;
-                       } else {
-                           Swal.fire({
-                               title: "¿Cómo desea enviar el comprobante?",
-                               text: "Seleccione una opción.",
-                               icon: "info",
-                               showCancelButton: true,
-                               cancelButtonText: "WhatsApp",
-                               confirmButtonText: "Correo",
-                           }).then((sendResult) => {
-                               const mensaje = sendResult.isConfirmed ? "¡Enviando por correo!" : "¡Enviando por WhatsApp!";
-                               Swal.fire({
-                                   title: mensaje,
-                                   text: `Su comprobante se está enviando por ${sendResult.isConfirmed ? "correo" : "WhatsApp"}.`,
-                                   icon: "success",
-                               });
-                           });
-                       }
-                   });
-               }else{
-                 Swal.fire({
-                     title: res.message,
-                     icon: "error",
-                 });
-               }
-                setDateToToday('fecha_venta');
-                mostrarProductoVenta();
-            },
-            error: function (xhr, status, error) {
-                console.error(xhr);
-                console.error(status);
-                console.error(error);
-            },
-        });
+    if (validarFormulario()) {
+        enviarCotizacion();
     }
 });
+
+/*=============================================
+ VALIDAR EL FORMULARIO DE LA COTIZACION
+ =============================================*/
+function validarFormulario() {
+    let isValid = true;
+    const campos = {
+        'id_cliente_venta': 'cliente',
+        'comprobante_venta': 'comprobante'
+    };
+
+    for (let [id, nombre] of Object.entries(campos)) {
+        const valor = $(`#${id}`).val();
+        if (!valor) {
+            $(`#error_${nombre}_venta`)
+                .html(`Por favor, seleccione el ${nombre}`)
+                .addClass("text-danger");
+            isValid = false;
+        } else {
+            $(`#error_${nombre}_venta`).html("").removeClass("text-danger");
+        }
+    }
+
+    return isValid;
+}
+
+/*=============================================
+ CAPTURANDO DATOS DEL PRODUCTO
+ =============================================*/
+function recolectarDatosProductos() {
+    const productos = [];
+    $("#detalle_cotizacion_producto tr").each(function () {
+        productos.push({
+            id_producto_venta: $(this).find(".id_producto_venta").val(),
+            numero_javas: $(this).find(".numero_javas_v").val(),
+            numero_aves: $(this).find(".numero_aves_v").val(),
+            peso_promedio: $(this).find(".peso_promedio_v").val(),
+            peso_bruto: $(this).find(".peso_bruto_v").val(),
+            peso_tara: $(this).find(".peso_tara_v").val(),
+            peso_merma: $(this).find(".peso_merma_v").val(),
+            peso_neto: $(this).find(".peso_neto_v").val(),
+            precio_venta: $(this).find(".precio_venta").val()
+        });
+    });
+    return JSON.stringify(productos);
+}
+
+/*=============================================
+ ENVIAR COTIZACION A AJAX
+ =============================================*/
+function enviarCotizacion() {
+    const datos = new FormData();
+    const tipo_pago = $("input[name='forma_pago_v']:checked").val();
+
+    const camposFormulario = {
+        'id_usuario_cotizacion': $("#id_usuario_cotizacion").val(),
+        'id_cliente_venta': $("#id_cliente_venta").val(),
+        'fecha_venta': $("#fecha_venta").val(),
+        'hora_venta': $("#hora_venta").val(),
+        'comprobante_venta': $("#comprobante_venta").val(),
+        'serie_cotizacion': $("#serie_venta").val(),
+        'validez_contizacion': $("#validez_contizacion").val(),
+        'igv_venta': $("#igv_venta").val(),
+        'productoAddVenta': recolectarDatosProductos(),
+        'subtotal': $("#subtotal_venta").text().replace(/,/g, ""),
+        'igv': $("#igv_venta_show").text().replace(/,/g, ""),
+        'total': $("#total_precio_venta").text().replace(/,/g, ""),
+        'tipo_pago': tipo_pago,
+        'estado_pago': tipo_pago === "contado" ? "completado" : "pendiente",
+        'metodos_pago_venta': $("#metodos_pago_venta").val()
+    };
+
+    for (let [key, value] of Object.entries(camposFormulario)) {
+        datos.append(key, value);
+    }
+
+    $.ajax({
+        url: "ajax/Cotizacion.ajax.php",
+        method: "POST",
+        data: datos,
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function (respuesta) {
+            manejarRespuestaCotizacion(JSON.parse(respuesta));
+        },
+        error: function (xhr, status, error) {
+            console.error(xhr, status, error);
+            mostrarError("Error al procesar la solicitud");
+        }
+    });
+}
+
+/*=============================================
+ RESPUESTA DE LA COTIZACION
+ =============================================*/
+function manejarRespuestaCotizacion(res) {
+    limpiarFormulario();
+
+    if (!res.status) {
+        mostrarError(res.message);
+        return;
+    }
+    const urlDocumento = `extensiones/${res.tipo_comprobante}/${res.tipo_comprobante}_c.php?id_cotizacion=${res.id_cotizacion}`;
+    mostrarOpcionesComprobante(res);
+
+    // Realizar una solicitud HTTP (como un GET)
+    fetch(urlDocumento)
+        .then(response => response.text())
+        .then(data => {
+            // Manejar la respuesta aquí si es necesario
+            console.log(data);
+        })
+        .catch(error => {
+            console.error('Error al hacer la solicitud:', error);
+        });
+}
+
+/*=============================================
+ LIMPIAR LOS FORMULARIOS
+ =============================================*/
+function limpiarFormulario() {
+    $("#form_contizacion_venta")[0].reset();
+    $("#detalle_cotizacion_producto").empty();
+    $("#subtotal_venta").text("00.00");
+    $("#igv_venta_show").text("00.00");
+    $("#total_precio_venta").text("00.00");
+    setDateToToday('fecha_venta');
+    mostrarProductoVenta();
+}
+
+/*=============================================
+ MOSTRAR LAS OPCIONES DE LOS COMPROBANTES
+ =============================================*/
+function mostrarOpcionesComprobante(res) {
+
+    Swal.fire({
+        title: res.message,
+        text: "¿Qué desea hacer con el comprobante?",
+        icon: "success",
+        showCancelButton: true,
+        confirmButtonColor: "#28C76F",
+        cancelButtonColor: "#F52E2F",
+        confirmButtonText: "Imprimir",
+        cancelButtonText: "Descargar",
+        html: `
+            <div class="mt-3">
+                <button type="button" id="btnWhatsApp" class="btn me-3" style="background: #32C35A">
+                    <i class="fab fa-whatsapp me-2"></i>Enviar por WhatsApp
+                </button>
+                <button type="button" id="btnEmail" class="btn btn-primary">
+                    <i class="fas fa-envelope me-2"></i>Enviar por Correo
+                </button>
+            </div>
+        `,
+        didRender: () => {
+            document.getElementById('btnWhatsApp').addEventListener('click', () => {
+                enviarWhatsApp(res.tipo_comprobante, res.id_cotizacion);
+            });
+            document.getElementById('btnEmail').addEventListener('click', () => {
+                enviarCorreo(res.tipo_comprobante, res.id_cotizacion);
+            });
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            imprimirComprobante(res);
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+            descargarComprobante(res);
+        }
+    });
+}
+
+/*=============================================
+ IMPRIMIR COMPROBANTE
+ =============================================*/
+function imprimirComprobante(res) {
+    const urlDocumento = `extensiones/${res.tipo_comprobante}/${res.tipo_comprobante}/cotizacion/${res.tipo_comprobante}_c_${res.id_cotizacion}.pdf`;
+    const ventana = window.open(urlDocumento, '_blank');
+    ventana.onload = () => {
+        ventana.print();
+        mostrarExito("Impreso con éxito", "Su comprobante se ha impreso.");
+    };
+}
+
+/*=============================================
+ DESCARGAR COMPROBANTE
+ =============================================*/
+function descargarComprobante(res) {
+    const enlace = document.createElement('a');
+    enlace.href = `extensiones/${res.tipo_comprobante}/${res.tipo_comprobante}/cotizacion/${res.tipo_comprobante}_c_${res.id_cotizacion}.pdf`;
+    enlace.download = `${res.tipo_comprobante}_c_${res.id_cotizacion}.pdf`;
+    enlace.click();
+    mostrarExito("Descargado con éxito", "Su comprobante se descargó.");
+}
+
+/*=============================================
+ ENVIAR PRO WHATSAPP EL COMPROBANTE
+ =============================================*/
+async function enviarWhatsApp(documento, id_cotizacion) {
+    try {
+        // Obtener datos de la cotización
+        const response = await fetch(`ajax/Lista.cotizacion.ajax.php?id_cotizacion_whatsapp=${id_cotizacion}`);
+        const cotizacion = await response.json();
+
+        // Verificar si la cotización se obtuvo correctamente
+        if (!cotizacion.id_cotizacion) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'No se pudo obtener la cotización'
+            });
+            return;
+        }
+
+        // Pedir el número de teléfono para WhatsApp
+        const { value: telefono } = await Swal.fire({
+            title: 'Ingrese el número de WhatsApp',
+            input: 'text',
+            inputLabel: 'Incluya el código de país (Ej: 51912345678)',
+            inputValidator: (value) => {
+                if (!value) return 'Debe ingresar un número';
+                if (!/^\d+$/.test(value)) return 'Solo se permiten números';
+                if (value.length < 10) return 'Número inválido';
+            }
+        });
+
+        if (telefono) {
+            // Asegurarse de que la URL del documento sea correcta
+            const documentoUrl = `${window.location.origin}/extensiones/${documento}/${documento}_c.php?id_cotizacion=${id_cotizacion}`;
+            const mensaje = encodeURIComponent(
+                `*COTIZACIÓN #${cotizacion.id_cotizacion}*\n\n` +
+                `📅 Fecha: ${cotizacion.fecha_cotizacion}\n` +
+                `💰 Total: USD. ${cotizacion.total_cotizacion}\n\n` +
+                `Adjunto el comprobante: ${documentoUrl}`  // Adjuntar el enlace al PDF
+            );
+
+            // Abrir el enlace de WhatsApp con el mensaje
+            window.open(`https://api.whatsapp.com/send?phone=${telefono}&text=${mensaje}`);
+        }
+    } catch (error) {
+        console.error(error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'No se pudo enviar el mensaje'
+        });
+    }
+}
+
+/*=============================================
+ ENVIAR POR CORREO EL COMPROBANTE
+ =============================================*/
+async function enviarCorreo(documento, id_cotizacion) {
+
+    const { value: email } = await Swal.fire({
+        title: 'Ingrese el correo electrónico',
+        input: 'email',
+        inputLabel: 'Correo del destinatario',
+        inputValidator: (value) => {
+            if (!value) return 'Debe ingresar un correo';
+            if (!/\S+@\S+\.\S+/.test(value)) return 'Correo inválido';
+        }
+    });
+
+    if (email) {
+        try {
+            const formData = new FormData();
+            formData.append('documento', documento);
+            formData.append('id_cotizacion', id_cotizacion);
+            formData.append('email', email);
+
+            const response = await fetch('ajax/Email.cotizacion.ajax.php', {
+                method: 'POST',
+                body: formData
+            });
+            const data = await response.json();
+
+            if (data.success) {
+                mostrarExito('¡Enviado con éxito!', 'Comprobante enviado por correo');
+            } else {
+                mostrarError('Error al enviar', data.message || 'Error en el envío');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            mostrarError('Error', 'No se pudo enviar el correo');
+        }
+    }
+}
+
+/*=============================================
+ MENSJAE Y ALERTAS DE EXITO
+ =============================================*/
+function mostrarExito(titulo, texto) {
+    Swal.fire({
+        title: titulo,
+        text: texto,
+        icon: 'success'
+    });
+}
+
+/*=============================================
+ MENSAJE Y ALERTAS DE ERROR
+ =============================================*/
+function mostrarError(titulo, texto = '') {
+    Swal.fire({
+        title: titulo,
+        text: texto,
+        icon: 'error'
+    });
+}
 
 /*=============================================
 LIMPINADO LOS MODALES
