@@ -122,7 +122,7 @@ function mostrarCotizaciones() {
                                     Acciones
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    ${cotizacion.estado === 0 || cotizacion.estado === 1 ? `` 
+                                    ${cotizacion.estado === 2 ? `` 
                                     : `<li>
                                         <a href = "#" class="dropdown-item btnGenerarVenta" idCotizacion = "${cotizacion.id_cotizacion}" >
                                         <i class="fa fa-cart-plus fa-lg me-2" style="color: #1B2850"></i> Generar venta
@@ -140,7 +140,7 @@ function mostrarCotizaciones() {
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="#" class="dropdown-item confirm-text btnEliminarCotizacion" idCotizacionDelete="${cotizacion.id_cotizacion}">
+                                        <a href="#" class="dropdown-item confirm-text btnEliminarCotizacion" idCotizacionDelete="${cotizacion.id_cotizacion}" tipo_comprobante="${cotizacion.tipo_comprobante_sn}">
                                             <i class="fa fa-trash fa-lg me-2" style="color: #FF4D4D"></i> Eliminar
                                         </a>
                                     </li>
@@ -173,7 +173,7 @@ $("#data_lista_cotizacion").on("click", ".btnImprimirComprobanteC", function (e)
     console.log("Imprimiendo comprobante");
     var idCotizacion = $(this).attr("idCotizacion");
     var documento = $(this).attr("tipo_comprobante");
-    const urlDocumento = `extensiones/${documento}/${documento}_c.php?id_cotizacion=${idCotizacion}`;
+    const urlDocumento = `extensiones/${documento}/${documento}/cotizacion/${documento}_c_${idCotizacion}.pdf`;
     const ventana = window.open(urlDocumento, '_blank');
     ventana.onload = () => ventana.print();
 });
@@ -182,12 +182,15 @@ $("#data_lista_cotizacion").on("click", ".btnImprimirComprobanteC", function (e)
 DESCARGAR COMPROBANTE
 =============================================*/
 $("#data_lista_cotizacion").on("click", ".btnDescargarComprobanteC", function (e) {
-    e.preventDefault();
-    console.log("Descargando comprobante");
     var idCotizacion = $(this).attr("idCotizacion");
     var documento = $(this).attr("tipo_comprobante");
-    window.location.href = `extensiones/${documento}/${documento}_c.php?id_cotizacion=${idCotizacion}&accion=descargar`;
+    var url = `extensiones/${documento}/${documento}/cotizacion/${documento}_c_${idCotizacion}.pdf`;
+    var link = document.createElement("a");
+    link.href = url;
+    link.download = `${documento}_c_${idCotizacion}.pdf`;
+    link.click();
 });
+
 
 /*=============================================
 ESTADO DE LA COTIZACION
@@ -379,8 +382,10 @@ ELIMINAR VENTA
 $("#data_lista_cotizacion").on("click", ".btnEliminarCotizacion", function (e) {
     e.preventDefault();
     let idCotizacionDelete = $(this).attr("idCotizacionDelete");
+    let tipo_comprobante = $(this).attr("tipo_comprobante");
     let datos = new FormData();
     datos.append("idCotizacionDelete", idCotizacionDelete);
+    datos.append("tipo_comprobante", tipo_comprobante);
     Swal.fire({
         title: "¿Está seguro de borrar la cotización?",
         text: "¡Si no lo está puede cancelar la acción!",
@@ -400,17 +405,21 @@ $("#data_lista_cotizacion").on("click", ".btnEliminarCotizacion", function (e) {
                 contentType: false,
                 processData: false,
                 success: function (respuesta) {
-             
                     var res = JSON.parse(respuesta);
-                    if (res === "ok") {
+                    if (res.status === true) {
                         Swal.fire({
                             title: "¡Eliminado!",
-                            text: "La cotización ha sido eliminada",
+                            text: res.message,
                             icon: "success",
                         });
                         mostrarCotizaciones();
                     } else {
-                        console.error("Error al eliminar los datos");
+                        Swal.fire({
+                            title: "Error!",
+                            text: res.message,
+                            icon: "error",
+                        });
+                        mostrarCotizaciones();
                     }
                 }
             });

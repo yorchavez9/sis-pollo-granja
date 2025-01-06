@@ -19,59 +19,6 @@ class ControladorCotizacion
         return $respuesta;
     }
 
-    /*=============================================
-    MOSTRAR REPORTE DE COTIZACIONES
-    =============================================*/
-    public static function ctrReporteCotizaciones()
-    {
-        $tabla_personas = "personas";
-        $tabla_cotizacion = "ventas";
-        $tabla_usuarios = "usuarios";
-        $tabla_s_n = "serie_num_comprobante";
-
-        // Capturamos los filtros
-        $filtros = [
-            "filtro_usuario_venta" => isset($_POST['filtro_usuario_venta']) ? $_POST['filtro_usuario_venta'] : null,
-            "filtro_fecha_desde_venta" => isset($_POST['filtro_fecha_desde_venta']) ? $_POST['filtro_fecha_desde_venta'] : null,
-            "filtro_fecha_hasta_venta" => isset($_POST['filtro_fecha_hasta_venta']) ? $_POST['filtro_fecha_hasta_venta'] : null,
-            "filtro_tipo_comprobante_venta" => isset($_POST['filtro_tipo_comprobante_venta']) ? $_POST['filtro_tipo_comprobante_venta'] : null,
-            "filtro_estado_pago_venta" => isset($_POST['filtro_estado_pago_venta']) ? $_POST['filtro_estado_pago_venta'] : null,
-            "filtro_total_venta_min" => isset($_POST['filtro_total_venta_min']) ? $_POST['filtro_total_venta_min'] : null,
-            "filtro_total_venta_max" => isset($_POST['filtro_total_venta_max']) ? $_POST['filtro_total_venta_max'] : null
-        ];
-
-        // Pasamos los filtros al modelo
-        $respuesta = ModeloCotizacion::mdlReporteVentas($tabla_personas, $tabla_cotizacion, $tabla_usuarios, $tabla_s_n, $filtros);
-
-        return $respuesta;
-    }
-
-    /*=============================================
-    MOSTRAR REPORTE DE COTIZACIONES PDF
-    =============================================*/
-    public static function ctrReporteCotizacionesPDF()
-    {
-        $tabla_personas = "personas";
-        $tabla_cotizacion = "ventas";
-        $tabla_usuarios = "usuarios";
-        $tabla_s_n = "serie_num_comprobante";
-
-        // Capturamos los filtros
-        $filtros = [
-            "filtro_usuario_venta" => isset($_GET['filtro_usuario_venta']) ? $_GET['filtro_usuario_venta'] : null,
-            "filtro_fecha_desde_venta" => isset($_GET['filtro_fecha_desde_venta']) ? $_GET['filtro_fecha_desde_venta'] : null,
-            "filtro_fecha_hasta_venta" => isset($_GET['filtro_fecha_hasta_venta']) ? $_GET['filtro_fecha_hasta_venta'] : null,
-            "filtro_tipo_comprobante_venta" => isset($_GET['filtro_tipo_comprobante_venta']) ? $_GET['filtro_tipo_comprobante_venta'] : null,
-            "filtro_estado_pago_venta" => isset($_GET['filtro_estado_pago_venta']) ? $_GET['filtro_estado_pago_venta'] : null,
-            "filtro_total_venta_min" => isset($_GET['filtro_total_venta_min']) ? $_GET['filtro_total_venta_min'] : null,
-            "filtro_total_venta_max" => isset($_GET['filtro_total_venta_max']) ? $_GET['filtro_total_venta_max'] : null
-        ];
-
-        // Pasamos los filtros al modelo
-        $respuesta = ModeloCotizacion::mdlReporteVentas($tabla_personas, $tabla_cotizacion, $tabla_usuarios, $tabla_s_n, $filtros);
-
-        return $respuesta;
-    }
 
   
     /*=============================================
@@ -183,16 +130,29 @@ class ControladorCotizacion
     }
 
     /*=============================================
-	BORRAR VENTA
-	=============================================*/
+    BORRAR VENTA
+    =============================================*/
     static public function ctrBorrarCotizacion()
     {
         $tablaV = "cotizaciones";
         $datos = $_POST["idCotizacionDelete"];
-        $respuesta = ModeloCotizacion::mdlBorrarCotizacion($tablaV, $datos);
-        $tablaD = "detalle_cotizacion";
-        $respuestaDetalle = ModeloCotizacion::mdlBorrarDetalleCotizacion($tablaD, $datos);
-        echo json_encode($respuestaDetalle);
-    
+        $tipo_comprobante = $_POST["tipo_comprobante"];
+
+        // Generar la ruta del archivo PDF
+        $rutaArchivo = "../extensiones/" . $tipo_comprobante . "/" . $tipo_comprobante . "/cotizacion/" . $tipo_comprobante . "_c_" . $datos . ".pdf";
+
+        // Verificar si el archivo existe y eliminarlo
+        if (file_exists($rutaArchivo)) {
+            if (unlink($rutaArchivo)) {
+                $respuesta = ModeloCotizacion::mdlBorrarCotizacion($tablaV, $datos);
+                echo json_encode($respuesta);
+            } else {
+                echo json_encode(['status' => false, 'message' => 'No se pudo eliminar el archivo PDF.']);
+            }
+        } else {
+            echo json_encode(['status' => false, 'message' => 'El archivo no existe.']);
+        }
     }
+
+
 }

@@ -372,9 +372,15 @@ class ModeloCotizacion
         $stmt = Conexion::conectar()->prepare("DELETE FROM $tabla WHERE id_cotizacion = :id_cotizacion");
         $stmt->bindParam(":id_cotizacion", $datos, PDO::PARAM_INT);
         if ($stmt->execute()) {
-            return "ok";
+            return [
+                "status" => true,
+                "message" => "El registro se eliminó con éxito"
+            ];
         } else {
-            return "error";
+            return [
+                "status" => false,
+                "message" => "Error al eliminar el registro"
+            ];
         }
         $stmt = null;
     }
