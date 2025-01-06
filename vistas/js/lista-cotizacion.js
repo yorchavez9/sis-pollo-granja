@@ -88,15 +88,20 @@ function mostrarCotizaciones() {
             tbody.empty();
             var cotizacionesProcesados = new Set();
             cotizaciones.forEach(function (cotizacion, index) {
-                // Verificar si el id_egreso ya ha sido procesado
                 if (!cotizacionesProcesados.has(cotizacion.id_cotizacion)) {
                     let totalCotizacion = formateoPrecio(cotizacion.total_cotizacion);
+                    const fechaActual = new Date();
+                    const fechaValidez = new Date();
+                    fechaValidez.setDate(fechaActual.getDate() + cotizacion.validez);
+                    const fechaEstaVencida = fechaActual >= fechaValidez;
                     var fila = `
                     <tr>
                         <td class="text-center">${index + 1}</td>
                         <td>${cotizacion.razon_social}</td>
                         <td>${cotizacion.tipo_comprobante_sn}</td>
-                        <td>${cotizacion.validez == 1 ? cotizacion.validez + ' dia' : cotizacion.validez + ' dias'}</td>
+                        <td class="${fechaEstaVencida ? 'text-danger' : ''}">
+                            ${cotizacion.validez == 1 ? cotizacion.validez + ' dia' : cotizacion.validez + ' dias'}
+                        </td>
                         <td>S/ ${totalCotizacion}</td>
                         <td>${cotizacion.fecha_cotizacion}</td>
                         <td>${cotizacion.hora_cotizacion}</td>
@@ -117,16 +122,13 @@ function mostrarCotizaciones() {
                                     Acciones
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <li>
-                                        <a href="#" class="dropdown-item btnGenerarVenta" idCotizacion="${cotizacion.id_cotizacion}">
-                                            <i class="fa fa-cart-plus fa-lg me-2" style="color: #1B2850"></i> Generar venta
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="dropdown-item btnEditarCotizacion" idCotizacion="${cotizacion.id_cotizacion}">
-                                            <i class="fa fa-edit fa-lg me-2" style="color: #FF9F43"></i> Editar
-                                        </a>
-                                    </li>
+                                    ${cotizacion.estado === 0 || cotizacion.estado === 1 ? `` 
+                                    : `<li>
+                                        <a href = "#" class="dropdown-item btnGenerarVenta" idCotizacion = "${cotizacion.id_cotizacion}" >
+                                        <i class="fa fa-cart-plus fa-lg me-2" style="color: #1B2850"></i> Generar venta
+                                                </a>
+                                    </li >`}
+                                   
                                     <li>
                                         <a href="#" class="dropdown-item btnImprimirComprobanteC" idCotizacion="${cotizacion.id_cotizacion}" tipo_comprobante="${cotizacion.tipo_comprobante_sn}">
                                             <i class="fa fa-print fa-lg me-2" style="color: #0084FF"></i> Imprimir
@@ -247,7 +249,7 @@ $("#tabla_lista_cotizaciones").on("click", ".btnActivar", function () {
 });
 
 /*=============================================
-ELIMINAR VENTA
+GENERAR VENTA A PARTIR DE LA COTIZACION
 =============================================*/
 $("#data_lista_cotizacion").on("click", ".btnGenerarVenta", function(e){
     e.preventDefault();
