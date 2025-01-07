@@ -34,20 +34,22 @@ $(document).ready(function () {
                 contentType: false,
                 processData: false,
                 success: function (respuesta) {
-                    console.log(respuesta);
-                    return;
                     var res = JSON.parse(respuesta);
-                    if (res === "ok") {
-                        $("#form_nuevo_categoria")[0].reset();
-                        $("#modalNuevoCategoria").modal("hide");
+                    if (res.status === true) {
+                        $("#form_nuevo_correo_config")[0].reset();
+                        $("#modal_nuevo_configuracion_correo").modal("hide");
                         Swal.fire({
                             title: "¡Correcto!",
-                            text: "La categoría ha sido guardado",
+                            text: res.message,
                             icon: "success",
                         });
                         mostrarConfigCorreo();
                     } else {
-                        console.error("Error al cargar los datos.");
+                        Swal.fire({
+                            title: "Error!",
+                            text: res.message,
+                            icon: "error",
+                        });
                     }
                 },
             });
@@ -59,36 +61,44 @@ $(document).ready(function () {
     =========================== */
     function mostrarConfigCorreo() {
         $.ajax({
-            url: "ajax/Categoria.ajax.php",
+            url: "ajax/Correo.config.ajax.php",
             type: "GET",
             dataType: "json",
-            success: function (categorias) {
+            success: function (configuraciones) {
+                let count = configuraciones.length;
+                if (count > 0) {
+                    $("#btn_agregar_configuracion_correo").hide();
+                } else {
+                    $("#btn_agregar_configuracion_correo").show();
+                }
 
-                var tbody = $("#dataCategorias");
+                let tbody = $("#data_correo_config");
                 tbody.empty();
-
-                categorias.forEach(function (categoria, index) {
+                configuraciones.forEach(function (config, index) {
                     var fila = `
-                    <tr>
-                        <td>${index + 1}</td>
-                        <td>${categoria.nombre_categoria}</td>
-                        <td>${categoria.descripcion}</td>
-                        <td>${categoria.fecha}</td>
-                        <td class="text-center">
-                            <a href="#" class="me-3 btnEditarCategoria" idCategoria="${categoria.id_categoria}" data-bs-toggle="modal" data-bs-target="#modalEditarCategoria">
-                                <i class="text-warning fas fa-edit fa-lg"></i>
-                            </a>
-                            <a href="#" class="me-3 confirm-text btnEliminarCategoria" idCategoria="${categoria.id_categoria}">
-                                <i class="text-danger fa fa-trash fa-lg"></i>
-                            </a>
-                        </td>
-                    </tr>
-                `;
+                                <tr>
+                                    <td>${index + 1}</td>
+                                    <td>${config.smtp}</td>
+                                    <td>${config.usuario}</td>
+                                    <td>${config.password}</td>
+                                    <td>${config.puerto}</td>
+                                    <td>${config.correo_remitente}</td>
+                                    <td>${config.nombre_remitente}</td>
+                                    <td class="text-center">
+                                        <a href="#" class="me-3 btnEditarCorreoConfig" idCorreoConfig="${config.id}" data-bs-toggle="modal" data-bs-target="#modal_editar_correo_config">
+                                            <i class="text-warning fas fa-edit fa-lg"></i>
+                                        </a>
+                                        <a href="#" class="me-3 confirm-text btnEliminarCorreoConfig" idCorreoConfig="${config.id}">
+                                            <i class="text-danger fa fa-trash fa-lg"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            `;
                     tbody.append(fila);
                 });
 
                 // Inicializar DataTables después de cargar los datos
-                $('#tabla_categoria').DataTable();
+                $('#tabla_correo_config').DataTable();
             },
             error: function (xhr, status, error) {
                 console.error("Error al recuperar los proveedores:", error);
@@ -99,15 +109,14 @@ $(document).ready(function () {
     /*=============================================
     EDITAR LA CONFIGURACION DEL CORREO
     =============================================*/
-    $("#tabla_categoria").on("click", ".btnEditarCategoria", function () {
-
-        var idCategoria = $(this).attr("idCategoria");
-
+    $("#tabla_correo_config").on("click", ".btnEditarCorreoConfig", function (e) {
+        e.preventDefault();
+        var idCorreoConfig = $(this).attr("idCorreoConfig");
         var datos = new FormData();
-        datos.append("idCategoria", idCategoria);
+        datos.append("idCorreoConfig", idCorreoConfig);
 
         $.ajax({
-            url: "ajax/Categoria.ajax.php",
+            url: "ajax/Correo.config.ajax.php",
             method: "POST",
             data: datos,
             cache: false,
@@ -115,11 +124,14 @@ $(document).ready(function () {
             processData: false,
             dataType: "json",
             success: function (respuesta) {
-
-                $("#edit_id_categoria").val(respuesta["id_categoria"]);
-                $("#edit_nombre_categoria").val(respuesta["nombre_categoria"]);
-                $("#edit_descripcion_categoria").val(respuesta["descripcion"]);
-
+                $("#id_config_correo_edit").val(respuesta["id"]);
+                $("#id_usuario_config_correo_edit").val(respuesta["id_usuario"]);
+                $("#smtp_correo_edit").val(respuesta["smtp"]);
+                $("#usuario_correo_config_edit").val(respuesta["usuario"]);
+                $("#password_correo_config_edit").val(respuesta["password"]);
+                $("#puerto_correo_edit").val(respuesta["puerto"]);
+                $("#correo_remitente_edit").val(respuesta["correo_remitente"]);
+                $("#nombre_remitente_edit").val(respuesta["nombre_remitente"]);
             },
         });
     });
@@ -127,60 +139,31 @@ $(document).ready(function () {
     /*===========================================
     ACTUALIZAR LA CONFIGURACION DEL CORREO
     =========================================== */
-    $("#btn_actualizar_categoria").click(function (e) {
-
+    $("#btn_update_correo_config").click(function (e) {
         e.preventDefault();
-
-
-        var isValid = true;
-
-        var edit_id_categoria = $("#edit_id_categoria").val();
-        var edit_nombre_categoria = $("#edit_nombre_categoria").val();
-        var edit_descripcion_categoria = $("#edit_descripcion_categoria").val();
-
-        // Validar el nombre de categoríua
-        if (edit_nombre_categoria === "") {
-            $("#edit_error_nombre_categoria")
-                .html("Por favor, ingrese el nombre")
-                .addClass("text-danger");
-            isValid = false;
-        } else if (!isNaN(edit_nombre_categoria)) {
-            $("#edit_error_nombre_categoria")
-                .html("El nombre no puede contener números")
-                .addClass("text-danger");
-            isValid = false;
-        } else {
-            $("#edit_error_nombre_categoria").html("").removeClass("text-danger");
-        }
-
-
-
-        // Validar el descripcion de categoria
-        if (edit_descripcion_categoria === "") {
-            $("#edit_error_descripcion_categoria")
-                .html("Por favor, ingrese la descripción")
-                .addClass("text-danger");
-            isValid = false;
-        } else if (!isNaN(edit_descripcion_categoria)) {
-            $("#edit_error_descripcion_categoria")
-                .html("La descripción no puede contener números")
-                .addClass("text-danger");
-            isValid = false;
-        } else {
-            $("#edit_error_descripcion_categoria").html("").removeClass("text-danger");
-        }
-
-
+        let isValid = true;
+        let edit_id_correo_config = $("#id_config_correo_edit").val();
+        let id_usuario_edit = $("#id_usuario_config_correo_edit").val();
+        let smtp_edit = $("#smtp_correo_edit").val();
+        let usuario_edit = $("#usuario_correo_config_edit").val();
+        let password_edit = $("#password_correo_config_edit").val();
+        let puerto_edit = $("#puerto_correo_edit").val();
+        let correo_remitente_edit = $("#correo_remitente_edit").val();
+        let nombre_remitente_edit = $("#nombre_remitente_edit").val();
 
         if (isValid) {
-            var datos = new FormData();
-            datos.append("edit_id_categoria", edit_id_categoria);
-            datos.append("edit_nombre_categoria", edit_nombre_categoria);
-            datos.append("edit_descripcion_categoria", edit_descripcion_categoria);
-
+            const datos = new FormData();
+            datos.append("edit_id_correo_config", edit_id_correo_config);
+            datos.append("id_usuario_edit", id_usuario_edit);
+            datos.append("smtp_edit", smtp_edit);
+            datos.append("usuario_edit", usuario_edit);
+            datos.append("password_edit", password_edit);
+            datos.append("puerto_edit", puerto_edit);
+            datos.append("correo_remitente_edit", correo_remitente_edit);
+            datos.append("nombre_remitente_edit", nombre_remitente_edit);
 
             $.ajax({
-                url: "ajax/Categoria.ajax.php",
+                url: "ajax/Correo.config.ajax.php",
                 method: "POST",
                 data: datos,
                 cache: false,
@@ -189,21 +172,22 @@ $(document).ready(function () {
                 success: function (respuesta) {
                     var res = JSON.parse(respuesta);
 
-                    if (res === "ok") {
-                        $("#form_actualizar_categoria")[0].reset();
-
-                        $("#modalEditarCategoria").modal("hide");
+                    if (res.status === true) {
+                        $("#form_udpate_correo_config")[0].reset();
+                        $("#modal_editar_correo_config").modal("hide");
 
                         Swal.fire({
                             title: "¡Correcto!",
-                            text: "La categoría ha sido actualizado",
+                            text: res.message,
                             icon: "success",
                         });
-
                         mostrarConfigCorreo();
-
                     } else {
-                        console.error("Error al cargar los datos.");
+                        Swal.fire({
+                            title: "Error!",
+                            text: res.message,
+                            icon: "error",
+                        });
                     }
                 }
             });
@@ -213,17 +197,13 @@ $(document).ready(function () {
     /*=============================================
       ELIMINAR LA CONFIGURACION DEL CORREO
       =============================================*/
-    $("#tabla_categoria").on("click", ".btnEliminarCategoria", function (e) {
-
+    $("#tabla_correo_config").on("click", ".btnEliminarCorreoConfig", function (e) {
         e.preventDefault();
-
-        var deleteIdCategoria = $(this).attr("idCategoria");
-
-        var datos = new FormData();
-        datos.append("deleteIdCategoria", deleteIdCategoria);
-
+        let idCorreoConfigDelete = $(this).attr("idCorreoConfig");
+        const datos = new FormData();
+        datos.append("idCorreoConfigDelete", idCorreoConfigDelete);
         Swal.fire({
-            title: "¿Está seguro de borrar la categoría?",
+            title: "¿Está seguro de borrar la configuración?",
             text: "¡Si no lo está puede cancelar la accíón!",
             icon: "warning",
             showCancelButton: true,
@@ -234,7 +214,7 @@ $(document).ready(function () {
         }).then(function (result) {
             if (result.value) {
                 $.ajax({
-                    url: "ajax/Categoria.ajax.php",
+                    url: "ajax/Correo.config.ajax.php",
                     method: "POST",
                     data: datos,
                     cache: false,
@@ -242,29 +222,25 @@ $(document).ready(function () {
                     processData: false,
                     success: function (respuesta) {
                         var res = JSON.parse(respuesta);
-
-                        if (res === "ok") {
-
+                        if (res.status === true) {
                             Swal.fire({
                                 title: "¡Eliminado!",
-                                text: "La categoria ha sido eliminado",
+                                text: res.message,
                                 icon: "success",
                             });
-
                             mostrarConfigCorreo();
-
                         } else {
-
-                            console.error("Error al eliminar los datos");
-
+                            Swal.fire({
+                                title: "Error!",
+                                text: res.message,
+                                icon: "error",
+                            });
                         }
                     }
                 });
-
             }
         });
-    }
-    );
+    });
 
     /* =====================================
     MOSTRANDO CONFIGURACION

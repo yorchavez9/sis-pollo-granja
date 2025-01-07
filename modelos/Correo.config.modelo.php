@@ -16,12 +16,10 @@ class ModeloCorreoConfig
             $stmt->execute();
             return $stmt->fetch();
         } else {
-            $stmt = Conexion::conectar()->prepare("SELECT * from $tabla ORDER BY id_categoria DESC");
+            $stmt = Conexion::conectar()->prepare("SELECT * from $tabla ORDER BY id DESC");
             $stmt->execute();
             return $stmt->fetchAll();
         }
-
-        $stmt = null;
     }
 
     /*=============================================
@@ -74,17 +72,33 @@ class ModeloCorreoConfig
     static public function mdlEditarConfigCorreo($tabla, $datos)
     {
         $stmt = Conexion::conectar()->prepare("UPDATE $tabla SET 
-																nombre_categoria = :nombre_categoria, 
-																descripcion = :descripcion
-																WHERE id_categoria = :id_categoria");
+																id_usuario = :id_usuario, 
+																smtp = :smtp,
+																usuario = :usuario,
+																password = :password,
+																puerto = :puerto,
+																correo_remitente = :correo_remitente,
+																nombre_remitente = :nombre_remitente
+																WHERE id = :id");
 
-        $stmt->bindParam(":nombre_categoria", $datos["nombre_categoria"], PDO::PARAM_STR);
-        $stmt->bindParam(":descripcion", $datos["descripcion"], PDO::PARAM_STR);
-        $stmt->bindParam(":id_categoria", $datos["id_categoria"], PDO::PARAM_INT);
+        $stmt->bindParam(":id_usuario", $datos["id_usuario"], PDO::PARAM_INT);
+        $stmt->bindParam(":smtp", $datos["smtp"], PDO::PARAM_STR);
+        $stmt->bindParam(":usuario", $datos["usuario"], PDO::PARAM_STR);
+        $stmt->bindParam(":password", $datos["password"], PDO::PARAM_STR);
+        $stmt->bindParam(":puerto", $datos["puerto"], PDO::PARAM_INT);
+        $stmt->bindParam(":correo_remitente", $datos["correo_remitente"], PDO::PARAM_STR);
+        $stmt->bindParam(":nombre_remitente", $datos["nombre_remitente"], PDO::PARAM_STR);
+        $stmt->bindParam(":id", $datos["id"], PDO::PARAM_INT);
         if ($stmt->execute()) {
-            return "ok";
+            return [
+                "status" => true,
+                "message" => "Correo de Configuración actualizado exitosamente."
+            ];
         } else {
-            return "error";
+            return [
+                "status" => false,
+                "message" => "Error al actualizar la configuración."
+            ];
         }
     }
 
@@ -109,12 +123,18 @@ class ModeloCorreoConfig
 
     static public function mdlBorrarConfigCorreo($tabla, $datos)
     {
-        $stmt = Conexion::conectar()->prepare("DELETE FROM $tabla WHERE id_categoria = :id_categoria");
-        $stmt->bindParam(":id_categoria", $datos, PDO::PARAM_INT);
+        $stmt = Conexion::conectar()->prepare("DELETE FROM $tabla WHERE id = :id");
+        $stmt->bindParam(":id", $datos, PDO::PARAM_INT);
         if ($stmt->execute()) {
-            return "ok";
+            return [
+                "status" => true,
+                "message" => "Correo de Configuración eliminado exitosamente."
+            ];
         } else {
-            return "error";
+            return [
+                "status" => false,
+                "message" => "Error al eliminar la configuración."
+            ];
         }
     }
 }

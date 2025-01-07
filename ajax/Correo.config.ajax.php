@@ -9,11 +9,11 @@ class AjaxCorreoConfig
     /*=============================================
 	EDITAR CONFIGURACION CORREO
 	=============================================*/
-    public $idCategoria;
-    public function ajaxEditarCategoria()
+    public $idCorreoConfig;
+    public function ajaxEditarConfigCorreo()
     {
-        $item = "id_categoria";
-        $valor = $this->idCategoria;
+        $item = "id";
+        $valor = $this->idCorreoConfig;
         $respuesta = ControladorCorreoConfig::ctrMostrarConfigCorreo($item, $valor);
         echo json_encode($respuesta);
     }
@@ -22,10 +22,10 @@ class AjaxCorreoConfig
 /*=============================================
 EDITAR CONFIGURACION CORREO
 =============================================*/
-if (isset($_POST["idCategoria"])) {
+if (isset($_POST["idCorreoConfig"])) {
     $editar = new AjaxCorreoConfig();
-    $editar->idCategoria = $_POST["idCategoria"];
-    $editar->ajaxEditarCategoria();
+    $editar->idCorreoConfig = $_POST["idCorreoConfig"];
+    $editar->ajaxEditarConfigCorreo();
 }
 
 /*=============================================
@@ -39,17 +39,17 @@ elseif (isset($_POST["id_usuario"])) {
 /*=============================================
 ACTUALIAZAR CONFIGURACION CORREO
 =============================================*/
-elseif (isset($_POST["edit_id_categoria"])) {
-    $editCategoria = new ControladorCorreoConfig();
-    $editCategoria->ctrEditarConfigCorreo();
+elseif (isset($_POST["edit_id_correo_config"])) {
+    $editConfigCorreo = new ControladorCorreoConfig();
+    $editConfigCorreo->ctrEditarConfigCorreo();
 }
 
 /*=============================================
 ELIMINAR CONFIGURACION CORREO
 =============================================*/
-elseif (isset($_POST["deleteIdCategoria"])) {
-    $borrarCategoria = new ControladorCorreoConfig();
-    $borrarCategoria->ctrBorraConfigCorreo();
+elseif (isset($_POST["idCorreoConfigDelete"])) {
+    $borrarCorreoConfig = new ControladorCorreoConfig();
+    $borrarCorreoConfig->ctrBorraConfigCorreo();
 }
 
 /*=============================================
@@ -58,17 +58,22 @@ MOSTRAR CONFIGURACION CORREO
 else {
     $item = null;
     $valor = null;
-    $mostrarCategorias = ControladorCorreoConfig::ctrMostrarConfigCorreo($item, $valor);
-    $tablaUsuarios = array();
-    foreach ($mostrarCategorias as $key => $usuario) {
+    $mostrarConfiguraciones = ControladorCorreoConfig::ctrMostrarConfigCorreo($item, $valor);
+    $tablaConfiguracion = array();
+    foreach ($mostrarConfiguraciones as $key => $usuario) {
         $fila = array(
-            'id_categoria' => $usuario['id_categoria'],
-            'nombre_categoria' => $usuario['nombre_categoria'],
-            'descripcion' => $usuario['descripcion'],
+            'id' => $usuario['id'],
+            'id_usuario' => $usuario['id_usuario'],
+            'smtp' => $usuario['smtp'],
+            'usuario' => $usuario['usuario'],
+            'password' => $usuario['password'],
+            'puerto' => $usuario['puerto'],
+            'correo_remitente' => $usuario['correo_remitente'],
+            'nombre_remitente' => $usuario['nombre_remitente'],
             'fecha' => $usuario['fecha']
         );
 
-        $tablaUsuarios[] = $fila;
+        $tablaConfiguracion[] = $fila;
     }
-    echo json_encode($tablaUsuarios);
+    echo json_encode($tablaConfiguracion);
 }

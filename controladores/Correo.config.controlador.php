@@ -37,7 +37,7 @@ class ControladorCorreoConfig
 	=============================================*/
     static public function ctrMostrarConfigCorreo($item, $valor)
     {
-        $tabla = "categorias";
+        $tabla = "config_correo";
         $respuesta = ModeloCorreoConfig::mdlMostrarConfigCorreo($tabla, $item, $valor);
         return $respuesta;
     }
@@ -47,19 +47,23 @@ class ControladorCorreoConfig
 	=============================================*/
     static public function ctrEditarConfigCorreo()
     {
-        if (preg_match('/^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ ]+$/', $_POST["edit_nombre_categoria"])) {
-            $tabla = "categorias";
-            $datos = array(
-                "id_categoria" => $_POST["edit_id_categoria"],
-                "nombre_categoria" => $_POST["edit_nombre_categoria"],
-                "descripcion" => $_POST["edit_descripcion_categoria"]
-            );
-            $respuesta = ModeloCorreoConfig::mdlEditarConfigCorreo($tabla, $datos);
-            if ($respuesta == "ok") {
-                echo json_encode("ok");
-            }
-        } else {
-            echo json_encode("ok");
+        $tabla = "config_correo";
+        $datos = array(
+            "id" => $_POST["edit_id_correo_config"],
+            "id_usuario" => $_POST["id_usuario_edit"],
+            "smtp" => $_POST["smtp_edit"],
+            "usuario" => $_POST["usuario_edit"],
+            "password" => $_POST["password_edit"],
+            "puerto" => $_POST["puerto_edit"],
+            "correo_remitente" => $_POST["correo_remitente_edit"],
+            "nombre_remitente" => $_POST["nombre_remitente_edit"]
+        );
+        $respuesta = ModeloCorreoConfig::mdlEditarConfigCorreo($tabla, $datos);
+        if ($respuesta["status"] == true) {
+            echo json_encode([
+                "status" => $respuesta["status"],
+                "message" => $respuesta["message"]
+            ]);
         }
     }
 
@@ -68,13 +72,21 @@ class ControladorCorreoConfig
 	=============================================*/
     static public function ctrBorraConfigCorreo()
     {
-        if (isset($_POST["deleteIdCategoria"])) {
-            $tabla = "categorias";
-            $datos = $_POST["deleteIdCategoria"];
-            $respuesta = ModeloCorreoConfig::mdlBorrarConfigCorreo($tabla, $datos);
-            if ($respuesta == "ok") {
-                echo json_encode("ok");
-            }
+        
+        $tabla = "config_correo";
+        $datos = $_POST["idCorreoConfigDelete"];
+        $respuesta = ModeloCorreoConfig::mdlBorrarConfigCorreo($tabla, $datos);
+        if ($respuesta["status"] == true) {
+            echo json_encode([
+                "status" => $respuesta["status"],
+                "message" => $respuesta["message"]
+            ]);
+        }else{
+            echo json_encode([
+                "status" => $respuesta["status"],
+                "message" => $respuesta["message"]
+            ]);
         }
+        
     }
 }
