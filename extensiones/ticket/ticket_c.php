@@ -143,11 +143,17 @@ foreach ($tickets as $ticket) {
     $pdf->Cell(0, 5, iconv("UTF-8", "ISO-8859-1", $ticket["mensaje"]), 0, 0, 'C');
 }
 
-// Generando el PDF
-if (isset($_GET['accion']) && $_GET['accion'] === 'descargar') {
-    // Descargar el PDF
-    $pdf->Output('D', 'ticket' . $numeroCotizacion . '_cotizacion.pdf'); // 'D' fuerza la descarga con el nombre 'boleta.pdf'
+/* ======================================================
+GUARDANDO EL COMPROBANTE EN EL DIRECTORIO DEL TCIKET
+====================================================== */
+$directorio = "ticket/cotizacion/";
+$nombreArchivo = 'ticket_c_' . $numeroCotizacion . '.pdf';
+$rutaArchivo = $directorio . $nombreArchivo;
+if (!file_exists($rutaArchivo)) {
+    if (!file_exists($directorio)) {
+        mkdir($directorio, 0777, true);
+    }
+    $pdf->Output('F', $rutaArchivo);
 } else {
-    // Mostrar el PDF en el navegador (imprimir)
-    $pdf->Output(); // Muestra el archivo en el navegador
+    echo "El archivo PDF ya existe.";
 }

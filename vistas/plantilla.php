@@ -60,6 +60,7 @@ if (isset($_SESSION["iniciarSesion"]) && $_SESSION["iniciarSesion"] == "ok") {
                 $_GET["ruta"] == "configuracionTicket" ||
                 $_GET["ruta"] == "configuracionImpresora" ||
                 $_GET["ruta"] == "configuracionSistema" ||
+                $_GET["ruta"] == "configuracionCorreo" ||
                 $_GET["ruta"] == "numFolio" ||
                 $_GET["ruta"] == "salir"
             ) {

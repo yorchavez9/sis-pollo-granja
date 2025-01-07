@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cotización Adjunta</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f4f4f7;
+            color: #51545e;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            padding: 20px;
+        }
+
+        .header {
+            background-color: #FF9F43;
+            color: #ffffff;
+            padding: 5px 0 1px 5px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        .content h2 {
+            color: #333333;
+            font-size: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .content p {
+            font-size: 14px;
+            line-height: 1.5;
+            margin: 10px 0;
+        }
+
+        .content ul {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+        }
+
+        .content ul li {
+            background-color: #f9f9f9;
+            padding: 10px 15px;
+            margin: 5px 0;
+            border-radius: 4px;
+            border: 1px solid #dddddd;
+        }
+
+        .content ul li strong {
+            color: #FF9F43;
+            font-weight: bold;
+        }
+
+        .content p.important {
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+            color: #333333;
+            margin-top: 20px;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 12px;
+            color: #888888;
+            margin-top: 20px;
+            padding: 10px 0;
+            border-top: 1px solid #eeeeee;
+        }
+
+        .footer a {
+            color: #FF9F43;
+            text-decoration: none;
+        }
+
+        /* Estilos para el check */
+        .check {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+
+        .footer .contact-info {
+            font-size: 14px;
+            color: #333333;
+        }
+
+        .footer .contact-info a {
+            color: #FF9F43;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="ok.png" alt="" width="100">
+            <p>Cotización Adjunta</p>
+        </div>
+        <div class="content">
+            <h2>Detalles de la Cotización</h2>
+            <p>Estimado cliente,</p>
+            <p>En el adjunto encontrará la cotización solicitada. A continuación, los detalles:</p>
+            <ul>
+                <li><strong>Número:</strong> {{id_cotizacion}} <span class="check"></span></li>
+                <li><strong>Fecha:</strong> {{fecha_cotizacion}} <span class="check"></span></li>
+                <li><strong>Total:</strong> S/. {{total_cotizacion}} <span class="check"></span></li>
+            </ul>
+            <p class="important">Gracias por confiar en nosotros. 😊</p>
+        </div>
+        <div class="footer">
+            <div class="contact-info">
+                <p>Este correo fue generado automáticamente. Si necesita asistencia, no duden en contactarnos.</p>
+                <p>Teléfono: {{numero_telefono}} | Dirección: {{direccion_negocio}}</p>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

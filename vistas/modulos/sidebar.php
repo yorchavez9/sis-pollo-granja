@@ -145,6 +145,7 @@ $permisosMenu = [
                         <ul>
                             <li><a href="configuracionSistema">Config sistema</a></li>
                             <li><a href="configuracionTicket">Config. comprobante</a></li>
+                            <li><a href="configuracionCorreo">Config. correo</a></li>
                             <li><a href="numFolio">Config Número y Folios</a></li>
                         </ul>
                     </li>

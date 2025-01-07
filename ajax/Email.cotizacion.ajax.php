@@ -4,6 +4,8 @@ require_once '../modelos/Cotizacion.modelo.php';
 require_once '../vendor/phpmailer/phpmailer/src/Exception.php';
 require_once '../vendor/phpmailer/phpmailer/src/PHPMailer.php';
 require_once '../vendor/phpmailer/phpmailer/src/SMTP.php';
+require_once '../controladores/Configuracion.ticket.controlador.php';
+require_once '../modelos/Configuracion.ticket.modelo.php';
 
 
 use PHPMailer\PHPMailer\PHPMailer;
@@ -16,6 +18,14 @@ require '../vendor/autoload.php';
 // Crear una instancia de PHPMailer; pasar `true` habilita las excepciones
 $mail = new PHPMailer(true);
 
+$itemConfig = null;
+$valorConfig = null;
+$configuracion = ControladorConfiguracionTicket::ctrMostrarConfiguracionTicket($itemConfig, $valorConfig);
+foreach ($configuracion as $key => $value) {
+    $nombreEmpresa = $value['nombre_empresa'];
+    $telefono = $value['telefono'];
+    $direccion = $value['direccion'];
+}
 
 if (!isset($_POST['documento']) || !isset($_POST['id_cotizacion']) || !isset($_POST['email'])) {
     throw new Exception('Datos incompletos');
@@ -44,25 +54,21 @@ if (!isset($_POST['documento']) || !isset($_POST['id_cotizacion']) || !isset($_P
 
         // Destinatarios
         $mail->setFrom('apuuray@apuuray.com', 'Apuuray');               // Remitente del correo
-        $mail->addAddress($_POST['email'], 'Jorge Chavez Huincho');           // Agregar destinatario principal
+        $mail->addAddress($_POST['email'], '');           // Agregar destinatario principal
 
         // Contenido del correo
-        $mail->isHTML(true);                                        // Establecer el formato del correo en HTML
-        $mail->Subject = 'Cotización N°' . $cotizacion['id_cotizacion'];                     // Asunto del correo
-        $mail->Body = '
-                <h2>Cotización Adjunta</h2>
-                <p>Estimado cliente,</p>
-                <p>Adjunto encontrará la cotización solicitada.</p>
-                <p>Detalles:</p>
-                <ul>
-                    <li>Número: ' . $cotizacion['id_cotizacion'] . '</li>
-                    <li>Fecha: ' . $cotizacion['fecha_cotizacion'] . '</li>
-                    <li>Total: S/. ' . $cotizacion['total_cotizacion'] . '</li>
-                </ul>
-                <p>Gracias por su preferencia.</p>
-            ';
+        $mail->isHTML(true); // Establecer el formato del correo en HTML
+        $mail->Subject = 'Cotización Adjunta';
+        $template = file_get_contents('plantillas/correo_cotizacion.html');   
+                                             
+        $body = str_replace(
+            ['{{id_cotizacion}}', '{{fecha_cotizacion}}', '{{total_cotizacion}}','{{numero_telefono}}', '{{direccion_negocio}}'],
+            [$cotizacion['id_cotizacion'], $cotizacion['fecha_cotizacion'], $cotizacion['total_cotizacion'], $telefono, $direccion],
+            $template
+        );
 
-        // Adjuntar PDF
+        $mail->Body = $body;
+                    // Adjuntar PDF
         $mail->addStringAttachment(
             file_get_contents("../extensiones/" . $cotizacion['tipo_comprobante_sn'] . "/" . $cotizacion['tipo_comprobante_sn'] . "/cotizacion/" . $cotizacion['tipo_comprobante_sn'] . "_c_". $cotizacion['id_cotizacion'].".pdf"),
             $cotizacion['tipo_comprobante_sn'] . '_c_'. $cotizacion['id_cotizacion'].'.pdf'
