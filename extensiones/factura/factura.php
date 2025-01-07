@@ -169,7 +169,7 @@ $totalCompra = 0;
 
 foreach ($respuesta_de as $index => $producto) {
     // Verificar si el peso bruto es cero
-    if ($producto['peso_bruto'] == 0) {
+    if ($producto['peso_neto'] == 0) {
         // Si el peso bruto es cero, sumar el número de aves por el precio de compra
         $totalProducto = $producto['numero_aves'] * $producto['precio_compra'];
     } else {

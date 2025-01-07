@@ -690,7 +690,6 @@ async function enviarWhatsApp(documento, id_cotizacion) {
  ENVIAR POR CORREO EL COMPROBANTE
  =============================================*/
 async function enviarCorreo(documento, id_cotizacion) {
-
     const { value: email } = await Swal.fire({
         title: 'Ingrese el correo electrónico',
         input: 'email',
@@ -702,25 +701,47 @@ async function enviarCorreo(documento, id_cotizacion) {
     });
 
     if (email) {
+        let timerInterval;
+        Swal.fire({
+            title: 'Enviando correo...',
+            html: 'Por favor, espere...',
+            timer: 0, 
+            timerProgressBar: true,
+            didOpen: () => {
+                Swal.showLoading();
+                const timer = Swal.getPopup().querySelector("b");
+                timerInterval = setInterval(() => {
+                    timer.textContent = `${Swal.getTimerLeft()}`;
+                }, 100);
+            },
+            willClose: () => {
+                clearInterval(timerInterval); 
+            }
+        });
+
         try {
             const formData = new FormData();
             formData.append('documento', documento);
             formData.append('id_cotizacion', id_cotizacion);
             formData.append('email', email);
-
             const response = await fetch('ajax/Email.cotizacion.ajax.php', {
                 method: 'POST',
                 body: formData
             });
+
             const data = await response.json();
+
+            Swal.close();
 
             if (data.success) {
                 mostrarExito('¡Enviado con éxito!', 'Comprobante enviado por correo');
             } else {
                 mostrarError('Error al enviar', data.message || 'Error en el envío');
             }
+
         } catch (error) {
             console.error('Error:', error);
+            Swal.close();
             mostrarError('Error', 'No se pudo enviar el correo');
         }
     }

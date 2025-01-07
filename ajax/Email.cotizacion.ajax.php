@@ -6,6 +6,8 @@ require_once '../vendor/phpmailer/phpmailer/src/PHPMailer.php';
 require_once '../vendor/phpmailer/phpmailer/src/SMTP.php';
 require_once '../controladores/Configuracion.ticket.controlador.php';
 require_once '../modelos/Configuracion.ticket.modelo.php';
+require_once '../controladores/Correo.config.controlador.php';
+require_once '../modelos/Correo.config.modelo.php';
 
 
 use PHPMailer\PHPMailer\PHPMailer;
@@ -21,10 +23,23 @@ $mail = new PHPMailer(true);
 $itemConfig = null;
 $valorConfig = null;
 $configuracion = ControladorConfiguracionTicket::ctrMostrarConfiguracionTicket($itemConfig, $valorConfig);
+$configuracionCorreo = ControladorCorreoConfig::ctrMostrarConfigCorreo($itemConfig, $valorConfig);
+
 foreach ($configuracion as $key => $value) {
     $nombreEmpresa = $value['nombre_empresa'];
     $telefono = $value['telefono'];
     $direccion = $value['direccion'];
+}
+
+foreach ($configuracionCorreo as $key => $correoconfig) {
+    $nombreEmpresa = $correoconfig['id'];
+    $id_usuario = $correoconfig['id_usuario'];
+    $smtp = $correoconfig['smtp'];
+    $usuario_config = $correoconfig['usuario'];
+    $password_config = $correoconfig['password'];
+    $puerto_config = $correoconfig['puerto'];
+    $correo_remitente = $correoconfig['correo_remitente'];
+    $nombre_remitente = $correoconfig['nombre_remitente'];
 }
 
 if (!isset($_POST['documento']) || !isset($_POST['id_cotizacion']) || !isset($_POST['email'])) {
@@ -44,16 +59,16 @@ if (!isset($_POST['documento']) || !isset($_POST['id_cotizacion']) || !isset($_P
         // Configuración del servidor
         /* $mail->SMTPDebug = SMTP::DEBUG_SERVER;    */                   // Habilitar salida de depuración detallada
         $mail->isSMTP();                                            // Usar SMTP para enviar el correo
-        $mail->Host       = 'smtp.hostinger.com';                   // Servidor SMTP para enviar el correo
+        $mail->Host       = $smtp;                   // Servidor SMTP para enviar el correo
         $mail->SMTPAuth   = true;                                   // Habilitar autenticación SMTP
-        $mail->Username   = 'apuuray@apuuray.com';                  // Nombre de usuario SMTP
-        $mail->Password   = 'Apuuray123$';                          // Contraseña SMTP
+        $mail->Username   = $usuario_config;                  // Nombre de usuario SMTP
+        $mail->Password   = $password_config;                          // Contraseña SMTP
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            // Habilitar cifrado TLS implícito
-        $mail->Port       = 465;
+        $mail->Port       = $puerto_config;
         $mail->CharSet    = 'UTF-8';                                    // Puerto TCP para la conexión (usar 587 para STARTTLS si es necesario)
 
         // Destinatarios
-        $mail->setFrom('apuuray@apuuray.com', 'Apuuray');               // Remitente del correo
+        $mail->setFrom($correo_remitente, $nombre_remitente);               // Remitente del correo
         $mail->addAddress($_POST['email'], '');           // Agregar destinatario principal
 
         // Contenido del correo
