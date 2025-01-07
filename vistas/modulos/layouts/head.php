@@ -52,12 +52,12 @@
 
 <body>
 
-    <!-- <div id="global-loader">
+    <div id="global-loader">
         <div class="whirly-loader"> </div>
     </div>
- -->
-
 
     <div class="loader-section">
         <span class="loader"></span>
     </div>
+
+    

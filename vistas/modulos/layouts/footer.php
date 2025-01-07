@@ -10,6 +10,7 @@
 <!-- ===================================
     SCRIPT DE MODULOS
     =================================== -->
+<script src="vistas/js/verificar_configuraciones.js" type="module"></script>
 <script src="vistas/js/script.js" type="module"></script>
 <script src="vistas/js/login.js" type="module"></script>
 <script src="vistas/js/sucursal.js" type="module"></script>
