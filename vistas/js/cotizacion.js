@@ -582,9 +582,9 @@ function mostrarOpcionesComprobante(res) {
         cancelButtonColor: "#F52E2F",
         confirmButtonText: "Imprimir",
         cancelButtonText: "Descargar",
-        html: `
+        footer: `
             <div class="mt-3">
-                <button type="button" id="btnWhatsApp" class="btn me-3" style="background: #32C35A">
+                <button type="button" id="btnWhatsApp" class="btn me-3" style="background: #28C76F; color: white">
                     <i class="fab fa-whatsapp me-2"></i>Enviar por WhatsApp
                 </button>
                 <button type="button" id="btnEmail" class="btn btn-primary">
@@ -594,10 +594,10 @@ function mostrarOpcionesComprobante(res) {
         `,
         didRender: () => {
             document.getElementById('btnWhatsApp').addEventListener('click', () => {
-                enviarWhatsApp(res.tipo_comprobante, res.id_cotizacion);
+                enviarWhatsApp(res.tipo_comprobante, res.id_cotizacion, res.telefono);
             });
             document.getElementById('btnEmail').addEventListener('click', () => {
-                enviarCorreo(res.tipo_comprobante, res.id_cotizacion);
+                enviarCorreo(res.tipo_comprobante, res.id_cotizacion, res.email);
             });
         }
     }).then((result) => {
@@ -635,7 +635,7 @@ function descargarComprobante(res) {
 /*=============================================
  ENVIAR PRO WHATSAPP EL COMPROBANTE
  =============================================*/
-async function enviarWhatsApp(documento, id_cotizacion) {
+async function enviarWhatsApp(documento, id_cotizacion, num_telefono) {
     try {
         // Obtener datos de la cotización
         const response = await fetch(`ajax/Lista.cotizacion.ajax.php?id_cotizacion_whatsapp=${id_cotizacion}`);
@@ -654,7 +654,7 @@ async function enviarWhatsApp(documento, id_cotizacion) {
         // Pedir el número de teléfono para WhatsApp
         const { value: telefono } = await Swal.fire({
             title: 'Ingrese el número de WhatsApp',
-            input: 'text',
+            input: num_telefono,
             inputLabel: 'Incluya el código de país (Ej: 51912345678)',
             inputValidator: (value) => {
                 if (!value) return 'Debe ingresar un número';
@@ -689,10 +689,10 @@ async function enviarWhatsApp(documento, id_cotizacion) {
 /*=============================================
  ENVIAR POR CORREO EL COMPROBANTE
  =============================================*/
-async function enviarCorreo(documento, id_cotizacion) {
+async function enviarCorreo(documento, id_cotizacion, correo) {
     const { value: email } = await Swal.fire({
         title: 'Ingrese el correo electrónico',
-        input: 'email',
+        input: correo,
         inputLabel: 'Correo del destinatario',
         inputValidator: (value) => {
             if (!value) return 'Debe ingresar un correo';
@@ -703,9 +703,9 @@ async function enviarCorreo(documento, id_cotizacion) {
     if (email) {
         let timerInterval;
         Swal.fire({
-            title: 'Enviando correo...',
+            title: 'Enviando al correo...',
             html: 'Por favor, espere...',
-            timer: 0, 
+            timer: 0,
             timerProgressBar: true,
             didOpen: () => {
                 Swal.showLoading();
@@ -715,7 +715,7 @@ async function enviarCorreo(documento, id_cotizacion) {
                 }, 100);
             },
             willClose: () => {
-                clearInterval(timerInterval); 
+                clearInterval(timerInterval);
             }
         });
 

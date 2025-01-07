@@ -122,7 +122,12 @@ $(document).ready(function () {
       dataType: "json",
       success: function (respuesta) {
         // Ajustar la ruta de la imagen
-        respuesta.imagen_producto = respuesta.imagen_producto.substring(3);
+        
+        if(respuesta.imagen_producto){
+          respuesta.imagen_producto = respuesta.imagen_producto.substring(3);
+        }else{
+          respuesta.imagen_producto = "vistas/img/productos/default.png"; // Ruta a la imagen predeterminada
+        }
 
         // Crear nueva fila con datos del producto
         const nuevaFila = `
@@ -408,7 +413,7 @@ $(document).ready(function () {
               cancelButtonColor: "#F52E2F",
               confirmButtonText: "Imprimir",
               cancelButtonText: "Descargar",
-              footer: '<a href="#">Enviar por WhatsApp o correo</a>',
+              footer: '<h2 style="font-size: 50px">👍</h2>',
             }).then((result) => {
               if (result.isConfirmed) {
                 Swal.fire({

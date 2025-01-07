@@ -15,6 +15,8 @@ class ModeloCotizacion
             $sql = "SELECT  
 						c.id_cotizacion,
                         p.id_persona,
+                        p.email,
+                        p.telefono,
                         u.id_usuario,
                         c.fecha_cotizacion, 
                         c.hora_cotizacion,
