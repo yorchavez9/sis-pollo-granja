@@ -5,23 +5,8 @@
                 <h4>Configuración de los comprobantes</h4>
                 <h6>Administrar comprobantes</h6>
             </div>
-            <div class="page-btn">
-                <?php
-
-                $item = null;
-                $valor = null;
-
-                $tickets = ControladorConfiguracionTicket::ctrMostrarConfiguracionTicket($item, $valor);
-
-                $contadorTickets = count($tickets);
-
-                if ($contadorTickets <= 0) {
-                ?>
-                    <a href="#" class="btn btn-added" data-bs-toggle="modal" data-bs-target="#modalNuevoConfiguracionTicket"><img src="vistas/assets/img/icons/plus.svg" alt="img" class="me-2">Crear configuración</a>
-
-                <?php
-                }
-                ?>
+            <div class="page-btn" id="btn_agregar_configuracion_tickets">
+                <a href="#" class="btn btn-added" data-bs-toggle="modal" data-bs-target="#modalNuevoConfiguracionTicket"><img src="vistas/assets/img/icons/plus.svg" alt="img" class="me-2">Crear configuración</a>
             </div>
         </div>
 

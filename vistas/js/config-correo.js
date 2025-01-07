@@ -16,6 +16,54 @@ $(document).ready(function () {
         let correo_remitente = $("#correo_remitente").val();
         let nombre_remitente = $("#nombre_remitente").val();
 
+        // Validar el campo SMTP
+        if (smtp_correo === "") {
+            $("#error_smtp_correo").text("El servidor SMTP es obligatorio.").css("color", "red");
+            isValid = false;
+        } else {
+            $("#error_smtp_correo").text("");
+        }
+
+        // Validar el campo Usuario SMTP
+        if (usuario_correo_config === "") {
+            $("#error_usuario_correo_config").text("El usuario SMTP es obligatorio.").css("color", "red");
+            isValid = false;
+        } else {
+            $("#error_usuario_correo_config").text("");
+        }
+
+        // Validar el campo Contraseña SMTP
+        if (password_correo_config === "") {
+            $("#error_password_correo_config").text("La contraseña SMTP es obligatoria.").css("color", "red");
+            isValid = false;
+        } else {
+            $("#error_password_correo_config").text("");
+        }
+
+        // Validar el campo Puerto TCP
+        if (puerto_correo === "") {
+            $("#error_puerto_correo").text("El puerto TCP es obligatorio.").css("color", "red");
+            isValid = false;
+        } else {
+            $("#error_puerto_correo").text("");
+        }
+
+        // Validar el campo Correo Remitente
+        if (correo_remitente === "") {
+            $("#error_correo_remitente").text("El correo del remitente es obligatorio.").css("color", "red");
+            isValid = false;
+        } else {
+            $("#error_correo_remitente").text("");
+        }
+
+        // Validar el campo Nombre Remitente
+        if (nombre_remitente === "") {
+            $("#error_nombre_remitente").text("El nombre del remitente es obligatorio.").css("color", "red");
+            isValid = false;
+        } else {
+            $("#error_nombre_remitente").text("");
+        }
+
         if (isValid) {
             const datos = new FormData();
             datos.append("id_usuario", id_usuario_config_correo);
@@ -150,6 +198,49 @@ $(document).ready(function () {
         let puerto_edit = $("#puerto_correo_edit").val();
         let correo_remitente_edit = $("#correo_remitente_edit").val();
         let nombre_remitente_edit = $("#nombre_remitente_edit").val();
+        
+        // Validar cada campo
+        if (smtp_edit === "") {
+            $("#error_smtp_correo_edit").text("El servidor SMTP es obligatorio.");
+            isValid = false;
+        } else {
+            $("#error_smtp_correo_edit").text("");
+        }
+
+        if (usuario_edit === "") {
+            $("#error_usuario_correo_config_edit").text("El usuario SMTP es obligatorio.");
+            isValid = false;
+        } else {
+            $("#error_usuario_correo_config_edit").text("");
+        }
+
+        if (password_edit === "") {
+            $("#error_password_correo_config_edit").text("La contraseña SMTP es obligatoria.");
+            isValid = false;
+        } else {
+            $("#error_password_correo_config_edit").text("");
+        }
+
+        if (puerto_edit === "") {
+            $("#error_puerto_correo_edit").text("El puerto TCP es obligatorio.");
+            isValid = false;
+        } else {
+            $("#error_puerto_correo_edit").text("");
+        }
+
+        if (correo_remitente_edit === "") {
+            $("#error_correo_remitente_edit").text("El correo del remitente es obligatorio.");
+            isValid = false;
+        } else {
+            $("#error_correo_remitente_edit").text("");
+        }
+
+        if (nombre_remitente_edit === "") {
+            $("#error_nombre_remitente_edit").text("El nombre del remitente es obligatorio.");
+            isValid = false;
+        } else {
+            $("#error_nombre_remitente_edit").text("");
+        }
 
         if (isValid) {
             const datos = new FormData();

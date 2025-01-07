@@ -4,16 +4,13 @@ $(document).ready(function () {
     =============================================*/
     $("#logo_ticket").change(function () {
         const file = this.files[0];
-
         if (file) {
             const reader = new FileReader();
-
             reader.onload = function (e) {
                 $("#vista_previa_logo_ticket").attr("src", e.target.result);
 
                 $("#vista_previa_logo_ticket").show();
             };
-
             reader.readAsDataURL(file);
         }
     });
@@ -23,16 +20,13 @@ $(document).ready(function () {
     =============================================*/
     $("#edit_logo_ticket").change(function () {
         const file = this.files[0];
-
         if (file) {
             const reader = new FileReader();
-
             reader.onload = function (e) {
                 $("#edit_vista_previa_logo_ticket").attr("src", e.target.result);
 
                 $("#edit_vista_previa_logo_ticket").show();
             };
-
             reader.readAsDataURL(file);
         }
     });
@@ -42,7 +36,6 @@ $(document).ready(function () {
     =============================================*/
     $("#logo_ticket").change(function () {
         var imagen = $(this).get(0).files[0];
-
         if (imagen) {
             var maxSize = 5 * 1024 * 1024;
 
@@ -187,10 +180,6 @@ $(document).ready(function () {
                 console.error(error);
             },
         });
-
-
-
-
     });
 
     /*=============================================
@@ -202,19 +191,18 @@ $(document).ready(function () {
             type: "GET",
             dataType: "json",
             success: function (tickets) {
-
-
-
+                let count = tickets.length;
+                if (count > 0) {
+                    $("#btn_agregar_configuracion_tickets").hide();
+                } else {
+                    $("#btn_agregar_configuracion_tickets").show();
+                }
                 var tbody = $("#data_configuracion_ticket");
-
                 tbody.empty();
-
                 tickets.forEach(function (ticket, index) {
-
                     if(ticket.logo != null){
                         ticket.logo = ticket.logo.substring(3);
                     }
-                
                     var fila = `
                           <tr>
                               <td>${index + 1}</td>

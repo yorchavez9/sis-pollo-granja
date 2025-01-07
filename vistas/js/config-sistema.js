@@ -4,7 +4,6 @@ $(document).ready(function () {
     /* ===========================================
     GUARDAR CONFIGURACION value
     =========================================== */
-    // Función para validar los campos del formulario
     function validarCampos() {
         let campos = [
             { id: "#nombre_sis", tipo: "texto", mensaje: "El nombre del sistema es obligatorio." },
@@ -104,25 +103,25 @@ $(document).ready(function () {
             type: "GET",
             dataType: "json",
             success: function (response) {
-    
+                let count = response.length;
+                if (count > 0) {
+                    $("#btn_agregar_configuracion_sistema").hide();
+                } else {
+                    $("#btn_agregar_configuracion_sistema").show();
+                }
+                
                 var tbody = $("#data_configuracion_sistema");
                 tbody.empty();
-
-                // Función para ajustar la ruta de las imágenes
                 function ajustarRutaImagen(imagen) {
                     return imagen ? imagen.substring(3) : null;
                 }
-
-                // Generar las filas
                 response.forEach(function (value, index) {
-                    // Ajustar las rutas de las imágenes
                     value.icon_pestana = ajustarRutaImagen(value.icon_pestana);
                     value.img_sidebar = ajustarRutaImagen(value.img_sidebar);
                     value.img_sidebar_min = ajustarRutaImagen(value.img_sidebar_min);
                     value.img_login = ajustarRutaImagen(value.img_login);
                     value.icon_login = ajustarRutaImagen(value.icon_login);
 
-                    // Crear la fila HTML
                     var fila = `
                     <tr>
                         <td>${index + 1}</td>
@@ -168,12 +167,9 @@ $(document).ready(function () {
                             </a>
                         </td>
                     </tr>`;
-
-                    // Añadir la fila al cuerpo de la tabla
                     tbody.append(fila);
                 });
 
-                // Inicializar la tabla DataTable
                 $('#tabla_configuracion_sistema').DataTable();
             },
             error: function (xhr, status, error) {

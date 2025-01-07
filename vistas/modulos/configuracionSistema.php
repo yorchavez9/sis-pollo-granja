@@ -5,18 +5,8 @@
                 <h4>Configuración del sistema</h4>
                 <h6>Administrar comprobantes</h6>
             </div>
-            <div class="page-btn">
-                <?php
-                $item = null;
-                $valor = null;
-                $configuracion = ControladorConfiguracionSistema::ctrMostrarConfiguracionSistema($item, $valor);
-                $count = count($configuracion);
-                if ($count === 0) {
-                ?>
+            <div class="page-btn" id="btn_agregar_configuracion_sistema">
                     <a href="#" class="btn btn-added" data-bs-toggle="modal" data-bs-target="#modal_nuevo_configuracion_sistema"><img src="vistas/assets/img/icons/plus.svg" alt="img" class="me-2">Crear configuración</a>
-                <?php
-                }
-                ?>
             </div>
         </div>
 

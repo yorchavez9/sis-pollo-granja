@@ -104,37 +104,37 @@ MODAL NUEVA CONFIGURACION DEL CORREO
                     <div class="form-group">
                         <label for="smtp_correo" class="form-label"> Servidor SMTP para enviar el correo (<span class="text-danger">*</span>)</label>
                         <input type="text" name="smtp_correo" id="smtp_correo" placeholder="smtp.proveedor.com">
-                        <small id="error_smtp_correo"></small>
+                        <small id="error_smtp_correo" style="color: #F5215C"></small>
                     </div>
                     <!-- INGRESO  Nombre de usuario SMTP-->
                     <div class="form-group">
                         <label for="usuario_correo_config" class="form-label">Ingrese el usuario SMTP (<span class="text-danger">*</span>)</label>
                         <input type="text" name="usuario_correo_config" id="usuario_correo_config" placeholder="proveedor@proveedor.com">
-                        <small id="error_usuario_correo_config"></small>
+                        <small id="error_usuario_correo_config" style="color: #F5215C"></small>
                     </div>
                     <!-- Contraseña SMTP -->
                     <div class="form-group">
                         <label for="password_correo_config" class="form-label">Contraseña SMTP (<span class="text-danger">*</span>)</label>
                         <input type="text" name="password_correo_config" id="password_correo_config" placeholder="Proveedor123">
-                        <small id="error_password_correo_config"></small>
+                        <small id="error_password_correo_config" style="color: #F5215C"></small>
                     </div>
                     <!-- Puerto TCP para la conexión -->
                     <div class="form-group">
                         <label for="puerto_correo" class="form-label">Ingrese el puerto TCP (<span class="text-danger">*</span>)</label>
                         <input type="number" name="puerto_correo" id="puerto_correo" placeholder="465" class="form-control">
-                        <small id="error_puerto_correo"></small>
+                        <small id="error_puerto_correo" style="color: #F5215C"></small>
                     </div>
                     <!-- Remitente del correo -->
                     <div class="form-group">
                         <label for="correo_remitente" class="form-label">Ingrese el correo del remitente o empresa (<span class="text-danger">*</span>)</label>
                         <input type="text" name="correo_remitente" id="correo_remitente" placeholder="proveedor@proveedor.com">
-                        <small id="error_correo_remitente"></small>
+                        <small id="error_correo_remitente" style="color: #F5215C"></small>
                     </div>
                     <!-- Nombre del correo -->
                     <div class="form-group">
                         <label for="nombre_remitente" class="form-label">Nombre del remitente o empresa (<span class="text-danger">*</span>)</label>
                         <input type="text" name="nombre_remitente" id="nombre_remitente" placeholder="Proveedor o nombre del negocio">
-                        <small id="error_nombre_remitente"></small>
+                        <small id="error_nombre_remitente" style="color: #F5215C"></small>
                     </div>
 
                 </div>
@@ -189,37 +189,37 @@ MODAL EDITAR CONFIGURACION DEL CORREO
                     <div class="form-group">
                         <label for="smtp_correo_edit" class="form-label"> Servidor SMTP para enviar el correo (<span class="text-danger">*</span>)</label>
                         <input type="text" name="smtp_correo_edit" id="smtp_correo_edit" placeholder="smtp.proveedor.com">
-                        <small id="error_smtp_correo_edit"></small>
+                        <small id="error_smtp_correo_edit" style="color: #F5215C"></small>
                     </div>
                     <!-- INGRESO  Nombre de usuario SMTP-->
                     <div class="form-group">
                         <label for="usuario_correo_config_edit" class="form-label">Ingrese el usuario SMTP (<span class="text-danger">*</span>)</label>
                         <input type="text" name="usuario_correo_config_edit" id="usuario_correo_config_edit" placeholder="proveedor@proveedor.com">
-                        <small id="error_usuario_correo_config_edit"></small>
+                        <small id="error_usuario_correo_config_edit" style="color: #F5215C"></small>
                     </div>
                     <!-- Contraseña SMTP -->
                     <div class="form-group">
                         <label for="password_correo_config_edit" class="form-label">Contraseña SMTP (<span class="text-danger">*</span>)</label>
                         <input type="text" name="password_correo_config_edit" id="password_correo_config_edit" placeholder="Proveedor123">
-                        <small id="error_password_correo_config_edit"></small>
+                        <small id="error_password_correo_config_edit" style="color: #F5215C"></small>
                     </div>
                     <!-- Puerto TCP para la conexión -->
                     <div class="form-group">
                         <label for="puerto_correo_edit" class="form-label">Ingrese el puerto TCP (<span class="text-danger">*</span>)</label>
                         <input type="number" name="puerto_correo_edit" id="puerto_correo_edit" placeholder="465" class="form-control">
-                        <small id="error_puerto_correo_edit"></small>
+                        <small id="error_puerto_correo_edit" style="color: #F5215C"></small>
                     </div>
                     <!-- Remitente del correo -->
                     <div class="form-group">
                         <label for="correo_remitente_edit" class="form-label">Ingrese el correo del remitente o empresa (<span class="text-danger">*</span>)</label>
                         <input type="text" name="correo_remitente_edit" id="correo_remitente_edit" placeholder="proveedor@proveedor.com">
-                        <small id="error_correo_remitente_edit"></small>
+                        <small id="error_correo_remitente_edit" style="color: #F5215C"></small>
                     </div>
                     <!-- Nombre del correo -->
                     <div class="form-group">
                         <label for="nombre_remitente_edit" class="form-label">Nombre del remitente o empresa (<span class="text-danger">*</span>)</label>
                         <input type="text" name="nombre_remitente_edit" id="nombre_remitente_edit" placeholder="Proveedor o nombre del negocio">
-                        <small id="error_nombre_remitente_edit"></small>
+                        <small id="error_nombre_remitente_edit" style="color: #F5215C"></small>
                     </div>
 
                 </div>
