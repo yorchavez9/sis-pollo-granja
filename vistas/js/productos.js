@@ -1,82 +1,161 @@
 $(document).ready(function () {
+  /* =====================================
+  VALORES DE INPUTS POR DEFECTO
+  ===================================== */
+  function inputFocus() {
+    $("input").each(function () {
+      var defaultValue = $(this).val();
+      $(this).focus(function () {
+        if ($(this).val() === defaultValue) {
+          $(this).val("");
+        }
+      });
+      $(this).blur(function () {
+        if ($(this).val() === "") {
+          $(this).val(defaultValue);
+        }
+      });
+    });
+  }
+  inputFocus();
+
+  /* =====================================
+  CONVERTIR DE DOLARES A 
+  ===================================== */
+  let currentRate = 0;
+
+  async function getExchangeRate(){
+    try {
+      const response = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
+      const data = await response.json();
+      return data.rates.VES;
+    } catch (error) {
+      console.error('Error obteniendo tasas', error);
+      try {
+        const response = await fetch('https://open.er-api.com/v6/latest/USD');
+        const data = await response.json();
+        return data.rates.VES;
+      } catch (error2) {
+        console.log("Error en API de respaldo:", error2);
+        return null;
+      }
+    }
+  }
+
+  async function updateRate() {
+    try {
+      const rate = await getExchangeRate();
+      if (rate) {
+        currentRate = rate; // Asigna la tasa de cambio al valor global
+        document.getElementById("error_moneda").textContent = "";
+      }
+    } catch (error) {
+      console.error("Error al actualizar la tasa:", error);
+    }
+  }
+
+  setInterval(updateRate, 60 * 60 * 1000);
 
   /* ===========================
   MOSTRANDO PRODUCTO
   =========================== */
-  function mostrarProductos() {
+  async function mostrarProductos() {
+    // Obtener la tasa de cambio antes de mostrar los productos
+    await updateRate();
+
     $.ajax({
-      url: "ajax/Producto.ajax.php",
-      type: "GET",
-      dataType: "json",
-      success: function (productos) {
-        var tbody = $("#data_productos");
-        tbody.empty();
-        productos.forEach(function (producto, index) {
-          producto.imagen_producto = producto.imagen_producto ? producto.imagen_producto.substring(3) : ''; // Verifica si la imagen existe
+        url: "ajax/Producto.ajax.php",
+        type: "GET",
+        dataType: "json",
+        success: function (productos) {
+            var tbody = $("#data_productos");
+            tbody.empty();
+            productos.forEach(function (producto, index) {
+                producto.imagen_producto = producto.imagen_producto ? producto.imagen_producto.substring(3) : ''; // Verifica si la imagen existe
 
-          // Si no tiene imagen, no mostrar la columna de imagen
-          var imagenColumna = producto.imagen_producto ?
-            `<td class="text-center">
-              <a href="javascript:void(0);" class="product-img">
-                <img src="${producto.imagen_producto}" alt="${producto.nombre_producto}">
-              </a>
-          </td>` :
-            `<td class="text-center">
-              <a href="javascript:void(0);" class="product-img">
-                <img src="vistas/img/productos/default.png" alt="${producto.nombre_producto}">
-              </a>
-          </td>`; 
+                // Si no tiene imagen, usar imagen por defecto
+                var imagenColumna = producto.imagen_producto ?
+                    `<td class="text-center">
+                        <a href="javascript:void(0);" class="product-img">
+                            <img src="${producto.imagen_producto}" alt="${producto.nombre_producto}">
+                        </a>
+                    </td>` :
+                    `<td class="text-center">
+                        <a href="javascript:void(0);" class="product-img">
+                            <img src="vistas/img/productos/default.png" alt="${producto.nombre_producto}">
+                        </a>
+                    </td>`;
 
-          var fila = `
-          <tr>
-            <td>${index + 1}</td>
-            <td>${producto.codigo_producto}</td>
-            ${imagenColumna}
-            <td>${producto.nombre_categoria}</td>
-            <td>${producto.nombre_producto}</td>
-            <td>S/ ${producto.precio_producto}</td>
-            <td class="text-center"><button type="button" class="btn btn-sm" style="${getButtonStyles(producto.stock_producto)}">${producto.stock_producto}</button></td>
-            <td>${producto.fecha_vencimiento ? producto.fecha_vencimiento : 'No tiene fecha de vencimiento'}</td>
-            <td>
-              ${producto.estado_producto != 0 ?
-              '<button class="btn bg-lightgreen badges btn-sm rounded btnActivar" idProducto="' + producto.id_producto + '" estadoProducto="0">Activado</button>'
-              :
-              '<button class="btn bg-lightred badges btn-sm rounded btnActivar" idProducto="' + producto.id_producto + '" estadoProducto="1">Desactivado</button>'
-            }
-            </td>
-            <td class="text-center">
-              <a href="#" class="me-3 btnEditarProducto" idProducto="${producto.id_producto}" data-bs-toggle="modal" data-bs-target="#modalEditarProducto">
-                <i class="text-warning fas fa-edit fa-lg"></i>
-              </a>
-              <a href="#" class="me-3 btnVerProducto" idProducto="${producto.id_producto}" data-bs-toggle="modal" data-bs-target="#modalVerProducto">
-                <i class="text-primary fa fa-eye fa-lg"></i>
-              </a>
-              <a href="#" class="me-3 confirm-text btnDeleteProducto" idProducto="${producto.id_producto}" imagenProducto="${producto.imagen_producto}">
-                <i class="fa fa-trash fa-lg" style="color: #FF4D4D"></i>
-              </a>
-            </td>
-          </tr>`;
+                // Calcular precio en bolívares
+                var precioBolivares = currentRate > 0 ? (producto.precio_producto * currentRate).toFixed(2) : "N/A";
 
-          function getButtonStyles(stock) {
-            if (stock > 20) {
-              return "background-color: #28C76F; color: white; border: none;"; // Verde
-            } else if (stock >= 10 && stock <= 20) {
-              return "background-color: #FF9F43; color: white; border: none;"; // Naranja
-            } else {
-              return "background-color: #FF4D4D; color: white; border: none;"; // Rojo
-            }
-          }
+                var fila = `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td>${producto.codigo_producto}</td>
+                    ${imagenColumna}
+                    <td>${producto.nombre_categoria}</td>
+                    <td>${producto.nombre_producto}</td>
+                    <td>
+                        <div>USD ${producto.precio_producto}</div>
+                        <div>VES ${precioBolivares}</div>
+                        <p class="text-danger" id="error_moneda"></p>
+                    </td>
+                    <td class="text-center"><button type="button" class="btn btn-sm" style="${getButtonStyles(producto.stock_producto)}">${producto.stock_producto}</button></td>
+                    <td>${producto.fecha_vencimiento ? producto.fecha_vencimiento : 'No tiene fecha de vencimiento'}</td>
+                    <td>
+                        ${producto.estado_producto != 0 ?
+                            '<button class="btn bg-lightgreen badges btn-sm rounded btnActivar" idProducto="' + producto.id_producto + '" estadoProducto="0">Activado</button>' :
+                            '<button class="btn bg-lightred badges btn-sm rounded btnActivar" idProducto="' + producto.id_producto + '" estadoProducto="1">Desactivado</button>'
+                        }
+                    </td>
+                    <td class="text-center">
+                        <div class="dropdown">
+                            <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" style="background: #FF9F43; color: white" data-bs-toggle="dropdown" aria-expanded="false">
+                                Acciones
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <li>
+                                    <a href="#" class="dropdown-item btnEditarProducto" idProducto="${producto.id_producto}" data-bs-toggle="modal" data-bs-target="#modalEditarProducto">
+                                        <i class="text-warning fas fa-edit fa-lg me-2"></i> Editar
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="dropdown-item btnVerProducto" idProducto="${producto.id_producto}" data-bs-toggle="modal" data-bs-target="#modalVerProducto">
+                                        <i class="text-primary fa fa-eye fa-lg me-2"></i> Ver
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="dropdown-item confirm-text btnDeleteProducto" idProducto="${producto.id_producto}" imagenProducto="${producto.imagen_producto}">
+                                        <i class="fa fa-trash fa-lg me-2" style="color: #FF4D4D"></i> Eliminar
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>`;
 
-          // Agregar la fila al tbody
-          tbody.append(fila);
-        });
-        $('#tabla_productos').DataTable();
-      },
-      error: function (xhr, status, error) {
-        console.error("Error al recuperar los usuarios:", error.mensaje);
-      },
+                function getButtonStyles(stock) {
+                    if (stock > 20) {
+                        return "background-color: #28C76F; color: white; border: none;"; // Verde
+                    } else if (stock >= 10 && stock <= 20) {
+                        return "background-color: #FF9F43; color: white; border: none;"; // Naranja
+                    } else {
+                        return "background-color: #FF4D4D; color: white; border: none;"; // Rojo
+                    }
+                }
+
+                // Agregar la fila al tbody
+                tbody.append(fila);
+            });
+            $('#tabla_productos').DataTable();
+        },
+        error: function (xhr, status, error) {
+            console.error("Error al recuperar los productos:", error);
+        },
     });
-  }
+}
+
 
   /* =====================================
   VISTA PREVIA DE IMAGEN PRODUCTO
@@ -141,12 +220,10 @@ $(document).ready(function () {
 
         return;
       }
-
     } else {
       alert("Por favor, seleccione una imagen.");
     }
   });
-
 
   /*  LIMPIADO EL VALOR DE FOCUS */
   $("#stock_producto").focus(function () {
@@ -160,7 +237,6 @@ $(document).ready(function () {
   GUARDAR PRODUCTO
   =========================================== */
   $("#btn_save_producto").click(function () {
-
     var isValid = true;
 
     let id_categoria_P = $("#id_categoria_P").val();
@@ -204,7 +280,13 @@ $(document).ready(function () {
     }
 
     // Validar el stock del producto
-    if (stock_producto === "" || stock_producto === null || isNaN(stock_producto) || parseInt(stock_producto) !== parseFloat(stock_producto) || parseInt(stock_producto) < 0) {
+    if (
+      stock_producto === "" ||
+      stock_producto === null ||
+      isNaN(stock_producto) ||
+      parseInt(stock_producto) !== parseFloat(stock_producto) ||
+      parseInt(stock_producto) < 0
+    ) {
       $("#error_stock_p")
         .html("Por favor, ingrese un número válido")
         .addClass("text-danger");
@@ -215,7 +297,6 @@ $(document).ready(function () {
 
     // Si el formulario es válido, envíalo
     if (isValid) {
-
       let datos = new FormData();
       datos.append("id_categoria_P", id_categoria_P);
       datos.append("codigo_producto", codigo_producto);
@@ -234,7 +315,6 @@ $(document).ready(function () {
         contentType: false,
         processData: false,
         success: function (respuesta) {
-       
           var res = JSON.parse(respuesta);
           if (res.estado === "ok") {
             $("#form_nuevo_producto")[0].reset();
@@ -260,9 +340,6 @@ $(document).ready(function () {
           console.error(error);
         },
       });
-
-
-
     }
   });
 
@@ -277,7 +354,6 @@ $(document).ready(function () {
     datos.append("activarId", idProducto);
     datos.append("activarProducto", estadoProducto);
 
-
     $.ajax({
       url: "ajax/Producto.ajax.php",
       method: "POST",
@@ -286,7 +362,7 @@ $(document).ready(function () {
       contentType: false,
       processData: false,
       success: function (respuesta) {
-        console.log(respuesta)
+        console.log(respuesta);
       },
     });
 
@@ -296,16 +372,13 @@ $(document).ready(function () {
         .addClass("bg-lightred")
         .html("Desactivado");
       $(this).attr("estadoProducto", 0);
-
     } else {
       $(this)
         .removeClass("bg-lightred")
         .addClass("bg-lightgreen")
         .html("Activado");
       $(this).attr("estadoProducto", 1);
-
     }
-
   });
 
   /*=============================================
@@ -350,9 +423,7 @@ $(document).ready(function () {
   MOSTRAR DETALLE DEL PRODUCTO
   =============================================*/
   $("#tabla_productos").on("click", ".btnVerProducto", function () {
-
     var idProductoVer = $(this).attr("idProducto");
-
 
     var datos = new FormData();
     datos.append("idProductoVer", idProductoVer);
@@ -370,28 +441,29 @@ $(document).ready(function () {
         $("#mostrar_codigo_producto").text(respuesta["codigo_producto"]);
         $("#mostrar_nombre_producto").text(respuesta["nombre_producto"]);
         $("#mostrar_stock_producto").text(respuesta["stock_producto"]);
-        $("#mostrar_descripcion_producto").text(respuesta["descripcion_producto"]);
+        $("#mostrar_descripcion_producto").text(
+          respuesta["descripcion_producto"]
+        );
 
         if (respuesta["estado_producto"] == 1) {
-          $("#mostrar_estado_producto").html("<button class='btn btn-sm mt-2' style='background: #28C76F; color: white'>Activado</button>");
-
+          $("#mostrar_estado_producto").html(
+            "<button class='btn btn-sm mt-2' style='background: #28C76F; color: white'>Activado</button>"
+          );
         } else {
-          $("#mostrar_estado_producto").html("<button class='btn btn-sm' style='background: #FF4D4D; color: white'>Desactivado</button>");
-
+          $("#mostrar_estado_producto").html(
+            "<button class='btn btn-sm' style='background: #FF4D4D; color: white'>Desactivado</button>"
+          );
         }
-
 
         var fecha = respuesta["fecha_vencimiento"];
 
         var fecha_obj = new Date(fecha);
 
-        var opciones = { year: 'numeric', month: 'long', day: '2-digit' };
+        var opciones = { year: "numeric", month: "long", day: "2-digit" };
 
-        var fecha_formateada = fecha_obj.toLocaleDateString('es-ES', opciones);
+        var fecha_formateada = fecha_obj.toLocaleDateString("es-ES", opciones);
 
         $("#mostrar_fecha_producto").text(fecha_formateada);
-
-
 
         var imagenUsuario = respuesta["imagen_producto"].substring(3);
 
@@ -404,17 +476,16 @@ $(document).ready(function () {
           );
         }
 
-        var data_roles = JSON.parse(respuesta["roles"])
+        var data_roles = JSON.parse(respuesta["roles"]);
 
         var rolesContainer = document.getElementById("mostrar_data_roles");
 
-        data_roles.forEach(role => {
+        data_roles.forEach((role) => {
           var roleSpan = document.createElement("span");
           roleSpan.textContent = role;
           roleSpan.classList.add("badge", "bg-primary", "me-2"); // Añade clases de Bootstrap para hacer que los roles se vean como insignias coloridas
           rolesContainer.appendChild(roleSpan);
         });
-
       },
     });
   });
@@ -423,7 +494,6 @@ $(document).ready(function () {
   ACTUALIZAR EL PRODUCTO
   =========================================== */
   $("#btn_actualizar_producto").click(function (e) {
-
     e.preventDefault();
 
     var isValid = true;
@@ -438,7 +508,6 @@ $(document).ready(function () {
     var edit_descripcion_producto = $("#edit_descripcion_producto").val();
     var edit_imagen_producto = $("#edit_imagen_producto").get(0).files[0];
     var edit_imagen_actual_p = $("#edit_imagen_actual_p").val();
-
 
     // Validar la categoria
     if (edit_id_categoria_p == "" || edit_id_categoria_p == null) {
@@ -472,7 +541,13 @@ $(document).ready(function () {
     }
 
     // Validar el stock del producto
-    if (edit_stock_producto === "" || edit_stock_producto === null || isNaN(edit_stock_producto) || parseInt(edit_stock_producto) !== parseFloat(edit_stock_producto) || parseInt(edit_stock_producto) < 0) {
+    if (
+      edit_stock_producto === "" ||
+      edit_stock_producto === null ||
+      isNaN(edit_stock_producto) ||
+      parseInt(edit_stock_producto) !== parseFloat(edit_stock_producto) ||
+      parseInt(edit_stock_producto) < 0
+    ) {
       $("#edit_error_stock_p")
         .html("Por favor, ingrese un numero válido")
         .addClass("text-danger");
@@ -480,7 +555,6 @@ $(document).ready(function () {
     } else {
       $("#edit_error_stock_p").html("").removeClass("text-danger");
     }
-
 
     // Si el formulario es válido, envíalo
     if (isValid) {
@@ -496,7 +570,6 @@ $(document).ready(function () {
       datos.append("edit_imagen_producto", edit_imagen_producto);
       datos.append("edit_imagen_actual_p", edit_imagen_actual_p);
 
-
       $.ajax({
         url: "ajax/Producto.ajax.php",
         method: "POST",
@@ -508,7 +581,6 @@ $(document).ready(function () {
           var res = JSON.parse(respuesta);
 
           if (res === "ok") {
-
             $("#form_editar_producto")[0].reset();
 
             $(".edit_vista_previa_imagen_p").attr("src", "");
@@ -522,13 +594,11 @@ $(document).ready(function () {
             });
 
             mostrarProductos();
-
           } else {
-
             console.error("Error al actualizar los datos");
-
           }
-        }, error: function (xhr, status, error) {
+        },
+        error: function (xhr, status, error) {
           console.error("Error al recuperar los usuarios:", error);
           console.error(xhr);
           console.error(status);
@@ -541,13 +611,11 @@ $(document).ready(function () {
     ELIMINAR PRODUCTO
     =============================================*/
   $("#tabla_productos").on("click", ".btnDeleteProducto", function (e) {
-
     e.preventDefault();
 
     let idProductoDelete = $(this).attr("idProducto");
     let imagenProductoDelete = $(this).attr("imagenProducto");
     let deleteRutaImagenProducto = "../" + imagenProductoDelete;
-
 
     let datos = new FormData();
 
@@ -564,9 +632,7 @@ $(document).ready(function () {
       cancelButtonText: "Cancelar",
       confirmButtonText: "Si, borrar!",
     }).then(function (result) {
-
       if (result.value) {
-
         $.ajax({
           url: "ajax/Producto.ajax.php",
           method: "POST",
@@ -575,7 +641,6 @@ $(document).ready(function () {
           contentType: false,
           processData: false,
           success: function (respuesta) {
-
             console.log(respuesta);
 
             mostrarProductos();
@@ -583,7 +648,6 @@ $(document).ready(function () {
             let res = JSON.parse(respuesta);
 
             if (res === "ok") {
-
               Swal.fire({
                 title: "¡Eliminado!",
                 text: "El producto ha sido eliminado",
@@ -591,49 +655,37 @@ $(document).ready(function () {
               });
 
               mostrarProductos();
-
             } else {
-
               console.error("Error al eliminar los datos");
-
             }
-          }
+          },
         });
-
       }
     });
-  }
-  );
+  });
 
   /*==========================================
   LIMPIAR MODALES
   ========================================== */
 
   $(".btn_modal_ver_close_usuario").click(function () {
-
-    $("#mostrar_data_roles").text('');
+    $("#mostrar_data_roles").text("");
   });
 
   $(".btn_modal_editar_close_usuario").click(function () {
-
     $("#formEditUsuario")[0].reset();
   });
-
-
 
   /* =========================================
   MOSTRANDO TODOS LOS PRODUCTOS PARA EL REPORTE
   ============================================ */
 
-
   var reporteProductos = function mostrarReporteProductos() {
-
     $.ajax({
       url: "ajax/Producto.ajax.php",
       type: "GET",
       dataType: "json",
       success: function (productos) {
-
         var tbody = $("#dataReporteProducto");
 
         tbody.empty();
@@ -641,7 +693,6 @@ $(document).ready(function () {
         let contador = 1;
 
         productos.forEach(function (producto) {
-
           var fila = `
                 <tr>
                     <td>
@@ -653,37 +704,35 @@ $(document).ready(function () {
                     <td>${producto.stock_producto}</td>
                     <td>${producto.fecha_vencimiento}</td>
                     <td>
-                        ${producto.estado_producto != 0 ? '<button class="btn bg-lightgreen badges btn-sm rounded btnActivar" idUsuario="' + producto.id_producto + '" estadoUsuario="0">Activado</button>'
-              : '<button class="btn bg-lightred badges btn-sm rounded btnActivar" idUsuario="' + producto.id_producto + '" estadoUsuario="1">Desactivado</button>'
-            }
+                        ${
+                          producto.estado_producto != 0
+                            ? '<button class="btn bg-lightgreen badges btn-sm rounded btnActivar" idUsuario="' +
+                              producto.id_producto +
+                              '" estadoUsuario="0">Activado</button>'
+                            : '<button class="btn bg-lightred badges btn-sm rounded btnActivar" idUsuario="' +
+                              producto.id_producto +
+                              '" estadoUsuario="1">Desactivado</button>'
+                        }
                     </td>
                     
                 </tr>`;
-
 
           // Agregar la fila al tbody
 
           tbody.append(fila);
 
           contador++;
-
         });
 
         // Inicializar DataTables después de cargar los datos
 
-        $('#tabla_reporte_producto').DataTable();
-
+        $("#tabla_reporte_producto").DataTable();
       },
       error: function (xhr, status, error) {
-
         console.error("Error al recuperar los usuarios:", error);
-
       },
     });
-
-
-  }
-
+  };
 
   /* =========================================
   MOSTRANDO LA BUSQUEDA POR STOCK
@@ -692,46 +741,39 @@ $(document).ready(function () {
   var clicEnBoton = false;
 
   $("#btn_mostrar_producto_stock").click(function (e) {
-
     e.preventDefault();
 
     clicEnBoton = true;
-
 
     let show_sotck_reporte = $("#show_sotck_reporte").val();
 
     var seleccion_fecha_r = "";
 
     if ($("#show_fecha_vencimiento").prop("checked")) {
-
       seleccion_fecha_r = $("#show_fecha_vencimiento").val();
-
     } else {
-
       seleccion_fecha_r = "";
-
     }
-
 
     mostrarReporteProductosStock(show_sotck_reporte);
 
-    window.open("extensiones/reportes/reporte.producto.php?show_sotck_reporte=" + show_sotck_reporte + "&seleccion_fecha_r=" + seleccion_fecha_r, "_blank");
+    window.open(
+      "extensiones/reportes/reporte.producto.php?show_sotck_reporte=" +
+        show_sotck_reporte +
+        "&seleccion_fecha_r=" +
+        seleccion_fecha_r,
+      "_blank"
+    );
 
-    $('#form_mostrar_producto_stock')[0].reset();
-
-
-  })
-
+    $("#form_mostrar_producto_stock")[0].reset();
+  });
 
   /* ==========================================
   MOSTRANDO TODOS LOS PRODUCTOS PARA EL REPORTE
   ============================================= */
 
-
   function mostrarReporteProductosStock(stock) {
-
     var cantStock = stock;
-
 
     var datos = new FormData();
 
@@ -746,8 +788,6 @@ $(document).ready(function () {
       processData: false,
       dataType: "json",
       success: function (productos) {
-
-
         var tbody = $("#dataReporteProducto");
 
         tbody.empty();
@@ -755,7 +795,6 @@ $(document).ready(function () {
         let contador = 1;
 
         productos.forEach(function (producto) {
-
           var fila = `
                 <tr>
                     <td>
@@ -767,29 +806,31 @@ $(document).ready(function () {
                     <td>${producto.stock_producto}</td>
                     <td>${producto.fecha_vencimiento}</td>
                     <td>
-                        ${producto.estado_producto != 0 ? '<button class="btn bg-lightgreen badges btn-sm rounded btnActivar" idUsuario="' + producto.id_producto + '" estadoUsuario="0">Activado</button>'
-              : '<button class="btn bg-lightred badges btn-sm rounded btnActivar" idUsuario="' + producto.id_producto + '" estadoUsuario="1">Desactivado</button>'
-            }
+                        ${
+                          producto.estado_producto != 0
+                            ? '<button class="btn bg-lightgreen badges btn-sm rounded btnActivar" idUsuario="' +
+                              producto.id_producto +
+                              '" estadoUsuario="0">Activado</button>'
+                            : '<button class="btn bg-lightred badges btn-sm rounded btnActivar" idUsuario="' +
+                              producto.id_producto +
+                              '" estadoUsuario="1">Desactivado</button>'
+                        }
                     </td>
                     
                 </tr>`;
-
 
           // Agregar la fila al tbody
 
           tbody.append(fila);
 
           contador++;
-
         });
 
         // Inicializar DataTables después de cargar los datos
 
-        $('#tabla_reporte_producto').DataTable();
-
+        $("#tabla_reporte_producto").DataTable();
       },
     });
-
   }
 
   /*=============================================
@@ -797,40 +838,28 @@ $(document).ready(function () {
   =============================================*/
 
   $("#btn_descargar_reporte_producto").click(function (e) {
-
-
     e.preventDefault();
 
     var idProducto = $(this).attr("idVenta");
 
-    window.open("extensiones/reportes/reporte.producto.php?idProducto=" + idProducto, "_blank");
-
+    window.open(
+      "extensiones/reportes/reporte.producto.php?idProducto=" + idProducto,
+      "_blank"
+    );
   });
-
-
 
   // Condición para verificar si se hizo clic en el botón
   if (clicEnBoton == true) {
-
     reporteProductos = null;
 
-    $('#tabla_reporte_producto').DataTable();
-
+    $("#tabla_reporte_producto").DataTable();
   } else if (clicEnBoton == false) {
-
     reporteProductos();
-
   }
-
 
   /* =====================================
   MSOTRANDO DATOS
   ===================================== */
 
   mostrarProductos();
-
-
-
-
-
 });
