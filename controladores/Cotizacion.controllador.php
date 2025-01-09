@@ -86,9 +86,13 @@ class ControladorCotizacion
         $respuestaDetalleCotizacion = ModeloCotizacion::mdlMostrarIdCotizacion($tablac, $tablasnc, $item, $valor);
         $id_cotizacion_ultimo = null;
         $tipo_comprobante_sn = null;
+        $email_persona = null;
+        $telefono_persona = null;
         foreach ($respuestaDetalleCotizacion as $value) {
             $id_cotizacion_ultimo = $value["id_cotizacion"];
             $tipo_comprobante_sn = $value["tipo_comprobante_sn"];
+            $email_persona = $value["email"];
+            $telefono_persona = $value["telefono"];
         }
 
         /* ==========================================
@@ -119,7 +123,9 @@ class ControladorCotizacion
                 "status" => $respuestaDatos["status"],
                 "message" => $respuestaDatos["message"],
                 "id_cotizacion" => $id_cotizacion_ultimo,
-                "tipo_comprobante" => $tipo_comprobante_sn
+                "tipo_comprobante" => $tipo_comprobante_sn,
+                "email" => $email_persona,
+                "telefono" => $telefono_persona
             ]);
         }else{
             echo json_encode([

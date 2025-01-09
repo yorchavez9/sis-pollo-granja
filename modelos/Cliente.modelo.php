@@ -61,7 +61,6 @@ class ModeloCliente{
 
 		// Verificar si el email está vacío. Si es vacío, lo dejamos como NULL.
 		$email = !empty($datos["email"]) ? $datos["email"] : NULL;
-
 		// Continuar con la inserción
 		$stmt = Conexion::conectar()->prepare("INSERT INTO $tabla(
                                                 tipo_persona, 
@@ -104,14 +103,11 @@ class ModeloCliente{
 		$stmt->bindParam(":sitio_web", $datos["sitio_web"], PDO::PARAM_STR);
 		$stmt->bindParam(":tipo_banco", $datos["tipo_banco"], PDO::PARAM_STR);
 		$stmt->bindParam(":numero_cuenta", $datos["numero_cuenta"], PDO::PARAM_STR);
-
 		if ($stmt->execute()) {
 			return "ok";
 		} else {
 			return "error";
 		}
-
-		$stmt = null;
 	}
 
 	/*=============================================
@@ -141,25 +137,16 @@ class ModeloCliente{
 		$stmt -> bindParam(":ciudad", $datos["ciudad"], PDO::PARAM_STR);
 		$stmt -> bindParam(":codigo_postal", $datos["codigo_postal"], PDO::PARAM_STR);
 		$stmt -> bindParam(":telefono", $datos["telefono"], PDO::PARAM_STR);
-		$stmt -> bindParam(":email", $$email, PDO::PARAM_STR);
+		$stmt -> bindParam(":email", $datos["email"], PDO::PARAM_STR);
 		$stmt -> bindParam(":sitio_web", $datos["sitio_web"], PDO::PARAM_STR);
 		$stmt -> bindParam(":tipo_banco", $datos["tipo_banco"], PDO::PARAM_STR);
 		$stmt -> bindParam(":numero_cuenta", $datos["numero_cuenta"], PDO::PARAM_STR);
 		$stmt -> bindParam(":id_persona", $datos["id_persona"], PDO::PARAM_INT);
-
 		if($stmt -> execute()){
-
 			return "ok";
-		
 		}else{
-
 			return "error";	
-
 		}
-
-
-		$stmt = null;
-
 	}
 
 	/*=============================================
@@ -167,25 +154,14 @@ class ModeloCliente{
 	=============================================*/
 
 	static public function mdlActualizarCliente($tabla, $item1, $valor1, $item2, $valor2){
-
 		$stmt = Conexion::conectar()->prepare("UPDATE $tabla SET $item1 = :$item1 WHERE $item2 = :$item2");
-
 		$stmt -> bindParam(":".$item1, $valor1, PDO::PARAM_STR);
 		$stmt -> bindParam(":".$item2, $valor2, PDO::PARAM_STR);
-
 		if($stmt -> execute()){
-			
 			return "ok";
-		
 		}else{
-
 			return "error";	
-
 		}
-
-
-		$stmt = null;
-
 	}
 
 	/*=============================================
@@ -193,25 +169,12 @@ class ModeloCliente{
 	=============================================*/
 
 	static public function mdlBorrarCliente($tabla, $datos){
-
 		$stmt = Conexion::conectar()->prepare("DELETE FROM $tabla WHERE id_persona = :id_persona");
-
 		$stmt -> bindParam(":id_persona", $datos, PDO::PARAM_INT);
-
 		if($stmt -> execute()){
-
 			return "ok";
-		
 		}else{
-
 			return "error";	
-
 		}
-
-
-		$stmt = null;
-
-
 	}
-
 }

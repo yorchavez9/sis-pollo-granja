@@ -138,7 +138,22 @@ class ModeloCotizacion
             $stmt->execute();
             return $stmt->fetch();
         } else {
-            $stmt = Conexion::conectar()->prepare("SELECT c.id_cotizacion, snc.tipo_comprobante_sn from $tablac as c INNER JOIN $tablasnc as snc on c.id_serie_num = snc.id_serie_num ORDER BY c.id_cotizacion DESC LIMIT 1");
+            $stmt = Conexion::conectar()->prepare("SELECT 
+                                                        c.id_cotizacion, 
+                                                        snc.tipo_comprobante_sn, 
+                                                        p.email, 
+                                                        p.telefono 
+                                                    FROM 
+                                                        $tablac AS c
+                                                    INNER JOIN 
+                                                        $tablasnc AS snc 
+                                                        ON c.id_serie_num = snc.id_serie_num
+                                                    INNER JOIN 
+                                                        personas AS p 
+                                                        ON c.id_persona = p.id_persona
+                                                    ORDER BY 
+                                                        c.id_cotizacion DESC LIMIT 1");
+
             $stmt->execute();
             return $stmt->fetchAll();
         }

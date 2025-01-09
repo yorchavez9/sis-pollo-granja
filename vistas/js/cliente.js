@@ -230,10 +230,9 @@ $("#tabla_clientes").on("click", ".btnActivar", function () {
 /*=============================================
 EDITAR EL CLIENTE
 =============================================*/
-$("#tabla_clientes").on("click", ".btnEditarCliente", function () {
-
+$("#tabla_clientes").on("click", ".btnEditarCliente", function (e) {
+  e.preventDefault();
   var idCliente = $(this).attr("idCliente");
-
   const datos = new FormData();
   datos.append("idCliente", idCliente);
 
@@ -246,33 +245,18 @@ $("#tabla_clientes").on("click", ".btnEditarCliente", function () {
     processData: false,
     dataType: "json",
     success: function (respuesta) {
-
       $("#edit_id_c").val(respuesta["id_persona"]);
-
       $("#edit_razon_social_c").val(respuesta["razon_social"]);
-
       $("#edit_id_doc_c").val(respuesta["id_doc"]);
-
       $("#edit_numero_documento_c").val(respuesta["numero_documento"]);
-
       $("#edit_direccion_c").val(respuesta["direccion"]);
-
       $("#edit_ciudad_c").val(respuesta["ciudad"]);
-
       $("#edit_codigo_postal_c").val(respuesta["codigo_postal"]);
-
       $("#edit_telefono_c").val(respuesta["telefono"]);
-
       $("#edit_correo_c").val(respuesta["email"]);
-
       $("#edit_sitio_web_c").val(respuesta["sitio_web"]);
-
-
       $("#edit_tipo_banco_c").val(respuesta["tipo_banco"]);
-
-
       $("#edit_numero_cuenta_c").val(respuesta["numero_cuenta"]);
-
     },
   });
 });
@@ -281,13 +265,11 @@ $("#tabla_clientes").on("click", ".btnEditarCliente", function () {
 /*=============================================
 VER CLIENTE
 =============================================*/
-$("#tabla_clientes").on("click", ".btnVerCliente", function () {
-
+$("#tabla_clientes").on("click", ".btnVerCliente", function (e) {
+  e.preventDefault();
   let idVerCliente = $(this).attr("idVerCliente");
-
-  let datos = new FormData();
+  const datos = new FormData();
   datos.append("idVerCliente", idVerCliente);
-
   $.ajax({
     url: "ajax/Cliente.ajax.php",
     method: "POST",
@@ -309,8 +291,6 @@ $("#tabla_clientes").on("click", ".btnVerCliente", function () {
       $("#ver_sitio_web_p").attr("href", respuesta["sitio_web"]).text("Visite el sitio web");
       $("#ver_tipo_banco_p").val(respuesta["tipo_banco"]);
       $("#ver_numero_cuenta_p").text(respuesta["numero_cuenta"]);
-
-
     },
   });
 });
@@ -320,11 +300,8 @@ $("#tabla_clientes").on("click", ".btnVerCliente", function () {
 ACTUALIZAR CLIENTE
 =========================================== */
 $("#btn_actualizar_cliente").click(function (e) {
-
   e.preventDefault();
-
   var isValid = true;
-
   var edit_id_cliente = $("#edit_id_c").val();
   var edit_razon_social = $("#edit_razon_social_c").val();
   var edit_id_doc = $("#edit_id_doc_c").val();

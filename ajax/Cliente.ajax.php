@@ -6,61 +6,44 @@ require_once "../modelos/Cliente.modelo.php";
 class AjaxCliente
 {
 
-    
     /*=============================================
 	EDITAR CLIENTE
 	=============================================*/
-
     public $idCliente;
-
     public function ajaxEditarCliente()
     {
-
         $item = "id_persona";
         $valor = $this->idCliente;
-
         $respuesta = ControladorCliente::ctrMostrarCliente($item, $valor);
-
         echo json_encode($respuesta);
     }
     
     /*=============================================
 	VER CLIENTE
 	=============================================*/
-
     public $idVerCliente;
-
     public function ajaxVerCliente()
     {
-
         $item = "id_persona";
         $valor = $this->idVerCliente;
-
         $respuesta = ControladorCliente::ctrMostrarCliente($item, $valor);
-
         echo json_encode($respuesta);
     }
 
     /*=============================================
 	ACTIVAR CLIENTE
 	=============================================*/
-
     public $activarCliente;
     public $activarId;
 
-
     public function ajaxActivarCliente()
     {
-
         $tabla = "personas";
-
         $item1 = "estado_persona";
         $valor1 = $this->activarCliente;
-
         $item2 = "id_persona";
         $valor2 = $this->activarId;
-
-        $respuesta = ModeloCliente::mdlActualizarCliente($tabla, $item1, $valor1, $item2, $valor2);
+        ModeloCliente::mdlActualizarCliente($tabla, $item1, $valor1, $item2, $valor2);
     }
 
 
@@ -70,7 +53,6 @@ class AjaxCliente
 EDITAR CLIENTE
 =============================================*/
 if (isset($_POST["idCliente"])) {
-
     $editar = new AjaxCliente();
     $editar->idCliente = $_POST["idCliente"];
     $editar->ajaxEditarCliente();
@@ -79,7 +61,6 @@ if (isset($_POST["idCliente"])) {
 VER CLIENTE
 =============================================*/
 elseif(isset($_POST["idVerCliente"])) {
-
     $ver = new AjaxCliente();
     $ver->idVerCliente = $_POST["idVerCliente"];
     $ver->ajaxVerCliente();
@@ -102,7 +83,6 @@ elseif (isset($_POST["tipo_persona"])) {
 
 //ACTUALIZAR CLIENTE
 elseif(isset($_POST["edit_id_cliente"])){
-
     $editProveedor = new ControladorCliente();
     $editProveedor->ctrEditarCliente();
 
@@ -156,4 +136,3 @@ else{
 
 
 ?>
-

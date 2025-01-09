@@ -654,8 +654,9 @@ async function enviarWhatsApp(documento, id_cotizacion, num_telefono) {
         // Pedir el número de teléfono para WhatsApp
         const { value: telefono } = await Swal.fire({
             title: 'Ingrese el número de WhatsApp',
-            input: num_telefono,
+            input: 'text', // Tipo de entrada correcto
             inputLabel: 'Incluya el código de país (Ej: 51912345678)',
+            inputValue: num_telefono, // Valor predeterminado
             inputValidator: (value) => {
                 if (!value) return 'Debe ingresar un número';
                 if (!/^\d+$/.test(value)) return 'Solo se permiten números';
@@ -692,8 +693,9 @@ async function enviarWhatsApp(documento, id_cotizacion, num_telefono) {
 async function enviarCorreo(documento, id_cotizacion, correo) {
     const { value: email } = await Swal.fire({
         title: 'Ingrese el correo electrónico',
-        input: correo,
+        input: 'email', // Tipo de entrada correcta
         inputLabel: 'Correo del destinatario',
+        inputValue: correo, // Valor predeterminado
         inputValidator: (value) => {
             if (!value) return 'Debe ingresar un correo';
             if (!/\S+@\S+\.\S+/.test(value)) return 'Correo inválido';
