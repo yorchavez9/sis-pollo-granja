@@ -44,10 +44,12 @@ async function updateRate() {
 // Función para convertir USD a VES
 function convertUsdToVes() {
     const usdAmount = parseFloat(document.getElementById('precio_producto').value);
+    const usdAmountEdit = parseFloat(document.getElementById('edit_precio_producto').value);
     if (!isNaN(usdAmount) && currentRate > 0) {
         const vesAmount = usdAmount * currentRate;
-        document.getElementById('value_precio_producto').textContent =
-            `${vesAmount.toLocaleString('es-VE', { minimumFractionDigits: 2 })} VES`;
+        const vesAmountEdit = usdAmountEdit * currentRate;
+        document.getElementById('value_precio_producto').textContent = `${vesAmount.toLocaleString('es-VE', { minimumFractionDigits: 2 })} VES`;
+        document.getElementById('value_precio_producto_edit').textContent = `${vesAmountEdit.toLocaleString('es-VE', { minimumFractionDigits: 2 })} VES`;
     }
 }
 
@@ -56,8 +58,7 @@ function convertVesToUsd() {
     const vesAmount = parseFloat(document.getElementById('vesAmount').value);
     if (!isNaN(vesAmount) && currentRate > 0) {
         const usdAmount = vesAmount / currentRate;
-        document.getElementById('usdResult').textContent =
-            `${usdAmount.toLocaleString('en-US', { minimumFractionDigits: 2 })} USD`;
+        document.getElementById('usdResult').textContent = `${usdAmount.toLocaleString('en-US', { minimumFractionDigits: 2 })} USD`;
     }
 }
 
@@ -67,4 +68,5 @@ setInterval(updateRate, 60 * 60 * 1000);
 
 // Eventos de entrada para conversión en tiempo real
 document.getElementById('precio_producto').addEventListener('input', convertUsdToVes);
+document.getElementById('edit_precio_producto').addEventListener('input', convertUsdToVes);
 document.getElementById('vesAmount').addEventListener('input', convertVesToUsd);

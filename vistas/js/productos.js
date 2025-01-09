@@ -50,7 +50,7 @@ $(document).ready(function () {
         document.getElementById("error_moneda").textContent = "";
       }
     } catch (error) {
-      console.error("Error al actualizar la tasa:", error);
+     /*  console.error("Error al actualizar la tasa:", error); */
     }
   }
 
@@ -60,9 +60,7 @@ $(document).ready(function () {
   MOSTRANDO PRODUCTO
   =========================== */
   async function mostrarProductos() {
-    // Obtener la tasa de cambio antes de mostrar los productos
     await updateRate();
-
     $.ajax({
         url: "ajax/Producto.ajax.php",
         type: "GET",
@@ -396,12 +394,15 @@ $(document).ready(function () {
       contentType: false,
       processData: false,
       dataType: "json",
-      success: function (respuesta) {
+      success: async function (respuesta) {
+        await updateRate();
+        var precioBolivares = currentRate > 0 ? (respuesta["precio_producto"] * currentRate).toFixed(2) : "N/A";
         $("#edit_id_producto").val(respuesta["id_producto"]);
         $("#edit_id_categoria_p").val(respuesta["id_categoria"]);
         $("#edit_codigo_producto").val(respuesta["codigo_producto"]);
         $("#edit_nombre_producto").val(respuesta["nombre_producto"]);
         $("#edit_precio_producto").val(respuesta["precio_producto"]);
+        $("#value_precio_producto_edit").text(precioBolivares + ' VES');
         $("#edit_stock_producto").val(respuesta["stock_producto"]);
         $("#edit_fecha_vencimiento").val(respuesta["fecha_vencimiento"]);
         $("#edit_descripcion_producto").val(respuesta["descripcion_producto"]);
