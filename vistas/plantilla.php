@@ -90,6 +90,13 @@ if (isset($_SESSION["iniciarSesion"]) && $_SESSION["iniciarSesion"] == "ok") {
             $_GET["ruta"] == "reporteProductos" ||
             $_GET["ruta"] == "reporteCompras" ||
             $_GET["ruta"] == "reporteVentas" ||
+
+            $_GET["ruta"] == "cajaGeneral" ||
+            $_GET["ruta"] == "arqueosCaja" ||
+            $_GET["ruta"] == "gatosIngresos" ||
+            $_GET["ruta"] == "ingresoDiario" ||
+            $_GET["ruta"] == "reportesCaja" ||
+
             $_GET["ruta"] == "reporteTrabajadores" ||
             $_GET["ruta"] == "reportePagosTrabajador" ||
             $_GET["ruta"] == "reporteAsistencia" ||

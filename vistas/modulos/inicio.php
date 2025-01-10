@@ -70,7 +70,7 @@ $totalProveedores = ControladorProveedores::ctrMostrarTotalProveedores($item, $v
                             <span><img src="vistas/assets/img/icons/dash2.svg" alt="img"></span>
                         </div>
                         <div class="dash-widgetcontent">
-                            <h5>S/ <span class="counters"><?php echo $precioFormateado ?></span></h5>
+                            <h5>USD <span class="counters"><?php echo $precioFormateado ?></span></h5>
                             <h6>Total de ventas</h6>
                         </div>
                     </div>

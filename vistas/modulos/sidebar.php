@@ -105,6 +105,20 @@ $permisosMenu = [
                     </li>
                 <?php endif; ?>
 
+                <!-- CAJA -->
+                <li class="submenu">
+                    <a href="javascript:void(0);">
+                        <i class="fas fa-cash-register" style="color: #808080;"></i><span>Caja</span> <span class="menu-arrow"></span>
+                    </a>
+                    <ul>
+                        <li><a href="cajaGeneral">Apertura & Cierre</a></li>
+                        <li><a href="arqueosCaja">Arqueo de caja</a></li>
+                        <li><a href="gatosIngresos">Gastos/Ingresos</a></li>
+                        <li><a href="ingresoDiario">Ingreso diario</a></li>
+                        <li><a href="reportesCaja">Reportes</a></li>
+                    </ul>
+                </li>
+
                 <!-- Trabajadores -->
                 <?php if (tieneRol($permisosMenu['trabajadores'])): ?>
                     <li class="submenu">

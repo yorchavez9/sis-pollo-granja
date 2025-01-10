@@ -46,8 +46,14 @@ function ultimoNumeroVenta() {
         type: "GET",
         dataType: "json",
         success: function (respuesta) {
-            const primerRegistro = respuesta[0];
-            localStorage.setItem('numero_comprobante', parseInt(primerRegistro.num_comprobante) + 1);
+            if (respuesta && respuesta.length > 0) {
+                const primerRegistro = respuesta[0];
+                const nuevoNumeroComprobante = parseInt(primerRegistro.num_comprobante) + 1;
+                localStorage.setItem('numero_comprobante', nuevoNumeroComprobante);
+                console.log("Número de comprobante guardado en localStorage:", nuevoNumeroComprobante);
+            } else {
+                /* console.warn("No se encontraron registros en la respuesta."); */
+            }
         },
         error: function (xhr, status, error) {
             console.error("Error al obtener el número de venta:", error);
