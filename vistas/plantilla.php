@@ -41,7 +41,7 @@ if (isset($_SESSION["iniciarSesion"]) && $_SESSION["iniciarSesion"] == "ok") {
 
                 // Llamadas a la función para cada configuración
                 verificarConfiguracion("ajax/Configuracion.ticket.ajax.php", "#section_verficar_configuraciones");
-                verificarConfiguracion("ajax/Correo.config.ajax.php", "#section_verficar_configuraciones");
+                /* verificarConfiguracion("ajax/Correo.config.ajax.php", "#section_verficar_configuraciones"); */
                 verificarConfiguracion("ajax/Configuracion.num.serie.ajax.php", "#section_verficar_configuraciones");
             });
         </script>
