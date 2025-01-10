@@ -1,3 +1,42 @@
+  /* =====================================
+  CONVERTIR DE DOLARES A 
+  ===================================== */
+  let currentRate = 0;
+
+  async function getExchangeRate(){
+    try {
+      const response = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
+      const data = await response.json();
+      return data.rates.VES;
+    } catch (error) {
+      console.error('Error obteniendo tasas', error);
+      try {
+        const response = await fetch('https://open.er-api.com/v6/latest/USD');
+        const data = await response.json();
+        return data.rates.VES;
+      } catch (error2) {
+        console.log("Error en API de respaldo:", error2);
+        return null;
+      }
+    }
+  }
+
+  async function updateRate() {
+    try {
+      const rate = await getExchangeRate();
+      if (rate) {
+        currentRate = rate; // Asigna la tasa de cambio al valor global
+        document.getElementById("error_moneda_cotizacion").textContent = "";
+      }
+    } catch (error) {
+     /*  console.error("Error al actualizar la tasa:", error); */
+    }
+  }
+
+  setInterval(updateRate, 60 * 60 * 1000);
+
+
+
 /*=============================================
 TRAER EL ULTIMO NUMERO DE VENTA
 =============================================*/
@@ -40,7 +79,7 @@ function mostrarProductoVenta() {
                         </a>
                     </td>
                     <td>${historial_pago.nombre_categoria}</td>
-                    <td class="fw-bold">S/ ${historial_pago.precio_producto}</td>
+                    <td class="fw-bold">USD ${historial_pago.precio_producto}</td>
                     <td>${historial_pago.nombre_producto}</td>
                     <td class="text-center">
                         <button type="button" class="btn btn-sm" style="${getButtonStyles(producto.stock_producto)}">
@@ -78,7 +117,8 @@ function formateoPrecio(numero) {
 /* ===========================================
 MOSTRANDO VENTAS
 =========================================== */
-function mostrarCotizaciones() {
+async function mostrarCotizaciones() {
+    await updateRate();
     $.ajax({
         url: "ajax/Lista.cotizacion.ajax.php",
         type: "GET",
@@ -94,6 +134,9 @@ function mostrarCotizaciones() {
                     const fechaValidez = new Date();
                     fechaValidez.setDate(fechaActual.getDate() + cotizacion.validez);
                     const fechaEstaVencida = fechaActual >= fechaValidez;
+
+                    let precioBolivares = currentRate > 0 ? (totalCotizacion * currentRate).toFixed(2) : "N/A";
+
                     var fila = `
                     <tr>
                         <td class="text-center">${index + 1}</td>
@@ -102,7 +145,10 @@ function mostrarCotizaciones() {
                         <td class="${fechaEstaVencida ? 'text-danger' : ''}">
                             ${cotizacion.validez == 1 ? cotizacion.validez + ' dia' : cotizacion.validez + ' dias'}
                         </td>
-                        <td>S/ ${totalCotizacion}</td>
+                        <td>
+                            <div>USD ${totalCotizacion}</div>
+                            <div>VES ${precioBolivares}</div>
+                        </td>
                         <td>${cotizacion.fecha_cotizacion}</td>
                         <td>${cotizacion.hora_cotizacion}</td>
                         <td class="text-center">

@@ -24,24 +24,19 @@
         <div class="card">
             <div class="card-body">
                 <div class="table-top">
-
                     <div class="search-set">
-
                         <div class="search-path">
                             <a class="btn btn-filter" id="filter_search">
                                 <img src="vistas/assets/img/icons/filter.svg" alt="img">
                                 <span><img src="vistas/assets/img/icons/closes.svg" alt="img"></span>
                             </a>
                         </div>
-
                         <div class="search-input">
                             <a class="btn btn-searchset">
                                 <img src="vistas/assets/img/icons/search-white.svg" alt="img">
                             </a>
                         </div>
-
                     </div>
-
                     <div class="wordset">
                         <ul>
                             <li>
@@ -99,7 +94,7 @@
                     <div class="row">
 
                         <!-- INGRESOO DE LA CATEGORIA -->
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <label class="form-label">Selecione la categoría (<span class="text-danger">*</span>)</label>
                             <?php
                             $item = null;
@@ -128,38 +123,40 @@
                             </div>
                         </div>
 
-                    </div>
-
-
-                    <div class="row">
-
                         <!-- INGRESO DE DEL CODIGO  -->
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <div class="form-group">
-                                <label for="codigo" class="form-label">Código del producto (<span class="text-danger">*</span>)</label>
-                                <input type="text" id="codigo_producto" placeholder="Ingrese el código" class="form-control">
+                                <label for="codigo" class="form-label">Código (<span class="text-danger">*</span>)</label>
+                                <input type="text" id="codigo_producto" placeholder="Código" class="form-control">
                                 <small id="error_codigo_p"></small>
                             </div>
-
                         </div>
+                    </div>
+                    <div class="row">
 
                         <!-- INGRESO DEL PRECIO  -->
-                        <div class="col-md-3">
+                        <div class="col-md-6">
                             <div class="form-group">
-                                <label for="precio_producto" class="form-label">Precio</label>
-                                <input type="number" id="precio_producto" class="form-control" value="0.00" min="0" placeholder="Ingrese el código">
+                                <label for="precio_producto" class="form-label mr-2">Precio (USD):</label>
+                                <div class="d-flex align-items-center">
+                                    <input type="number" id="precio_producto" class="form-control mr-3" style="max-width: 150px;" value="0.00" min="0" placeholder="Precio">
+                                    <div class="text-center mx-3">
+                                        <h5 class="m-0" id="value_precio_producto">0,00 VES</h5>
+                                    </div>
+                                </div>
                             </div>
-
                         </div>
+
+
+                        <!-- INGRESO DE VALOR DE LA MONEDA -->
 
                         <!-- INGRESO DE STOCK -->
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="stock" class="form-label">Stock</label>
-                                <input type="number" id="stock_producto" value="0" min="0" class="form-control">
+                                <input type="number" id="stock_producto" value="0" min="0" class="form-control" placeholder="Stock">
                                 <small id="error_stock_p"></small>
                             </div>
-
                         </div>
 
                         <!-- INGRESO DE FECHA DE VENCIMIENTO -->
@@ -215,14 +212,14 @@
                     <div class="row">
 
                         <!-- INGRESOO DE LA CATEGORIA -->
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <label class="form-label">Selecione la categoría (<span class="text-danger">*</span>)</label>
                             <?php
                             $item = null;
                             $valor = null;
                             $categorias = ControladorCategoria::ctrMostrarCategoria($item, $valor);
                             ?>
-                            <select class="form-select form-select-sm" id="edit_id_categoria_p">
+                            <select class="select" id="edit_id_categoria_p">
                                 <option disabled selected>Seleccione</option>
                                 <?php
                                 foreach ($categorias as $key => $categoria) {
@@ -237,11 +234,21 @@
 
 
                         <!-- INGRESO DE NOMBRE  -->
-                        <div class="col-md-5">
+                        <div class="col-md-6">
                             <div class="form-group">
-                                <label for="direccion" class="form-label">Ingrese el nombre del producto (<span class="text-danger">*</span>)</label>
+                                <label for="direccion" class="form-label">Nombre del producto (<span class="text-danger">*</span>)</label>
                                 <input type="text" id="edit_nombre_producto" placeholder="Ingrese el nombre del producto">
                                 <small id="edit_error_nombre_p"></small>
+                            </div>
+                        </div>
+
+                        
+                        <!-- INGRESO DE DEL CODIGO  -->
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="codigo" class="form-label">Código (<span class="text-danger">*</span>)</label>
+                                <input type="text" id="edit_codigo_producto" placeholder="Ingrese el código del producto">
+                                <small id="edit_error_codigo_p"></small>
                             </div>
                         </div>
 
@@ -250,21 +257,16 @@
 
                     <div class="row">
 
-                        <!-- INGRESO DE DEL CODIGO  -->
-                        <div class="col-md-3">
+                        <!-- INGRESO DE DEL PRECIO -->
+                        <div class="col-md-6">
                             <div class="form-group">
-                                <label for="codigo" class="form-label">Ingrese el código (<span class="text-danger">*</span>)</label>
-                                <input type="text" id="edit_codigo_producto" placeholder="Ingrese el código del producto">
-                                <small id="edit_error_codigo_p"></small>
-                            </div>
-
-                        </div>
-
-                        <!-- INGRESO DE STOCK -->
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="edit_precio_producto" class="form-label">Precio</label>
-                                <input type="number" id="edit_precio_producto" value="0.00" min="0" class="form-control form-control">
+                                <label for="edit_precio_producto" class="form-label mr-2">Precio (USD)</label>
+                                <div class="d-flex align-items-center">
+                                    <input type="number" id="edit_precio_producto" style="max-width: 150px;" value="0.00" min="0" class="form-control mr-3">
+                                    <div class="text-center mx-3">
+                                        <h5 class="m-0" id="value_precio_producto_edit">0,00 VES</h5>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 

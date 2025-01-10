@@ -106,8 +106,8 @@ foreach ($tickets as $ticket) {
         $pdf->Cell(5, 4, iconv("UTF-8", "ISO-8859-1", "" . $value["numero_javas"] . ""), 0, 0, 'C');
         $pdf->Cell(15, 4, iconv("UTF-8", "ISO-8859-1", "" . $value["numero_aves"] . ""), 0, 0, 'C');
         $pdf->Cell(18, 4, iconv("UTF-8", "ISO-8859-1", "" . $value["peso_neto"] . ""), 0, 0, 'C');
-        $pdf->Cell(14, 4, iconv("UTF-8", "ISO-8859-1", "S/ " . formatearPrecio($value["precio_compra"]) . ""), 0, 0, 'C');
-        $pdf->Cell(24, 4, iconv("UTF-8", "ISO-8859-1", "S/ " . formatearPrecio($totalPrecioProducto) . ""), 0, 0, 'C');
+        $pdf->Cell(14, 4, iconv("UTF-8", "ISO-8859-1", "USD " . formatearPrecio($value["precio_compra"]) . ""), 0, 0, 'C');
+        $pdf->Cell(24, 4, iconv("UTF-8", "ISO-8859-1", "USD " . formatearPrecio($totalPrecioProducto) . ""), 0, 0, 'C');
 
         $pdf->Ln(5); 
     }
@@ -121,19 +121,19 @@ foreach ($tickets as $ticket) {
 
     $pdf->Cell(18, 5, iconv("UTF-8", "ISO-8859-1", ""), 0, 0, 'C');
     $pdf->Cell(22, 5, iconv("UTF-8", "ISO-8859-1", "SUBTOTAL"), 0, 0, 'R');
-    $pdf->Cell(32, 5, iconv("UTF-8", "ISO-8859-1", " S/ " . formatearPrecio($respuesta["subTotal"]) . ""), 0, 0, 'R');
+    $pdf->Cell(32, 5, iconv("UTF-8", "ISO-8859-1", " USD " . formatearPrecio($respuesta["subTotal"]) . ""), 0, 0, 'R');
 
     $pdf->Ln(5);
 
     $pdf->Cell(18, 5, iconv("UTF-8", "ISO-8859-1", ""), 0, 0, 'C');
     $pdf->Cell(22, 5, iconv("UTF-8", "ISO-8859-1", "(IGV ". $respuesta["impuesto"]." %)"), 0, 0, 'R');
-    $pdf->Cell(32, 5, iconv("UTF-8", "ISO-8859-1", " S/ " . formatearPrecio($respuesta["igv"]) . ""), 0, 0, 'R');
+    $pdf->Cell(32, 5, iconv("UTF-8", "ISO-8859-1", " USD " . formatearPrecio($respuesta["igv"]) . ""), 0, 0, 'R');
 
     $pdf->Ln(5);
 
     $pdf->Cell(18, 5, iconv("UTF-8", "ISO-8859-1", ""), 0, 0, 'C');
     $pdf->Cell(22, 5, iconv("UTF-8", "ISO-8859-1", "TOTAL A PAGAR"), 0, 0, 'R');
-    $pdf->Cell(32, 5, iconv("UTF-8", "ISO-8859-1", "S/ " . formatearPrecio($respuesta["total_compra"]) . ""), 0, 0, 'R');
+    $pdf->Cell(32, 5, iconv("UTF-8", "ISO-8859-1", "USD " . formatearPrecio($respuesta["total_compra"]) . ""), 0, 0, 'R');
 
     $pdf->Ln(10);
     $pdf->Cell(0, 5, iconv("UTF-8", "ISO-8859-1", "-------------------------------------------------------------------"), 0, 0, 'C');

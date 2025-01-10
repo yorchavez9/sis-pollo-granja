@@ -81,7 +81,7 @@ $totalProveedores = ControladorProveedores::ctrMostrarTotalProveedores($item, $v
                             <span><img src="vistas/assets/img/icons/dash1.svg" alt="img"></span>
                         </div>
                         <div class="dash-widgetcontent">
-                            <h5>S/ <span class="counters"><?php echo $precioFormateadoCompra; ?></span></h5>
+                            <h5>USD <span class="counters"><?php echo $precioFormateadoCompra; ?></span></h5>
                             <h6>Total de compras</h6>
                         </div>
                     </div>
@@ -92,7 +92,7 @@ $totalProveedores = ControladorProveedores::ctrMostrarTotalProveedores($item, $v
                             <span><img src="vistas/assets/img/icons/dash3.svg" alt="img"></span>
                         </div>
                         <div class="dash-widgetcontent">
-                            <h5>S/ <span class="counters"><?php echo $precioFormateadoContado ?></span></h5>
+                            <h5>USD <span class="counters"><?php echo $precioFormateadoContado ?></span></h5>
                             <h6>Ventas al contado</h6>
                         </div>
                     </div>
@@ -103,7 +103,7 @@ $totalProveedores = ControladorProveedores::ctrMostrarTotalProveedores($item, $v
                             <span><img src="vistas/assets/img/icons/dash4.svg" alt="img"></span>
                         </div>
                         <div class="dash-widgetcontent">
-                            <h5>S/ <span class="counters"><?php echo $precioFormateadoCredito ?></span></h5>
+                            <h5>USD <span class="counters"><?php echo $precioFormateadoCredito ?></span></h5>
                             <h6>Ventas al crédito</h6>
                         </div>
                     </div>
@@ -157,7 +157,6 @@ $totalProveedores = ControladorProveedores::ctrMostrarTotalProveedores($item, $v
         }
         ?>
         <div class="row">
-
             <div class="col-lg-8 col-sm-12 col-12 d-flex">
                 <div class="card flex-fill">
                     <div class="card-header pb-0 d-flex justify-content-between align-items-center">

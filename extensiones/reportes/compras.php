@@ -124,12 +124,10 @@ if (count($configuraciones) > 0) {
         $pdf->Cell(35 * $scalingFactor, 10, utf8_decode($producto['razon_social']), 1, 0, 'L');
         $pdf->Cell(20 * $scalingFactor, 10, utf8_decode($producto['tipo_comprobante']), 1, 0, 'L');
         $pdf->Cell(15 * $scalingFactor, 10, utf8_decode($producto['serie_comprobante'] . '-' . $producto["num_comprobante"]), 1, 0, 'C');
-        $pdf->Cell(20 * $scalingFactor, 10, 'S/ ' . number_format($producto['total_compra'], 2), 1, 0, 'R');
-        $pdf->Cell(20 * $scalingFactor, 10, 'S/ ' . number_format($producto['total_pago'], 2), 1, 0, 'R');
+        $pdf->Cell(20 * $scalingFactor, 10, 'USD ' . number_format($producto['total_compra'], 2), 1, 0, 'R');
+        $pdf->Cell(20 * $scalingFactor, 10, 'USD ' . number_format($producto['total_pago'], 2), 1, 0, 'R');
         $pdf->Cell(20 * $scalingFactor, 10, $estado, 1, 1, 'C'); // Salto de línea
     }
-
-
 
     // Mostrar el PDF
     $pdf->Output();

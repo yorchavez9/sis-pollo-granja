@@ -190,8 +190,8 @@ foreach ($respuesta_de as $index => $producto) {
     $pdf->Cell(20, 10, $producto['peso_tara'], $borde, 0, 'C');
     $pdf->Cell(15, 10, $producto['peso_merma'], $borde, 0, 'C');
     $pdf->Cell(20, 10, $producto['peso_neto'], $borde, 0, 'C');
-    $pdf->Cell(20, 10, 'S/ ' . number_format($producto['precio_compra'], 2), $borde, 0, 'C');
-    $pdf->Cell(25, 10, 'S/ ' . number_format($totalProducto, 2), $borde, 1, 'C');
+    $pdf->Cell(20, 10, 'USD ' . number_format($producto['precio_compra'], 2), $borde, 0, 'C');
+    $pdf->Cell(25, 10, 'USD ' . number_format($totalProducto, 2), $borde, 1, 'C');
 }
 
 // Cálculo del impuesto y el total
@@ -202,12 +202,12 @@ $totalConImpuesto = $totalCompra + $impuestoTotal;
 $pdf->Ln(5);
 $pdf->SetFont('Helvetica', 'B', 10);
 $pdf->Cell(150, 10, 'Subtotal:', 0, 0, 'R');
-$pdf->Cell(40, 10, 'S/ ' . number_format($totalCompra, 2), 0, 1, 'R');
+$pdf->Cell(40, 10, 'USD ' . number_format($totalCompra, 2), 0, 1, 'R');
 $pdf->Cell(150, 10, 'Impuestos (' . $impuesto . '%):', 0, 0, 'R');
-$pdf->Cell(40, 10, 'S/ ' . number_format($impuestoTotal, 2), 0, 1, 'R');
+$pdf->Cell(40, 10, 'USD ' . number_format($impuestoTotal, 2), 0, 1, 'R');
 // Total con borde superior e inferior
 $pdf->Cell(150, 10, 'Total:', 'TB', 0, 'R'); // Borde superior e inferior en la celda de "Total"
-$pdf->Cell(40, 10, 'S/ ' . number_format($totalConImpuesto, 2), 'TB', 1, 'R'); // Borde superior e inferior en la celda del total
+$pdf->Cell(40, 10, 'USD ' . number_format($totalConImpuesto, 2), 'TB', 1, 'R'); // Borde superior e inferior en la celda del total
 
 if (isset($_GET['accion']) && $_GET['accion'] === 'descargar') {
     // Descargar el PDF
