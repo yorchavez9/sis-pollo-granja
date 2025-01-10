@@ -194,15 +194,24 @@ $serieNumeroComprobante = ControladorSerieNumero::ctrMostrarSerieNumero($item, $
                                             <ul>
                                                 <li>
                                                     <p>Subtotal</p>
-                                                    <p class="price">S/ <span id="subtotal_venta">00.00</span></p>
+                                                    <p class="price">USD <span id="subtotal_venta">00.00</span></p>
                                                 </li>
                                                 <li>
                                                     <p>IGV (%)</p>
-                                                    <p class="price">S/ <span id="igv_venta_show">00.00</span></p>
+                                                    <p class="price">USD <span id="igv_venta_show">00.00</span></p>
                                                 </li>
                                                 <li class="total-value">
                                                     <p class="fw-bold">Total</p>
-                                                    <p class="price">S/ <span id="total_precio_venta">00.00</span></p>
+                                                    <p class="price">USD <span id="total_precio_venta">00.00</span></p>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <!-- SECCIÓN DE PRECIO DE VENTA EN VES -->
+                                        <div class="flex-container mb-2">
+                                            <ul>
+                                                <li class="total-value">
+                                                    <p class="fw-bold"></p>
+                                                    <p class="price">VES <span id="total_precio_venta_ves">00.00</span></p>
                                                 </li>
                                             </ul>
                                         </div>

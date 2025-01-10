@@ -1,3 +1,44 @@
+  /* =====================================
+    CONVERTIR DE DOLARES A 
+    ===================================== */
+    let currentRate = 0;
+
+    async function getExchangeRate(){
+      try {
+        const response = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
+        const data = await response.json();
+        return data.rates.VES;
+      } catch (error) {
+        console.error('Error obteniendo tasas', error);
+        try {
+          const response = await fetch('https://open.er-api.com/v6/latest/USD');
+          const data = await response.json();
+          return data.rates.VES;
+        } catch (error2) {
+          console.log("Error en API de respaldo:", error2);
+          return null;
+        }
+      }
+    }
+
+    async function updateRate() {
+      try {
+        const rate = await getExchangeRate();
+        if (rate) {
+          currentRate = rate; // Asigna la tasa de cambio al valor global
+          document.getElementById("error_moneda").textContent = "";
+        }
+      } catch (error) {
+      /*  console.error("Error al actualizar la tasa:", error); */
+      }
+    }
+
+    setInterval(updateRate, 60 * 60 * 1000);
+
+
+
+
+
 /*=============================================
  CALCULO DE IGV AUTOMATICAMENTE
  =============================================*/
@@ -185,7 +226,7 @@ function mostrarProductoVenta() {
                                 </a>
                             </td>
                             <td>${producto.nombre_categoria}</td>
-                            <td class="fw-bold">S/ ${
+                            <td class="fw-bold">USD ${
                               producto.precio_producto
                             }</td>
                             <td>${producto.nombre_producto}</td>
@@ -290,7 +331,7 @@ $("#tabla_add_producto_cotizacion").on(
                             <td><input type="number" class="form-control form-control-sm peso_neto_v" value="0.00" min="0" readonly step="0.01"></td>
                             <td><input type="number" class="form-control form-control-sm precio_venta" value="${respuesta.precio_producto}" min="0" step="0.01"></td>
                             <td class="text-end">
-                                <span style="font-weight: bold;">S/</span>
+                                <span style="font-weight: bold;">USD</span>
                                 <input type="text" class="form-control form-control-sm precio_sub_total_v" value="0.00" readonly style="width: 100px; display: inline-block; text-align: right; font-weight: bold;">
                             </td>
                             </tr>`;
@@ -387,7 +428,8 @@ $("#tabla_add_producto_cotizacion").on(
 /*=============================================
 CALCULAR EL TOTAL DE LA VENTA
 =============================================*/
-function calcularTotal(igv_venta) {
+async function calcularTotal(igv_venta) {
+  await updateRate();
   let subtotalTotal = 0;
 
   $("#detalle_cotizacion_producto tr").each(function () {
@@ -403,9 +445,11 @@ function calcularTotal(igv_venta) {
   let igv = subtotalTotal * (igv_venta / 100);
   let total = subtotalTotal + igv;
   total = isNaN(total) ? 0 : total;
+  var precioBolivares = currentRate > 0 ? (total * currentRate).toFixed(2) : "N/A";
   $("#subtotal_venta").text(formateoPrecio(subtotalTotal.toFixed(2)));
   $("#igv_venta_show").text(formateoPrecio(igv.toFixed(2)));
   $("#total_precio_venta").text(formateoPrecio(total.toFixed(2)));
+  $("#total_precio_venta_ves").text(formateoPrecio(precioBolivares));
 }
 
 /*=============================================

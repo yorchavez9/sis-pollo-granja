@@ -1,5 +1,45 @@
 $(document).ready(function () {
 
+
+  /* =====================================
+    CONVERTIR DE DOLARES A 
+    ===================================== */
+    let currentRate = 0;
+
+    async function getExchangeRate(){
+      try {
+        const response = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
+        const data = await response.json();
+        return data.rates.VES;
+      } catch (error) {
+        console.error('Error obteniendo tasas', error);
+        try {
+          const response = await fetch('https://open.er-api.com/v6/latest/USD');
+          const data = await response.json();
+          return data.rates.VES;
+        } catch (error2) {
+          console.log("Error en API de respaldo:", error2);
+          return null;
+        }
+      }
+    }
+
+    async function updateRate() {
+      try {
+        const rate = await getExchangeRate();
+        if (rate) {
+          currentRate = rate; // Asigna la tasa de cambio al valor global
+          document.getElementById("error_moneda").textContent = "";
+        }
+      } catch (error) {
+      /*  console.error("Error al actualizar la tasa:", error); */
+      }
+    }
+
+    setInterval(updateRate, 60 * 60 * 1000);
+
+
+
   // SELECCIONAR LA FECHA AUTOMATICAMENTE
   const setDateToToday = (inputId) => {
     const today = new Date();
@@ -249,7 +289,8 @@ $(document).ready(function () {
   }
 
   //CALCULAR EL TOTAL DE CADA DETALLE PRODUCTO
-  function calcularTotal(impuesto) {
+  async function calcularTotal(impuesto) {
+    await updateRate();
     let subtotalTotal = 0;
     $("#detalle_egreso_producto tr").each(function () {
       let precio_sub_total = $(this).find(".precio_sub_total").val().replace(/,/g, '');
@@ -260,9 +301,13 @@ $(document).ready(function () {
     let igv = subtotalTotal * (impuesto / 100);
     let total = subtotalTotal + igv;
     total = isNaN(total) ? 0 : total;
+    var precioBolivares = currentRate > 0 ? (total * currentRate).toFixed(2) : "N/A";
+
     $("#subtotal_egreso").text(formateoPrecio(subtotalTotal.toFixed(2)));
     $("#igv_egreso").text(formateoPrecio(igv.toFixed(2)));
     $("#total_precio_egreso").text(formateoPrecio(total.toFixed(2)));
+    $("#total_precio_egreso_ves").text(formateoPrecio(precioBolivares));
+    
   }
 
 
@@ -318,21 +363,6 @@ $(document).ready(function () {
       $("#error_compra_comprobante").html("").removeClass("text-danger");
     }
 
-    // Si falta la serie
-    if (!serie_comprobante) {
-      $("#error_compra_serie_comprobante").html("Por favor, ingrese la serie").addClass("text-danger");
-      isValid = false;
-    } else {
-      $("#error_compra_serie_comprobante").html("").removeClass("text-danger");
-    }
-
-    // Si falta la serie
-    if (!num_comprobante) {
-      $("#error_compra_cnum_omprobante").html("Por favor, ingrese el número").addClass("text-danger");
-      isValid = false;
-    } else {
-      $("#error_compra_cnum_omprobante").html("").removeClass("text-danger");
-    }
 
     // Capturar los productos de la compra
     const valoresProductos = [];

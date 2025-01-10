@@ -1,12 +1,50 @@
 $(document).ready(function () {
 
+  /* =====================================
+  CONVERTIR DE DOLARES A 
+  ===================================== */
+  let currentRate = 0;
+
+  async function getExchangeRate(){
+    try {
+      const response = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
+      const data = await response.json();
+      return data.rates.VES;
+    } catch (error) {
+      console.error('Error obteniendo tasas', error);
+      try {
+        const response = await fetch('https://open.er-api.com/v6/latest/USD');
+        const data = await response.json();
+        return data.rates.VES;
+      } catch (error2) {
+        console.log("Error en API de respaldo:", error2);
+        return null;
+      }
+    }
+  }
+
+  async function updateRate() {
+    try {
+      const rate = await getExchangeRate();
+      if (rate) {
+        currentRate = rate; // Asigna la tasa de cambio al valor global
+        document.getElementById("error_moneda_egreso").textContent = "";
+      }
+    } catch (error) {
+     /*  console.error("Error al actualizar la tasa:", error); */
+    }
+  }
+
+  setInterval(updateRate, 60 * 60 * 1000);
+
   //FORMATEAR LOS PRECIOS 
   function formateoPrecio(numero) {
     return numero.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
 
   //MOSTRANDO EN LA TABLA LOS EGRESO O CAMPRAS 
-  function mostrarEgresos() {
+  async function mostrarEgresos() {
+    await updateRate();
     $.ajax({
       url: "ajax/Lista.compra.ajax.php",
       type: "GET",
@@ -23,6 +61,8 @@ $(document).ready(function () {
             let fechaFormateada = partesFecha[2] + "/" + partesFecha[1] + "/" + partesFecha[0];
             let totalCompra = formateoPrecio(egreso.total_compra);
             let formateadoPagoRestante = formateoPrecio(restantePago);
+            var precioBolivares = currentRate > 0 ? (totalCompra * currentRate).toFixed(2) : "N/A";
+            var precioBolivaresRes = currentRate > 0 ? (formateadoPagoRestante * currentRate).toFixed(2) : "N/A";
             var fila = `
                         <tr>
                             <td>${index + 1}</td>
@@ -31,8 +71,15 @@ $(document).ready(function () {
                             <td>${egreso.serie_comprobante}</td>
                             <td>${egreso.num_comprobante}</td>
                             <td>${egreso.tipo_pago}</td>
-                            <td>S/ ${totalCompra}</td>
-                            <td>S/ ${formateadoPagoRestante}</td>
+                            <td>
+                              <div>USD ${totalCompra}</div>
+                              <div>VES ${precioBolivares}</div>
+                              <span id="error_moneda_egreso"></span>
+                            </td>
+                            <td>
+                            <div>USD ${formateadoPagoRestante}</div>
+                            <div>VES ${precioBolivaresRes}</div>
+                            </td>
                             <td class="text-center">
                                 ${restantePago == '0.00' ?
                 '<button class="btn btn-sm rounded" style="background: #28C76F; color:white;">Completado</button>' :
