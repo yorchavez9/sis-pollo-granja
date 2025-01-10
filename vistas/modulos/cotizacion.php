@@ -216,7 +216,7 @@ $serieNumeroComprobante = ControladorSerieNumero::ctrMostrarSerieNumero($item, $
                                             <ul>
                                                 <li class="total-value">
                                                     <p class="fw-bold"></p>
-                                                    <p class="price">USD <span id="total_precio_venta_ves">00.00</span></p>
+                                                    <p class="price">VES <span id="total_precio_venta_ves">00.00</span></p>
                                                 </li>
                                             </ul>
                                         </div>
@@ -276,7 +276,7 @@ $serieNumeroComprobante = ControladorSerieNumero::ctrMostrarSerieNumero($item, $
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Crear nuevo cliente</h5>
+                <h5 class="modal-title">Lista de productos</h5>
                 <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body">

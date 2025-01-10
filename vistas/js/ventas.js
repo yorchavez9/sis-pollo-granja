@@ -203,7 +203,8 @@ setDateToToday('fecha_venta');
 MOSTRANDO TAABLE DE PRODUCTOS PARA VENTA
 =============================================*/
 
-function mostrarProductoVenta() {
+async function mostrarProductoVenta() {
+  await updateRate();
   $.ajax({
     url: "ajax/Producto.ajax.php",
     type: "GET",
@@ -219,7 +220,7 @@ function mostrarProductoVenta() {
         } else {
           producto.imagen_producto = "vistas/img/productos/default.png"; // Ruta a la imagen predeterminada
         }
-
+        let precioBolivares = currentRate > 0 ? (producto.precio_producto * currentRate).toFixed(2) : "N/A";
         var fila = `
           <tr>
               <td class="text-center">
@@ -228,7 +229,10 @@ function mostrarProductoVenta() {
                   </a>
               </td>
               <td>${producto.nombre_categoria}</td>
-              <td class="fw-bold">USD ${producto.precio_producto}</td>
+              <td class="fw-bold">
+                <div>USD ${producto.precio_producto}</div>
+                <div>VES ${precioBolivares}</div>
+              </td>
               <td>${producto.nombre_producto}</td>
               <td class="text-center">
                   <button type="button" class="btn btn-sm" style="${getButtonStyles(producto.stock_producto)}">
