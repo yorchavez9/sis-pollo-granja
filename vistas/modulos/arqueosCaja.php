@@ -1,9 +1,11 @@
 <div class="page-wrapper">
     <div class="content">
         <div class="page-header">
-            <div class="page-title">
-                <h4>Arqueo caja</h4>
-                <h6>Administrar arqueo de caja</h6>
+            <div class="page-title d-flex align-items-center">
+                <h3 class="d-flex align-items-center" style="font-size: 1.5rem;">
+                    <img src="vistas/assets/img/icons/dollars.svg" width="40" alt="" class="me-2">
+                    Arqueo caja
+                </h3>
             </div>
             <div class="page-btn">
                 <a href="#" class="btn btn-added" data-bs-toggle="modal" data-bs-target="#modal_nuevo_arqueo"><img src="vistas/assets/img/icons/plus.svg" alt="img" class="me-2">Nuevo arqueo</a>
@@ -78,7 +80,7 @@
 
                     <!-- Campos ocultos -->
                     <input type="hidden" id="id_movimiento_arqueo_caja">
-                    <input type="hidden" id="id_usuario_arqueo_caja" value="<?php echo $_SESSION["id_usuario"]?>">
+                    <input type="hidden" id="id_usuario_arqueo_caja" value="<?php echo $_SESSION["id_usuario"] ?>">
 
                     <!-- Selección de la fecha -->
                     <div class="form-group mb-4">
@@ -151,9 +153,9 @@
                 <div class="modal-body">
 
                     <!-- Campos ocultos -->
-                     <input type="hidden" id="edit_id_arqueo_caja">
+                    <input type="hidden" id="edit_id_arqueo_caja">
                     <input type="hidden" id="edit_id_movimiento_arqueo_caja">
-                    <input type="hidden" id="edit_id_usuario_arqueo_caja" value="<?php echo $_SESSION["id_usuario"]?>">
+                    <input type="hidden" id="edit_id_usuario_arqueo_caja" value="<?php echo $_SESSION["id_usuario"] ?>">
 
                     <!-- Selección de la fecha -->
                     <div class="form-group mb-4">
@@ -203,7 +205,9 @@
                 <!-- Botones -->
                 <div class="text-end mx-4 mb-2">
                     <button type="button" id="btn_update_arqueo_caja" class="btn btn-primary mx-2">
-                        <i class="fa fa-save me-1"></i> Actualizar
+                        <div class="d-flex align-items-center">
+                            <img src="vistas/assets/img/icons/update.svg" alt="img" width="20" class="me-2"> Actualizar
+                        </div>
                     </button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                 </div>
