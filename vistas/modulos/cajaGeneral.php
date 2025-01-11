@@ -1,9 +1,13 @@
 <div class="page-wrapper">
     <div class="content">
         <div class="page-header">
-            <div class="page-title">
-                <h3 style="font-size: 1.5rem">Caja del sistema</h3>
+            <div class="page-title d-flex align-items-center">
+                <h3 class="d-flex align-items-center" style="font-size: 1.5rem;">
+                    <img src="vistas/assets/img/icons/caja-icon.svg" width="40" alt="" class="me-2">
+                    Caja 
+                </h3>
             </div>
+
             <div class="page-btn d-flex">
                 <a href="#" style="border-radius: 10px; background: #1B2850; color: white" class="btn me-2">
                     <i class="fa fa-clock me-2"></i> Cerrar caja automáticamente a las 12pm
@@ -45,7 +49,7 @@
                         <span><img src="vistas/assets/img/icons/cash-money-svgrepo-com.svg" width="30" alt="img"></span>
                     </div>
                     <div class="dash-widgetcontent">
-                        <h5 >USD <span class="counters" id="total_saldo_inicial_caja">0.00</span></h5>
+                        <h5>USD <span class="counters" id="total_saldo_inicial_caja">0.00</span></h5>
                         <h6>Saldo Inicial</h6>
                     </div>
                 </div>

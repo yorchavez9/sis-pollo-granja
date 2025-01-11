@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-
+<?php date_default_timezone_set('America/Lima'); ?>
 <head>
     <meta charset="utf-8">
     <meta charset="utf-8">
@@ -29,7 +29,9 @@
         <link rel="shortcut icon" type="image/x-icon" href="vistas/img/sistema/favicon.png">
     <?php
     }
+    date_default_timezone_set('America/Lima');
     ?>
+
 
     <link rel="stylesheet" href="vistas/assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="vistas/assets/plugins/select2/css/select2.min.css">
@@ -51,6 +53,7 @@
 </head>
 
 <body>
+    <?php date_default_timezone_set('America/Lima');?>
 
     <div id="global-loader">
         <div class="whirly-loader"> </div>

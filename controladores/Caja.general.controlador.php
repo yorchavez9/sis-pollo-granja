@@ -44,15 +44,29 @@ class ControladorCajaGeneral
 	=============================================*/
 	static public function ctrEditarCajaGeneral()
 	{
-        $tabla = "categorias";
+        $tabla = "movimientos_caja";
         $datos = array(
-            "id_categoria" => $_POST["edit_id_categoria"],
-            "nombre_categoria" => $_POST["edit_nombre_categoria"],
-            "descripcion" => $_POST["edit_descripcion_categoria"]
+            "id_movimiento" => $_POST["id_movimiento_update"],
+            "id_usuario" => $_POST["id_usuario_update"],
+            "tipo_movimiento" => $_POST["tipo_movimiento_update"],
+            "egresos" => $_POST["egresos_update"],
+            "ingresos" => $_POST["ingresos_update"],
+            "monto_inicial" => $_POST["monto_inicial_update"],
+            "monto_final" => $_POST["monto_final_update"],
+            "fecha_cierre" => $_POST["fecha_cierre_update"],
+            "estado" => $_POST["estado_update"]
         );
         $respuesta = ModeloCajaGeneral::mdlEditarCajaGeneral($tabla, $datos);
-        if ($respuesta == "ok") {
-            echo json_encode("ok");
+        if ($respuesta["status"] == true) {
+            echo json_encode([
+                "status" => $respuesta["status"],
+                "message" => $respuesta["message"]
+            ]);
+        }else{
+            echo json_encode([
+                "status" => $respuesta["status"],
+                "message" => $respuesta["message"]
+            ]);
         }
 	}
 

@@ -74,17 +74,35 @@ class ModeloCajaGeneral
 	=============================================*/
 	static public function mdlEditarCajaGeneral($tabla, $datos){
 		$stmt = Conexion::conectar()->prepare("UPDATE $tabla SET 
-																nombre_categoria = :nombre_categoria, 
-																descripcion = :descripcion
-																WHERE id_categoria = :id_categoria");
+																id_usuario  = :id_usuario, 
+																tipo_movimiento  = :tipo_movimiento, 
+																egresos = :egresos,
+																ingresos = :ingresos,
+																monto_inicial = :monto_inicial,
+																monto_final = :monto_final,
+																fecha_cierre = :fecha_cierre,
+																estado = :estado
+																WHERE id_movimiento = :id_movimiento");
 
-		$stmt -> bindParam(":nombre_categoria", $datos["nombre_categoria"], PDO::PARAM_STR);
-		$stmt -> bindParam(":descripcion", $datos["descripcion"], PDO::PARAM_STR);
-		$stmt -> bindParam(":id_categoria", $datos["id_categoria"], PDO::PARAM_INT);
+		$stmt -> bindParam(":id_usuario", $datos["id_usuario"], PDO::PARAM_INT);
+		$stmt -> bindParam(":tipo_movimiento", $datos["tipo_movimiento"], PDO::PARAM_STR);
+		$stmt -> bindParam(":egresos", $datos["egresos"], PDO::PARAM_STR);
+		$stmt -> bindParam(":ingresos", $datos["ingresos"], PDO::PARAM_STR);
+		$stmt -> bindParam(":monto_inicial", $datos["monto_inicial"], PDO::PARAM_STR);
+		$stmt -> bindParam(":monto_final", $datos["monto_final"], PDO::PARAM_STR);
+		$stmt -> bindParam(":fecha_cierre", $datos["fecha_cierre"], PDO::PARAM_STR);
+		$stmt -> bindParam(":estado", $datos["estado"], PDO::PARAM_STR);
+		$stmt -> bindParam(":id_movimiento", $datos["id_movimiento"], PDO::PARAM_INT);
 		if($stmt -> execute()){
-			return "ok";
+			return [
+                "status" => true,
+                "message" => "La caja se cerró exitosamente"
+            ];
 		}else{
-			return "error";	
+			return [
+                "status" => false,
+                "message" => "Error al cerrar la caja"
+            ];
 		}
 	}
 

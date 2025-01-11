@@ -35,9 +35,9 @@ elseif (isset($_POST["id_usuario_caja"])) {
 }
 
 //ACTUALIZAR CAJA GENERAL
-elseif(isset($_POST["edit_id_categoria"])){
-    $editCategoria = new ControladorCajaGeneral();
-    $editCategoria->ctrEditarCajaGeneral();
+elseif(isset($_POST["id_movimiento_update"])){
+    $cierreCaja = new ControladorCajaGeneral();
+    $cierreCaja->ctrEditarCajaGeneral();
 }
 
 //ELIMINAR CAJA GENERAL
