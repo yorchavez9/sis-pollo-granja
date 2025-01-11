@@ -93,7 +93,7 @@ if (isset($_SESSION["iniciarSesion"]) && $_SESSION["iniciarSesion"] == "ok") {
 
             $_GET["ruta"] == "cajaGeneral" ||
             $_GET["ruta"] == "arqueosCaja" ||
-            $_GET["ruta"] == "gatosIngresos" ||
+            $_GET["ruta"] == "gastosIngresos" ||
             $_GET["ruta"] == "ingresoDiario" ||
             $_GET["ruta"] == "reportesCaja" ||
 

@@ -2,7 +2,7 @@
     <div class="content">
         <div class="page-header">
             <div class="page-title">
-                <h4>Gatos e Ingresos</h4>
+                <h4>Gatos e Ingresos extras</h4>
                 <h6>Administrar gastos e ingresos</h6>
             </div>
             <div class="page-btn d-flex justify-content-start">

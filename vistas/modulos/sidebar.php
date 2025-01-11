@@ -113,7 +113,7 @@ $permisosMenu = [
                     <ul>
                         <li><a href="cajaGeneral">Apertura & Cierre</a></li>
                         <li><a href="arqueosCaja">Arqueo de caja</a></li>
-                        <li><a href="gatosIngresos">Gastos/Ingresos</a></li>
+                        <li><a href="gastosIngresos">Gastos/Ingresos extras</a></li>
                         <li><a href="reportesCaja">Reportes Gastos/Ingresos</a></li>
                         <li><a href="reporteVentas">Reportes de ventas</a></li>
                         <li><a href="reporteCompras">Reportes de compras</a></li>

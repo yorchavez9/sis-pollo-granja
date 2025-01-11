@@ -204,7 +204,11 @@ $(document).ready(function () {
                     <tr>
                         <td>${index + 1}</td>
                         <td>${data.fecha}</td>
-                        <td>${data.tipo}</td>
+                        <td>
+                          ${data.tipo === 'ingreso' 
+                            ? `<span class="p-1 rounded" style="background: #28C76F; color: white">${data.tipo}</span>` 
+                            : `<span class="p-1 rounded" style="background: #F5215C; color: white">${data.tipo}</span>`}
+                        </td>
                         <td>${data.concepto}</td>
                         <td>
                             <div>USD ${data.monto}</div>
