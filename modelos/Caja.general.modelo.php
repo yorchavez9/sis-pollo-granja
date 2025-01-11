@@ -107,29 +107,85 @@ class ModeloCajaGeneral
 	}
 
 	/*=============================================
-	ACTUALIZAR CAJA
+	EDITAR CAJA
 	=============================================*/
-	static public function mdlActualizarCajaGeneral($tabla, $item1, $valor1, $item2, $valor2){
-		$stmt = Conexion::conectar()->prepare("UPDATE $tabla SET $item1 = :$item1 WHERE $item2 = :$item2");
-		$stmt -> bindParam(":".$item1, $valor1, PDO::PARAM_STR);
-		$stmt -> bindParam(":".$item2, $valor2, PDO::PARAM_STR);
-		if($stmt -> execute()){
-			return "ok";
-		}else{
-			return "error";	
+	static public function mdlActualizarMontos($tabla, $datos){
+		/* Sumar a los campos egresos e ingresos */
+		$stmt = Conexion::conectar()->prepare("UPDATE $tabla SET 
+													egresos = egresos + :egresos, 
+													ingresos = ingresos + :ingresos 
+												WHERE id_movimiento = :id_movimiento");
+	
+		$stmt->bindParam(":egresos", $datos["egresos"], PDO::PARAM_STR);
+		$stmt->bindParam(":ingresos", $datos["ingresos"], PDO::PARAM_STR);
+		$stmt->bindParam(":id_movimiento", $datos["id_movimiento"], PDO::PARAM_INT);
+	
+		if ($stmt->execute()) {
+			return [
+				"status" => true,
+				"message" => "Los montos se actualizaron exitosamente"
+			];
+		} else {
+			return [
+				"status" => false,
+				"message" => "Error al actualizar los montos"
+			];
 		}
 	}
-
+	
 	/*=============================================
-	BORRAR CAJA
+	EDITAR CAJA ACTUALIZANDO
 	=============================================*/
-	static public function mdlBorrarCajaGeneral($tabla, $datos){
-		$stmt = Conexion::conectar()->prepare("DELETE FROM $tabla WHERE id_categoria = :id_categoria");
-		$stmt -> bindParam(":id_categoria", $datos, PDO::PARAM_INT);
-		if($stmt -> execute()){
-			return "ok";
-		}else{
-			return "error";	
+	static public function mdlActualizarMontosEdit($tabla, $datos) {
+		// Dependiendo de la acción, realiza suma o resta en los campos de ingresos o egresos
+		$operacionEgresos = ($datos["accion"] == "suma") ? "+" : "-";
+		$operacionIngresos = ($datos["accion"] == "suma") ? "+" : "-";
+	
+		$stmt = Conexion::conectar()->prepare("UPDATE $tabla SET 
+												egresos = egresos $operacionEgresos :egresos, 
+												ingresos = ingresos $operacionIngresos :ingresos 
+											  WHERE id_movimiento = :id_movimiento");
+	
+		$stmt->bindParam(":egresos", $datos["egresos"], PDO::PARAM_STR);
+		$stmt->bindParam(":ingresos", $datos["ingresos"], PDO::PARAM_STR);
+		$stmt->bindParam(":id_movimiento", $datos["id_movimiento"], PDO::PARAM_INT);
+	
+		if ($stmt->execute()) {
+			return [
+				"status" => true,
+				"message" => "Los montos se actualizaron exitosamente"
+			];
+		} else {
+			return [
+				"status" => false,
+				"message" => "Error al actualizar los montos"
+			];
 		}
 	}
+	
+	
+	/*=============================================
+	ELIMINANDO EL EGRESO O INGRESO (ACTUALIZACION)
+	=============================================*/
+	static public function mdlActualizarMontosDelete($tabla, $datos) {
+		$stmt = Conexion::conectar()->prepare("UPDATE $tabla SET 
+													egresos = egresos - :egresos, 
+													ingresos = ingresos - :ingresos 
+												WHERE id_movimiento = :id_movimiento");
+	
+		$stmt->bindParam(":egresos", $datos["egresos"], PDO::PARAM_STR);
+		$stmt->bindParam(":ingresos", $datos["ingresos"], PDO::PARAM_STR);
+		$stmt->bindParam(":id_movimiento", $datos["id_movimiento"], PDO::PARAM_INT);
+	
+		if ($stmt->execute()) {
+			return [
+				"status" => true
+			];
+		} else {
+			return [
+				"status" => false
+			];
+		}
+	}
+	
 }
