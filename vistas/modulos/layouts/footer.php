@@ -36,6 +36,7 @@
 <script src="vistas/js/cotizacion.js" type="module"></script>
 <script src="vistas/js/lista-cotizacion.js" type="module"></script>
 <script src="vistas/js/cajaGeneral.js" type="module"></script>
+<script src="vistas/js/arqueo-caja.js" type="module"></script>
 
 
 <script src="vistas/js/trabajador.js" type="module"></script>

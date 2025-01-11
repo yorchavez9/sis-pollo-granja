@@ -29,6 +29,7 @@ require_once "controladores/Configuraracion.sistema.controlador.php";
 require_once "controladores/Correo.config.controlador.php";
 require_once "controladores/Caja.general.controlador.php";
 require_once "controladores/Gastos.ingreso.controlador.php";
+require_once "controladores/Arqueo.caja.controlador.php";
 
 /* MODELOS */
 
@@ -57,6 +58,7 @@ require_once "modelos/Configuracion.sistema.modelo.php";
 require_once "modelos/Correo.config.modelo.php";
 require_once "modelos/Caja.general.modelo.php";
 require_once "modelos/Gastos.ingreso.modelo.php";
+require_once "modelos/Arqueo.caja.modelo.php";
 
 
 $plantilla = new ControladorPlantilla();
