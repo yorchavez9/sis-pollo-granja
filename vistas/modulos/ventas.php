@@ -55,8 +55,11 @@ $serieNumeroComprobante = ControladorSerieNumero::ctrMostrarSerieNumero($item, $
         <div class="card">
             <div class="card-body">
                 <div class="page-header">
-                    <div class="">
-                        <h4 class="h2" style="font-size: 25px">Crear venta <i class="fas fa-shopping-cart" style="color: #5645ED"></i></h4>
+                    <div class="page-title d-flex align-items-center">
+                        <h3 class="d-flex align-items-center" style="font-size: 1.3rem;">
+                            <img src="vistas/assets/img/icons/shopping-cart.svg" width="50" alt="" class="me-2">
+                            Crear venta
+                        </h3>
                     </div>
                     <div class="page-btn">
                         <a href="#" id="ver_ventas" class="btn btn-added"><i class="fas fa-eye me-2"></i>Ver ventas</a>

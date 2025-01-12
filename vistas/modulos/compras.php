@@ -49,8 +49,11 @@
         <div class="card">
             <div class="card-body">
                 <div class="page-header">
-                    <div class="">
-                        <h4 class="h2" style="font-size: 25px">Crear Compra <i class="fas fa-shopping-cart" style="color: #5645ED"></i></h4>
+                    <div class="page-title d-flex align-items-center">
+                        <h3 class="d-flex align-items-center" style="font-size: 1.3rem;">
+                            <img src="vistas/assets/img/icons/shopping-base.svg" width="50" alt="" class="me-2">
+                            Compras
+                        </h3>
                     </div>
                     <div class="page-btn">
                         <a href="listaCompras" class="btn btn-added"><i class="fas fa-eye me-2"></i>Ver compras</a>
