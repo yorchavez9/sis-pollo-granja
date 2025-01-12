@@ -21,6 +21,49 @@ class ModeloGastoIngreso
 		}
 	}
 
+
+		/*=============================================
+	MOSTRAR REPORTE DE GASTOS INGRESOS EXTRAS
+	=============================================*/
+	public static function mdlReporteGastosIngresos($tabla, $id_usuario, $tipo, $fecha_desde, $fecha_hasta)
+	{
+		// Crear la consulta base
+		$query = "SELECT *  FROM $tabla WHERE 1";  
+
+		// Arreglo de parámetros para la consulta
+		$params = [];
+
+		// Filtro por categoría
+		if ($id_usuario !== null && $id_usuario !== '') {
+			$query .= " AND id_usuario = ?";
+			$params[] = $id_usuario;
+		}
+
+		// Filtro por estado
+		if ($tipo !== null && $tipo !== ''
+		) {
+			$query .= " AND tipo = ?";
+			$params[] = $tipo;
+		}
+
+		// Filtro por rango de fecha de vencimiento
+		if ($fecha_desde !== null && $fecha_desde !== '' && $fecha_hasta !== null && $fecha_hasta !== '') {
+			$query .= " AND fecha BETWEEN ? AND ?";
+			$params[] = $fecha_desde;
+			$params[] = $fecha_hasta;
+		}
+
+		// Ordenar por fecha de producto (DESC)
+		$query .= " ORDER BY fecha DESC";
+
+		// Preparar y ejecutar la consulta
+		$stmt = Conexion::conectar()->prepare($query);
+		$stmt->execute($params);
+
+		// Retornar los resultados
+		return $stmt->fetchAll();
+	}
+
 	/*=============================================
 	REGISTRAR GASTOS INGRESOS
 	=============================================*/

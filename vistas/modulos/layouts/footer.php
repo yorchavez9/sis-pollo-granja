@@ -29,6 +29,7 @@
 <script src="vistas/js/lista-egreso.js" type="module"></script>
 <script src="vistas/js/gastos-ingresos.js" type="module"></script>
 
+
 <script src="vistas/js/ventas.js" type="module"></script>
 <script src="vistas/js/lista-ventas.js" type="module"></script>
 <script src="vistas/js/ver-venta.js" type="module"></script>
@@ -54,7 +55,7 @@
 <script src="vistas/js/reporte-asistencia.js" type="module"></script>
 <script src="vistas/js/config-sistema.js" type="module"></script>
 <script src="vistas/js/config-correo.js" type="module"></script>
-
+<script src="vistas/js/reporte-ingreso-egreso.js" type="module"></script>
 </body>
 
 </html>

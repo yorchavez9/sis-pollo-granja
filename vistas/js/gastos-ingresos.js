@@ -186,7 +186,7 @@ $(document).ready(function () {
   });
 
   /* ===========================
-      MOSTRANDO CATEGORIA
+      MOSTRANDO INGRSOS O EGRESOS
       =========================== */
   async function mostrarGatosIngresos() {
     await updateRate();

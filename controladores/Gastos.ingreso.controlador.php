@@ -63,6 +63,38 @@ class ControladorGastoIngreso
         return $respuesta;
     }
 
+    	/*=============================================
+    MOSTRAR REPORTE DE PRODUCTOS
+    =============================================*/
+
+	public static function ctrReporteGastosIngresos()
+	{
+		$tabla = "gasto_ingreso";
+		$id_usuario = isset($_POST['id_usuario_reporte']) ? $_POST['id_usuario_reporte'] : null;
+		$tipo = isset($_POST['tipo_reporte']) ? $_POST['tipo_reporte'] : null;
+		$fecha_desde = isset($_POST['fecha_desde_reporte']) ? $_POST['fecha_desde_reporte'] : null;
+		$fecha_hasta = isset($_POST['fecha_hasta_reporte']) ? $_POST['fecha_hasta_reporte'] : null;
+
+		$respuesta = ModeloGastoIngreso::mdlReporteGastosIngresos($tabla, $id_usuario, $tipo, $fecha_desde, $fecha_hasta);
+		return $respuesta;
+	}
+
+    	/*=============================================
+    MOSTRAR REPORTE DE PRODUCTOS
+    =============================================*/
+
+	public static function ctrReporteGastosIngresosPDF()
+	{
+		$tabla = "gasto_ingreso";
+		$id_usuario = isset($_GET['id_usuario_reporte']) ? $_GET['id_usuario_reporte'] : null;
+		$tipo = isset($_GET['tipo_reporte']) ? $_GET['tipo_reporte'] : null;
+		$fecha_desde = isset($_GET['fecha_desde_reporte']) ? $_GET['fecha_desde_reporte'] : null;
+		$fecha_hasta = isset($_GET['fecha_hasta_reporte']) ? $_GET['fecha_hasta_reporte'] : null;
+
+		$respuesta = ModeloGastoIngreso::mdlReporteGastosIngresos($tabla, $id_usuario, $tipo, $fecha_desde, $fecha_hasta);
+		return $respuesta;
+	}
+
     /*=============================================
 	EDITAR GASTO INGRESO
 	=============================================*/
