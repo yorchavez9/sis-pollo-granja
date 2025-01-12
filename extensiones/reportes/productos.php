@@ -111,11 +111,11 @@ if (count($configuraciones) > 0) {
 
     // Contenido de la tabla
     $pdf->SetFont('Arial', '', 10);
-    foreach ($productos as $producto) {
+    foreach ($productos as $key => $producto) {
         // Convertir el estado en texto legible (Activo / Inactivo)
         $estado = ($producto['estado_producto'] == 1) ? 'Activo' : 'Inactivo';
 
-        $pdf->Cell(10 * $scalingFactor, 10, $producto['id_producto'], 1, 0, 'C');
+        $pdf->Cell(10 * $scalingFactor, 10, $key +1, 1, 0, 'C');
         $pdf->Cell(35 * $scalingFactor, 10, utf8_decode($producto['nombre_categoria']), 1, 0, 'L');
         $pdf->Cell(50 * $scalingFactor, 10, utf8_decode($producto['nombre_producto']), 1, 0, 'L');
         $pdf->Cell(25 * $scalingFactor, 10, 'USD '.number_format($producto['precio_producto'], 2), 1, 0, 'C'); // Formato de precio

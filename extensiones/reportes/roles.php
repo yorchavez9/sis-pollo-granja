@@ -76,14 +76,14 @@ if (count($configuraciones) > 0) {
 
     // Contenido de la tabla
     $pdf->SetFont('Arial', '', 10);
-    foreach ($roles as $rol) {
+    foreach ($roles as $key => $rol) {
         // Verificamos si hay suficiente espacio en la página para esta fila
         if ($pdf->GetY() > 250) {
             $pdf->AddPage(); // Si no hay suficiente espacio, agregamos una nueva página
         }
 
         // Dibujamos la celda de ID
-        $pdf->Cell(20, 10, $rol['id_rol'], 1, 0, 'C');
+        $pdf->Cell(20, 10, $key + 1, 1, 0, 'C');
         // Dibujamos la celda de Nombre
         $pdf->Cell(50, 10, utf8_decode($rol['nombre_rol']), 1, 0, 'L');
 

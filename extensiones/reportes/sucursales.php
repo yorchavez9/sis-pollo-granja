@@ -78,8 +78,8 @@ if (count($configuraciones) > 0) {
 
     // Contenido de la tabla
     $pdf->SetFont('Arial', '', 10);
-    foreach ($sucursales as $sucursal) {
-        $pdf->Cell(20, 10, $sucursal['id_sucursal'], 1, 0, 'C');
+    foreach ($sucursales as $key => $sucursal) {
+        $pdf->Cell(20, 10, $key + 1, 1, 0, 'C');
         $pdf->Cell(50, 10, utf8_decode($sucursal['nombre_sucursal']), 1, 0, 'L');
         $pdf->Cell(70, 10, utf8_decode($sucursal['direccion']), 1, 0, 'L');
         $pdf->Cell(30, 10, $sucursal['telefono'], 1, 0, 'C');

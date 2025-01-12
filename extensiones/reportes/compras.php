@@ -114,11 +114,11 @@ if (count($configuraciones) > 0) {
 
     // Contenido de la tabla
     $pdf->SetFont('Arial', '', 10);
-    foreach ($compras as $producto) {
+    foreach ($compras as $key => $producto) {
         $estado = ($producto['estado_pago'] == 'completado') ? 'Completado' : 'Pendiente';
 
         // Ajuste del ancho dinámico según el factor de escala
-        $pdf->Cell(8 * $scalingFactor, 10, $producto['id_egreso'], 1, 0, 'C');
+        $pdf->Cell(8 * $scalingFactor, 10, $key + 1, 1, 0, 'C');
         $pdf->Cell(15 * $scalingFactor, 10, $producto['fecha_egre'], 1, 0, 'C');
         $pdf->Cell(45 * $scalingFactor, 10, utf8_decode($producto['nombre_usuario']), 1, 0, 'L');
         $pdf->Cell(35 * $scalingFactor, 10, utf8_decode($producto['razon_social']), 1, 0, 'L');

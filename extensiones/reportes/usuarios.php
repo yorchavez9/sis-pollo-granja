@@ -98,8 +98,8 @@ if (count($configuraciones) > 0) {
 
     // Contenido de la tabla
     $pdf->SetFont('Arial', '', 10);
-    foreach ($usuarios as $usuario) {
-        $pdf->Cell(8 * $scalingFactor, 10, $usuario['id_usuario'], 1, 0, 'C');
+    foreach ($usuarios as $key => $usuario) {
+        $pdf->Cell(8 * $scalingFactor, 10, $key+1, 1, 0, 'C');
         $pdf->Cell(30 * $scalingFactor, 10, utf8_decode($usuario['nombre_sucursal']), 1, 0, 'L');
         $pdf->Cell(48 * $scalingFactor, 10, utf8_decode($usuario['nombre_usuario']), 1, 0, 'L');
         $pdf->Cell(20 * $scalingFactor, 10, $usuario['telefono'], 1, 0, 'C');

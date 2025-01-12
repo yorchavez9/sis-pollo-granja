@@ -98,8 +98,8 @@ if (count($configuraciones) > 0) {
 
     // Contenido de la tabla
     $pdf->SetFont('Arial', '', 10);
-    foreach ($proveedores as $proveedor) {
-        $pdf->Cell(8 * $scalingFactor, 10, $proveedor['id_persona'], 1, 0, 'C');
+    foreach ($proveedores as $key => $proveedor) {
+        $pdf->Cell(8 * $scalingFactor, 10, $key + 1, 1, 0, 'C');
         $pdf->Cell(100 * $scalingFactor, 10, utf8_decode($proveedor['razon_social']), 1, 0, 'L');
         $pdf->Cell(30 * $scalingFactor, 10, $proveedor['direccion'], 1, 0, 'C');
         $pdf->Cell(40 * $scalingFactor, 10, $proveedor['numero_documento'], 1, 0, 'C');
