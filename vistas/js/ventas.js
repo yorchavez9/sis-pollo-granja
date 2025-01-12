@@ -1,6 +1,43 @@
 
 import { mostrarVentas } from "./lista-ventas.js";
 
+function mostrarIdMovimientoCaja() {
+  $.ajax({
+    url: "ajax/Caja.general.ajax.php",
+    type: "GET",
+    dataType: "json",
+    success: function (respuesta) {
+      if (respuesta.length > 0) {
+        let encontrado = false;
+        respuesta.forEach(function (item) {
+          if (item.estado === "abierto") {
+            $("#id_movimiento_caja_venta").val(item.id_movimiento);
+            encontrado = true;
+          }else{
+            Swal.fire({
+              title: "¡Aviso!",
+              text: "Aperture la caja del día.",
+              icon: "warning",
+            });
+          }
+        });
+      } else {
+        Swal.fire({
+          title: "¡Aviso!",
+          text: "Aperture la caja del día. caso contrario no podrá realizar la compra y venta",
+          icon: "warning",
+        });
+        return;
+      }
+    },
+    error: function (xhr, status, error) {
+      console.error("Error al recuperar los proveedores:", error);
+    },
+  });
+}
+
+mostrarIdMovimientoCaja();
+
 
 
   /* =====================================
@@ -120,6 +157,7 @@ function mostrarSerieNumero() {
       type: "POST",
       data: datos,
       success: function (respuesta) {
+        console.log(respuesta);
         try {
           let data = JSON.parse(respuesta);
           if (data) {
@@ -129,7 +167,7 @@ function mostrarSerieNumero() {
             $("#numero_venta").val("");
           }
         } catch (e) {
-          console.error("Error al parsear JSON:", e);
+          /* console.error("Error al parsear JSON:", e); */
         }
       },
       error: function (xhr, status, error) {
@@ -490,6 +528,7 @@ $(".tipo_pago_venta").on("click", function () {
 $("#btn_crear_nueva_venta").click(function (e) {
   e.preventDefault();
   let isValid = true;
+  let id_movimiento_caja_venta = $("#id_movimiento_caja_venta").val();
   let id_usuario_venta = $("#id_usuario_venta").val();
   let id_cliente_venta = $("#id_cliente_venta").val();
   let fecha_venta = $("#fecha_venta").val();
@@ -571,10 +610,13 @@ $("#btn_crear_nueva_venta").click(function (e) {
   } else {
     estado_pago = "pendiente";
   }
+  let tipo_movimiento = "ingreso";
  
   if (isValid) {
 
     const datos = new FormData();
+    datos.append("id_movimiento_caja_venta", id_movimiento_caja_venta);
+    datos.append("tipo_movimiento", tipo_movimiento);
     datos.append("id_usuario_venta", id_usuario_venta);
     datos.append("id_cliente_venta", id_cliente_venta);
     datos.append("fecha_venta", fecha_venta);
@@ -607,6 +649,7 @@ $("#btn_crear_nueva_venta").click(function (e) {
         $("#subtotal_venta").text("00.00");
         $("#igv_venta_show").text("00.00");
         $("#total_precio_venta").text("00.00");
+        $("#total_precio_venta_ves").text("00.00");
         setDateToToday('fecha_venta');
         // Mostrar alerta y preguntar acción
         Swal.fire({
@@ -661,6 +704,7 @@ $("#btn_crear_nueva_venta").click(function (e) {
         mostrarProductoVenta();
         mostrarSerieNumero('ticket');
         mostrarVentas();
+        mostrarIdMovimientoCaja();
       },
       error: function (xhr, status, error) {
         console.error(xhr);

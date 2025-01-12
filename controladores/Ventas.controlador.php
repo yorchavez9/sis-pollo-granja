@@ -236,6 +236,7 @@ class ControladorVenta
 		$datos = array(
 			"id_persona" => $_POST["id_cliente_venta"],
 			"id_usuario" => $_POST["id_usuario_venta"],
+			"id_movimiento_caja" => $_POST["id_movimiento_caja_venta"],
 			"fecha_venta" => $_POST["fecha_venta"],
 			"hora_venta" => $_POST["hora_venta"],
 			"id_serie_num" => $_POST["comprobante_venta"],
@@ -264,6 +265,18 @@ class ControladorVenta
 		foreach ($respuestaDetalleVenta as $value) {
 			$id_venta_ultimo = $value["id_venta"];
 		}
+
+		/* ============================================
+		ACTUALIZANDO EL VALOR DE DE CAJA 
+		============================================ */
+		$tabla_caja = "movimientos_caja";
+		$datosActualizar = array(
+			"id_movimiento" => $_POST["id_movimiento_caja_venta"],
+			"egresos" => ($_POST["tipo_movimiento"] == "egreso") ? $_POST["total"] : 0,
+			"ingresos" => ($_POST["tipo_movimiento"] == "ingreso") ? $_POST["total"] : 0
+		);
+
+		ModeloCajaGeneral::mdlActualizarMontos($tabla_caja, $datosActualizar);
 
 		/* ==========================================
 		INGRESO DE DATOS AL DETALLE VENTA

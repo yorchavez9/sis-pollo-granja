@@ -178,6 +178,7 @@ class ModeloCompra
 		$stmt = Conexion::conectar()->prepare("INSERT INTO $tabla(
                                                                 id_persona,
                                                                 id_usuario, 
+                                                                id_movimiento_caja, 
                                                                 fecha_egre,
 																hora_egreso, 
                                                                 tipo_comprobante, 
@@ -194,6 +195,7 @@ class ModeloCompra
                                                                 VALUES (
                                                                 :id_persona, 
                                                                 :id_usuario, 
+                                                                :id_movimiento_caja, 
                                                                 :fecha_egre, 
                                                                 :hora_egreso, 
                                                                 :tipo_comprobante, 
@@ -210,6 +212,7 @@ class ModeloCompra
 
 		$stmt->bindParam(":id_persona", $datos["id_persona"], PDO::PARAM_INT);
 		$stmt->bindParam(":id_usuario", $datos["id_usuario"], PDO::PARAM_INT);
+		$stmt->bindParam(":id_movimiento_caja", $datos["id_movimiento_caja"], PDO::PARAM_INT);
 		$stmt->bindParam(":fecha_egre", $datos["fecha_egre"], PDO::PARAM_STR);
 		$stmt->bindParam(":hora_egreso", $datos["hora_egreso"], PDO::PARAM_STR);
 		$stmt->bindParam(":tipo_comprobante", $datos["tipo_comprobante"], PDO::PARAM_STR);

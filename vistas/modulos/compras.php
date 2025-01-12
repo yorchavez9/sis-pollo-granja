@@ -65,6 +65,9 @@
                         FORMULARIO DE COMPRA DE PRODUCTO
                         ======================================-->
                         <form id="form_compra_producto">
+
+                            <input type="hidden" id="id_movimiento_caja_compra" >
+
                             <!-- INGRESO DE ID DEL USUARIO -->
                             <input type="hidden" id="id_usuario_egreso" value="<?php echo $_SESSION["id_usuario"] ?>">
                             <div class="row">

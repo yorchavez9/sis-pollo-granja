@@ -123,6 +123,7 @@ class ControladorCompra
 	static public function ctrCrearCompra()
 	{
 		$tabla = "egresos";
+		$tabla_caja = "movimientos_caja";
 		$pago_total = 0;
 		if($_POST["tipo_pago"] == "contado"){
 			$pago_total = $_POST["total"];
@@ -133,6 +134,7 @@ class ControladorCompra
 		$datos = array(
 			"id_persona" => $_POST["id_proveedor_egreso"],
 			"id_usuario" => $_POST["id_usuario_egreso"],
+			"id_movimiento_caja" => $_POST["id_movimiento_caja_compra"],
 			"fecha_egre" => $_POST["fecha_egreso"],
 			"hora_egreso" => $_POST["hora_egreso"],
 			"tipo_comprobante" => $_POST["tipo_comprobante_egreso"],
@@ -159,14 +161,23 @@ class ControladorCompra
 			$id_egreso_ultimo = $value["id_egreso"];
 		}
 
+		/* ============================================
+		ACTUALIZANDO EL VALOR DE DE CAJA 
+		============================================ */
+		$datosActualizar = array(
+			"id_movimiento" => $_POST["id_movimiento_caja_compra"],
+			"egresos" => ($_POST["tipo_movimiento"] == "egreso") ? $_POST["total"] : 0,
+			"ingresos" => ($_POST["tipo_movimiento"] == "ingreso") ? $_POST["total"] : 0
+		);
+
+		ModeloCajaGeneral::mdlActualizarMontos($tabla_caja, $datosActualizar);
+
 		/* ==========================================
 		INGRESO DE DATOS AL DETALLE EGRESO
 		========================================== */
 		$tablaDetalleEgreso = "detalle_egreso";
 		$productos = json_decode($_POST["productoAddEgreso"], true);
 		$datos = array();
-
-		// Recorrer productos y preparar datos
 		foreach ($productos as $dato) {
 			$datos[] = array(
 				'id_egreso' => $id_egreso_ultimo,
@@ -183,15 +194,11 @@ class ControladorCompra
 			);
 		}
 
-		// Insertar todos los datos en una sola operación
 		$respuestaDatos = ModeloCompra::mdlGuardarDetalleCompra($tablaDetalleEgreso, $datos);
-
-
 
 		/* ==========================================
 		ACTUALIZANDO EL STOCK DEL PRODUCTO
 		========================================== */
-
 		$tblProducto = "productos";
 		$stocks = json_decode($_POST["productoAddEgreso"], true);
 
@@ -199,8 +206,6 @@ class ControladorCompra
 			$idProducto = $value['idProductoEgreso'];
 			$cantidad = $value['numero_aves'];
 			$precio = $value['precio_venta'];
-
-			// Actualizar el stock del producto
 			ModeloCompra::mdlActualizarStockProducto($tblProducto, $idProducto, $cantidad, $precio);
 		}
 

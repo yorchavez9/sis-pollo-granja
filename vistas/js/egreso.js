@@ -1,5 +1,43 @@
 $(document).ready(function () {
 
+  function mostrarIdMovimientoCaja() {
+    $.ajax({
+      url: "ajax/Caja.general.ajax.php",
+      type: "GET",
+      dataType: "json",
+      success: function (respuesta) {
+        if (respuesta.length > 0) {
+          let encontrado = false;
+          respuesta.forEach(function (item) {
+            if (item.estado === "abierto") {
+              $("#id_movimiento_caja_compra").val(item.id_movimiento);
+              encontrado = true;
+            }else{
+              Swal.fire({
+                title: "¡Aviso!",
+                text: "Aperture la caja del día.",
+                icon: "warning",
+              });
+            }
+          });
+
+        } else {
+          Swal.fire({
+            title: "¡Aviso!",
+            text: "Aperture la caja del día. caso contrario no podrá realizar la compra y venta",
+            icon: "warning",
+          });
+          return;
+        }
+      },
+      error: function (xhr, status, error) {
+        console.error("Error al recuperar los proveedores:", error);
+      },
+    });
+  }
+
+  mostrarIdMovimientoCaja();
+
 
   /* =====================================
     CONVERTIR DE DOLARES A 
@@ -81,7 +119,6 @@ $(document).ready(function () {
       });
     });
   };
-
 
   tipoPago();
 
@@ -325,12 +362,14 @@ $(document).ready(function () {
 
   configurarInputConValorPorDefecto("#impuesto_egreso", "0.00");
 
+
   // CREAR COMPRA
   $("#btn_crear_compra").click((e) => {
     e.preventDefault();
     let isValid = true;
 
     // Validación de campos
+    const id_movimiento_caja_compra = $("#id_movimiento_caja_compra").val();
     const id_usuario_egreso = $("#id_usuario_egreso").val();
     const id_proveedor_egreso = $("#id_proveedor_egreso").val();
     const fecha_egreso = $("#fecha_egreso").val();
@@ -392,10 +431,13 @@ $(document).ready(function () {
     const estado_pago = tipo_pago === "contado" ? "completado" : "pendiente";
     const pago_tipo = $("input[name='pago_tipo']:checked").val();
     const pago_e_y = pago_tipo === "efectivo" ? "efectivo" : (pago_tipo === "yape" ? "yape" : "");
+    const tipo_movimiento = "egreso";
 
     // Si la validación es correcta
     if (isValid) {
       const datos = new FormData();
+      datos.append("id_movimiento_caja_compra", id_movimiento_caja_compra);
+      datos.append("tipo_movimiento", tipo_movimiento);
       datos.append("id_proveedor_egreso", id_proveedor_egreso);
       datos.append("id_usuario_egreso", id_usuario_egreso);
       datos.append("fecha_egreso", fecha_egreso);
@@ -421,6 +463,7 @@ $(document).ready(function () {
         contentType: false,
         processData: false,
         success: (respuesta) => {
+ 
           const res = JSON.parse(respuesta);
 
           // Verificar respuesta de la API
@@ -431,6 +474,7 @@ $(document).ready(function () {
             $("#subtotal_egreso").text("00.00");
             $("#igv_egreso").text("00.00");
             $("#total_precio_egreso").text("00.00");
+            $("#total_precio_egreso_ves").text("00.00");
             setDateToToday('fecha_egreso');
 
             // Mostrar alerta y preguntar acción
@@ -486,6 +530,7 @@ $(document).ready(function () {
             // Llamar funciones adicionales
             setDateToToday('fecha_egreso');
             mostrarProductos();
+            mostrarIdMovimientoCaja();
           } else {
             Swal.fire({
               title: "¡Error!",

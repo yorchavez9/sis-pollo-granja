@@ -397,6 +397,7 @@ class ModeloVenta
 		$stmt = Conexion::conectar()->prepare("INSERT INTO $tabla(
                                                                 id_persona,
                                                                 id_usuario, 
+                                                                id_movimiento_caja, 
                                                                 fecha_venta, 
                                                                 hora_venta, 
                                                                 id_serie_num, 
@@ -416,6 +417,7 @@ class ModeloVenta
                                                                 VALUES (
                                                                 :id_persona, 
                                                                 :id_usuario, 
+                                                                :id_movimiento_caja, 
                                                                 :fecha_venta, 
                                                                 :hora_venta, 
                                                                 :id_serie_num, 
@@ -434,6 +436,7 @@ class ModeloVenta
 
 		$stmt->bindParam(":id_persona", $datos["id_persona"], PDO::PARAM_INT);
 		$stmt->bindParam(":id_usuario", $datos["id_usuario"], PDO::PARAM_INT);
+		$stmt->bindParam(":id_movimiento_caja", $datos["id_movimiento_caja"], PDO::PARAM_INT);
 		$stmt->bindParam(":fecha_venta", $datos["fecha_venta"], PDO::PARAM_STR);
 		$stmt->bindParam(":hora_venta", $datos["hora_venta"], PDO::PARAM_STR);
 		$stmt->bindParam(":id_serie_num", $datos["id_serie_num"], PDO::PARAM_INT);

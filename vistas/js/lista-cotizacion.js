@@ -50,7 +50,6 @@ function ultimoNumeroVenta() {
                 const primerRegistro = respuesta[0];
                 const nuevoNumeroComprobante = parseInt(primerRegistro.num_comprobante) + 1;
                 localStorage.setItem('numero_comprobante', nuevoNumeroComprobante);
-                console.log("Número de comprobante guardado en localStorage:", nuevoNumeroComprobante);
             } else {
                 /* console.warn("No se encontraron registros en la respuesta."); */
             }

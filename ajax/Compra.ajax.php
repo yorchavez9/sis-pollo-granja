@@ -6,6 +6,9 @@ require_once "../modelos/Producto.modelo.php";
 require_once "../modelos/Compra.modelo.php";
 require_once "../controladores/Compra.controlador.php";
 
+require_once "../controladores/Caja.general.controlador.php";
+require_once "../modelos/Caja.general.modelo.php";
+
 class AjaxProductoAdd
 {
 
