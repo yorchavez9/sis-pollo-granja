@@ -1,12 +1,7 @@
 <?php
-
 session_start();
 
 include "modulos/layouts/head.php";
-
-?>
-
-<?php
 
 if (isset($_SESSION["iniciarSesion"]) && $_SESSION["iniciarSesion"] == "ok") {
 ?>

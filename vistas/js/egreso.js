@@ -22,12 +22,20 @@ $(document).ready(function () {
           });
 
         } else {
-          Swal.fire({
-            title: "¡Aviso!",
-            text: "Aperture la caja del día. caso contrario no podrá realizar la compra y venta",
-            icon: "warning",
+          $.ajax({
+            url: "ajax/Sesion.usuario.ajax.php",
+            type: "GET",
+            dataType: "json",
+            success: function (response) {
+              if(response.estado === "success") {
+                Swal.fire({
+                  title: "¡Aviso!",
+                  text: "Aperture la caja del día. caso contrario no podrá realizar la compra y venta",
+                  icon: "warning",
+                });
+              }
+            }
           });
-          return;
         }
       },
       error: function (xhr, status, error) {
