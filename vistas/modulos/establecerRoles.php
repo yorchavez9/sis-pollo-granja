@@ -79,6 +79,7 @@
                     $valor = null;
                     $usuarios = ControladorUsuarios::ctrMostrarUsuarios($item, $valor);
                     $roles = ControladorRol::ctrMostrarRoles($item, $valor);
+                    $modulos = ControladorModulos::ctrMostrarModulos($item, $modulos);
                     ?>
 
                     <!-- SECCION DE USUARIOS Y ROLES -->
@@ -115,9 +116,31 @@
                         </div>
                     </div>
 
-                    <div class="row">
-                        
+                    <div class="form-group">
+                        <div class="row">
+                            <?php
+                            foreach ($modulos as $key => $modulo) {
+                            ?>
+                                <div class="col-md-6">
+                                    <div class="form-check">
+                                        <input
+                                            type="checkbox"
+                                            class="form-check-input"
+                                            id="id_<?php echo $modulo["id_modulo"]; ?>"
+                                            value="id_<?php echo $modulo["id_modulo"]; ?>">
+                                        <label
+                                            class="form-check-label"
+                                            for="id_<?php echo $modulo["id_modulo"]; ?>">
+                                            <?php echo $modulo["modulo"]; ?>
+                                        </label>
+                                    </div>
+                                </div>
+                            <?php
+                            }
+                            ?>
+                        </div>
                     </div>
+
 
                 </div>
 
