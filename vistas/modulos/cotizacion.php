@@ -84,7 +84,7 @@ $serieNumeroComprobante = ControladorSerieNumero::ctrMostrarSerieNumero($item, $
                                 <!-- BOTON PARA AGREGAR CLIENTE -->
                                 <div class="col-md-2">
                                     <div class="form-group">
-                                        <a href="#" class="btn btn-sm btn-adds mt-4" id="btn_add_cliente" data-bs-toggle="modal" data-bs-target="#modal_nuevo_cliente"><i class="fa fa-user-plus me-2"></i></a>
+                                        <a href="#" class="btn btn-sm btn-adds mt-4" id="btn_add_cliente" data-bs-toggle="modal" data-bs-target="#modal_nuevo_cliente_cotizacion"><i class="fa fa-user-plus me-2"></i></a>
                                     </div>
 
                                 </div>
@@ -386,14 +386,14 @@ $serieNumeroComprobante = ControladorSerieNumero::ctrMostrarSerieNumero($item, $
 </div>
 
 <!-- MODAL NUEVO CLIENTE -->
-<div class="modal fade" id="modal_nuevo_cliente" tabindex="-1" aria-labelledby="modal_nuevo_clienteLabel" aria-hidden="true">
+<div class="modal fade" id="modal_nuevo_cliente_cotizacion" tabindex="-1" aria-labelledby="modal_nuevo_cliente_cotizacionLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Crear nuevo cliente</h5>
                 <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
             </div>
-            <form enctype="multipart/form-data" id="form_nuevo_cliente">
+            <form enctype="multipart/form-data" id="form_nuevo_cliente_cotizacion">
 
                 <div class="modal-body">
 

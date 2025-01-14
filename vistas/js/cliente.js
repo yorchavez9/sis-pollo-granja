@@ -94,9 +94,16 @@ $("#btn_guardar_cliente").click(function (e) {
         var res = JSON.parse(respuesta);
 
         if (res === "ok") {
-          $("#form_nuevo_cliente")[0].reset();
+          if ($("#form_nuevo_cliente").length > 0) {
+            $("#form_nuevo_cliente")[0].reset();
+          }
 
+          if ($("#form_nuevo_cliente_cotizacion").length > 0) {
+            $("#form_nuevo_cliente_cotizacion")[0].reset();
+          }
+        
           $("#modalNuevoCliente").modal("hide");
+          $("#modal_nuevo_cliente_cotizacion").modal("hide");
           Swal.fire({
             title: "¡Correcto!",
             text: "El cliente ha sido guardado",

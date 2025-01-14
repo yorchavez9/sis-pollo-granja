@@ -43,7 +43,6 @@ $(document).ready(function () {
       },
     });
   }
-
   mostrarIdMovimientoCaja();
 
 

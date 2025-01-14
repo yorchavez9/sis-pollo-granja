@@ -80,7 +80,7 @@
                                         $valor = null;
                                         $proveedores = ControladorProveedores::ctrMostrarProveedor($item, $valor);
                                         ?>
-                                        <select name="" id="id_proveedor_egreso" class="form-select small-select">
+                                        <select name="" id="id_proveedor_egreso" class="select">
                                             <option value="">Selecione el proveedor</option>
                                             <?php
                                             foreach ($proveedores as $key => $proveedor) {

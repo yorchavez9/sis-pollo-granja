@@ -9,6 +9,7 @@
                 <a href="cotizacion" class="btn btn-added"><img src="vistas/assets/img/icons/plus.svg" alt="img" class="me-2">Nueva cotizacion</a>
             </div>
         </div>
+        <input type="hidden" id="id_caja_cotizacion_save">
         <div class="card">
             <div class="card-body">
                 <div class="table-top">

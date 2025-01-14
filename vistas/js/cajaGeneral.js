@@ -1,4 +1,15 @@
 $(document).ready(function () {
+
+  /* ===========================================
+    SELECIONADO LA FECHA AUTOMÁTICO
+    =========================================== */
+    // Obtener la fecha actual en formato YYYY-MM-DD
+    const today = new Date().toISOString().split('T')[0];
+    
+    // Asignar la fecha actual a los campos de apertura y cierre
+    $("#fecha_apertura_caja").val(today);
+    $("#fecha_cierre_caja").val(today); // Puedes ajustar esto según tu lógica
+
   /* ===========================================
     GUARDAR CAJA GENRAL APERTURA
     =========================================== */

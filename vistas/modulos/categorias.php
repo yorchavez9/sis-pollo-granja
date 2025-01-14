@@ -84,7 +84,7 @@
 
                     <!-- INGRESO DE RAZÓN SOCIAL -->
                     <div class="form-group">
-                        <label class="form-label">Ingrese la descripción (<span class="text-danger">*</span>)</label>
+                        <label class="form-label">Ingrese la descripción</label>
                         <textarea name="descripcion_categoria" id="descripcion_categoria" cols="30" rows="10" placeholder="Ingrese la descripción"></textarea>
                         <small id="error_descripcion_categoria"></small>
                     </div>
@@ -122,7 +122,7 @@
 
                     <!-- INGRESO DE RAZÓN SOCIAL -->
                     <div class="form-group">
-                        <label class="form-label">Ingrese la descripción (<span class="text-danger">*</span>)</label>
+                        <label class="form-label">Ingrese la descripción</label>
                         <textarea name="edit_descripcion_categoria" id="edit_descripcion_categoria" cols="30" rows="10" placeholder="Ingrese la descripción"></textarea>
                         <small id="edit_error_descripcion_categoria"></small>
                     </div>

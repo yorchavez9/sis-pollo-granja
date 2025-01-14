@@ -172,7 +172,7 @@
 
                     <!-- INGRESO DEL CORREO ELECTRÓNICO -->
                     <div class="form-group">
-                        <label for="correo" class="form-label">Ingrese el correo electrónico (<span class="text-danger">*</span>)</label>
+                        <label for="correo" class="form-label">Ingrese el correo electrónico</label>
                         <div class="pass-group">
                             <input type="text" id="correo_proveedor" placeholder="Ingrese el correo electrónico">
                             <small id="validate_correo_proveedor"></small>
@@ -425,7 +425,7 @@
 
                     <!-- INGRESO DEL CORREO ELECTRÓNICO -->
                     <div class="form-group">
-                        <label for="correo" class="form-label">Ingrese el correo electrónico (<span class="text-danger">*</span>)</label>
+                        <label for="correo" class="form-label">Ingrese el correo electrónico</label>
                         <div class="pass-group">
                             <input type="text" id="edit_correo_proveedor" placeholder="Ingrese el correo electrónico">
                             <small id="edit_error_c"></small>

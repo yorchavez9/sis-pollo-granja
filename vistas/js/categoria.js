@@ -28,27 +28,9 @@ $(document).ready(function () {
       } else {
         $("#error_nombre_categoria").html("").removeClass("text-danger");
       }
-      
+    
 
 
-      // Validar el descripcion de categoria
-      if (descripcion_categoria === "") {
-        $("#error_descripcion_categoria")
-          .html("Por favor, ingrese la descripción")
-          .addClass("text-danger");
-        isValid = false;
-      } else if (!isNaN(descripcion_categoria)) {
-        $("#error_descripcion_categoria")
-          .html("La descripción no puede contener números")
-          .addClass("text-danger");
-        isValid = false;
-      } else {
-        $("#error_descripcion_categoria").html("").removeClass("text-danger");
-      }
-      
-
-
-  
       // Si el formulario es válido, envíalo
       if (isValid) {
         var datos = new FormData();
@@ -191,22 +173,6 @@ $(document).ready(function () {
       
 
 
-      // Validar el descripcion de categoria
-      if (edit_descripcion_categoria === "") {
-        $("#edit_error_descripcion_categoria")
-          .html("Por favor, ingrese la descripción")
-          .addClass("text-danger");
-        isValid = false;
-      } else if (!isNaN(edit_descripcion_categoria)) {
-        $("#edit_error_descripcion_categoria")
-          .html("La descripción no puede contener números")
-          .addClass("text-danger");
-        isValid = false;
-      } else {
-        $("#edit_error_descripcion_categoria").html("").removeClass("text-danger");
-      }
-      
-      
 
       if (isValid) {
         var datos = new FormData();

@@ -98,20 +98,6 @@ $(document).ready(function () {
       $("#validate_telefono_proveedor").html("").removeClass("text-danger");
     }
 
-    //Validar el correo electrónico
-    if (email === "") {
-      $("#validate_correo_proveedor")
-        .html("Por favor, ingrese el correo electrónico")
-        .addClass("text-danger");
-      isValid = false;
-    } else if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
-      $("#validate_correo_proveedor")
-        .html("Por favor, ingrese un correo electrónico válido")
-        .addClass("text-danger");
-      isValid = false;
-    } else {
-      $("#validate_correo_proveedor").html("").removeClass("text-danger");
-    }
 
     // Si el formulario es válido, envíalo
     if (isValid) {
@@ -429,21 +415,6 @@ $(document).ready(function () {
       isValid = false;
     } else {
       $("#edit_error_t").html("").removeClass("text-danger");
-    }
-
-    //Validar el correo electrónico
-    if (edit_email === "") {
-      $("#edit_error_c")
-        .html("Por favor, ingrese el correo electrónico")
-        .addClass("text-danger");
-      isValid = false;
-    } else if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(edit_email)) {
-      $("#edit_error_c")
-        .html("Por favor, ingrese un correo electrónico válido")
-        .addClass("text-danger");
-      isValid = false;
-    } else {
-      $("#edit_error_c").html("").removeClass("text-danger");
     }
 
 

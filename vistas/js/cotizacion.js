@@ -1,3 +1,4 @@
+
   /* =====================================
     CONVERTIR DE DOLARES A 
     ===================================== */
@@ -624,6 +625,7 @@ function limpiarFormulario() {
   $("#subtotal_venta").text("00.00");
   $("#igv_venta_show").text("00.00");
   $("#total_precio_venta").text("00.00");
+  $("#total_precio_venta_ves").text("00.00");
   setDateToToday("fecha_venta");
   mostrarProductoVenta();
 }
@@ -869,9 +871,14 @@ function mostrarClientesSelect() {
       );
       respuesta.forEach((cliente) => {
         $("#id_cliente_venta").append(
-          `<option value="${cliente.id_persona}">${cliente.razon_social}</option>`
+            `<option value="${cliente.id_persona}">
+                ${cliente.razon_social}
+                ${cliente.correo ? `<i class="fas fa-envelope" title="Tiene correo"></i>` : `<i class="fas fa-envelope-slash" title="No tiene correo"></i>`}
+                ${cliente.telefono ? `<i class="fas fa-phone" title="Tiene teléfono"></i>` : `<i class="fas fa-phone-slash" title="No tiene teléfono"></i>`}
+            </option>`
         );
-      });
+    });
+    
     },
     error: function (xhr, status, error) {
       console.error("Error al cargar los clientes:", error);

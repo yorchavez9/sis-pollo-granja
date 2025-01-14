@@ -1,3 +1,50 @@
+let idMovimientoCaja = null; // Variable global para almacenar id_movimiento
+
+function mostrarIdMovimientoCaja() {
+    $.ajax({
+        url: "ajax/Caja.general.ajax.php",
+        type: "GET",
+        dataType: "json",
+        success: function (respuesta) {
+            if (respuesta.length > 0) {
+                let encontrado = false;
+                respuesta.forEach(function (item) {
+                    if (item.estado === "abierto") {
+                        $("#id_caja_cotizacion_save").val(item.id_movimiento);
+                        encontrado = true;
+                    } else {
+                        Swal.fire({
+                            title: "¡Aviso!",
+                            text: "Aperture la caja del día.",
+                            icon: "warning",
+                        });
+                    }
+                });
+
+            } else {
+                $.ajax({
+                    url: "ajax/Sesion.usuario.ajax.php",
+                    type: "GET",
+                    dataType: "json",
+                    success: function (response) {
+                        if (response.estado === "success") {
+                            Swal.fire({
+                                title: "¡Aviso!",
+                                text: "Aperture la caja del día. caso contrario no podrá realizar la compra y venta",
+                                icon: "warning",
+                            });
+                        }
+                    }
+                });
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error("Error al recuperar los proveedores:", error);
+        },
+    });
+}
+mostrarIdMovimientoCaja();
+
   /* =====================================
   CONVERTIR DE DOLARES A 
   ===================================== */
@@ -172,10 +219,10 @@ async function mostrarCotizaciones() {
                                 <button class="btn btn-sm dropdown-toggle text-white" type="button" id="dropdownMenuButton" style="background: #FF9F43" data-bs-toggle="dropdown" aria-expanded="false">
                                     Acciones
                                 </button>
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="accione_lista_cortizacion">
                                     ${cotizacion.estado === 2 ? `` 
                                     : `<li>
-                                        <a href = "#" class="dropdown-item btnGenerarVenta" idCotizacion = "${cotizacion.id_cotizacion}" >
+                                        <a href = "#" class="dropdown-item btnGenerarVenta" idCotizacion = "${cotizacion.id_cotizacion}">
                                         <i class="fa fa-cart-plus fa-lg me-2" style="color: #1B2850"></i> Generar venta
                                                 </a>
                                     </li >`}
@@ -332,8 +379,13 @@ $("#data_lista_cotizacion").on("click", ".btnGenerarVenta", function(e){
                     estado_pago = "pendiente";
                 }
                 let metodos_pago_venta = "pago_efectivo";
+                let tipo_movimiento = "ingreso";
+                let id_movimiento_caja_venta = $("#id_caja_cotizacion_save").val();
 
                 const datos = new FormData();
+                datos.append("id_movimiento_caja_venta", id_movimiento_caja_venta);
+                datos.append("tipo_movimiento", tipo_movimiento);
+
                 datos.append("id_usuario_venta", cotizacion.id_usuario);
                 datos.append("id_cliente_venta", cotizacion.id_persona);
                 datos.append("fecha_venta", cotizacion.fecha_cotizacion);
@@ -352,7 +404,6 @@ $("#data_lista_cotizacion").on("click", ".btnGenerarVenta", function(e){
                 datos.append("pago_cuota_venta", cotizacion.pago_cuota_venta);
                 datos.append("recibo_de_pago_venta", cotizacion.recibo_de_pago_venta);
                 datos.append("serie_de_pago_venta", cotizacion.serie_de_pago_venta);
-
 
                 $.ajax({
                     url: "ajax/ventas.ajax.php",
