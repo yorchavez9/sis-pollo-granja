@@ -55,7 +55,7 @@
 <body>
     <?php date_default_timezone_set('America/Lima');?>
 
-    <div id="global-loader">
+    <!-- <div id="global-loader">
         <div class="whirly-loader"> </div>
     </div>
 
@@ -64,3 +64,4 @@
     </div>
 
     
+ -->

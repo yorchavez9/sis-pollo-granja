@@ -97,7 +97,27 @@
                         <small id="error_usuario_roles" class="text-danger"></small>
                     </div>
 
-                    <!-- SELECCIONA LOS ROLES -->
+                    <!-- SELECIONAR EL ROL -->
+                    <div class="form-group mb-3">
+                        <?php
+                        $item = null;
+                        $valor = null;
+                        $roles = ControladorRol::ctrMostrarRoles($item, $valor);
+                        ?>
+                        <label for="id_rol" class="form-label fw-bold">Selecione el rol</label>
+                        <select name="id_rol_select" id="id_rol_select" class="select">
+                            <option disabled selected>Selecione</option>
+                            <?php
+                            foreach ($roles as $key => $rol) {
+                            ?>
+                                <option value="<?php echo $rol["id_rol"] ?>"><?php echo $rol["nombre_rol"] ?></option>
+                            <?php
+                            }
+                            ?>
+                        </select>
+                    </div>
+
+                    <!-- SELECCIONA LOS MODULOS -->
                     <div class="form-group mb-3">
                         <label for="id_roles" class="form-label fw-bold">Selecciona Roles</label>
                         <div class="card p-3 shadow-sm">
@@ -198,7 +218,6 @@
         </div>
     </div>
 </div>
-
 
 
 <script>

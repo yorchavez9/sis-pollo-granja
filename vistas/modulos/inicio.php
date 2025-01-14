@@ -47,14 +47,10 @@ $totalClientes = ControladorCliente::ctrMostrarTotalCliente($item, $valor);
 $totalProveedores = ControladorProveedores::ctrMostrarTotalProveedores($item, $valor);
 
 ?>
-<?php
-if (isset($_SESSION["roles"]) && is_array($_SESSION["roles"])) {
-    foreach ($_SESSION["roles"] as $rol) {
 
-?>
         <div class="page-wrapper">
             <div class="content">
-                <?php if ($rol === 'ADMINISTRADOR' || $rol === 'GERENTE' || $rol === 'CEO') { ?>
+               
                     <div class="row">
                         <div class="col-lg-3 col-sm-6 col-12">
                             <div class="dash-widget dash1">
@@ -286,8 +282,7 @@ if (isset($_SESSION["roles"]) && is_array($_SESSION["roles"])) {
                             </div>
                         </div>
                     </div>
-                <?php } else {
-                ?>
+              
                     <div class="row justify-content-center mt-5">
                         <div class="col-md-8 text-center">
                             <div class="alert" style="background: #FF9F43; color: white">
@@ -298,12 +293,6 @@ if (isset($_SESSION["roles"]) && is_array($_SESSION["roles"])) {
                         </div>
                     </div>
 
-                <?php
-                } ?>
-
+              
             </div>
         </div>
-<?php
-    }
-}
-?>
