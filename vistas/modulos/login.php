@@ -39,7 +39,7 @@ foreach ($images as $key => $value) {
                     <div class="form-login" style="margin-bottom: 15px;">
                         <label style="display: block; font-family: Arial, sans-serif; color: #333;">Ingrese su correo o usuario</label>
                         <div class="form-addons" style="position: relative;">
-                            <input type="text" id="ingUsuario" name="ingUsuario" placeholder="Ingrese su correo o usuario" style="width: 100%; padding: 10px 40px 10px 10px; border: 1px solid #ccc; border-radius: 5px; outline: none;">
+                            <input type="text" id="ingUsuario" name="ingUsuario" value="Apuuray12345" placeholder="Ingrese su correo o usuario" style="width: 100%; padding: 10px 40px 10px 10px; border: 1px solid #ccc; border-radius: 5px; outline: none;">
                             <img src="vistas/assets/img/icons/mail.svg" alt="img" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); width: 20px;">
                         </div>
                         <div id="errorIngUsuario"></div>
@@ -49,7 +49,7 @@ foreach ($images as $key => $value) {
                     <div class="form-login" style="margin-bottom: 15px;">
                         <label style="display: block; font-family: Arial, sans-serif; color: #333;">Ingrese su contraseña</label>
                         <div class="pass-group" style="position: relative;">
-                            <input type="password" id="ingPassword" name="ingPassword" class="pass-input" placeholder="Ingrese su contraseña" style="width: 100%; padding: 10px 40px 10px 10px; border: 1px solid #ccc; border-radius: 5px; outline: none;">
+                            <input type="password" id="ingPassword" name="ingPassword" value="Apuuray12345" class="pass-input" placeholder="Ingrese su contraseña" style="width: 100%; padding: 10px 40px 10px 10px; border: 1px solid #ccc; border-radius: 5px; outline: none;">
                             <span class="fas toggle-password fa-eye-slash" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;"></span>
                         </div>
                         <div id="errorIngPassword"></div>
