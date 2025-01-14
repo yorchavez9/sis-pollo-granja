@@ -2,31 +2,31 @@
 
 require_once "Conexion.php";
 
-class ModeloModulos
+class ModeloAccion
 {
 
 	/*=============================================
-	MOSTRAR MODULOS
+	MOSTRAR ACCIONES
 	=============================================*/
 
-	static public function mdlMostrarModulos($tabla, $item, $valor){
+	static public function mdlMostrarAcciones($tabla, $item, $valor){
 		if($item != null){
 			$stmt = Conexion::conectar()->prepare("SELECT * from $tabla WHERE $item = :$item");
 			$stmt -> bindParam(":".$item, $valor, PDO::PARAM_STR);
 			$stmt -> execute();
 			return $stmt -> fetch();
 		}else{
-			$stmt = Conexion::conectar()->prepare("SELECT * from $tabla ORDER BY id_modulo ASC");
+			$stmt = Conexion::conectar()->prepare("SELECT * from $tabla ORDER BY id_accion ASC");
 			$stmt -> execute();
 			return $stmt -> fetchAll();
 		}
 	}
 
 	/*=============================================
-	REGISTRAR MODULOS
+	REGISTRAR ACCIONES
 	=============================================*/
 
-	static public function mdlIngresarModulo($tabla, $datos){
+	static public function mdlIngresarAccion($tabla, $datos){
 		$stmt = Conexion::conectar()->prepare("INSERT INTO $tabla(
                                                                     nombre_categoria, 
                                                                     descripcion
@@ -47,10 +47,10 @@ class ModeloModulos
 	}
 
 	/*=============================================
-	EDITAR MODULOS
+	EDITAR ACCIONES
 	=============================================*/
 
-	static public function mdlEditarModulo($tabla, $datos){
+	static public function mdlEditarAccion($tabla, $datos){
 		$stmt = Conexion::conectar()->prepare("UPDATE $tabla SET 
 																nombre_categoria = :nombre_categoria, 
 																descripcion = :descripcion
@@ -67,10 +67,10 @@ class ModeloModulos
 	}
 
 	/*=============================================
-	ACTUALIZAR MODULOS
+	ACTUALIZAR ACCIONES
 	=============================================*/
 
-	static public function mdlActualizarModulo($tabla, $item1, $valor1, $item2, $valor2){
+	static public function mdlActualizarAccion($tabla, $item1, $valor1, $item2, $valor2){
 		$stmt = Conexion::conectar()->prepare("UPDATE $tabla SET $item1 = :$item1 WHERE $item2 = :$item2");
 		$stmt -> bindParam(":".$item1, $valor1, PDO::PARAM_STR);
 		$stmt -> bindParam(":".$item2, $valor2, PDO::PARAM_STR);
@@ -82,10 +82,10 @@ class ModeloModulos
 	}
 
 	/*=============================================
-	BORRAR MODULOS
+	BORRAR ACCIONES
 	=============================================*/
 
-	static public function mdlBorrarModulo($tabla, $datos){
+	static public function mdlBorrarAccion($tabla, $datos){
 		$stmt = Conexion::conectar()->prepare("DELETE FROM $tabla WHERE id_categoria = :id_categoria");
 		$stmt -> bindParam(":id_categoria", $datos, PDO::PARAM_INT);
 		if($stmt -> execute()){

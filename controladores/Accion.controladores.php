@@ -1,21 +1,19 @@
 <?php
 
-class ControladorModulos
+class ControladorAccion
 {
 
-
 	/*=============================================
-	REGISTRO DE MODULOS
+	REGISTRO DE ACCION
 	=============================================*/
-	static public function ctrCrearModulo()
+	static public function ctrCrearAccion()
 	{
-
-		$tabla = "categorias";
+		$tabla = "acciones";
 		$datos = array(
 			"nombre_categoria" => $_POST["nombre_categoria"],
 			"descripcion" => $_POST["descripcion_categoria"]
 		);
-		$respuesta = ModeloModulos::mdlIngresarModulo($tabla,	$datos);
+		$respuesta = ModeloAccion::mdlIngresarAccion($tabla,	$datos);
 		if ($respuesta == "ok") {
 			echo json_encode("ok");
 		} else {
@@ -24,27 +22,27 @@ class ControladorModulos
 	}
 
 	/*=============================================
-	MOSTRAR MODULOS
+	MOSTRAR ACCIONES
 	=============================================*/
-	static public function ctrMostrarModulos($item, $valor)
+	static public function ctrMostrarAcciones($item, $valor)
 	{
-		$tabla = "modulos";
-		$respuesta = ModeloModulos::mdlMostrarModulos($tabla, $item, $valor);
+		$tabla = "acciones";
+		$respuesta = ModeloAccion::mdlMostrarAcciones($tabla, $item, $valor);
 		return $respuesta;
 	}
 
     /*=============================================
-	EDITAR MODULOS
+	EDITAR ACCION
 	=============================================*/
-    static public function ctrEditarModulo()
+    static public function ctrEditarAccion()
     {
-        $tabla = "categorias";
+        $tabla = "acciones";
         $datos = array(
             "id_categoria" => $_POST["edit_id_categoria"],
             "nombre_categoria" => $_POST["edit_nombre_categoria"],
             "descripcion" => $_POST["edit_descripcion_categoria"]
         );
-        $respuesta = ModeloModulos::mdlEditarModulo($tabla, $datos);
+        $respuesta = ModeloAccion::mdlEditarAccion($tabla, $datos);
 
         if ($respuesta == "ok") {
             echo json_encode("ok");
@@ -52,14 +50,14 @@ class ControladorModulos
     }
 
 	/*=============================================
-	BORRAR MODULOS
+	BORRAR ACCION
 	=============================================*/
-	static public function ctrBorraModulo()
+	static public function ctrBorraAccion()
     {
 
-        $tabla = "categorias";
+        $tabla = "acciones";
         $datos = $_POST["deleteIdCategoria"];
-        $respuesta = ModeloModulos::mdlBorrarModulo($tabla, $datos);
+        $respuesta = ModeloAccion::mdlBorrarAccion($tabla, $datos);
         if ($respuesta == "ok") {
             echo json_encode("ok");
         }
