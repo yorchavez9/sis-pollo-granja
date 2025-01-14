@@ -2,7 +2,8 @@
 
 require_once "Conexion.php";
 
-class ModeloUsuarios{
+class ModeloUsuarios
+{
 
 	/*=============================================
 	MOSTRAR USUARIOS
@@ -10,46 +11,65 @@ class ModeloUsuarios{
 
 	static public function mdlMostrarUsuarioConRoles($tablaUsuario, $tablaUsuarioRol, $tablaRol, $item, $valor)
 	{
-		$stmt = Conexion::conectar()->prepare("
-												SELECT 
+
+		// Corregimos la consulta para incluir el marcador de parámetro correctamente
+		$stmt = Conexion::conectar()->prepare("SELECT 
 													u.id_usuario,
 													u.nombre_usuario,
-													u.telefono,
-													u.contrasena,
-													u.correo,
 													u.usuario,
+													u.correo,
+													u.contrasena,
 													u.imagen_usuario,
-													r.id_rol,
-													r.nombre_rol
+													u.estado_usuario,
+													u.imagen_usuario,
+													r.nombre_rol,
+													GROUP_CONCAT(DISTINCT m.modulo ORDER BY m.modulo) AS modulos,
+													GROUP_CONCAT(DISTINCT 
+														CONCAT(m.modulo, ': ', a.accion) ORDER BY m.modulo, a.accion) AS acciones
 												FROM 
-													$tablaUsuario AS u
-												INNER JOIN 
-													$tablaUsuarioRol AS ur ON u.id_usuario = ur.id_usuario
-												INNER JOIN 
-													$tablaRol AS r ON ur.id_rol = r.id_rol
+													usuarios u
+												JOIN 
+													usuario_roles ur ON u.id_usuario = ur.id_usuario
+												JOIN 
+													roles r ON ur.id_rol = r.id_rol
+												JOIN 
+													role_modulos rm ON r.id_rol = rm.id_rol
+												JOIN 
+													modulos m ON rm.id_modulo = m.id_modulo
+												JOIN 
+													role_acciones ra ON r.id_rol = ra.id_rol AND m.id_modulo = ra.id_modulo
+												JOIN 
+													acciones a ON ra.id_accion = a.id_accion
 												WHERE 
-													u.$item = :$item AND u.estado_usuario = 1
-											");
-		$stmt->bindParam(":" . $item, $valor, PDO::PARAM_STR);
+													u.$item = :$item
+												GROUP BY 
+													u.id_usuario, r.id_rol");
+													
+
+		// Vincular el valor al marcador
+		$stmt->bindParam(":$item", $valor, PDO::PARAM_STR);
 		$stmt->execute();
+
 		return $stmt->fetchAll(PDO::FETCH_ASSOC); // Devolver múltiples roles si existen
 	}
+
 
 	/*=============================================
 	MOSTRAR USUARIOS
 	=============================================*/
 
-	static public function mdlMostrarUsuarios($tablaSucursal, $tablausuario, $item, $valor){
+	static public function mdlMostrarUsuarios($tablaSucursal, $tablausuario, $item, $valor)
+	{
 
-		if($item != null){
+		if ($item != null) {
 			$stmt = Conexion::conectar()->prepare("SELECT * from $tablaSucursal as s inner join $tablausuario as u on s.id_sucursal = u.id_sucursal WHERE $item = :$item");
-			$stmt -> bindParam(":".$item, $valor, PDO::PARAM_STR);
-			$stmt -> execute();
-			return $stmt -> fetch();
-		}else{
+			$stmt->bindParam(":" . $item, $valor, PDO::PARAM_STR);
+			$stmt->execute();
+			return $stmt->fetch();
+		} else {
 			$stmt = Conexion::conectar()->prepare("SELECT * from $tablaSucursal as s inner join $tablausuario as u on s.id_sucursal = u.id_sucursal ORDER BY u.id_usuario DESC");
-			$stmt -> execute();
-			return $stmt -> fetchAll();
+			$stmt->execute();
+			return $stmt->fetchAll();
 		}
 		$stmt = null;
 	}
@@ -124,8 +144,9 @@ class ModeloUsuarios{
 	EDITAR USUARIO
 	=============================================*/
 
-	static public function mdlEditarUsuario($tabla, $datos){
-	
+	static public function mdlEditarUsuario($tabla, $datos)
+	{
+
 		$stmt = Conexion::conectar()->prepare("UPDATE $tabla SET 
 																id_sucursal = :id_sucursal, 
 																nombre_usuario = :nombre_usuario, 
@@ -136,28 +157,25 @@ class ModeloUsuarios{
 																imagen_usuario = :imagen_usuario
 																WHERE id_usuario = :id_usuario");
 
-		$stmt -> bindParam(":id_sucursal", $datos["id_sucursal"], PDO::PARAM_INT);
-		$stmt -> bindParam(":nombre_usuario", $datos["nombre_usuario"], PDO::PARAM_STR);
-		$stmt -> bindParam(":telefono", $datos["telefono"], PDO::PARAM_STR);
-		$stmt -> bindParam(":correo", $datos["correo"], PDO::PARAM_STR);
-		$stmt -> bindParam(":usuario", $datos["usuario"], PDO::PARAM_STR);
-		$stmt -> bindParam(":contrasena", $datos["contrasena"], PDO::PARAM_STR);
-		$stmt -> bindParam(":imagen_usuario", $datos["imagen_usuario"], PDO::PARAM_STR);
-		$stmt -> bindParam(":id_usuario", $datos["id_usuario"], PDO::PARAM_INT);
+		$stmt->bindParam(":id_sucursal", $datos["id_sucursal"], PDO::PARAM_INT);
+		$stmt->bindParam(":nombre_usuario", $datos["nombre_usuario"], PDO::PARAM_STR);
+		$stmt->bindParam(":telefono", $datos["telefono"], PDO::PARAM_STR);
+		$stmt->bindParam(":correo", $datos["correo"], PDO::PARAM_STR);
+		$stmt->bindParam(":usuario", $datos["usuario"], PDO::PARAM_STR);
+		$stmt->bindParam(":contrasena", $datos["contrasena"], PDO::PARAM_STR);
+		$stmt->bindParam(":imagen_usuario", $datos["imagen_usuario"], PDO::PARAM_STR);
+		$stmt->bindParam(":id_usuario", $datos["id_usuario"], PDO::PARAM_INT);
 
-		if($stmt -> execute()){
+		if ($stmt->execute()) {
 
 			return "ok";
-		
-		}else{
+		} else {
 
-			return "error";	
-
+			return "error";
 		}
 
 
 		$stmt = null;
-
 	}
 
 	/*=============================================
@@ -176,8 +194,6 @@ class ModeloUsuarios{
 			print_r($stmt->errorInfo()); // Muestra los errores de SQL
 			return "error";
 		}
-
-	
 	}
 
 
@@ -185,13 +201,14 @@ class ModeloUsuarios{
 	BORRAR USUARIO
 	=============================================*/
 
-	static public function mdlBorrarUsuario($tabla, $datos){
+	static public function mdlBorrarUsuario($tabla, $datos)
+	{
 		$stmt = Conexion::conectar()->prepare("DELETE FROM $tabla WHERE id_usuario = :id_usuario");
-		$stmt -> bindParam(":id_usuario", $datos, PDO::PARAM_INT);
-		if($stmt -> execute()){
+		$stmt->bindParam(":id_usuario", $datos, PDO::PARAM_INT);
+		if ($stmt->execute()) {
 			return "ok";
-		}else{
-			return "error";	
+		} else {
+			return "error";
 		}
 		$stmt = null;
 	}

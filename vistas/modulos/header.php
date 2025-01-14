@@ -183,9 +183,7 @@
                             </h6>
                             <h5>
                                 <?php
-                                foreach ($_SESSION["roles"] as $rol) {
-                                    echo $rol . "<br>";
-                                }
+                                echo $_SESSION["nombre_rol"];
                                 ?>
                             </h5>
 
