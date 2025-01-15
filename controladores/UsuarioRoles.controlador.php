@@ -6,33 +6,76 @@ class ControladorUsuarioRoles
     /*=============================================
 	REGISTRO DE USUARIO ROLES
 	=============================================*/
-
     static public function ctrCrearUsuarioRoles()
     {
-        $idUsuario = $_POST['id_usuario_roles'];
-        $roles = json_decode($_POST['usuario_roles'], true);
+        $tabla_usuario_roles = "usuario_roles";
+        $tabla_role_modulos = "role_modulos";
+        $tabla_rol_modulo_accion = "role_acciones";
 
-        if(!is_array($roles) || empty($roles)){
-            echo json_encode("Error");
-            return;
-        }
+        $id_usuario = $_POST["id_usuario_permiso"];
+        $id_rol = $_POST["id_rol_permiso"];
+        $modulos = json_decode($_POST["modulosAcciones"], true);
 
-        $tabla = "usuario_rol";
-        $respuesta = "ok";
+        $datos = array(
+            "id_usuario" => $id_usuario,
+            "id_rol" => $id_rol
+        );
 
-        foreach ($roles as $idRol) {
-            $datos = array(
-                "id_usuario" => $idUsuario,
-                "id_rol" => $idRol
-            );
+        $respuesta = ModeloUsuariorRoles::mdlIngresarUsuarioRoles($tabla_usuario_roles, $datos);
 
-            $resultado = ModeloUsuariorRoles::mdlIngresarUsuarioRoles($tabla, $datos);
-            if($resultado != "ok"){
-                $respuesta = "Error";
+        if ($respuesta["status"] == true) {
+            $errors = []; // Almacena errores si ocurren
+            $success = true; // Controla si todo se realizó con éxito
+
+            foreach ($modulos as $id_modulo => $acciones) {
+                $datosModulo = array(
+                    "id_rol" => $id_rol,
+                    "id_modulo" => $id_modulo
+                );
+                $response = ModeloUsuariorRoles::mdlIngresarRolModulos($tabla_role_modulos, $datosModulo);
+
+                if ($response["status"] != true) {
+                    $success = false;
+                    $errors[] = $response["message"];
+                    continue;
+                }
+
+                foreach ($acciones as $id_accion) {
+                    $datosRolModuloAccion = array(
+                        "id_rol" => $id_rol,
+                        "id_modulo" => $id_modulo,
+                        "id_accion" => $id_accion
+                    );
+
+                    $respuestaAccion = ModeloUsuariorRoles::mdlIngresarRolModuloAccion($tabla_rol_modulo_accion, $datosRolModuloAccion);
+
+                    if ($respuestaAccion["status"] != true) {
+                        $success = false;
+                        $errors[] = $respuestaAccion["message"];
+                    }
+                }
             }
+
+            // Emitir un único mensaje según el resultado
+            if ($success) {
+                echo json_encode([
+                    "status" => true,
+                    "message" => "Todos los datos se guardaron correctamente."
+                ]);
+            } else {
+                echo json_encode([
+                    "status" => false,
+                    "message" => "Ocurrieron algunos errores: " . implode(", ", $errors)
+                ]);
+            }
+        } else {
+            echo json_encode([
+                "status" => false,
+                "message" => $respuesta["message"]
+            ]);
         }
-        echo json_encode($respuesta);
     }
+
 
     /*=============================================
 	MOSTRAR USUARIO ROLES
@@ -40,14 +83,7 @@ class ControladorUsuarioRoles
 
     static public function ctrMostrarUsuarioRoles($item, $valor)
     {
-        // Define los nombres de las tablas
-        $tablaUsuarioRol = "usuario_rol";
-        $tablaUsuarios = "usuarios";
-        $tablaRoles = "rol";
-
-        // Llama al modelo pasando los nombres de las tablas
-        $respuesta = ModeloUsuariorRoles::mdlMostrarUsuarioRoles($tablaUsuarioRol, $tablaUsuarios, $tablaRoles, $item, $valor);
-
+        $respuesta = ModeloUsuariorRoles::mdlMostrarUsuarioRoles($item, $valor);
         return $respuesta;
     }
 
@@ -67,14 +103,13 @@ class ControladorUsuarioRoles
             "roles" => $rolesSeleccionados,
         );
 
-        $respuesta = ModeloUsuariorRoles::mdlEditarUsuarioRoles($tabla,$datos);
+        $respuesta = ModeloUsuariorRoles::mdlEditarUsuarioRoles($tabla, $datos);
 
         if ($respuesta == "ok") {
             echo json_encode("ok");
         } else {
             echo json_encode("error");
         }
-
     }
 
 
@@ -84,14 +119,41 @@ class ControladorUsuarioRoles
 
     static public function ctrBorrarUsuarioRoles()
     {
+        $tabla_usuario_rol = "usuario_roles";
+        $tabla_role_modulos = "role_modulos";
+        $tabla_role_acciones = "role_acciones";
 
-        if (isset($_POST["deleteIdUsuarioRol"])) {
-            $tabla = "usuario_rol";
-            $datos = $_POST["deleteIdUsuarioRol"];
-            $respuesta = ModeloUsuariorRoles::mdlBorrarUsuarioRoles($tabla, $datos);
-            if ($respuesta == "ok") {
-                echo json_encode("ok");
+        $id_usuario = $_POST["idUsuarioPermisoDelete"];
+        $id_rol = $_POST["idRolPermisoDelete"];
+
+        $respuesta = ModeloUsuariorRoles::mdlBorrarUsuarioRoles($tabla_usuario_rol, $id_usuario);
+        
+        if($respuesta["status"] == true){
+            $response_role_modulos = ModeloUsuariorRoles::mdlBorrarRolModulos($tabla_role_modulos, $id_rol);
+            if($response_role_modulos["status"] == true){
+                $response_role_acciones = ModeloUsuariorRoles::mdlBorrarRolModuloAccion($tabla_role_acciones, $id_rol);
+                if($response_role_acciones["status"] == true){
+                    echo json_encode([
+                        "status" => true,
+                        "message" => "Los datos se han borrado correctamente."
+                    ]);
+                }else{
+                    echo json_encode([
+                        "status" => false,
+                        "message" => "Ocurrió un error al borrar las acciones del rol: ". $response_role_acciones["message"]
+                    ]);
+                }
+            }else{
+                echo json_encode([
+                    "status" => false,
+                    "message" => "Ocurrió un error al borrar los módulos del rol: ". $response_role_modulos["message"]
+                ]);
             }
+        }else{
+            echo json_encode([
+                "status" => false,
+                "message" => "Ocurrió un error al borrar los roles del usuario: ". $respuesta["message"]
+            ]);
         }
     }
 }
