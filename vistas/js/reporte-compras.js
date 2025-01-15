@@ -1,3 +1,42 @@
+
+ /* =====================================
+  CONVERTIR DE DOLARES A 
+  ===================================== */
+  let currentRate = 0;
+
+  async function getExchangeRate(){
+    try {
+      const response = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
+      const data = await response.json();
+      return data.rates.VES;
+    } catch (error) {
+      console.error('Error obteniendo tasas', error);
+      try {
+        const response = await fetch('https://open.er-api.com/v6/latest/USD');
+        const data = await response.json();
+        return data.rates.VES;
+      } catch (error2) {
+        console.log("Error en API de respaldo:", error2);
+        return null;
+      }
+    }
+  }
+
+  async function updateRate() {
+    try {
+      const rate = await getExchangeRate();
+      if (rate) {
+        currentRate = rate; // Asigna la tasa de cambio al valor global
+        document.getElementById("error_moneda").textContent = "";
+      }
+    } catch (error) {
+     /*  console.error("Error al actualizar la tasa:", error); */
+    }
+  }
+
+  setInterval(updateRate, 60 * 60 * 1000);
+
+
 $("#btn_aplicar_filtros_compras").on("click", function (e) {
     e.preventDefault();
     let filtro_usuario_compra = $("#filtro_usuario_compra").val();
@@ -25,7 +64,8 @@ $("#btn_aplicar_filtros_compras").on("click", function (e) {
 /* ===========================
 MOSTRANDO CLIENTES
 =========================== */
-function mostrarProductos(datos) {
+async function mostrarProductos(datos) {
+    await updateRate();
     $.ajax({
         url: "ajax/Reporte.compra.ajax.php",
         type: "POST",
@@ -50,7 +90,9 @@ function mostrarProductos(datos) {
                 let total_pago = producto.total_pago || '<span class="text-secondary">0.00</span>';
                 let estado = producto.estado_pago === 'completado' ? 'Pagado' : 'Pendiente';
 
-                // Generar fila
+                var compra_total = currentRate > 0 ? (producto.total_compra * currentRate).toFixed(2) : "N/A";
+                var compra_total_pago = currentRate > 0 ? (producto.total_pago * currentRate).toFixed(2) : "N/A";
+
                 let fila = `
                     <tr>
                         <td>${index + 1}</td>
@@ -59,8 +101,14 @@ function mostrarProductos(datos) {
                         <td>${fecha_egre}</td>
                         <td>${comprobante}</td>
                         <td>${serie}-${numero}</td>
-                        <td>${total_compra}</td>
-                        <td>${total_pago}</td>
+                        <td>
+                            <div>USD ${total_compra}</div>
+                            <div>VES ${compra_total}</div>
+                        </td>
+                        <td>
+                        <div>USD ${total_pago}</div>
+                        <div>VES ${compra_total_pago}</div>
+                        </td>
                         <td>${estado}</td>
                     </tr>
                 `;

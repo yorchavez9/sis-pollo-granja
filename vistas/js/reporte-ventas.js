@@ -1,3 +1,43 @@
+ /* =====================================
+  CONVERTIR DE DOLARES A 
+  ===================================== */
+  let currentRate = 0;
+
+  async function getExchangeRate(){
+    try {
+      const response = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
+      const data = await response.json();
+      return data.rates.VES;
+    } catch (error) {
+      console.error('Error obteniendo tasas', error);
+      try {
+        const response = await fetch('https://open.er-api.com/v6/latest/USD');
+        const data = await response.json();
+        return data.rates.VES;
+      } catch (error2) {
+        console.log("Error en API de respaldo:", error2);
+        return null;
+      }
+    }
+  }
+
+  async function updateRate() {
+    try {
+      const rate = await getExchangeRate();
+      if (rate) {
+        currentRate = rate; // Asigna la tasa de cambio al valor global
+        document.getElementById("error_moneda").textContent = "";
+      }
+    } catch (error) {
+     /*  console.error("Error al actualizar la tasa:", error); */
+    }
+  }
+
+  setInterval(updateRate, 60 * 60 * 1000);
+
+
+
+
 $("#btn_aplicar_filtros_ventas").on("click", function (e) {
     e.preventDefault();
     let filtro_usuario_venta = $("#filtro_usuario_venta").val();
@@ -25,7 +65,8 @@ $("#btn_aplicar_filtros_ventas").on("click", function (e) {
 /* ===========================
 MOSTRANDO CLIENTES
 =========================== */
-function mostrarProductos(datos) {
+async function mostrarProductos(datos) {
+    await updateRate();
     $.ajax({
         url: "ajax/Reporte.venta.ajax.php",
         type: "POST",
@@ -45,7 +86,7 @@ function mostrarProductos(datos) {
                 let comprobante = producto.tipo_comprobante_sn || '<span class="text-secondary">Sin comprobante</span>';
                 let serie = producto.serie_prefijo || '<span class="text-secondary">Sin serie</span>';
                 let numero = producto.num_comprobante || '<span class="text-secondary">Sin número</span>';
-                let total_compra = producto.total_venta || '<span class="text-secondary">0.00</span>';
+                let total_venta = producto.total_venta || '<span class="text-secondary">0.00</span>';
                 let total_pago = producto.total_pago || '<span class="text-secondary">0.00</span>';
 
                 // Determinar el estado con color
@@ -53,7 +94,8 @@ function mostrarProductos(datos) {
                     producto.estado_pago === 'completado'
                         ? `<span class="text-success">Pagado</span>`
                         : `<span class="text-danger">Pendiente</span>`;
-
+                        var venta_total = currentRate > 0 ? (producto.total_venta * currentRate).toFixed(2) : "N/A";
+                        var venta_total_pago = currentRate > 0 ? (producto.total_pago * currentRate).toFixed(2) : "N/A";
                 // Generar fila
                 let fila = `
             <tr>
@@ -63,8 +105,14 @@ function mostrarProductos(datos) {
                 <td>${fecha_venta}</td>
                 <td>${comprobante}</td>
                 <td>${serie}-${numero}</td>
-                <td>S/ ${total_compra}</td>
-                <td>S/ ${total_pago}</td>
+                <td>
+                    <div>USD ${total_venta}</div>
+                    <div>VES ${venta_total}</div>
+                </td>
+                <td>
+                    <div>USD ${total_pago}</div>
+                    <div>VES ${venta_total_pago}</div>
+                </td>
                 <td>${estado}</td>
             </tr>
         `;

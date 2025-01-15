@@ -198,8 +198,7 @@ $(document).ready(function () {
         var tbody = $("#data_ingresos_egresos");
         tbody.empty();
         respuesta.forEach(function (data, index) {
-          var precioBolivares =
-            currentRate > 0 ? (data.monto * currentRate).toFixed(2) : "N/A";
+          var precioBolivares = currentRate > 0 ? (data.monto * currentRate).toFixed(2) : "N/A";
           var fila = `
                     <tr>
                         <td>${index + 1}</td>

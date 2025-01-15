@@ -224,7 +224,7 @@ $totalProveedores = ControladorProveedores::ctrMostrarTotalProveedores($item, $v
                                                 </a>
                                                 <a href="productlist.html"><?php echo $producto["nombre_producto"] ?></a>
                                             </td>
-                                            <td>S/ <?php echo $producto["precio_producto"] ?></td>
+                                            <td>USD <?php echo $producto["precio_producto"] ?></td>
                                         </tr>
                                     <?php
                                         $contador++;

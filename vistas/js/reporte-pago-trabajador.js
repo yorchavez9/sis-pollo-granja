@@ -42,7 +42,7 @@ function mostrarPagosReporte(datos) {
             <tr>
                 <td>${index + 1}</td>
                 <td>${nombre}</td>
-                <td><b>S/ ${monto}</b></td>
+                <td><b>USD ${monto}</b></td>
                 <td>${fecha}</td>
                 <td>${estado}</td>
             </tr>
