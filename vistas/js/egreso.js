@@ -6,7 +6,8 @@ $(document).ready(function () {
       type: "GET",
       dataType: "json",
       success: function (respuesta) {
-        if (respuesta.length > 0) {
+        console.log(respuesta);
+        if (respuesta && respuesta.length > 0) {
           let encontrado = false;
           respuesta.forEach(function (item) {
             if (item.estado === "abierto") {
@@ -27,6 +28,7 @@ $(document).ready(function () {
             type: "GET",
             dataType: "json",
             success: function (response) {
+              console.log(response);
               if(response.estado === "success") {
                 Swal.fire({
                   title: "¡Aviso!",

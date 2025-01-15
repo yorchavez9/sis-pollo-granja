@@ -803,7 +803,7 @@ $(document).ready(function () {
                     </td>
                     <td>${producto.codigo_producto}</td>
                     <td>${producto.nombre_producto}</td>
-                    <td>S/ ${producto.precio_producto}</td>
+                    <td>USD ${producto.precio_producto}</td>
                     <td>${producto.stock_producto}</td>
                     <td>${producto.fecha_vencimiento}</td>
                     <td>

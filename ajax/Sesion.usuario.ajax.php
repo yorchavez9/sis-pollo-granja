@@ -7,11 +7,8 @@ if (isset($_SESSION["iniciarSesion"]) && $_SESSION["iniciarSesion"] === "ok") {
     $datosSesion = [
         "id_usuario" => $_SESSION["id_usuario"],
         "nombre_usuario" => $_SESSION["nombre_usuario"],
-        "telefono" => $_SESSION["telefono"],
-        "correo" => $_SESSION["correo"],
         "usuario" => $_SESSION["usuario"],
-        "imagen_usuario" => $_SESSION["imagen_usuario"],
-        "roles" => $_SESSION["roles"]
+        "imagen_usuario" => $_SESSION["imagen_usuario"]
     ];
 
     // Enviar respuesta JSON
