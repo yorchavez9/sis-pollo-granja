@@ -306,6 +306,7 @@
                             <div class="form-group">
                                 <label><i class="fas fa-money-bill" style="color: #28C76F"></i> Compra total:</label>
                                 <h3 class="fw-bold" id="total_compra_show"></h3>
+                                <h3 class="fw-bold" id="total_compra_show_ves"></h3>
                             </div>
 
                         </div>
@@ -313,6 +314,7 @@
                             <div class="form-group">
                                 <label><i class="fas fa-money-bill" style="color: #28C76F"></i> Total restante:</label>
                                 <h3 class="fw-bold text-warning" id="total_restante_show"></h3>
+                                <h3 class="fw-bold text-warning" id="total_restante_show_ves"></h3>
                             </div>
                         </div>
                     </div>

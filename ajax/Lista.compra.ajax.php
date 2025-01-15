@@ -12,8 +12,10 @@ if(isset($_POST["idEgresoDelete"])){
     $borrarCompra = new ControladorCompra();
     $borrarCompra->ctrBorrarCompra();
 
+}else if(isset($_POST["id_egreso_pagar"])){
+    $pagar = new ControladorListaCompra();
+    $pagar->ctrActualizarDeudaEgreso();
 }
-
 //MOSTRAR COMPRA EN LA TABLA
 else{
 

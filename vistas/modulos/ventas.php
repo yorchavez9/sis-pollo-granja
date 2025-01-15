@@ -1,4 +1,9 @@
 <style>
+.modal-body{
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
+}
+
     #hora_venta {
         font-weight: bold;
     }

@@ -3,7 +3,10 @@
 /* ===================================
 ESTILOS DE ESTADO DE COTIZACION
 =================================== */
-
+.modal-body{
+  max-height: calc(100vh - 200px);
+  overflow-y: auto;
+}
 
 .btn-enviado {
   background: #28C76F;

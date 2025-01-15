@@ -166,14 +166,19 @@ $(document).ready(function () {
   });
 
   //MOSTRAR DEUDA A COMPRAR
-  $("#data_lista_egresos").on("click", ".btnPagarCompra", function (e) {
+  $("#data_lista_egresos").on("click", ".btnPagarCompra", async function (e) {
     e.preventDefault();
+    await updateRate();
     let idEgreso = $(this).attr("idEgreso");
     let totalCompraEgreso = $(this).attr("totalCompraEgreso");
     let pagoRestanteEgreso = $(this).attr("pagoRestanteEgreso");
+    let total_compra = currentRate > 0 ? (totalCompraEgreso * currentRate).toFixed(2) : "N/A";
+    let pago_restante = currentRate > 0 ? (pagoRestanteEgreso * currentRate).toFixed(2) : "N/A";
     $("#id_egreso_pagar").val(idEgreso);
-    $("#total_compra_show").text("S/ " + totalCompraEgreso);
-    $("#total_restante_show").text("S/ " + pagoRestanteEgreso);
+    $("#total_compra_show").text("USD " + totalCompraEgreso);
+    $("#total_compra_show_ves").text("VES " + total_compra);
+    $("#total_restante_show").text("USD " + pagoRestanteEgreso);
+    $("#total_restante_show_ves").text("VES " + pago_restante);
 
   })
 
@@ -215,7 +220,7 @@ $(document).ready(function () {
 
     // Si el formulario es válido, envíalo
     if (isValid) {
-      var datos = new FormData();
+      const datos = new FormData();
       datos.append("id_egreso_pagar", id_egreso_pagar);
       datos.append("monto_pagar_compra", monto_pagar_compra);
       $.ajax({
