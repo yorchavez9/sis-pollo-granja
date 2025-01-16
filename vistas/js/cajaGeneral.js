@@ -257,6 +257,41 @@ $(document).ready(function () {
     });
   }
 
+  /* ===========================
+    MOSTRANDO CAJA GENRAL APERTURA
+    =========================== */
+  function mostrarResumenVentaCaja() {
+    $.ajax({
+      url: "ajax/Resumen.ventas.ajax.php",
+      type: "GET",
+      dataType: "json",
+      success: function (response) {
+        var tbody = $("#data_resumen_venta_productos");
+        tbody.empty();
+        response.forEach(function (data, index) {
+          var fila = `
+              <tr>
+                  <td>${index + 1}</td>
+                  <td>${data.nombre_producto}</td>
+                  <td class="text-center">USD ${data.total_vendido}</td>
+                  <td class="text-center">USD ${data.ganancia_por_unidad}</td>
+                  <td class="text-center">USD ${data.ganancia_total}</td>
+              </tr>
+          `;
+            tbody.append(fila);
+        });
+
+        // Inicializar DataTables después de cargar los datos
+        $('#tabla_resumen_venta_productos').DataTable();
+    },
+      error: function (xhr, status, error) {
+        console.error("Error al obtener datos de caja:", error);
+        console.log(xhr);
+        console.log(status);
+      },
+    });
+  }
+  mostrarResumenVentaCaja();
   /* ===================================
     CIERRE DE CAJA MANUALMENTE
   =================================== */

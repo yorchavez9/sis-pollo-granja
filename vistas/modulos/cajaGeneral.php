@@ -70,10 +70,53 @@
                 </div>
             </div>
         </div>
+
+
+        <!-- SECTION DE GRAFICOS -->
+        <div class="row">
+            <!-- Donut Chart Column -->
+            <div class="col-12 col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">Productos vendidos</h5>
+                    </div>
+                    <div class="card-body">
+                        <!-- Para hacer el gráfico responsivo -->
+                        <div id="dona_grafico_caja_productos" class="chart-set" style="width: 100%; height: auto;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Table Column -->
+            <div class="col-12 col-md-8">
+                <div class="card">
+                    <div class="card-body table-responsive">
+                        <h6 class="fw-bold">Tabla de ventas de productos</h6>
+                        <table class="table datatable" id="tabla_resumen_venta_productos">
+                            <thead>
+                                <tr>
+                                    <th>N°</th>
+                                    <th>Producto</th>
+                                    <th>Total (Unidad / KG)</th>
+                                    <th>Ganancia (Unidad / KG)</th>
+                                    <th>Ganacia Total</th>
+                                </tr>
+                            </thead>
+                            <tbody id="data_resumen_venta_productos">
+                               
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
         <div class="card">
             <div class="card-body">
                 <div class="table-top"></div>
                 <div class="table-responsive">
+                    <h6 class="fw-bold">Tabla de cierre de cajas</h6>
                     <table class="table table-striped table-bordered" style="width:100%" id="tabla_apertura_cierre_caja">
                         <thead>
                             <tr>

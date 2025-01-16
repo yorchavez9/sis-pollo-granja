@@ -3,6 +3,14 @@
 class ControladorCajaGeneral
 {
 
+	/* ==============================================
+	MOSTRAR RESULTADOS Y CALCULOS DE LAS VENTAS
+	============================================== */
+	static public function ctrMostrarCalcularVentas(){
+        $respuesta = ModeloCajaGeneral::mdlMostrarResumenVentas();
+        return $respuesta;
+	}
+
 	/*=============================================
 	REGISTRO DE CAJA GENERAL
 	=============================================*/
@@ -74,13 +82,5 @@ class ControladorCajaGeneral
 	/*=============================================
 	BORRAR CAJA GENERAL
 	=============================================*/
-	static public function ctrBorraCajaGeneral()
-	{
-        $tabla = "categorias";
-        $datos = $_POST["deleteIdCategoria"];
-        $respuesta = ModeloCajaGeneral::mdlBorrarCajaGeneral($tabla, $datos);
-        if ($respuesta == "ok") {
-            echo json_encode("ok");
-        }
-	}
+	
 }

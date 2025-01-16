@@ -298,6 +298,70 @@ $(document).ready(function () {
         var chart = new ApexCharts(document.querySelector("#mixed-chart"), options);
         chart.render();
     }
+
+    function mostrarResumenVentaCaja() {
+        $.ajax({
+            url: "ajax/Resumen.ventas.ajax.php",
+            type: "GET",
+            dataType: "json",
+            success: function (response) {
+
+                // Validar si response tiene datos
+                if (!response || !Array.isArray(response) || response.length === 0) {
+                    console.error("No hay datos para mostrar en el gráfico");
+                    return;
+                }
+                // Procesar datos para el gráfico de dona
+                var productos = response.map(data => data.nombre_producto);
+                var ventas = response.map(data => parseFloat(data.total_vendido || 0));
+    
+                // Renderizar el gráfico de dona
+                if ($("#dona_grafico_caja_productos").length > 0) {
+                    var donutChart = {
+                        chart: {
+                            height: 350,
+                            type: "donut",
+                            toolbar: { show: false }
+                        },
+                        series: ventas,
+                        labels: productos,
+                        responsive: [
+                            {
+                                breakpoint: 480,
+                                options: {
+                                    chart: { width: 200 },
+                                    legend: { position: "bottom" }
+                                }
+                            },
+                        ],
+                    };
+    
+                    // Destruir gráfico anterior si existe
+                    if (window.donut) {
+                        window.donut.destroy();
+                    }
+    
+                    // Crear y renderizar nuevo gráfico
+                    window.donut = new ApexCharts(
+                        document.querySelector("#dona_grafico_caja_productos"),
+                        donutChart
+                    );
+                    window.donut.render();
+                } else {
+                    console.error("El contenedor #dona_grafico_caja_productos no existe.");
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("Error al obtener datos de caja:", error);
+                console.log(xhr);
+                console.log(status);
+            },
+        });
+    }
+    
+    mostrarResumenVentaCaja();
+    
+
     if ($("#donut-chart").length > 0) {
         var donutChart = {
             chart: { height: 350, type: "donut", toolbar: { show: false } },
@@ -315,6 +379,10 @@ $(document).ready(function () {
         );
         donut.render();
     }
+
+
+
+
     if ($("#radial-chart").length > 0) {
         var radialChart = {
             chart: { height: 350, type: "radialBar", toolbar: { show: false } },
@@ -342,6 +410,8 @@ $(document).ready(function () {
         );
         chart.render();
     }
+
+
 
     var totalVentas = 0;
     var totalCompras = 0;

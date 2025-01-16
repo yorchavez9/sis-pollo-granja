@@ -40,12 +40,6 @@ elseif(isset($_POST["id_movimiento_update"])){
     $cierreCaja->ctrEditarCajaGeneral();
 }
 
-//ELIMINAR CAJA GENERAL
-elseif(isset($_POST["deleteIdCategoria"])){
-    $borrarCategoria = new ControladorCajaGeneral();
-    $borrarCategoria->ctrBorraCajaGeneral();
-}
-
 //MOSTRAR CAJA GENERAL
 else{
     $item = null;

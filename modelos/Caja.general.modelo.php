@@ -6,6 +6,28 @@ class ModeloCajaGeneral
 {
 
 	/*=============================================
+    MOSTRAR REPORTE EN GRAFICOS Y TABLAS DE VENTAS
+    =============================================*/
+	static public function mdlMostrarResumenVentas(){
+		$stmt = Conexion::conectar()->prepare("SELECT 
+													dv.id_producto,
+													p.nombre_producto,
+													SUM(dv.numero_aves) AS total_vendido,
+													(p.precio_producto - p.precio_compra) AS ganancia_por_unidad,
+													SUM(dv.numero_aves) * (p.precio_producto - p.precio_compra) AS ganancia_total
+												FROM 
+													detalle_venta dv
+												JOIN 
+													productos p ON dv.id_producto = p.id_producto
+												WHERE DATE(dv.fecha_detalle) = CURDATE() -- Cambia CURDATE() por una fecha específica si lo deseas
+												GROUP BY dv.id_producto, p.nombre_producto, p.precio_producto, p.precio_compra
+												ORDER BY ganancia_total DESC");
+			$stmt -> execute();
+			return $stmt -> fetchAll();
+	}
+
+
+	/*=============================================
 	MOSTRAR CAJA
 	=============================================*/
 	static public function mdlMostrarCajaGeneral($tabla, $item, $valor){
