@@ -13,10 +13,19 @@ function mostrarIdMovimientoCaja() {
                         $("#id_caja_cotizacion_save").val(item.id_movimiento);
                         encontrado = true;
                     } else {
-                        Swal.fire({
-                            title: "¡Aviso!",
-                            text: "Aperture la caja del día.",
-                            icon: "warning",
+                        $.ajax({
+                            url: "ajax/Sesion.usuario.ajax.php",
+                            type: "GET",
+                            dataType: "json",
+                            success: function (response) {
+                                if (response.estado === "success") {
+                                    Swal.fire({
+                                        title: "¡Aviso!",
+                                        text: "Aperture la caja del día. caso contrario no podrá realizar la compra y venta",
+                                        icon: "warning",
+                                    });
+                                }
+                            }
                         });
                     }
                 });
