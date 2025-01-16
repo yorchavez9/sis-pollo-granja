@@ -308,7 +308,7 @@ $(document).ready(function () {
 
                 // Validar si response tiene datos
                 if (!response || !Array.isArray(response) || response.length === 0) {
-                    console.error("No hay datos para mostrar en el gráfico");
+                    /* console.error("No hay datos para mostrar en el gráfico"); */
                     return;
                 }
                 // Procesar datos para el gráfico de dona

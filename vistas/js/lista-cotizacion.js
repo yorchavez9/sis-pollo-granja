@@ -2,16 +2,15 @@ let idMovimientoCaja = null; // Variable global para almacenar id_movimiento
 
 function mostrarIdMovimientoCaja() {
     $.ajax({
-        url: "ajax/Caja.general.ajax.php",
+        url: "ajax/Verificar.estado.caja.ajax.php",
         type: "GET",
         dataType: "json",
         success: function (respuesta) {
-            if (respuesta.length > 0) {
-                let encontrado = false;
+            /* console.log(respuesta); */
+            if (respuesta && respuesta.length > 0) {
                 respuesta.forEach(function (item) {
                     if (item.estado === "abierto") {
                         $("#id_caja_cotizacion_save").val(item.id_movimiento);
-                        encontrado = true;
                     } else {
                         $.ajax({
                             url: "ajax/Sesion.usuario.ajax.php",

@@ -11,6 +11,15 @@ class ControladorCajaGeneral
         return $respuesta;
 	}
 
+	/* ==============================================
+	MOSTRAR VERIFICACION DEL ESTADO DE LA CAJA (ID)
+	============================================== */
+	static public function ctrMostrarEstadoIdCaja(){
+		$tabla = "movimientos_caja";
+        $respuesta = ModeloCajaGeneral::mdlMostrarEstadoIdCaja($tabla);
+        return $respuesta;
+	}
+
 	/*=============================================
 	REGISTRO DE CAJA GENERAL
 	=============================================*/

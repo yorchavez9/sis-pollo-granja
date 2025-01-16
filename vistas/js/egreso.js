@@ -2,11 +2,10 @@ $(document).ready(function () {
 
   function mostrarIdMovimientoCaja() {
     $.ajax({
-      url: "ajax/Caja.general.ajax.php",
+      url: "ajax/Verificar.estado.caja.ajax.php",
       type: "GET",
       dataType: "json",
       success: function (respuesta) {
-        console.log(respuesta);
         if (respuesta && respuesta.length > 0) {
           let encontrado = false;
           respuesta.forEach(function (item) {

@@ -26,6 +26,16 @@ class ModeloCajaGeneral
 			return $stmt -> fetchAll();
 	}
 
+	/*=============================================
+    MOSTRAR EL ESTADO Y DEVOLUCION DE ESTADO Y ID
+    =============================================*/
+	static public function mdlMostrarEstadoIdCaja($tabla)
+	{
+		$stmt = Conexion::conectar()->prepare("SELECT id_movimiento, fecha_apertura, estado FROM $tabla WHERE estado = 'abierto'");
+		$stmt->execute();
+		return $stmt->fetchAll();
+	}
+
 
 	/*=============================================
 	MOSTRAR CAJA

@@ -3,11 +3,11 @@ import { mostrarVentas } from "./lista-ventas.js";
 
 function mostrarIdMovimientoCaja() {
   $.ajax({
-    url: "ajax/Caja.general.ajax.php",
+    url: "ajax/Verificar.estado.caja.ajax.php",
     type: "GET",
     dataType: "json",
     success: function (respuesta) {
-      if (respuesta.length > 0) {
+      if (respuesta && respuesta.length > 0) {
         let encontrado = false;
         respuesta.forEach(function (item) {
           if (item.estado === "abierto") {
