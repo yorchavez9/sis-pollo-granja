@@ -19,6 +19,30 @@ function formatearPrecio($precio)
     return number_format($precio, 2, '.', ',');
 }
 
+function getExchangeRate() {
+    $primaryUrl = 'https://api.exchangerate-api.com/v4/latest/USD';
+    $backupUrl = 'https://open.er-api.com/v6/latest/USD';
+
+    $response = file_get_contents($primaryUrl);
+    if ($response !== false) {
+        $data = json_decode($response, true);
+        if (isset($data['rates']['VES'])) {
+            return $data['rates']['VES'];
+        }
+    }
+
+    $responseBackup = file_get_contents($backupUrl);
+    if ($responseBackup !== false) {
+        $dataBackup = json_decode($responseBackup, true);
+        if (isset($dataBackup['rates']['VES'])) {
+            return $dataBackup['rates']['VES'];
+        }
+    }
+
+    return null;
+}
+$currentRate = getExchangeRate();
+
 /* ========================================
 MOSTRANDO DATOS DE LA VENTA
 ======================================== */
@@ -200,16 +224,27 @@ foreach ($respuesta_dv as $index => $producto) {
 $impuestoTotal = $totalCompra * ($impuesto / 100);
 $totalConImpuesto = $totalCompra + $impuestoTotal;
 
+$subTotalVES = $totalCompra * $currentRate;
+$impuestoTotalVES = $impuestoTotal * $currentRate;
+$TotalVES = $totalConImpuesto * $currentRate;
+
+
 // Resumen del total
 $pdf->Ln(5);
 $pdf->SetFont('Helvetica', 'B', 10);
+
 $pdf->Cell(150, 10, 'Subtotal:', 0, 0, 'R');
 $pdf->Cell(40, 10, 'USD ' . number_format($totalCompra, 2), 0, 1, 'R');
+$pdf->Cell(190, 10, 'VES ' . number_format($subTotalVES, 2), 0, 1, 'R');
+
 $pdf->Cell(150, 10, 'Impuesto (' . intval($impuesto) . '%):', 0, 0, 'R');
 $pdf->Cell(40, 10, 'USD ' . number_format($impuestoTotal, 2), 0, 1, 'R');
+$pdf->Cell(190, 10, 'VES ' . number_format($impuestoTotalVES, 2), 0, 1, 'R');
+
 // Total con borde superior e inferior
 $pdf->Cell(150, 10, 'Total:', 'TB', 0, 'R'); // Borde superior e inferior en la celda de "Total"
 $pdf->Cell(40, 10, 'USD ' . number_format($totalConImpuesto, 2), 'TB', 1, 'R'); // Borde superior e inferior en la celda del total
+$pdf->Cell(190, 10, 'VES ' . number_format($TotalVES, 2), 'TB', 1, 'R'); // Borde superior e inferior en la celda del total
 
 if (isset($_GET['accion']) && $_GET['accion'] === 'descargar') {
     // Descargar el PDF
