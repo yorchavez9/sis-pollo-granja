@@ -27,6 +27,30 @@ function formatearPrecio($precio)
     return number_format($precio, 2, '.', ',');
 }
 
+function getExchangeRate() {
+    $primaryUrl = 'https://api.exchangerate-api.com/v4/latest/USD';
+    $backupUrl = 'https://open.er-api.com/v6/latest/USD';
+
+    $response = file_get_contents($primaryUrl);
+    if ($response !== false) {
+        $data = json_decode($response, true);
+        if (isset($data['rates']['VES'])) {
+            return $data['rates']['VES'];
+        }
+    }
+
+    $responseBackup = file_get_contents($backupUrl);
+    if ($responseBackup !== false) {
+        $dataBackup = json_decode($responseBackup, true);
+        if (isset($dataBackup['rates']['VES'])) {
+            return $dataBackup['rates']['VES'];
+        }
+    }
+
+    return null;
+}
+$currentRate = getExchangeRate();
+
 /* ========================================
 MOSTRANDO DATOS DE LA VENTA
 ======================================== */
@@ -95,7 +119,13 @@ foreach ($tickets as $ticket) {
     $subtotal = 0;
 
     foreach ($respuesta_de as $value) {
-        $totalPrecioProducto = $value["peso_neto"] * $value["precio_compra"];
+        $totalPrecioProducto = 0;
+        if($value['peso_neto'] == 0){
+            $totalPrecioProducto = $value['numero_aves'] * $value['precio_compra'];
+        }else{
+            $totalPrecioProducto = $value["peso_neto"] * $value["precio_compra"];
+        }
+        
         $subtotal += $totalPrecioProducto;
 
         $pdf->MultiCell(0, 2, iconv("UTF-8", "ISO-8859-1", ""), 0, 'C'); // Si no necesitas esta línea, puedes eliminarla
@@ -113,6 +143,11 @@ foreach ($tickets as $ticket) {
     }
 
 
+    $sub_total_bolivares = $respuesta["subTotal"] * $currentRate;
+    $impuesto_bolivares = $respuesta["impuesto"] * $currentRate;
+    $total_bolivares = $respuesta["total_compra"] * $currentRate;
+
+
     /* Fin detalles de la tabla */
 
     $pdf->Cell(72, 5, iconv("UTF-8", "ISO-8859-1", "-------------------------------------------------------------------"), 0, 0, 'C');
@@ -125,15 +160,26 @@ foreach ($tickets as $ticket) {
 
     $pdf->Ln(5);
 
+    $pdf->Cell(72, 5, iconv("UTF-8", "ISO-8859-1", " VES " . formatearPrecio($sub_total_bolivares) . ""), 0, 0, 'R');
+
+    $pdf->Ln(5);
+
     $pdf->Cell(18, 5, iconv("UTF-8", "ISO-8859-1", ""), 0, 0, 'C');
     $pdf->Cell(22, 5, iconv("UTF-8", "ISO-8859-1", "(IGV ". $respuesta["impuesto"]." %)"), 0, 0, 'R');
     $pdf->Cell(32, 5, iconv("UTF-8", "ISO-8859-1", " USD " . formatearPrecio($respuesta["igv"]) . ""), 0, 0, 'R');
+
+    $pdf->Ln(5);
+    
+    $pdf->Cell(72, 5, iconv("UTF-8", "ISO-8859-1", " VES " . formatearPrecio($impuesto_bolivares) . ""), 0, 0, 'R');
 
     $pdf->Ln(5);
 
     $pdf->Cell(18, 5, iconv("UTF-8", "ISO-8859-1", ""), 0, 0, 'C');
     $pdf->Cell(22, 5, iconv("UTF-8", "ISO-8859-1", "TOTAL A PAGAR"), 0, 0, 'R');
     $pdf->Cell(32, 5, iconv("UTF-8", "ISO-8859-1", "USD " . formatearPrecio($respuesta["total_compra"]) . ""), 0, 0, 'R');
+
+    $pdf->Ln(5);
+    $pdf->Cell(72, 5, iconv("UTF-8", "ISO-8859-1", "VES " . formatearPrecio($total_bolivares) . ""), 0, 0, 'R');
 
     $pdf->Ln(10);
     $pdf->Cell(0, 5, iconv("UTF-8", "ISO-8859-1", "-------------------------------------------------------------------"), 0, 0, 'C');

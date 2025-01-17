@@ -39,6 +39,9 @@ if (isset($_SESSION["iniciarSesion"]) && $_SESSION["iniciarSesion"] == "ok") {
                 /* verificarConfiguracion("ajax/Correo.config.ajax.php", "#section_verficar_configuraciones"); */
                 verificarConfiguracion("ajax/Configuracion.num.serie.ajax.php", "#section_verficar_configuraciones");
             });
+
+            
+
         </script>
     </div>
 
