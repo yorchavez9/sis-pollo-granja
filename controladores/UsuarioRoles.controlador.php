@@ -29,6 +29,7 @@ class ControladorUsuarioRoles
 
             foreach ($modulos as $id_modulo => $acciones) {
                 $datosModulo = array(
+                    "id_usuario" => $id_usuario,
                     "id_rol" => $id_rol,
                     "id_modulo" => $id_modulo
                 );
@@ -42,6 +43,7 @@ class ControladorUsuarioRoles
 
                 foreach ($acciones as $id_accion) {
                     $datosRolModuloAccion = array(
+                        "id_usuario" => $id_usuario,
                         "id_rol" => $id_rol,
                         "id_modulo" => $id_modulo,
                         "id_accion" => $id_accion
@@ -124,14 +126,12 @@ class ControladorUsuarioRoles
         $tabla_role_acciones = "role_acciones";
 
         $id_usuario = $_POST["idUsuarioPermisoDelete"];
-        $id_rol = $_POST["idRolPermisoDelete"];
-
         $respuesta = ModeloUsuariorRoles::mdlBorrarUsuarioRoles($tabla_usuario_rol, $id_usuario);
         
         if($respuesta["status"] == true){
-            $response_role_modulos = ModeloUsuariorRoles::mdlBorrarRolModulos($tabla_role_modulos, $id_rol);
+            $response_role_modulos = ModeloUsuariorRoles::mdlBorrarRolModulos($tabla_role_modulos, $id_usuario);
             if($response_role_modulos["status"] == true){
-                $response_role_acciones = ModeloUsuariorRoles::mdlBorrarRolModuloAccion($tabla_role_acciones, $id_rol);
+                $response_role_acciones = ModeloUsuariorRoles::mdlBorrarRolModuloAccion($tabla_role_acciones, $id_usuario);
                 if($response_role_acciones["status"] == true){
                     echo json_encode([
                         "status" => true,

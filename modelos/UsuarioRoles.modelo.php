@@ -123,7 +123,8 @@ class ModeloUsuariorRoles
     static public function mdlIngresarRolModulos($tabla, $datos)
     {
         try {
-            $stmt = Conexion::conectar()->prepare("INSERT INTO $tabla (id_rol, id_modulo) VALUES (:id_rol, :id_modulo)");
+            $stmt = Conexion::conectar()->prepare("INSERT INTO $tabla (id_usuario, id_rol, id_modulo) VALUES (:id_usuario, :id_rol, :id_modulo)");
+            $stmt->bindParam(":id_usuario", $datos["id_usuario"], PDO::PARAM_INT);
             $stmt->bindParam(":id_rol", $datos["id_rol"], PDO::PARAM_INT);
             $stmt->bindParam(":id_modulo", $datos["id_modulo"], PDO::PARAM_INT);
 
@@ -152,7 +153,8 @@ class ModeloUsuariorRoles
     static public function mdlIngresarRolModuloAccion($tabla, $datos)
     {
         try {
-            $stmt = Conexion::conectar()->prepare("INSERT INTO $tabla (id_rol, id_modulo, id_accion) VALUES (:id_rol, :id_modulo, :id_accion)");
+            $stmt = Conexion::conectar()->prepare("INSERT INTO $tabla (id_usuario, id_rol, id_modulo, id_accion) VALUES (:id_usuario, :id_rol, :id_modulo, :id_accion)");
+            $stmt->bindParam(":id_usuario", $datos["id_usuario"], PDO::PARAM_INT);
             $stmt->bindParam(":id_rol", $datos["id_rol"], PDO::PARAM_INT);
             $stmt->bindParam(":id_modulo", $datos["id_modulo"], PDO::PARAM_INT);
             $stmt->bindParam(":id_accion", $datos["id_accion"], PDO::PARAM_INT);
@@ -230,8 +232,8 @@ class ModeloUsuariorRoles
 	=============================================*/
     static public function mdlBorrarRolModulos($tabla, $datos)
     {
-        $stmt = Conexion::conectar()->prepare("DELETE FROM $tabla WHERE id_rol = :id_rol");
-        $stmt->bindParam(":id_rol", $datos, PDO::PARAM_INT);
+        $stmt = Conexion::conectar()->prepare("DELETE FROM $tabla WHERE id_usuario = :id_usuario");
+        $stmt->bindParam(":id_usuario", $datos, PDO::PARAM_INT);
         if ($stmt->execute()) {
             return [
                 "status" => true,
@@ -250,8 +252,8 @@ class ModeloUsuariorRoles
 	=============================================*/
     static public function mdlBorrarRolModuloAccion($tabla, $datos)
     {
-        $stmt = Conexion::conectar()->prepare("DELETE FROM $tabla WHERE id_rol = :id_rol");
-        $stmt->bindParam(":id_rol", $datos, PDO::PARAM_INT);
+        $stmt = Conexion::conectar()->prepare("DELETE FROM $tabla WHERE id_usuario = :id_usuario");
+        $stmt->bindParam(":id_usuario", $datos, PDO::PARAM_INT);
         if ($stmt->execute()) {
             return [
                 "status" => true,

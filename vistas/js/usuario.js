@@ -190,12 +190,12 @@ $(document).ready(function () {
             // Validar si imagen_usuario existe y es una cadena
             usuario.imagen_usuario = usuario.imagen_usuario
               ? usuario.imagen_usuario.substring(3)
-              : "vistas/img/usuarios/default.jpeg";
+              : "vistas/img/usuarios/default.png";
 
             var fila = `
                     <tr>
                         <td>
-                            <a href="javascript:void(0);" class="product-img">
+                            <a href="javascript:void(0);" class="product-img"">
                                 <img src="${usuario.imagen_usuario}" alt="${usuario.nombre_usuario}">
                             </a>
                         </td>

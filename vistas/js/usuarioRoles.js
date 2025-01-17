@@ -30,76 +30,87 @@ $(document).ready(function () {
   /* ===========================================
   GUARDAR PERMISOS
   =========================================== */
-  $('#btn_guardar_rol_modulo_accion').on('click', function (e) {
-    e.preventDefault();
-
-    let id_usuario_permiso = $('#id_usuario_permiso').val();
-    let id_rol_permiso = $('#id_rol_permiso').val();
-
-    const modulosAcciones = {};
-    if (!id_usuario_permiso) {
+  // Validar usuario y rol
+  function validarUsuarioYRol(idUsuario, idRol) {
+    if (!idUsuario) {
       Swal.fire({
         title: "¡Aviso!",
-        text: 'Selecione un usuario',
+        text: "Seleccione un usuario",
         icon: "warning",
       });
-      return;
-    } else if (!id_rol_permiso) {
-      Swal.fire({
-        title: "¡Aviso!",
-        text: 'Selecione un rol',
-        icon: "warning",
-      });
-      return;
+      return false;
     }
+    if (!idRol) {
+      Swal.fire({
+        title: "¡Aviso!",
+        text: "Seleccione un rol",
+        icon: "warning",
+      });
+      return false;
+    }
+    return true;
+  }
 
-    // Recorrer cada módulo seleccionado
+  // Validar módulos y acciones
+  function validarModulosYAcciones() {
+    const modulosAcciones = {};
+    let moduloSinAcciones = false;
+
     $('input[type="checkbox"][id^="id_modulo_"]:checked').each(function () {
-      const moduloId = $(this).val(); // ID del módulo
+      const moduloId = $(this).val();
       const accionesDelModulo = [];
-
-      // Buscar acciones relacionadas con el módulo actual
       $(this)
-        .closest('.card') // Encontrar el contenedor del módulo
-        .find('input[type="checkbox"][id^="accion_"]:checked') // Buscar las acciones seleccionadas dentro del módulo
+        .closest(".card")
+        .find('input[type="checkbox"][id^="accion_"]:checked')
         .each(function () {
-          accionesDelModulo.push($(this).val()); // Agregar las acciones al array
+          accionesDelModulo.push($(this).val());
         });
+
       if (accionesDelModulo.length === 0) {
-        Swal.fire({
-          title: "¡Aviso!",
-          text: 'Por favor, seleccione al menos una acción para cada módulo.',
-          icon: "warning",
-        });
-        return; // Detener el proceso si el módulo no tiene acciones
+        moduloSinAcciones = true;
+        return false; // Salir del bucle
       }
-      // Agregar el módulo y sus acciones al objeto
+
       modulosAcciones[moduloId] = accionesDelModulo;
     });
 
-    // Validar si se seleccionaron módulos con acciones
+    if (moduloSinAcciones) {
+      Swal.fire({
+        title: "¡Aviso!",
+        text: "Por favor, seleccione al menos una acción para cada módulo.",
+        icon: "warning",
+      });
+      return null;
+    }
+
     if (Object.keys(modulosAcciones).length === 0) {
       Swal.fire({
         title: "¡Aviso!",
-        text: 'Por favor, seleccione al menos un módulo con sus acciones.',
+        text: "Por favor, seleccione al menos un módulo con sus acciones.",
         icon: "warning",
       });
-      return; // Detener el proceso si no se seleccionaron módulos con acciones
+      return null;
     }
+
+    return modulosAcciones;
+  }
+
+  // Guardar datos
+  function guardarDatos(idUsuario, idRol, modulosAcciones) {
     const datos = new FormData();
-    datos.append("id_usuario_permiso", id_usuario_permiso);
-    datos.append("id_rol_permiso", id_rol_permiso);
+    datos.append("id_usuario_permiso", idUsuario);
+    datos.append("id_rol_permiso", idRol);
     datos.append("modulosAcciones", JSON.stringify(modulosAcciones));
 
     $.ajax({
-      url: 'ajax/Usuario.permisos.ajax.php',
+      url: "ajax/Usuario.permisos.ajax.php",
       method: "POST",
       data: datos,
       cache: false,
       contentType: false,
       processData: false,
       success: function (response) {
-        var res = JSON.parse(response);
+        const res = JSON.parse(response);
         if (res.status === true) {
           $("#form_rol_modulo_accion")[0].reset();
           $("#modal_nuevo_permisos_usuario").modal("hide");
@@ -118,11 +129,34 @@ $(document).ready(function () {
         }
       },
       error: function (error) {
-        alert('Ocurrió un error al guardar los datos');
+        Swal.fire({
+          title: "¡Error!",
+          text: "Ocurrió un problema al guardar los datos.",
+          icon: "error",
+        });
         console.error(error);
-      }
+      },
     });
+  }
+
+  // Evento del botón "Guardar"
+  $('#btn_guardar_rol_modulo_accion').on('click', function (e) {
+    e.preventDefault();
+
+    const idUsuario = $('#id_usuario_permiso').val();
+    const idRol = $('#id_rol_permiso').val();
+
+    // Validar usuario y rol
+    if (!validarUsuarioYRol(idUsuario, idRol)) return;
+
+    // Validar módulos y acciones
+    const modulosAcciones = validarModulosYAcciones();
+    if (!modulosAcciones) return;
+
+    // Guardar datos
+    guardarDatos(idUsuario, idRol, modulosAcciones);
   });
+
 
   /* ===========================
   MOSTRANDO PERMISOS
