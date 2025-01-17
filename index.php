@@ -1,5 +1,5 @@
 <?php
-/* error_reporting(0); */
+error_reporting(0);
 /* CONTROLADORES */
 
 require_once "controladores/Plantilla.controlador.php";
