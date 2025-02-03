@@ -131,7 +131,7 @@ foreach ($respuesta as $key => $data) {
     $pdf->Cell($scaledWidths[1], 10, utf8_decode($data['fecha']), 1, 0, 'L');
     $pdf->Cell($scaledWidths[2], 10, utf8_decode($data['tipo']), 1, 0, 'L');
     $pdf->Cell($scaledWidths[3], 10, $data['concepto'], 1, 0, 'C');
-    $pdf->Cell($scaledWidths[4], 10, 'USD ' . number_format($data['monto'], 2), 1, 0, 'C');
+    $pdf->Cell($scaledWidths[4], 10, 'S/ ' . number_format($data['monto'], 2), 1, 0, 'C');
     $pdf->Cell($scaledWidths[5], 10, utf8_decode($data['detalles']), 1, 1, 'C'); // Última celda pasa a la siguiente línea
 }
 

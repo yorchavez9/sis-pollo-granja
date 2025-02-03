@@ -47,12 +47,12 @@
                     <!-- Precio -->
                     <div class="col-md-2">
                         <label for="filtro_precio_min" class="form-label">Precio Mínimo</label>
-                        <input type="number" id="filtro_precio_min" min="0" class="form-control" placeholder="USD">
+                        <input type="number" id="filtro_precio_min" min="0" class="form-control" placeholder="PEN">
                     </div>
 
                     <div class="col-md-2">
                         <label for="filtro_precio_max" class="form-label">Precio Máximo</label>
-                        <input type="number" id="filtro_precio_max" min="0" class="form-control" placeholder="USD">
+                        <input type="number" id="filtro_precio_max" min="0" class="form-control" placeholder="PEN">
                     </div>
 
                     <!-- Fecha de Vencimiento -->

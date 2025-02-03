@@ -72,13 +72,13 @@
                     <!-- Total Compra Mínimo -->
                     <div class="col-md-2 mb-2">
                         <label for="filtro_total_compra_min" class="form-label">Total Compra Mínimo</label>
-                        <input type="number" id="filtro_total_venta_min" min="0" class="form-control" placeholder="USD">
+                        <input type="number" id="filtro_total_venta_min" min="0" class="form-control" placeholder="PEN">
                     </div>
 
                     <!-- Total Compra Máximo -->
                     <div class="col-md-2 mb-2">
                         <label for="filtro_total_compra_max" class="form-label">Total Compra Máximo</label>
-                        <input type="number" id="filtro_total_venta_max" min="0" class="form-control" placeholder="USD">
+                        <input type="number" id="filtro_total_venta_max" min="0" class="form-control" placeholder="PEN">
                     </div>
                 </div>
 

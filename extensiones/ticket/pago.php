@@ -65,12 +65,12 @@ foreach ($tickets as $ticket) {
     $pdf->MultiCell(0, 5, iconv("UTF-8", "ISO-8859-1", "Fecha: " . $fechaVenta . " " . $horaVenta), 0, 'C', false);
     $pdf->MultiCell(0, 5, iconv("UTF-8", "ISO-8859-1", "Cliente: " . $nombreCliente), 0, 'C', false);
     $pdf->SetFont('Arial', 'B', 10);
-    $pdf->MultiCell(0, 5, iconv("UTF-8", "ISO-8859-1", strtoupper("Monto Total: USD " . formatearPrecio($montoTotal))), 0, 'C', false);
+    $pdf->MultiCell(0, 5, iconv("UTF-8", "ISO-8859-1", strtoupper("Monto Total: S/ " . formatearPrecio($montoTotal))), 0, 'C', false);
 
     // Monto pagado y monto restante
     $pdf->SetFont('Arial', '', 9);
-    $pdf->MultiCell(0, 5, iconv("UTF-8", "ISO-8859-1", "Monto Pagado: USD " . formatearPrecio($montoPagado)), 0, 'C', false);
-    $pdf->MultiCell(0, 5, iconv("UTF-8", "ISO-8859-1", "Monto Restante: USD " . formatearPrecio($montoRestante)), 0, 'C', false);
+    $pdf->MultiCell(0, 5, iconv("UTF-8", "ISO-8859-1", "Monto Pagado: S/ " . formatearPrecio($montoPagado)), 0, 'C', false);
+    $pdf->MultiCell(0, 5, iconv("UTF-8", "ISO-8859-1", "Monto Restante: S/ " . formatearPrecio($montoRestante)), 0, 'C', false);
 
     // Finalizando ticket
     $pdf->Ln(10);

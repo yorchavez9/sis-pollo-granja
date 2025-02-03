@@ -18,22 +18,22 @@ function formatearPrecio($precio)
 }
 
 function getExchangeRate() {
-    $primaryUrl = 'https://api.exchangerate-api.com/v4/latest/USD';
-    $backupUrl = 'https://open.er-api.com/v6/latest/USD';
+    $primaryUrl = 'https://api.exchangerate-api.com/v4/latest/PEN';
+    $backupUrl = 'https://open.er-api.com/v6/latest/PEN';
 
     $response = file_get_contents($primaryUrl);
     if ($response !== false) {
         $data = json_decode($response, true);
-        if (isset($data['rates']['VES'])) {
-            return $data['rates']['VES'];
+        if (isset($data['rates']['USD'])) {
+            return $data['rates']['USD'];
         }
     }
 
     $responseBackup = file_get_contents($backupUrl);
     if ($responseBackup !== false) {
         $dataBackup = json_decode($responseBackup, true);
-        if (isset($dataBackup['rates']['VES'])) {
-            return $dataBackup['rates']['VES'];
+        if (isset($dataBackup['rates']['USD'])) {
+            return $dataBackup['rates']['USD'];
         }
     }
 
@@ -216,8 +216,8 @@ foreach ($respuesta_de as $index => $producto) {
     $pdf->Cell(20, 10, $producto['peso_tara'], $borde, 0, 'C');
     $pdf->Cell(15, 10, $producto['peso_merma'], $borde, 0, 'C');
     $pdf->Cell(20, 10, $producto['peso_neto'], $borde, 0, 'C');
-    $pdf->Cell(20, 10, 'USD ' . number_format($producto['precio_compra'], 2), $borde, 0, 'C');
-    $pdf->Cell(25, 10, 'USD ' . number_format($totalProducto, 2), $borde, 1, 'C');
+    $pdf->Cell(20, 10, 'S/ ' . number_format($producto['precio_compra'], 2), $borde, 0, 'C');
+    $pdf->Cell(25, 10, 's/ ' . number_format($totalProducto, 2), $borde, 1, 'C');
 }
 
 // Cálculo del impuesto y el total
@@ -232,15 +232,15 @@ $TotalVES = $totalConImpuesto * $currentRate;
 $pdf->Ln(5);
 $pdf->SetFont('Helvetica', 'B', 10);
 $pdf->Cell(150, 10, 'Subtotal:', 0, 0, 'R');
-$pdf->Cell(40, 10, 'USD ' . number_format($totalCompra, 2), 0, 1, 'R');
-$pdf->Cell(190, 10, 'VES ' . number_format($subTotalVES, 2), 0, 1, 'R');
+$pdf->Cell(40, 10, 'S/ ' . number_format($totalCompra, 2), 0, 1, 'R');
+$pdf->Cell(190, 10, 'USD ' . number_format($subTotalVES, 2), 0, 1, 'R');
 $pdf->Cell(150, 10, 'Impuestos (' . $impuesto . '%):', 0, 0, 'R');
-$pdf->Cell(40, 10, 'USD ' . number_format($impuestoTotal, 2), 0, 1, 'R');
-$pdf->Cell(190, 10, 'VES ' . number_format($impuestoTotalVES, 2), 0, 1, 'R');
+$pdf->Cell(40, 10, 'S/ ' . number_format($impuestoTotal, 2), 0, 1, 'R');
+$pdf->Cell(190, 10, 'USD ' . number_format($impuestoTotalVES, 2), 0, 1, 'R');
 // Total con borde superior e inferior
 $pdf->Cell(150, 10, 'Total:', 'TB', 0, 'R'); // Borde superior e inferior en la celda de "Total"
-$pdf->Cell(40, 10, 'USD ' . number_format($totalConImpuesto, 2), 'TB', 1, 'R'); // Borde superior e inferior en la celda del total
-$pdf->Cell(190, 10, 'VES ' . number_format($TotalVES, 2), 'TB', 1, 'R'); // Borde superior e inferior en la celda del total
+$pdf->Cell(40, 10, 'S/ ' . number_format($totalConImpuesto, 2), 'TB', 1, 'R'); // Borde superior e inferior en la celda del total
+$pdf->Cell(190, 10, 'USD ' . number_format($TotalVES, 2), 'TB', 1, 'R'); // Borde superior e inferior en la celda del total
 
 if (isset($_GET['accion']) && $_GET['accion'] === 'descargar') {
     // Descargar el PDF

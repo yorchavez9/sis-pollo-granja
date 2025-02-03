@@ -554,11 +554,24 @@ $("#btn_crear_nueva_venta").click(function (e) {
   const subtotal = $("#subtotal_venta").text().replace(/,/g, "");
   const igv = $("#igv_venta_show").text().replace(/,/g, "");
   const total = $("#total_precio_venta").text().replace(/,/g, "");
+  
   let tipo_pago = $("input[name='forma_pago_v']:checked").val();
   let metodos_pago_venta = $("#metodos_pago_venta").val();
   let pago_cuota_venta = $("#pago_cuota_venta").val();
   let recibo_de_pago_venta = $("#recibo_de_pago_venta").get(0).files[0];
   let serie_de_pago_venta = $("#serie_de_pago_venta").val();
+
+  // Verificar si algún campo está vacío o no seleccionado
+  if (!tipo_pago || !metodos_pago_venta || !pago_cuota_venta) {
+    Swal.fire({
+      icon: "warning",
+      title: "Campos obligatorios",
+      text: "Selecione el tipo de pago, el método de pago y el monto del pago",
+      confirmButtonText: "Entendido",
+    });
+
+    isValid = false;
+  }
 
   var estado_pago;
   if (tipo_pago == "contado") {
