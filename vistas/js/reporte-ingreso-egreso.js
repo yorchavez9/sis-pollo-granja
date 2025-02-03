@@ -44,7 +44,7 @@ function mostrarIngresoEgreso(datos) {
                             : `<span class="p-1 rounded" style="background: #F5215C; color: white">${data.tipo}</span>`}
                         </td>
                         <td>${data.concepto}</td>
-                        <td>USD ${data.monto}</td>
+                        <td>S/ ${data.monto}</td>
                         <td>${data.detalles}</td>
                     </tr>
                 `;

@@ -5,15 +5,15 @@
 
   async function getExchangeRate(){
     try {
-      const response = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
+      const response = await fetch('https://api.exchangerate-api.com/v4/latest/PEN');
       const data = await response.json();
-      return data.rates.VES;
+      return data.rates.USD;
     } catch (error) {
       console.error('Error obteniendo tasas', error);
       try {
-        const response = await fetch('https://open.er-api.com/v6/latest/USD');
+        const response = await fetch('https://open.er-api.com/v6/latest/PEN');
         const data = await response.json();
-        return data.rates.VES;
+        return data.rates.USD;
       } catch (error2) {
         console.log("Error en API de respaldo:", error2);
         return null;
@@ -106,12 +106,12 @@ async function mostrarProductos(datos) {
                 <td>${comprobante}</td>
                 <td>${serie}-${numero}</td>
                 <td>
-                    <div>USD ${total_venta}</div>
-                    <div>VES ${venta_total}</div>
+                    <div>S/ ${total_venta}</div>
+                    <div>USD ${venta_total}</div>
                 </td>
                 <td>
-                    <div>USD ${total_pago}</div>
-                    <div>VES ${venta_total_pago}</div>
+                    <div>S/ ${total_pago}</div>
+                    <div>USD ${venta_total_pago}</div>
                 </td>
                 <td>${estado}</td>
             </tr>
