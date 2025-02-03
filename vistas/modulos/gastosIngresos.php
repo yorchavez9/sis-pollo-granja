@@ -107,11 +107,11 @@
                     <!-- INGRESO DEL MONTO -->
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="monto_ingreso_egreso" class="form-label mr-2">Precio (USD) (<span class="text-danger">*</span>)</label>
+                            <label for="monto_ingreso_egreso" class="form-label mr-2">Precio (PEN) (<span class="text-danger">*</span>)</label>
                             <div class="d-flex align-items-center">
                                 <input type="number" id="monto_ingreso_egreso" style="max-width: 200px;" value="0.00" min="0" class="form-control mr-3">
                                 <div class="text-center mx-3">
-                                    <h5 class="m-0" id="value_monto_ingreso_egrso">VEZ 0.00</h5>
+                                    <h5 class="m-0" id="value_monto_ingreso_egrso">USD 0.00</h5>
                                 </div>
                             </div>
                             <span class="text-danger" id="error_monto_ingreso_egreso"></span>
@@ -170,11 +170,11 @@
                     <!-- INGRESO DEL MONTO -->
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="edit_monto_ingreso_egreso" class="form-label mr-2">Precio (USD) (<span class="text-danger">*</span>)</label>
+                            <label for="edit_monto_ingreso_egreso" class="form-label mr-2">Precio (PEN) (<span class="text-danger">*</span>)</label>
                             <div class="d-flex align-items-center">
                                 <input type="number" id="edit_monto_ingreso_egreso" style="max-width: 200px;" value="0.00" min="0" class="form-control mr-3">
                                 <div class="text-center mx-3">
-                                    <h5 class="m-0" id="value_monto_ingreso_egreso_edit">VEZ 0.00</h5>
+                                    <h5 class="m-0" id="value_monto_ingreso_egreso_edit">USD 0.00</h5>
                                 </div>
                             </div>
                             <span class="text-danger" id="error_edit_monto_ingreso_egreso"></span>

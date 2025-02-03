@@ -198,15 +198,15 @@
                                             <ul>
                                                 <li>
                                                     <p>Subtotal</p>
-                                                    <p class="price">USD <span id="subtotal_egreso">00.00</span></p>
+                                                    <p class="price">S/ <span id="subtotal_egreso">00.00</span></p>
                                                 </li>
                                                 <li>
                                                     <p>IGV (%)</p>
-                                                    <p class="price">USD <span id="igv_egreso">00.00</span></p>
+                                                    <p class="price">S/ <span id="igv_egreso">00.00</span></p>
                                                 </li>
                                                 <li class="total-value">
                                                     <p class="fw-bold">Total</p>
-                                                    <p class="price">USD <span id="total_precio_egreso">00.00</span></p>
+                                                    <p class="price">S/ <span id="total_precio_egreso">00.00</span></p>
                                                 </li>
                                             </ul>
                                         </div>
@@ -214,7 +214,7 @@
                                             <ul>
                                                 <li class="total-value">
                                                     <p class="fw-bold"></p>
-                                                    <p class="price">VES <span id="total_precio_egreso_ves">00.00</span></p>
+                                                    <p class="price">USD <span id="total_precio_egreso_ves">00.00</span></p>
                                                 </li>
                                             </ul>
                                         </div>

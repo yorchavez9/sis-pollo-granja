@@ -7,15 +7,15 @@ $(document).ready(function () {
 
   async function getExchangeRate(){
     try {
-      const response = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
+      const response = await fetch('https://api.exchangerate-api.com/v4/latest/PEN');
       const data = await response.json();
-      return data.rates.VES;
+      return data.rates.USD;
     } catch (error) {
       console.error('Error obteniendo tasas', error);
       try {
-        const response = await fetch('https://open.er-api.com/v6/latest/USD');
+        const response = await fetch('https://open.er-api.com/v6/latest/PEN');
         const data = await response.json();
-        return data.rates.VES;
+        return data.rates.USD;
       } catch (error2) {
         console.log("Error en API de respaldo:", error2);
         return null;
@@ -44,7 +44,7 @@ $(document).ready(function () {
     let precioBolivares = currentRate > 0 && !isNaN(parseFloat(valor_apertura_caja)) && valor_apertura_caja !== "" 
       ? (parseFloat(valor_apertura_caja) * currentRate).toFixed(2) 
       : "0.00";
-    $("#value_valor_bolivares_caja").text("VES " + precioBolivares);
+    $("#value_valor_bolivares_caja").text("USD " + precioBolivares);
   }
   
   $("#monto_inicial_caja").on("input", function() {
@@ -156,10 +156,10 @@ $(document).ready(function () {
                       <tr>
                           <td class="text-center">${index + 1}</td>
                           <td class="text-center">${item.fecha_cierre}</td>
-                          <td class="text-center">USD ${item.ingresos}</td>
-                          <td class="text-center">USD ${item.egresos}</td>
-                          <td class="text-center">USD ${item.monto_inicial}</td>
-                          <td class="text-center">USD ${item.monto_final}</td>
+                          <td class="text-center">S/ ${item.ingresos}</td>
+                          <td class="text-center">S/ ${item.egresos}</td>
+                          <td class="text-center">S/ ${item.monto_inicial}</td>
+                          <td class="text-center">S/ ${item.monto_final}</td>
                       </tr>
                   `;
 
@@ -273,9 +273,9 @@ $(document).ready(function () {
               <tr>
                   <td>${index + 1}</td>
                   <td>${data.nombre_producto}</td>
-                  <td class="text-center">USD ${data.total_vendido}</td>
-                  <td class="text-center">USD ${data.ganancia_por_unidad}</td>
-                  <td class="text-center">USD ${data.ganancia_total}</td>
+                  <td class="text-center">S/ ${data.total_vendido}</td>
+                  <td class="text-center">S/ ${data.ganancia_por_unidad}</td>
+                  <td class="text-center">S/ ${data.ganancia_total}</td>
               </tr>
           `;
             tbody.append(fila);

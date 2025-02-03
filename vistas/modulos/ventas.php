@@ -206,15 +206,15 @@ $serieNumeroComprobante = ControladorSerieNumero::ctrMostrarSerieNumero($item, $
                                             <ul>
                                                 <li>
                                                     <p>Subtotal</p>
-                                                    <p class="price">USD <span id="subtotal_venta">00.00</span></p>
+                                                    <p class="price">S/ <span id="subtotal_venta">00.00</span></p>
                                                 </li>
                                                 <li>
                                                     <p>IGV (%)</p>
-                                                    <p class="price">USD <span id="igv_venta_show">00.00</span></p>
+                                                    <p class="price">S/ <span id="igv_venta_show">00.00</span></p>
                                                 </li>
                                                 <li class="total-value">
                                                     <p class="fw-bold">Total</p>
-                                                    <p class="price">USD <span id="total_precio_venta">00.00</span></p>
+                                                    <p class="price">S/ <span id="total_precio_venta">00.00</span></p>
                                                 </li>
                                             </ul>
                                         </div>
@@ -223,15 +223,16 @@ $serieNumeroComprobante = ControladorSerieNumero::ctrMostrarSerieNumero($item, $
                                             <ul>
                                                 <li class="total-value">
                                                     <p class="fw-bold"></p>
-                                                    <p class="price">VES <span id="total_precio_venta_ves">00.00</span></p>
+                                                    <p class="price">USD <span id="total_precio_venta_ves">00.00</span></p>
                                                 </li>
                                             </ul>
                                         </div>
                                         <!-- SECTION DE VENTA AL CONTADO O AL CRÉDITO -->
                                         <div class="row mb-3">
+                                            <label for="" class="mb-3">Selecion el tipo de pago (<span class="text-danger">*</span>) </label>
                                             <div class="col">
                                                 <div class="form-check">
-                                                    <input class="form-check-input tipo_pago_venta" type="radio" name="forma_pago_v" value="contado" checked>
+                                                    <input class="form-check-input" type="radio" name="forma_pago_v" value="contado">
                                                     <label class="form-check-label" for="contado">
                                                         Al contado
                                                     </label>
@@ -239,7 +240,7 @@ $serieNumeroComprobante = ControladorSerieNumero::ctrMostrarSerieNumero($item, $
                                             </div>
                                             <div class="col">
                                                 <div class="form-check">
-                                                    <input class="form-check-input tipo_pago_venta" type="radio" name="forma_pago_v" value="credito">
+                                                    <input class="form-check-input" type="radio" name="forma_pago_v" value="credito">
                                                     <label class="form-check-label" for="credito">
                                                         Al crédito
                                                     </label>
@@ -262,7 +263,7 @@ $serieNumeroComprobante = ControladorSerieNumero::ctrMostrarSerieNumero($item, $
                                         </div>
                                         <!-- SECCION DE PAGO DE LA CUOTA -->
                                         <div class="mb-3 mt-3">
-                                            <input type="number" name="pago_cuota_venta" id="pago_cuota_venta" class="form-control" value="0.00" placeholder="Ingrese un monto de la cuota a pagar">
+                                            <input type="number" name="pago_cuota_venta" id="pago_cuota_venta" class="form-control" value="0.00" placeholder="Ingrese el monto a pagar">
                                         </div>
                                         <!-- SECCION DE SUBIR RECIBO DE PAGO Y DE SERIO O NUMERO D PAGO -->
                                         <div class="mt-3">

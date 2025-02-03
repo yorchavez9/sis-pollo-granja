@@ -5,15 +5,15 @@
 
   async function getExchangeRate(){
     try {
-      const response = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
+      const response = await fetch('https://api.exchangerate-api.com/v4/latest/PEN');
       const data = await response.json();
-      return data.rates.VES;
+      return data.rates.USD;
     } catch (error) {
       console.error('Error obteniendo tasas', error);
       try {
-        const response = await fetch('https://open.er-api.com/v6/latest/USD');
+        const response = await fetch('https://open.er-api.com/v6/latest/PEN');
         const data = await response.json();
-        return data.rates.VES;
+        return data.rates.USD;
       } catch (error2) {
         console.log("Error en API de respaldo:", error2);
         return null;
@@ -115,8 +115,8 @@ async function mostrarVentas() {
           let fechaFormateada = partesFecha[2] + "/" + partesFecha[1] + "/" + partesFecha[0];
           let totalventa = formateoPrecio(venta.total_venta);
           let formateadoPagoRestante = formateoPrecio(restantePago);
-          let precioBolivares = currentRate > 0 ? (totalventa * currentRate).toFixed(2) : "N/A";
-          let precioBolivaresRes = currentRate > 0 ? (formateadoPagoRestante * currentRate).toFixed(2) : "N/A";
+          let precioBolivares = currentRate > 0 ? (venta.total_venta * currentRate).toFixed(2) : "N/A";
+          let precioBolivaresRes = currentRate > 0 ? (restantePago * currentRate).toFixed(2) : "N/A";
           var fila = `
                     <tr>
                         <td>${index + 1}</td>
@@ -124,13 +124,13 @@ async function mostrarVentas() {
                         <td>${venta.serie_prefijo}-${venta.num_comprobante}</td>
                         <td>${venta.tipo_pago}</td>
                         <td>
-                          <div>USD ${totalventa}</div>
-                          <div>VES ${precioBolivares}</div>
+                          <div>S/ ${totalventa}</div>
+                          <div>USD ${precioBolivares}</div>
                           <span id="error_moneda_venta"></span>
                         </td>
                         <td>
-                          <div>USD ${formateadoPagoRestante}</div>
-                          <div>VES ${precioBolivaresRes}</div>
+                          <div>S/ ${formateadoPagoRestante}</div>
+                          <div>USD ${precioBolivaresRes}</div>
                         </td>
                         <td>${fechaFormateada}</td>
                         <td class="text-center">
@@ -232,7 +232,7 @@ function cargarHistorialPago(id_venta_historial) {
             <td>${index + 1}</td>
             <td>${historial_pago.fecha_registro}</td>
             <td>${historial_pago.forma_pago}</td>
-            <td>USD ${historial_pago.monto_pago}</td>
+            <td>S/ ${historial_pago.monto_pago}</td>
             <td class="text-center">
               <div>
                 ${comprobanteImagen
@@ -407,7 +407,7 @@ $("#data_edit_productos_detalle_venta").on("click", ".btnAddEditProductoVenta", 
                               <input type="number" class="form-control form-control-sm edit_precio_venta" value="${respuesta.precio_producto}">
                           </td>
                           <td style="text-align: right;">
-                              <p class="price">USD <span class="edit_precio_sub_total_venta">0.00</span></p>
+                              <p class="price">S/ <span class="edit_precio_sub_total_venta">0.00</span></p>
                           </td>
                           
                       </tr>`;
@@ -533,7 +533,7 @@ function calcularTotal() {
     var subtotalString = $(this)
       .find(".edit_precio_sub_total_venta")
       .text()
-      .replace("USD ", "")
+      .replace("S/ ", "")
       .replace(",", "");
 
     var subtotal = parseFloat(subtotalString);
@@ -634,8 +634,8 @@ $("#data_lista_ventas").on("click", ".btnPagarVenta", function (e) {
   // Asignar valores a los elementos del formulario
   $("#id_venta_pagar").val(idVenta);
   $("#tipo_pago_historial_venta").val(tipoPago || ""); // Tipo de pago por defecto vacío si no existe
-  $("#total_venta_pagar").text(`USD ${formatNumber(totalCompraVenta)}`);
-  $("#pago_restante_pagar").text(`USD ${formatNumber(pagoRestanteVenta)}`);
+  $("#total_venta_pagar").text(`S/ ${formatNumber(totalCompraVenta)}`);
+  $("#pago_restante_pagar").text(`S/ ${formatNumber(pagoRestanteVenta)}`);
 
   // Mostrar el modal
   $("#modalPagarVenta").modal("show");
@@ -683,8 +683,8 @@ $("#data_lista_ventas").on("click", ".btnPagarVenta", function (e) {
   // Asignar valores a los elementos del formulario
   $("#id_venta_pagar").val(idVenta);
   $("#tipo_pago_historial_venta").val(tipoPago || ""); // Tipo de pago por defecto vacío si no existe
-  $("#total_venta_pagar").text(`USD ${totalCompraVenta.toFixed(2)}`);
-  $("#pago_restante_pagar").text(`USD ${pagoRestanteVenta.toFixed(2)}`);
+  $("#total_venta_pagar").text(`S/ ${totalCompraVenta.toFixed(2)}`);
+  $("#pago_restante_pagar").text(`S/ ${pagoRestanteVenta.toFixed(2)}`);
 
   // Mostrar el modal
   $("#modalPagarVenta").modal("show");

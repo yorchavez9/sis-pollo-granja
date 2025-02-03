@@ -8,16 +8,16 @@ $(document).ready(function () {
     async function getExchangeRate() {
         try {
             const response = await fetch(
-                "https://api.exchangerate-api.com/v4/latest/USD"
+                "https://api.exchangerate-api.com/v4/latest/PEN"
             );
             const data = await response.json();
-            return data.rates.VES;
+            return data.rates.USD;
         } catch (error) {
             console.error("Error obteniendo tasas", error);
             try {
-                const response = await fetch("https://open.er-api.com/v6/latest/USD");
+                const response = await fetch("https://open.er-api.com/v6/latest/PEN");
                 const data = await response.json();
-                return data.rates.VES;
+                return data.rates.USD;
             } catch (error2) {
                 console.log("Error en API de respaldo:", error2);
                 return null;
@@ -92,9 +92,9 @@ $(document).ready(function () {
             let montoDiferencia = parseFloat($("#monto_diferencia_arqueo_caja").val()) || 0;
 
             // Conversión a CAD
-            let montoSistemaCAD = currentRate > 0 ? (montoSistema * currentRate).toFixed(2) + " VES" : "N/A";
-            let montoFisicoCAD = currentRate > 0 ? (montoFisico * currentRate).toFixed(2) + " VES" : "N/A";
-            let montoDiferenciaCAD = currentRate > 0 ? (montoDiferencia * currentRate).toFixed(2) + " VES" : "N/A";
+            let montoSistemaCAD = currentRate > 0 ? (montoSistema * currentRate).toFixed(2) + " USD" : "N/A";
+            let montoFisicoCAD = currentRate > 0 ? (montoFisico * currentRate).toFixed(2) + " USD" : "N/A";
+            let montoDiferenciaCAD = currentRate > 0 ? (montoDiferencia * currentRate).toFixed(2) + " USD" : "N/A";
 
             // Mostrar valores convertidos
             $("#value_monto_sistema_arqueo_caja").text(montoSistemaCAD);
@@ -111,9 +111,9 @@ $(document).ready(function () {
             let montoDiferencia = parseFloat($("#edit_monto_diferencia_arqueo_caja").val()) || 0;
 
             // Conversión a CAD
-            let montoSistemaCAD = currentRate > 0 ? (montoSistema * currentRate).toFixed(2) + " VES" : "N/A";
-            let montoFisicoCAD = currentRate > 0 ? (montoFisico * currentRate).toFixed(2) + " VES" : "N/A";
-            let montoDiferenciaCAD = currentRate > 0 ? (montoDiferencia * currentRate).toFixed(2) + " VES" : "N/A";
+            let montoSistemaCAD = currentRate > 0 ? (montoSistema * currentRate).toFixed(2) + " USD" : "N/A";
+            let montoFisicoCAD = currentRate > 0 ? (montoFisico * currentRate).toFixed(2) + " USD" : "N/A";
+            let montoDiferenciaCAD = currentRate > 0 ? (montoDiferencia * currentRate).toFixed(2) + " USD" : "N/A";
 
             // Mostrar valores convertidos
             $("#value_monto_sistema_arqueo_caja_edit").text(montoSistemaCAD);
@@ -139,7 +139,7 @@ $(document).ready(function () {
                     respuesta.forEach(function (item) {
                         if (item.estado === "abierto") {
                             let monto_final = parseFloat(item.monto_inicial) + parseFloat(item.ingresos) - parseFloat(item.egresos);
-                            let montoSistemaVES = currentRate > 0 ? (monto_final * currentRate).toFixed(2) + " VES" : "N/A";
+                            let montoSistemaVES = currentRate > 0 ? (monto_final * currentRate).toFixed(2) + " USD" : "N/A";
                             $("#monto_sistema_arqueo_caja").val(monto_final.toFixed(2));
                             $("#value_monto_sistema_arqueo_caja").text(montoSistemaVES);
                             $("#id_movimiento_arqueo_caja").val(item.id_movimiento);
@@ -245,9 +245,9 @@ $(document).ready(function () {
                         <tr>
                             <td>${index + 1}</td>
                             <td>${data.fecha_arqueo}</td>
-                            <td>USD ${data.monto_sistema}</td>
-                            <td>USD ${data.monto_fisico}</td>
-                            <td>USD ${diferencia}</td>
+                            <td>S/ ${data.monto_sistema}</td>
+                            <td>S/ ${data.monto_fisico}</td>
+                            <td>S/ ${diferencia}</td>
                             <td>${data.observaciones}</td>
                             <td class="text-center">
                                 <a href="#" class="me-3 btnEditarArqueoCaja" idArqueoCaja="${data.id_arqueo}" data-bs-toggle="modal" data-bs-target="#modal_editar_arqueo_caja">

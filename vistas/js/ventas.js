@@ -34,15 +34,15 @@ mostrarIdMovimientoCaja();
 
     async function getExchangeRate(){
       try {
-        const response = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
+        const response = await fetch('https://api.exchangerate-api.com/v4/latest/PEN');
         const data = await response.json();
-        return data.rates.VES;
+        return data.rates.USD;
       } catch (error) {
         console.error('Error obteniendo tasas', error);
         try {
-          const response = await fetch('https://open.er-api.com/v6/latest/USD');
+          const response = await fetch('https://open.er-api.com/v6/latest/PEN');
           const data = await response.json();
-          return data.rates.VES;
+          return data.rates.USD;
         } catch (error2) {
           console.log("Error en API de respaldo:", error2);
           return null;
@@ -192,26 +192,6 @@ function handleInputFocusAndBlur(inputSelector, defaultValue) {
 }
 handleInputFocusAndBlur('#igv_venta', '0');
 
-/*=============================================
-SELECIONANDO EL TIPO DE PAGO
-=============================================*/
-// Función para manejar el cambio de tipo de pago
-const manejarTipoPago = () => {
-  const tipoPago = $("input[name='forma_pago_v']:checked").val(); // Obtén el valor del tipo de pago seleccionado
-
-  if (tipoPago === "contado") {
-    $("#pago_cuota_venta").hide(); // Oculta el campo de pago de cuota
-  } else {
-    $("#pago_cuota_venta").show(); // Muestra el campo de pago de cuota
-  }
-};
-
-// Escuchar cambios en los inputs de tipo de pago
-$("input[name='forma_pago_v']").change(manejarTipoPago);
-
-// Ejecutar al cargar la página para ajustar según el valor inicial
-manejarTipoPago();
-
 
 /*=============================================
 SELECION DE FECHA AUTOMATICO
@@ -255,8 +235,8 @@ async function mostrarProductoVenta() {
               </td>
               <td>${producto.nombre_categoria}</td>
               <td class="fw-bold">
-                <div>USD ${producto.precio_producto}</div>
-                <div>VES ${precioBolivares}</div>
+                <div>S/ ${producto.precio_producto}</div>
+                <div>USD ${precioBolivares}</div>
               </td>
               <td>${producto.nombre_producto}</td>
               <td class="text-center">
@@ -356,7 +336,7 @@ $("#tabla_add_producto_venta").on("click touchstart", ".btnAddProductoVenta", fu
           <td><input type="number" class="form-control form-control-sm peso_neto_v" value="0.00" min="0" readonly step="0.01"></td>
           <td><input type="number" class="form-control form-control-sm precio_venta" value="${respuesta.precio_producto}" min="0" step="0.01"></td>
           <td class="text-end">
-            <span style="font-weight: bold;">USD</span>
+            <span style="font-weight: bold;">S/</span>
             <input type="text" class="form-control form-control-sm precio_sub_total_v" value="0.00" readonly style="width: 100px; display: inline-block; text-align: right; font-weight: bold;">
           </td>
         </tr>`;
@@ -499,17 +479,6 @@ $(document).on("click touchstart", ".btnEliminarAddProductoVenta", function (e) 
 });
 
 
-/*=============================================
- MOSTRANDO Y ESCONDIENDO EL TIPO DE PAGO 
- =============================================*/
-$(".tipo_pago_venta").on("click", function () {
-  let valor = $(this).val();
-  if (valor == "credito") {
-    $("#venta_al_contado").hide();
-  } else {
-    $("#venta_al_contado").show();
-  }
-});
 
 // CREAR VENTA
 $("#btn_crear_nueva_venta").click(function (e) {

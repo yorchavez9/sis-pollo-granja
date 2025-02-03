@@ -7,16 +7,16 @@ $(document).ready(function () {
   async function getExchangeRate() {
     try {
       const response = await fetch(
-        "https://api.exchangerate-api.com/v4/latest/USD"
+        "https://api.exchangerate-api.com/v4/latest/PEN"
       );
       const data = await response.json();
-      return data.rates.VES;
+      return data.rates.USD;
     } catch (error) {
       console.error("Error obteniendo tasas", error);
       try {
-        const response = await fetch("https://open.er-api.com/v6/latest/USD");
+        const response = await fetch("https://open.er-api.com/v6/latest/PEN");
         const data = await response.json();
-        return data.rates.VES;
+        return data.rates.USD;
       } catch (error2) {
         console.log("Error en API de respaldo:", error2);
         return null;
@@ -43,7 +43,7 @@ $(document).ready(function () {
       await updateRate();
       let monto = parseFloat($(this).val()) || 0;
       let precioBolivares =
-        currentRate > 0 ? (monto * currentRate).toFixed(2) + " VES" : "N/A";
+        currentRate > 0 ? (monto * currentRate).toFixed(2) + " USD" : "N/A";
       $("#value_monto_ingreso_egrso").text(precioBolivares);
     });
   }
@@ -54,7 +54,7 @@ $(document).ready(function () {
       await updateRate();
       let monto = parseFloat($(this).val()) || 0;
       let precioBolivares =
-        currentRate > 0 ? (monto * currentRate).toFixed(2) + " VES" : "N/A";
+        currentRate > 0 ? (monto * currentRate).toFixed(2) + " USD" : "N/A";
       $("#value_monto_ingreso_egreso_edit").text(precioBolivares);
     });
   }
@@ -210,8 +210,8 @@ $(document).ready(function () {
                         </td>
                         <td>${data.concepto}</td>
                         <td>
-                            <div>USD ${data.monto}</div>
-                            <div>VES ${precioBolivares}</div>
+                            <div>S/ ${data.monto}</div>
+                            <div>USD ${precioBolivares}</div>
                         </td>
                         <td>${data.detalles}</td>
                         <td class="text-center">
@@ -262,7 +262,7 @@ $(document).ready(function () {
         $("#edit_naturaleza_concepto_pago").val(respuesta["concepto"]);
         $("#edit_monto_ingreso_egreso").val(respuesta["monto"]);
         $("#edit_monto_ingreso_egreso_actual").val(respuesta["monto"]);
-        $("#value_monto_ingreso_egreso_edit").text(precioBolivares + ' VES');
+        $("#value_monto_ingreso_egreso_edit").text(precioBolivares + ' USD');
         $("#edit_detalle_ingreso_egreso").val(respuesta["detalles"]);
       },
     });

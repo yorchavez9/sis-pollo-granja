@@ -137,11 +137,11 @@
                         <!-- INGRESO DEL PRECIO  -->
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="precio_producto" class="form-label mr-2">Precio (USD):</label>
+                                <label for="precio_producto" class="form-label mr-2">Precio (PEN):</label>
                                 <div class="d-flex align-items-center">
                                     <input type="number" id="precio_producto" class="form-control mr-3" style="max-width: 150px;" value="0.00" min="0" placeholder="Precio">
                                     <div class="text-center mx-3">
-                                        <h5 class="m-0" id="value_precio_producto">0,00 VES</h5>
+                                        <h5 class="m-0" id="value_precio_producto">0,00 USD</h5>
                                     </div>
                                 </div>
                             </div>

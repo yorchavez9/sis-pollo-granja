@@ -26,22 +26,22 @@ $(document).ready(function () {
 
   async function getExchangeRate(){
     try {
-      const response = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
+      const response = await fetch('https://api.exchangerate-api.com/v4/latest/PEN');
       const data = await response.json();
-      return data.rates.VES;
+      return data.rates.USD;
     } catch (error) {
       console.error('Error obteniendo tasas', error);
       try {
-        const response = await fetch('https://open.er-api.com/v6/latest/USD');
+        const response = await fetch('https://open.er-api.com/v6/latest/PEN');
         const data = await response.json();
-        return data.rates.VES;
+        return data.rates.USD;
       } catch (error2) {
         console.log("Error en API de respaldo:", error2);
         return null;
       }
     }
   }
-
+  
   async function updateRate() {
     try {
       const rate = await getExchangeRate();
@@ -50,10 +50,10 @@ $(document).ready(function () {
         document.getElementById("error_moneda").textContent = "";
       }
     } catch (error) {
-     /*  console.error("Error al actualizar la tasa:", error); */
+      // Manejo de error silencioso
     }
   }
-
+  
   setInterval(updateRate, 60 * 60 * 1000);
 
   /* ===========================
@@ -95,12 +95,12 @@ $(document).ready(function () {
                     <td>${producto.nombre_categoria}</td>
                     <td>${producto.nombre_producto}</td>
                     <td>
-                        <div>USD ${producto.precio_producto}</div>
-                        <div>VES ${precioBolivares}</div>
+                        <div>S/ ${producto.precio_producto}</div>
+                        <div>USD ${precioBolivares}</div>
                         <p class="text-danger" id="error_moneda"></p>
                     </td>
                     <td class="text-center"><button type="button" class="btn btn-sm" style="${getButtonStyles(producto.stock_producto)}">${producto.stock_producto}</button></td>
-                    <td>${producto.fecha_vencimiento ? producto.fecha_vencimiento : 'No tiene fecha de vencimiento'}</td>
+                    <td>${producto.fecha_vencimiento ? producto.fecha_vencimiento : 'Ninguno'}</td>
                     <td>
                         ${producto.estado_producto != 0 ?
                             '<button class="btn bg-lightgreen badges btn-sm rounded btnActivar" idProducto="' + producto.id_producto + '" estadoProducto="0">Activado</button>' :
@@ -396,13 +396,13 @@ $(document).ready(function () {
       dataType: "json",
       success: async function (respuesta) {
         await updateRate();
-        var precioBolivares = currentRate > 0 ? (respuesta["precio_producto"] * currentRate).toFixed(2) : "N/A";
+        var valorUSD = currentRate > 0 ? (respuesta["precio_producto"] * currentRate).toFixed(2) : "N/A";
         $("#edit_id_producto").val(respuesta["id_producto"]);
         $("#edit_id_categoria_p").val(respuesta["id_categoria"]);
         $("#edit_codigo_producto").val(respuesta["codigo_producto"]);
         $("#edit_nombre_producto").val(respuesta["nombre_producto"]);
         $("#edit_precio_producto").val(respuesta["precio_producto"]);
-        $("#value_precio_producto_edit").text(precioBolivares + ' VES');
+        $("#value_precio_producto_edit").text(valorUSD + ' USD');
         $("#edit_stock_producto").val(respuesta["stock_producto"]);
         $("#edit_fecha_vencimiento").val(respuesta["fecha_vencimiento"]);
         $("#edit_descripcion_producto").val(respuesta["descripcion_producto"]);

@@ -31,15 +31,15 @@ $(document).ready(function () {
 
     async function getExchangeRate(){
       try {
-        const response = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
+        const response = await fetch('https://api.exchangerate-api.com/v4/latest/PEN');
         const data = await response.json();
-        return data.rates.VES;
+        return data.rates.USD;
       } catch (error) {
         console.error('Error obteniendo tasas', error);
         try {
-          const response = await fetch('https://open.er-api.com/v6/latest/USD');
+          const response = await fetch('https://open.er-api.com/v6/latest/PEN');
           const data = await response.json();
-          return data.rates.VES;
+          return data.rates.USD;
         } catch (error2) {
           console.log("Error en API de respaldo:", error2);
           return null;

@@ -60,15 +60,15 @@ mostrarIdMovimientoCaja();
 
   async function getExchangeRate(){
     try {
-      const response = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
+      const response = await fetch('https://api.exchangerate-api.com/v4/latest/PEN');
       const data = await response.json();
-      return data.rates.VES;
+      return data.rates.USD;
     } catch (error) {
       console.error('Error obteniendo tasas', error);
       try {
-        const response = await fetch('https://open.er-api.com/v6/latest/USD');
+        const response = await fetch('https://open.er-api.com/v6/latest/PEN');
         const data = await response.json();
-        return data.rates.VES;
+        return data.rates.USD;
       } catch (error2) {
         console.log("Error en API de respaldo:", error2);
         return null;
@@ -206,8 +206,8 @@ async function mostrarCotizaciones() {
                             ${cotizacion.validez == 1 ? cotizacion.validez + ' dia' : cotizacion.validez + ' dias'}
                         </td>
                         <td>
-                            <div>USD ${totalCotizacion}</div>
-                            <div>VES ${precioBolivares}</div>
+                            <div>S/ ${totalCotizacion}</div>
+                            <div>USD ${precioBolivares}</div>
                         </td>
                         <td>${cotizacion.fecha_cotizacion}</td>
                         <td>${cotizacion.hora_cotizacion}</td>

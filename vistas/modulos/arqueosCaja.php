@@ -93,30 +93,30 @@
 
                     <!-- Monto del sistema -->
                     <div class="form-group mb-4">
-                        <label for="monto_sistema_arqueo_caja" class="form-label"><strong>Monto del sistema (USD):</strong></label>
+                        <label for="monto_sistema_arqueo_caja" class="form-label"><strong>Monto del sistema (PEN):</strong></label>
                         <div class="d-flex align-items-center">
                             <input type="number" id="monto_sistema_arqueo_caja" class="form-control" style="max-width: 200px;" value="0.00" min="0" placeholder="Monto sistema">
-                            <h5 class="m-0 text-primary mx-3" id="value_monto_sistema_arqueo_caja">0.00 VES</h5>
+                            <h5 class="m-0 text-primary mx-3" id="value_monto_sistema_arqueo_caja">USD 0.00</h5>
                         </div>
                         <span class="text-danger" id="error_value_monto_sistema_arqueo_caja"></span>
                     </div>
 
                     <!-- Monto físico -->
                     <div class="form-group mb-4">
-                        <label for="monto_fisico_arqueo_caja" class="form-label"><strong>Monto físico y otros (USD):</strong></label>
+                        <label for="monto_fisico_arqueo_caja" class="form-label"><strong>Monto físico y otros (PEN):</strong></label>
                         <div class="d-flex align-items-center">
                             <input type="number" id="monto_fisico_arqueo_caja" class="form-control" style="max-width: 200px;" value="0.00" min="0" placeholder="Monto físico">
-                            <h5 class="m-0 text-success mx-3" id="value_monto_fisico_arqueo_caja">0.00 VES</h5>
+                            <h5 class="m-0 text-success mx-3" id="value_monto_fisico_arqueo_caja">USD 0.00</h5>
                         </div>
                         <span class="text-danger" id="error_value_monto_fisico_arqueo_caja"></span>
                     </div>
 
                     <!-- Monto diferencia -->
                     <div class="form-group mb-4">
-                        <label for="monto_diferencia_arqueo_caja" class="form-label"><strong>Monto diferencia (USD):</strong></label>
+                        <label for="monto_diferencia_arqueo_caja" class="form-label"><strong>Monto diferencia (PEN):</strong></label>
                         <div class="d-flex align-items-center">
                             <input type="number" id="monto_diferencia_arqueo_caja" class="form-control" style="max-width: 200px;" value="0.00" min="0" readonly disabled placeholder="Monto diferencia">
-                            <h5 class="m-0 text-success mx-3" id="value_monto_diferencia_arqueo_caja">0.00 VES</h5>
+                            <h5 class="m-0 text-success mx-3" id="value_monto_diferencia_arqueo_caja">USD 0.00</h5>
                         </div>
                     </div>
 
@@ -168,30 +168,30 @@
 
                     <!-- Monto del sistema -->
                     <div class="form-group mb-4">
-                        <label for="edit_monto_sistema_arqueo_caja" class="form-label"><strong>Monto del sistema (USD):</strong></label>
+                        <label for="edit_monto_sistema_arqueo_caja" class="form-label"><strong>Monto del sistema (PEN):</strong></label>
                         <div class="d-flex align-items-center">
                             <input type="number" id="edit_monto_sistema_arqueo_caja" class="form-control" style="max-width: 200px;" value="0.00" min="0" placeholder="Monto sistema">
-                            <h5 class="m-0 text-primary mx-3" id="value_monto_sistema_arqueo_caja_edit">0.00 VES</h5>
+                            <h5 class="m-0 text-primary mx-3" id="value_monto_sistema_arqueo_caja_edit">USD 0.00</h5>
                         </div>
                         <span class="text-danger" id="error_edit_monto_sistema_arqueo_caja"></span>
                     </div>
 
                     <!-- Monto físico -->
                     <div class="form-group mb-4">
-                        <label for="edit_monto_fisico_arqueo_caja" class="form-label"><strong>Monto físico y otros (USD):</strong></label>
+                        <label for="edit_monto_fisico_arqueo_caja" class="form-label"><strong>Monto físico y otros (PEN):</strong></label>
                         <div class="d-flex align-items-center">
                             <input type="number" id="edit_monto_fisico_arqueo_caja" class="form-control" style="max-width: 200px;" value="0.00" min="0" placeholder="Monto físico">
-                            <h5 class="m-0 text-success mx-3" id="value_edit_monto_fisico_arqueo_caja">0.00 VES</h5>
+                            <h5 class="m-0 text-success mx-3" id="value_edit_monto_fisico_arqueo_caja">USD 0.00</h5>
                         </div>
                         <span class="text-danger" id="error_edit_monto_fisico_arqueo_caja"></span>
                     </div>
 
                     <!-- Monto diferencia -->
                     <div class="form-group mb-4">
-                        <label for="edit_monto_diferencia_arqueo_caja" class="form-label"><strong>Monto diferencia (USD):</strong></label>
+                        <label for="edit_monto_diferencia_arqueo_caja" class="form-label"><strong>Monto diferencia (PEN):</strong></label>
                         <div class="d-flex align-items-center">
                             <input type="number" id="edit_monto_diferencia_arqueo_caja" class="form-control" style="max-width: 200px;" value="0.00" min="0" readonly disabled placeholder="Monto diferencia">
-                            <h5 class="m-0 text-success mx-3" id="value_edit_monto_diferencia_arqueo_caja">0.00 VES</h5>
+                            <h5 class="m-0 text-success mx-3" id="value_edit_monto_diferencia_arqueo_caja">USD 0.00</h5>
                         </div>
                     </div>
 

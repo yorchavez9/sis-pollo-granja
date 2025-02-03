@@ -7,15 +7,15 @@ $(document).ready(function () {
 
   async function getExchangeRate(){
     try {
-      const response = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
+      const response = await fetch('https://api.exchangerate-api.com/v4/latest/PEN');
       const data = await response.json();
-      return data.rates.VES;
+      return data.rates.USD;
     } catch (error) {
       console.error('Error obteniendo tasas', error);
       try {
-        const response = await fetch('https://open.er-api.com/v6/latest/USD');
+        const response = await fetch('https://open.er-api.com/v6/latest/PEN');
         const data = await response.json();
-        return data.rates.VES;
+        return data.rates.USD;
       } catch (error2) {
         console.log("Error en API de respaldo:", error2);
         return null;
@@ -72,13 +72,13 @@ $(document).ready(function () {
                             <td>${egreso.num_comprobante}</td>
                             <td>${egreso.tipo_pago}</td>
                             <td>
-                              <div>USD ${totalCompra}</div>
-                              <div>VES ${precioBolivares}</div>
+                              <div>S/ ${totalCompra}</div>
+                              <div>USD ${precioBolivares}</div>
                               <span id="error_moneda_egreso"></span>
                             </td>
                             <td>
-                            <div>USD ${formateadoPagoRestante}</div>
-                            <div>VES ${precioBolivaresRes}</div>
+                            <div>S/ ${formateadoPagoRestante}</div>
+                            <div>USD ${precioBolivaresRes}</div>
                             </td>
                             <td class="text-center">
                                 ${restantePago == '0.00' ?
@@ -175,10 +175,10 @@ $(document).ready(function () {
     let total_compra = currentRate > 0 ? (totalCompraEgreso * currentRate).toFixed(2) : "N/A";
     let pago_restante = currentRate > 0 ? (pagoRestanteEgreso * currentRate).toFixed(2) : "N/A";
     $("#id_egreso_pagar").val(idEgreso);
-    $("#total_compra_show").text("USD " + totalCompraEgreso);
-    $("#total_compra_show_ves").text("VES " + total_compra);
-    $("#total_restante_show").text("USD " + pagoRestanteEgreso);
-    $("#total_restante_show_ves").text("VES " + pago_restante);
+    $("#total_compra_show").text("S/ " + totalCompraEgreso);
+    $("#total_compra_show_ves").text("USD " + total_compra);
+    $("#total_restante_show").text("S/ " + pagoRestanteEgreso);
+    $("#total_restante_show_ves").text("USD " + pago_restante);
 
   })
 

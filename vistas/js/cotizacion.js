@@ -6,15 +6,15 @@
 
     async function getExchangeRate(){
       try {
-        const response = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
+        const response = await fetch('https://api.exchangerate-api.com/v4/latest/PEN');
         const data = await response.json();
-        return data.rates.VES;
+        return data.rates.USD;
       } catch (error) {
         console.error('Error obteniendo tasas', error);
         try {
-          const response = await fetch('https://open.er-api.com/v6/latest/USD');
+          const response = await fetch('https://open.er-api.com/v6/latest/PEN');
           const data = await response.json();
-          return data.rates.VES;
+          return data.rates.USD;
         } catch (error2) {
           console.log("Error en API de respaldo:", error2);
           return null;
@@ -229,8 +229,8 @@ async function mostrarProductoVenta() {
                             </td>
                             <td>${producto.nombre_categoria}</td>
                             <td class="fw-bold">
-                                <div>USD ${producto.precio_producto}</div>
-                                <div>VES ${precioBolivares}</div>
+                                <div>S/ ${producto.precio_producto}</div>
+                                <div>USD ${precioBolivares}</div>
                             </td>
                             <td>${producto.nombre_producto}</td>
                             <td class="text-center">
@@ -334,7 +334,7 @@ $("#tabla_add_producto_cotizacion").on(
                             <td><input type="number" class="form-control form-control-sm peso_neto_v" value="0.00" min="0" readonly step="0.01"></td>
                             <td><input type="number" class="form-control form-control-sm precio_venta" value="${respuesta.precio_producto}" min="0" step="0.01"></td>
                             <td class="text-end">
-                                <span style="font-weight: bold;">USD</span>
+                                <span style="font-weight: bold;">S/</span>
                                 <input type="text" class="form-control form-control-sm precio_sub_total_v" value="0.00" readonly style="width: 100px; display: inline-block; text-align: right; font-weight: bold;">
                             </td>
                             </tr>`;
