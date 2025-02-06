@@ -126,7 +126,7 @@ mostrarClienteVenta(datos);
 /*=============================================
  DESCARGAR REPORTE
  =============================================*/
-$("#seccion_clientes_reporte").on("click", ".reporte_clientes_pdf", (e) => {
+ $("#seccion_clientes_reporte").on("click", ".reporte_clientes_pdf", (e) => {
     e.preventDefault();
 
     let id_cliente = $("#filtro_cliente_venta").val();
@@ -144,9 +144,6 @@ $("#seccion_clientes_reporte").on("click", ".reporte_clientes_pdf", (e) => {
     // Abrir el reporte PDF con los filtros aplicados
     window.open(url, "_blank");
 
-    // Limpiar los campos de filtro después de abrir el reporte
-    $("#filtro_cliente_venta").val("");
-    $("#filtro_fecha_desde_venta_cliente").val("");
-    $("#filtro_fecha_hasta_venta_cliente").val("");
-    $("#filtro_tipo_venta_cliente").val("");
+    // Refrescar la página para restablecer los filtros
+    location.reload();
 });

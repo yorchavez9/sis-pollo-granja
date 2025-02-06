@@ -75,6 +75,26 @@ class ControladorCliente
 		return $respuesta;
 	}
 
+	/*=============================================
+	MOSTRAR REPORTE CLIENTE VENTAS
+	=============================================*/
+	static public function ctrMostrarReporteClientesPDF()
+	{
+
+		// Capturamos los filtros
+		$filtros = [
+			"id_cliente" => isset($_GET['id_cliente']) ? $_GET['id_cliente'] : null,
+			"fecha_desde" => isset($_GET['fecha_desde']) ? $_GET['fecha_desde'] : null,
+			"fecha_hasta" => isset($_GET['fecha_hasta']) ? $_GET['fecha_hasta'] : null,
+			"tipo_venta" => isset($_GET['tipo_venta']) ? $_GET['tipo_venta'] : null
+		];
+
+		// Pasamos los filtros al modelo
+		$respuesta = ModeloCliente::mdlReporteClienteVentaPDF($filtros);
+
+		return $respuesta;
+	}
+
 
 	/*=============================================
 	MOSTRAR TOTAL DE CLIENTES

@@ -2,7 +2,7 @@
     <div class="content">
         <div class="page-header">
             <div class="page-title">
-                <h4>Reporte de Clientes</h4>
+                <h4>Reporte de ventas por cliente</h4>
                 <h6>Genere su reporte de clientes</h6>
             </div>
             <div class="page-btn">

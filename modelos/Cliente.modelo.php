@@ -21,6 +21,9 @@ class ModeloCliente
 		$stmt = null;
 	}
 
+	/* ===============================================
+	MOSTRAR REPORTE CLIENTE PARA LA TABLA DEL MODULO
+	=============================================== */
 	public static function mdlReporteClientesVenta($filtros)
 	{
 		// Crear la consulta base
@@ -62,6 +65,62 @@ class ModeloCliente
 		$stmt->execute($params);
 
 		// Retornar los resultados
+		return $stmt->fetchAll();
+	}
+
+	/* ====================================================
+	MOSTRAR REPORTE DE CLIENTE PARA EL PDF
+	==================================================== */
+	public static function mdlReporteClienteVentaPDF($filtros){
+		$sql = "SELECT 
+					v.id_venta,
+					dv.id_venta,
+					v.fecha_venta,
+					p.razon_social,
+					pd.nombre_producto,
+					dv.numero_javas,
+					dv.numero_aves,
+					dv.peso_promedio,
+					dv.peso_bruto,
+					dv.peso_tara,
+					dv.peso_neto,
+					dv.precio_venta,
+					v.total_venta,
+					v.total_pago,
+					(v.total_venta - v.total_pago) AS saldo
+				FROM 
+					personas AS p
+				INNER JOIN 
+					ventas AS v ON p.id_persona = v.id_persona
+				INNER JOIN 
+					detalle_venta AS dv ON v.id_venta = dv.id_venta
+				INNER JOIN 
+					productos AS pd ON pd.id_producto = dv.id_producto
+				WHERE 1 = 1";
+
+		$params = [];
+
+		if (!empty($filtros['id_cliente'])) {
+			$sql .= " AND p.id_persona = :id_persona";
+			$params[':id_persona'] = $filtros['id_cliente'];
+		}
+
+		if (!empty($filtros['fecha_desde']) && !empty($filtros['fecha_hasta'])) {
+			$sql .= " AND v.fecha_venta BETWEEN :fecha_desde AND :fecha_hasta";
+			$params[':fecha_desde'] = $filtros['fecha_desde'];
+			$params[':fecha_hasta'] = $filtros['fecha_hasta'];
+		}
+
+		if (!empty($filtros['tipo_venta'])) {
+			$sql .= " AND v.tipo_pago = :tipo_pago";
+			$params[':tipo_pago'] = $filtros['tipo_venta'];
+		}
+
+		$sql .= " ORDER BY v.fecha_venta DESC";
+
+		$stmt = Conexion::conectar()->prepare($sql);
+		$stmt->execute($params);
+
 		return $stmt->fetchAll();
 	}
 
