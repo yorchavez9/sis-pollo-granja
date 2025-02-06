@@ -59,7 +59,7 @@
                     <!-- Botón aplicar filtros -->
                     <div class="col-md-2 mb-2 d-flex align-items-end">
                         <div class="w-100">
-                            <button id="btn_aplicar_filtros_venta_cliente" class="btn btn-primary w-100">Aplicar Filtros</button>
+                            <button id="btn_filtro_venta_cliente" class="btn btn-primary w-100">Aplicar Filtros</button>
                         </div>
                     </div>
                 </div>
@@ -69,13 +69,14 @@
                         <thead>
                             <tr>
                                 <th>N°</th>
-                                <th>Nombre/Razón Social</th>
-                                <th>Documento</th>
-                                <th>Teléfono</th>
-                                <th>Dirección</th>
-                                <th>Ciudad</th>
-                                <th>Código Postal</th>
-                                <th>Estado</th>
+                                <th>Proveedor</th>
+                                <th>Usuario</th>
+                                <th>Fecha </th>
+                                <th>Tipo Comprobante</th>
+                                <th>Serie y número</th>
+                                <th>Total venta</th>
+                                <th>Total Pago</th>
+                                <th>Estado Pago</th>
                             </tr>
                         </thead>
                         <tbody id="data_clientes_reporte">

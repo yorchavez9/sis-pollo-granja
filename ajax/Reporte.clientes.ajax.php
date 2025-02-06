@@ -3,50 +3,49 @@
 require_once "../controladores/Cliente.controlador.php";
 require_once "../modelos/Cliente.modelo.php";
 
-//ELIMINAR CLIENTE
-if(isset($_POST["deleteIdCliente"])){
+if (
+    (isset($_POST["id_cliente"]) && !empty($_POST["id_cliente"])) ||
+    (isset($_POST["fecha_desde"]) && !empty($_POST["fecha_desde"])) ||
+    (isset($_POST["fecha_hasta"]) && !empty($_POST["fecha_hasta"])) ||
+    (isset($_POST["tipo_venta"]) && !empty($_POST["tipo_venta"]))
+) {
+    $respuesta = ControladorCliente::ctrMostrarReporteClientes();
+    echo json_encode($respuesta);
+} else {
+    $mostrarVentas = ControladorCliente::ctrMostrarReporteClientesLista();
 
-    $borrarCliente = new ControladorCliente();
-    $borrarCliente->ctrBorraCliente();
+    $tablaVentasReporte = array();
 
-}
-//MOSTRAR CLIENTE
-else{
+    foreach ($mostrarVentas as $key => $venta) {
 
-    $item = null;
-    $valor = null;
-    $mostrarClientes = ControladorCliente::ctrMostrarCliente($item, $valor);
-    
-    $tablaCliente = array();
-    
-    foreach ($mostrarClientes as $key => $usuario) {
-        
         $fila = array(
-            'id_persona' => $usuario['id_persona'],
-            'tipo_persona' => $usuario['tipo_persona'],
-            'razon_social' => $usuario['razon_social'],
-            'id_doc' => $usuario['id_doc'],
-            'nombre_doc' => $usuario['nombre_doc'],
-            'numero_documento' => $usuario['numero_documento'],
-            'direccion' => $usuario['direccion'],
-            'ciudad' => $usuario['ciudad'],
-            'codigo_postal' => $usuario['codigo_postal'],
-            'telefono' => $usuario['telefono'],
-            'email' => $usuario['email'],
-            'sitio_web' => $usuario['sitio_web'],
-            'estado_persona' => $usuario['estado_persona'],
-            'tipo_banco' => $usuario['tipo_banco'],
-            'numero_cuenta' => $usuario['numero_cuenta'],
-            'fecha_persona' => $usuario['fecha_persona']
+            'id_venta' => $venta['id_venta'],
+            'nombre_usuario' => $venta['nombre_usuario'],
+            'id_usuario' => $venta['id_usuario'],
+            'id_persona' => $venta['id_persona'],
+            'razon_social' => $venta['razon_social'],
+            'numero_documento' => $venta['numero_documento'],
+            'direccion' => $venta['direccion'],
+            'telefono' => $venta['telefono'],
+            'email' => $venta['email'],
+            'tipo_comprobante_sn' => $venta['tipo_comprobante_sn'],
+            'serie_prefijo' => $venta['serie_prefijo'],
+            'num_comprobante' => $venta['num_comprobante'],
+            'impuesto' => $venta['impuesto'],
+            'tipo_pago' => $venta['tipo_pago'],
+            'total_venta' => $venta['total_venta'],
+            'sub_total' => $venta['sub_total'],
+            'igv' => $venta['igv'],
+            'total_pago' => $venta['total_pago'],
+            'fecha_venta' => $venta['fecha_venta'],
+            'hora_venta' => $venta['hora_venta'],
+            'estado_pago' => $venta['estado_pago']
         );
-    
-        
-        $tablaCliente[] = $fila;
+
+
+        $tablaVentasReporte[] = $fila;
     }
-    
-    
-    echo json_encode($tablaCliente);
+
+
+    echo json_encode($tablaVentasReporte);
 }
-
-
-?>

@@ -3,19 +3,13 @@
 class ControladorCliente
 {
 
-
-
 	/*=============================================
 	REGISTRO DE CLIENTE
 	=============================================*/
-
 	static public function ctrCrearCliente()
 	{
 
-
-
 		$tabla = "personas";
-
 		$datos = array(
 			"tipo_persona" => $_POST["tipo_persona"],
 			"razon_social" => $_POST["razon_social"],
@@ -34,7 +28,6 @@ class ControladorCliente
 		$respuesta = ModeloCliente::mdlIngresarCliente($tabla,	$datos);
 
 		if ($respuesta == "ok") {
-
 			echo json_encode("ok");
 		} else {
 			echo json_encode("error");
@@ -47,34 +40,56 @@ class ControladorCliente
 
 	static public function ctrMostrarCliente($item, $valor)
 	{
-
 		$tablaDoc = "tipo_documentos";
 		$tablaPer = "personas";
-
 		$respuesta = ModeloCliente::mdlMostrarCliente($tablaDoc, $tablaPer, $item, $valor);
+		return $respuesta;
+	}
+	/*=============================================
+	MOSTRAR CLIENTE
+	=============================================*/
 
+	static public function ctrMostrarReporteClientesLista()
+	{
+		$respuesta = ModeloCliente::mdlMostrarClienteVentas();
 		return $respuesta;
 	}
 
 	/*=============================================
-	MOSTRAR TOTAL DE CLIENTES
+	MOSTRAR REPORTE CLIENTE VENTAS
 	=============================================*/
-
-	static public function ctrMostrarTotalCliente($item, $valor)
+	static public function ctrMostrarReporteClientes()
 	{
 
+		// Capturamos los filtros
+		$filtros = [
+			"id_cliente" => isset($_POST['id_cliente']) ? $_POST['id_cliente'] : null,
+			"fecha_desde" => isset($_POST['fecha_desde']) ? $_POST['fecha_desde'] : null,
+			"fecha_hasta" => isset($_POST['fecha_hasta']) ? $_POST['fecha_hasta'] : null,
+			"tipo_venta" => isset($_POST['tipo_venta']) ? $_POST['tipo_venta'] : null
+		];
+
+		// Pasamos los filtros al modelo
+		$respuesta = ModeloCliente::mdlReporteClientesVenta($filtros);
+
+		return $respuesta;
+	}
+
+
+	/*=============================================
+	MOSTRAR TOTAL DE CLIENTES
+	=============================================*/
+	static public function ctrMostrarTotalCliente($item, $valor)
+	{
 		$tablaDoc = "tipo_documentos";
 		$tablaPer = "personas";
-
 		$respuesta = ModeloCliente::mdlMostrarTotalClientes($tablaDoc, $tablaPer, $item, $valor);
-
 		return $respuesta;
 	}
 
 	/*=============================================
 	EDITAR CLIENTE
 	=============================================*/
-
 	static public function ctrEditarCliente()
 	{
 		$tabla = "personas";
@@ -103,19 +118,11 @@ class ControladorCliente
 	=============================================*/
 	static public function ctrBorraCliente()
 	{
-
 		if (isset($_POST["deleteIdCliente"])) {
-
 			$tabla = "personas";
-
 			$datos = $_POST["deleteIdCliente"];
-			
-			
-
 			$respuesta = ModeloCliente::mdlBorrarCliente($tabla, $datos);
-
 			if ($respuesta == "ok") {
-
 				echo json_encode("ok");
 			}
 		}
