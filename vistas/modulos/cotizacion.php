@@ -171,18 +171,17 @@ $serieNumeroComprobante = ControladorSerieNumero::ctrMostrarSerieNumero($item, $
                                                 <th scope="col" class="text-white">Opc</th>
                                                 <th scope="col" class="text-white">Img</th>
                                                 <th scope="col" class="text-white">Prod</th>
-                                                <th scope="col" class="text-white">Javas</th>
-                                                <th scope="col" class="text-white">Unidades</th>
-                                                <th scope="col" class="text-white">P. Prom</th>
-                                                <th scope="col" class="text-white">P. Brut</th>
+                                                <th scope="col" class="text-white">Nª Javas</th>
+                                                <th scope="col" class="text-white">Nª Unidades</th>
+                                                <th scope="col" class="text-white">P. Bruto</th>
                                                 <th scope="col" class="text-white">P. Tara</th>
                                                 <th scope="col" class="text-white">P. Merma</th>
+                                                <th scope="col" class="text-white">P. Promedio</th>
                                                 <th scope="col" class="text-white">P. Neto</th>
                                                 <th scope="col" class="text-white">Precio</th>
-                                                <th scope="col" class="text-white">Subt</th>
+                                                <th scope="col" class="text-white">Sub Total</th>
                                             </tr>
                                         </thead>
-
                                         <tbody id="detalle_cotizacion_producto">
                                         </tbody>
                                     </table>

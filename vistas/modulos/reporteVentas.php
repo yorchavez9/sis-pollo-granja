@@ -81,7 +81,6 @@
                         <input type="number" id="filtro_total_venta_max" min="0" class="form-control" placeholder="PEN">
                     </div>
                 </div>
-
                 <div class="row my-3 justify-content-center">
                     <!-- Botón Aplicar Filtros -->
                     <div class="col-md-3 text-center">

@@ -1,8 +1,8 @@
 <style>
-.modal-body{
-    max-height: calc(100vh - 200px);
-    overflow-y: auto;
-}
+    .modal-body {
+        max-height: calc(100vh - 200px);
+        overflow-y: auto;
+    }
 
     #hora_venta {
         font-weight: bold;
@@ -77,7 +77,7 @@ $serieNumeroComprobante = ControladorSerieNumero::ctrMostrarSerieNumero($item, $
                         ======================================-->
                         <form id="form_venta_producto">
 
-                           <!--  ID DE LA APERTURA DE LA CAJA -->
+                            <!--  ID DE LA APERTURA DE LA CAJA -->
                             <input type="hidden" id="id_movimiento_caja_venta">
 
                             <!-- INGRESO DE ID DEL USUARIO -->
@@ -177,16 +177,16 @@ $serieNumeroComprobante = ControladorSerieNumero::ctrMostrarSerieNumero($item, $
                                             <tr style="background: #28C76F;">
                                                 <th scope="col" class="text-white">Opc</th>
                                                 <th scope="col" class="text-white">Img</th>
-                                                <th scope="col" class="text-white">Prod</th>
-                                                <th scope="col" class="text-white">Javas</th>
-                                                <th scope="col" class="text-white">Unidades</th>
-                                                <th scope="col" class="text-white">P. Prom</th>
-                                                <th scope="col" class="text-white">P. Brut</th>
+                                                <th scope="col" class="text-white">Prod.</th>
+                                                <th scope="col" class="text-white">Nª Javas</th>
+                                                <th scope="col" class="text-white">Nª Unidades</th>
+                                                <th scope="col" class="text-white">P. Bruto</th>
                                                 <th scope="col" class="text-white">P. Tara</th>
                                                 <th scope="col" class="text-white">P. Merma</th>
+                                                <th scope="col" class="text-white">P. Promedio</th>
                                                 <th scope="col" class="text-white">P. Neto</th>
                                                 <th scope="col" class="text-white">Precio</th>
-                                                <th scope="col" class="text-white">Subt</th>
+                                                <th scope="col" class="text-white">Sub Total</th>
                                             </tr>
                                         </thead>
 

@@ -327,10 +327,10 @@ $("#tabla_add_producto_cotizacion").on(
                             <td>${respuesta.nombre_producto}</td>
                             <td><input type="number" class="form-control form-control-sm numero_javas_v" value="0" min="0" style="width: 50px;"></td>
                             <td><input type="number" class="form-control form-control-sm numero_aves_v" value="0" min="0"></td>
-                            <td><input type="number" class="form-control form-control-sm peso_promedio_v" value="0.00" min="0" readonly step="0.01"></td>
                             <td><input type="number" class="form-control form-control-sm peso_bruto_v" value="0.00" min="0" step="0.01"></td>
                             <td><input type="number" class="form-control form-control-sm peso_tara_v" value="0.00" min="0" step="0.01"></td>
                             <td><input type="number" class="form-control form-control-sm peso_merma_v" value="0.00" min="0" step="0.01"></td>
+                            <td><input type="number" class="form-control form-control-sm peso_promedio_v" value="0.00" min="0" readonly step="0.01"></td>
                             <td><input type="number" class="form-control form-control-sm peso_neto_v" value="0.00" min="0" readonly step="0.01"></td>
                             <td><input type="number" class="form-control form-control-sm precio_venta" value="${respuesta.precio_producto}" min="0" step="0.01"></td>
                             <td class="text-end">
