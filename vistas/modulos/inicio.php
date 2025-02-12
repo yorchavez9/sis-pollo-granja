@@ -61,7 +61,7 @@ $totalProveedores = ControladorProveedores::ctrMostrarTotalProveedores($item, $v
                         <span><img src="vistas/assets/img/icons/dash2.svg" alt="img"></span>
                     </div>
                     <div class="dash-widgetcontent">
-                        <h5>USD <span class="counters"><?php echo $precioFormateado ?></span></h5>
+                        <h5>S/ <span class="counters"><?php echo $precioFormateado ?></span></h5>
                         <h6>Total de ventas</h6>
                     </div>
                 </div>
@@ -72,7 +72,7 @@ $totalProveedores = ControladorProveedores::ctrMostrarTotalProveedores($item, $v
                         <span><img src="vistas/assets/img/icons/dash1.svg" alt="img"></span>
                     </div>
                     <div class="dash-widgetcontent">
-                        <h5>USD <span class="counters"><?php echo $precioFormateadoCompra; ?></span></h5>
+                        <h5>S/ <span class="counters"><?php echo $precioFormateadoCompra; ?></span></h5>
                         <h6>Total de compras</h6>
                     </div>
                 </div>
@@ -83,7 +83,7 @@ $totalProveedores = ControladorProveedores::ctrMostrarTotalProveedores($item, $v
                         <span><img src="vistas/assets/img/icons/dash3.svg" alt="img"></span>
                     </div>
                     <div class="dash-widgetcontent">
-                        <h5>USD <span class="counters"><?php echo $precioFormateadoContado ?></span></h5>
+                        <h5>S/ <span class="counters"><?php echo $precioFormateadoContado ?></span></h5>
                         <h6>Ventas al contado</h6>
                     </div>
                 </div>
@@ -94,7 +94,7 @@ $totalProveedores = ControladorProveedores::ctrMostrarTotalProveedores($item, $v
                         <span><img src="vistas/assets/img/icons/dash4.svg" alt="img"></span>
                     </div>
                     <div class="dash-widgetcontent">
-                        <h5>USD <span class="counters"><?php echo $precioFormateadoCredito ?></span></h5>
+                        <h5>S/ <span class="counters"><?php echo $precioFormateadoCredito ?></span></h5>
                         <h6>Ventas al crédito</h6>
                     </div>
                 </div>
@@ -224,7 +224,7 @@ $totalProveedores = ControladorProveedores::ctrMostrarTotalProveedores($item, $v
                                                 </a>
                                                 <a href="productlist.html"><?php echo $producto["nombre_producto"] ?></a>
                                             </td>
-                                            <td>USD <?php echo $producto["precio_producto"] ?></td>
+                                            <td>S/ <?php echo $producto["precio_producto"] ?></td>
                                         </tr>
                                     <?php
                                         $contador++;
