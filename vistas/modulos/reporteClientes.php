@@ -17,7 +17,7 @@
                 <div class="row mb-4">
                     <!-- Usuario -->
                     <div class="col-md-3 mb-2">
-                        <label for="filtro_cliente" class="form-label">Usuario</label>
+                        <label for="filtro_cliente" class="form-label">Selecione el cliente</label>
                         <select id="filtro_cliente_venta" class="select">
                             <option value="">Todos</option>
                             <!-- Aquí puedes cargar los usuarios dinámicamente desde la base de datos -->
