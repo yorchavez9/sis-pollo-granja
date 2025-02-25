@@ -96,8 +96,8 @@ $(document).ready(function () {
                             </a>
                             <a href="#" class="me-3 confirm-text btnEliminarCategoria" idCategoria="${categoria.id_categoria}">
                                 <i class="text-danger fa fa-trash fa-lg"></i>
-                            </a>
-                        </td>
+                            </>
+                        </td>a
                     </tr>
                 `;
                   tbody.append(fila);
