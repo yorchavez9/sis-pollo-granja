@@ -261,7 +261,7 @@ $(document).ready(function () {
             precio_sub_total_f = numero_aves * precio_compra;
           }else{
             // Calcular peso_bruto, peso_neto y precio_sub_total
-            peso_neto_f = peso_bruto - peso_tara - peso_merma;
+            peso_neto_f = peso_bruto - peso_tara + peso_merma;
             peso_promedio_f = peso_neto_f / numero_aves;
             precio_sub_total_f = peso_neto_f * precio_compra;
           }

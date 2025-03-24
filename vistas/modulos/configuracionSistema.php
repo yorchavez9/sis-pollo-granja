@@ -109,7 +109,7 @@ MODAL NUEVA CONFIGURACION
 
                             <!-- Campo Icono de pestaña -->
                             <div class="mb-3">
-                                <label for="icon_pestana" class="form-label"><i class="fa fa-window-maximize text-success"></i> Icono de pestaña del boscador (Google)</label>
+                                <label for="icon_pestana" class="form-label"><i class="fa fa-window-maximize text-success"></i> Icono de pestaña del buscador (Google)</label>
                                 <input type="file" class="form-control" id="icon_pestana_sis" name="icon_pestana" accept="image/*" required onchange="previewImage(event, 'preview_icon_pestana')">
                                 <img id="preview_icon_pestana" src="" alt="Vista previa" class="img-thumbnail mt-2" style="display: none; max-height: 150px;">
                             </div>
