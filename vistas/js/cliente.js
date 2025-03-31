@@ -483,7 +483,7 @@ function mostrarReporteClientes() {
     dataType: "json",
     success: function (clientes) {
 
-      var tbody = $("#dataReporteCliente");
+      let tbody = $("#dataReporteCliente");
 
       tbody.empty();
 
@@ -491,7 +491,7 @@ function mostrarReporteClientes() {
 
       clientes.forEach(function (cliente) {
 
-        var fila = `
+        let fila = `
                 <tr>
                     <td>
                         ${contador}
@@ -549,7 +549,7 @@ $("#btn_descargar_reporte_cliente").click(function (e) {
 
   e.preventDefault();
 
-  var idCliente = $(this).attr("idVenta");
+  let idCliente = $(this).attr("idVenta");
 
   window.open("extensiones/reportes/reporte.cliente.php?idCliente=" + idCliente, "_blank");
 
