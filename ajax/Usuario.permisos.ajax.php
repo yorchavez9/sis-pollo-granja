@@ -5,14 +5,14 @@ require_once "../modelos/UsuarioRoles.modelo.php";
 
 class AjaxPermisos
 {
-
     /*=============================================
-	EDITAR PERMISOS
-	=============================================*/
+    EDITAR PERMISOS
+    =============================================*/
     public $idCategoria;
+    
     public function ajaxEditarCategoria()
     {
-        $item = "id_categoria";
+        $item = "id_usuario";
         $valor = $this->idCategoria;
         $respuesta = ControladorUsuarioRoles::ctrMostrarUsuarioRoles($item, $valor);
         echo json_encode($respuesta);
@@ -27,25 +27,21 @@ if (isset($_POST["idCategoria"])) {
     $editar->idCategoria = $_POST["idCategoria"];
     $editar->ajaxEditarCategoria();
 }
-
-//GUARDAR PERSMISO
+//GUARDAR PERMISO
 elseif (isset($_POST["id_usuario_permiso"])) {
     $crear = new ControladorUsuarioRoles();
     $crear->ctrCrearUsuarioRoles();
 }
-
 //ACTUALIZAR PERMISO
-elseif(isset($_POST["edit_id_categoria"])){
+elseif(isset($_POST["edit_id_usuario"])){
     $actualizar = new ControladorUsuarioRoles();
     $actualizar->ctrEditarUsuarioRoles();
 }
-
 //ELIMINAR PERMISO
 elseif(isset($_POST["idUsuarioPermisoDelete"])){
     $borrar = new ControladorUsuarioRoles();
     $borrar->ctrBorrarUsuarioRoles();
 }
-
 //MOSTRAR PERMISO
 else{
     $item = null;
@@ -64,6 +60,7 @@ else{
             'estado_usuario' => $data['estado_usuario'],
             'nombre_rol' => $data['nombre_rol'],
             'modulos' => $data['modulos'],
+            'acciones' => $data['acciones'],
             'id_rol' => $data['id_rol']
         );
         $tabla[] = $fila;
@@ -71,4 +68,3 @@ else{
     echo json_encode($tabla);
 }
 ?>
-
