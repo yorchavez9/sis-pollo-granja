@@ -440,6 +440,7 @@ $(document).ready(function () {
         type: "GET",
         dataType: "json",
         success: function (ventas) {
+            
             // Procesar los datos de ventas
             ventas.forEach(venta => {
                 const mes = new Date(venta.fecha_venta).getMonth();
@@ -478,7 +479,7 @@ $(document).ready(function () {
 
     // Función para actualizar el gráfico una vez obtenidos los datos
     function actualizarGrafico() {
-        if (ventasListas && comprasListas && $("#sales_charts").length > 0) {
+        if (ventasListas && comprasListas && $("#").length > 0) {
             var options = {
                 series: [
                     { name: "Ventas", data: ventasPorMes },
@@ -513,7 +514,7 @@ $(document).ready(function () {
             if (typeof chart !== "undefined") {
                 chart.updateOptions(options);
             } else {
-                chart = new ApexCharts(document.querySelector("#sales_charts"), options);
+                chart = new ApexCharts(document.querySelector("#"), options);
                 chart.render();
             }
         }
