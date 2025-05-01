@@ -1,14 +1,5 @@
 $(document).ready(function () {
 
-    $.ajax({
-        url: "ajax/Sesion.usuario.ajax.php",
-        type: "GET",
-        dataType: "json",
-        success: function (response) {
-            console.log(response);
-        }
-    });
-
     /* ===========================================
     GUARDAR SUCURSAL
     =========================================== */

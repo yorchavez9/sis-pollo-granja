@@ -245,7 +245,7 @@ $(document).ready(function () {
               }
             }, 1000);
           } else {
-            console.log("La fecha de cierre no es hoy.");
+            /* console.log("La fecha de cierre no es hoy."); */
           }
         } else {
           console.log("No hay datos disponibles.");
