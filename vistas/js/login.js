@@ -28,8 +28,7 @@ $(document).ready(function () {
             contentType: false,  // Necesario para FormData
             dataType: "json",
             success: function (respuesta) {
-                console.log(respuesta);
-                return;
+   
                 if (respuesta.status) {
                     window.location = respuesta.redirect;
                 } else {

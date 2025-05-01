@@ -72,7 +72,7 @@ class ControladorUsuarios
     static public function ctrCrearUsuario()
     {
         // Validar campos obligatorios
-        $camposRequeridos = ["usuario", "contrasena", "id_sucursal", "id_persona", "nombre_usuario"];
+        $camposRequeridos = ["usuario", "telefono", "correo", "contrasena", "id_sucursal", "nombre_usuario"];
         foreach ($camposRequeridos as $campo) {
             if (!isset($_POST[$campo])) {
                 return self::jsonResponse(false, "El campo $campo es requerido");
@@ -99,11 +99,12 @@ class ControladorUsuarios
         // Crear usuario
         $datos = [
             "id_sucursal" => (int)$_POST["id_sucursal"],
-            "id_persona" => (int)$_POST["id_persona"],
             "nombre_usuario" => htmlspecialchars(trim($_POST["nombre_usuario"])),
+            "telefono" => $_POST["telefono"],
+            "correo" => $_POST["correo"],
             "usuario" => $usuario,
             "contrasena" => password_hash($_POST["contrasena"], PASSWORD_DEFAULT),
-            "imagen" => $imagen,
+            "imagen_usuario" => $imagen,
             "estado" => 1
         ];
 

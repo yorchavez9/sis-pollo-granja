@@ -2,15 +2,15 @@
 
 require_once "Conexion.php";
 
-class ModeloAccion
+class ModeloModulo
 {
     /*=============================================
-    MOSTRAR ACCIONES
+    MOSTRAR MODULOS
     =============================================*/
-    static public function mdlMostrarAcciones()
+    static public function mdlMostrarModulos()
     {
         try {
-            $stmt = Conexion::conectar()->prepare("SELECT * FROM acciones");
+            $stmt = Conexion::conectar()->prepare("SELECT * FROM modulos");
             $stmt->execute();
             return json_encode([
                 "status" => true,

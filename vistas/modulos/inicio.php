@@ -52,7 +52,8 @@ $totalProveedores = ControladorProveedores::ctrMostrarTotalProveedores($item, $v
 <div class="page-wrapper">
     <div class="content">
         <?php 
-        if($_SESSION["nombre_rol"] === "ADMINISTRADOR" && strpos($_SESSION["modulos"], "inicio") !== false){
+       /*  echo '<pre>' . print_r($_SESSION["permisos"], true) . '</pre>'; */
+        if(isset($_SESSION["roles"][0]["nombre"]) && $_SESSION["roles"][0]["nombre"] == "ADMINISTRADOR" && isset($_SESSION["permisos"]["inicio"]["acciones"]) && in_array("ver", $_SESSION["permisos"]["inicio"]["acciones"])){
         ?>
         <div class="row">
             <div class="col-lg-3 col-sm-6 col-12">

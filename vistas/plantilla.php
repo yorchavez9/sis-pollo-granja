@@ -2,8 +2,7 @@
 session_start();
 
 include "modulos/layouts/head.php";
-
-if (isset($_SESSION["iniciarSesion"]) && $_SESSION["iniciarSesion"] == "ok") {
+if (isset($_SESSION["iniciarSesion"]) && $_SESSION["iniciarSesion"] == "ok" && isset($_SESSION["roles"][0]["nombre"]) && $_SESSION["roles"][0]["nombre"] == "ADMINISTRADOR") {
 ?>
     <?php echo '<div class="main-wrapper">'; ?>
     <div id="section_verficar_configuraciones">

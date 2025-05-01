@@ -1,279 +1,234 @@
 <?php
-$rol = $_SESSION["nombre_rol"];
-$modulos = $_SESSION["modulos"];
+$permisos = $_SESSION["permisos"] ?? [];
 ?>
 
 <div class="sidebar" id="sidebar">
     <div class="sidebar-inner slimscroll">
         <div id="sidebar-menu" class="sidebar-menu">
             <ul>
-  
-                <!-- Panel principal -->
-                <?php if (in_array('inicio', explode(',', $modulos))) : 
-                    ?>
-                    <li class="active">
-                        <a href="inicio"><img src="vistas/assets/img/icons/dashboard.svg" alt="img"><span>Panel</span></a>
-                    </li>
+                <!-- Dashboard -->
+                <?php if (isset($permisos["inicio"])) : ?>
+                <li class="active">
+                    <a href="inicio"><i class="fas fa-home"></i><span>Panel Principal</span></a>
+                </li>
                 <?php endif; ?>
-
-                <!-- Sucursales -->
-                <?php if (in_array('sucursales', explode(',', $modulos))) : ?>
-                    <li>
-                        <a href="sucursales">
-                            <i class="fas fa-store" style="color: #808080;"></i> <!-- Color plomo -->
-                            <span>Sucursales</span>
-                        </a>
-                    </li>
-                <?php endif; ?>
-
-                <!-- Personas -->
-                 <?php 
-                 $section_personas = false;
-                 ?>
+                
+                <!-- Personas - Solo mostrar si tiene al menos un permiso -->
+                <?php if (isset($permisos["tipo_documento"]) || isset($permisos["proveedores"]) || isset($permisos["clientes"])) : ?>
                 <li class="submenu">
-                    <?php ob_start() ?>
-                    <a href="javascript:void(0);"><img src="vistas/assets/img/icons/users1.svg" alt="img"><span>Personas</span> <span class="menu-arrow"></span></a>
+                    <a href="javascript:void(0);"><i class="fas fa-users"></i><span>Personas</span> <span class="menu-arrow"></span></a>
                     <ul>
-                        <?php if (in_array('tipo_documento', explode(',', $modulos))) : $section_personas = true; ?>
-                            <li><a href="tipoDocumento">Tipo documento</a></li>
+                        <?php if (isset($permisos["tipo_documento"])) : ?>
+                        <li><a href="tipoDocumento"><i class="fas fa-id-card"></i> Tipo de Documento</a></li>
                         <?php endif; ?>
-                        <?php if (in_array('roles', explode(',', $modulos))) : $section_personas = true; ?>
-                            <li><a href="roles">Roles</a></li>
+                        
+                        <?php if (isset($permisos["proveedores"])) : ?>
+                        <li><a href="proveedores"><i class="fas fa-truck"></i> Proveedores</a></li>
                         <?php endif; ?>
-                        <?php if (in_array('usuarios', explode(',', $modulos))) : $section_personas = true; ?>
-                            <li><a href="usuarios">Usuarios</a></li>
-                        <?php endif; ?>
-                        <?php if (in_array('permisos', explode(',', $modulos))) : $section_personas = true; ?>
-                            <li><a href="permisos">Permisos</a></li>
-                        <?php endif; ?>
-                        <?php if (in_array('proveedores', explode(',', $modulos))) : $section_personas = true; ?>
-                            <li><a href="proveedores">Proveedores</a></li>
-                        <?php endif; ?>
-                        <?php if (in_array('clientes', explode(',', $modulos))) : $section_personas = true; ?>
-                            <li><a href="clientes">Clientes</a></li>
+                        
+                        <?php if (isset($permisos["clientes"])) : ?>
+                        <li><a href="clientes"><i class="fas fa-user-friends"></i> Clientes</a></li>
                         <?php endif; ?>
                     </ul>
                 </li>
-                <?php
-                $show_section_personas = ob_get_clean();
-                if($section_personas){
-                    echo $show_section_personas;
-                }
-                ?>
-
-                <!-- Inventario -->
-                <?php
-                $section_inventario = false;
-                ?>
+                <?php endif; ?>
+                
+                <!-- Usuarios y Seguridad -->
+                <?php if (isset($permisos["roles"]) || isset($permisos["usuarios"]) || isset($permisos["permisos"])) : ?>
                 <li class="submenu">
-                    <?php ob_start() ?>
-                    <a href="javascript:void(0);"><img src="vistas/assets/img/icons/product.svg" alt="img"><span>Inventario</span> <span class="menu-arrow"></span></a>
+                    <a href="javascript:void(0);"><i class="fas fa-user-shield"></i><span>Seguridad</span> <span class="menu-arrow"></span></a>
                     <ul>
-                        <?php if (in_array('categorias', explode(',', $modulos))) :  $section_inventario = true; ?>
-                            <li><a href="categorias">Categorías</a></li>
+                        <?php if (isset($permisos["roles"])) : ?>
+                        <li><a href="roles"><i class="fas fa-user-tag"></i> Roles</a></li>
                         <?php endif; ?>
-                        <?php if (in_array('proveedores', explode(',', $modulos))) : $section_inventario = true; ?>
-                            <li><a href="proveedores">Proveedor</a></li>
+                        
+                        <?php if (isset($permisos["usuarios"])) : ?>
+                        <li><a href="usuarios"><i class="fas fa-users-cog"></i> Usuarios</a></li>
                         <?php endif; ?>
-                        <?php if (in_array('productos', explode(',', $modulos))) : $section_inventario = true; ?>
-                            <li><a href="productos">Producto</a></li>
-                        <?php endif; ?>
-                        <?php if (in_array('codigo_barra', explode(',', $modulos))) : $section_inventario = true; ?>
-                            <li><a href="codigoBarra">Imprimir código de barras</a></li>
+                        
+                        <?php if (isset($permisos["permisos"])) : ?>
+                        <li><a href="permisos"><i class="fas fa-key"></i> Permisos</a></li>
                         <?php endif; ?>
                     </ul>
                 </li>
-                <?php
-                $show_section_inventario = ob_get_clean();
-                if($section_inventario){
-                    echo $show_section_inventario;
-                }
-                ?>
-
+                <?php endif; ?>
+                
+                <!-- Inventario y Productos -->
+                <?php if (isset($permisos["categorias"]) || isset($permisos["productos"]) || isset($permisos["codigo_barra"])) : ?>
+                <li class="submenu">
+                    <a href="javascript:void(0);"><i class="fas fa-boxes"></i><span>Inventario</span> <span class="menu-arrow"></span></a>
+                    <ul>
+                        <?php if (isset($permisos["categorias"])) : ?>
+                        <li><a href="categorias"><i class="fas fa-tags"></i> Categorías</a></li>
+                        <?php endif; ?>
+                        
+                        <?php if (isset($permisos["productos"])) : ?>
+                        <li><a href="productos"><i class="fas fa-box-open"></i> Productos</a></li>
+                        <?php endif; ?>
+                        
+                        <?php if (isset($permisos["codigo_barra"])) : ?>
+                        <li><a href="codigoBarra"><i class="fas fa-barcode"></i> Códigos de Barras</a></li>
+                        <?php endif; ?>
+                    </ul>
+                </li>
+                <?php endif; ?>
+                
                 <!-- Compras -->
-                <?php
-                $section_compras = false;
-                ?>
+                <?php if (isset($permisos["compras"]) || isset($permisos["lista_compras"])) : ?>
                 <li class="submenu">
-                    <?php ob_start(); ?>
-                    <a href="javascript:void(0);"><img src="vistas/assets/img/icons/purchase1.svg" alt="img"><span>Compras</span> <span class="menu-arrow"></span></a>
+                    <a href="javascript:void(0);"><i class="fas fa-shopping-basket"></i><span>Compras</span> <span class="menu-arrow"></span></a>
                     <ul>
-                        <?php if (in_array('compras', explode(',', $modulos))) : $section_compras = true; ?>
-                            <li><a href="compras">Compra</a></li>
+                        <?php if (isset($permisos["compras"])) : ?>
+                        <li><a href="compras"><i class="fas fa-cart-plus"></i> Registrar Compra</a></li>
                         <?php endif; ?>
-                        <?php if (in_array('lista_compras', explode(',', $modulos))) : $section_compras = true ?>
-                            <li><a href="listaCompras">Lista de compras</a></li>
+                        
+                        <?php if (isset($permisos["lista_compras"])) : ?>
+                        <li><a href="listaCompras"><i class="fas fa-list"></i> Historial Compras</a></li>
                         <?php endif; ?>
                     </ul>
                 </li>
-                <?php
-                $show_section_compras = ob_get_clean();
-                if($section_compras){
-                    echo $show_section_compras;
-                }
-                ?>
-
+                <?php endif; ?>
+                
                 <!-- Ventas -->
-                <?php
-                $section_ventas = false;
-                ?>
+                <?php if (isset($permisos["cotizacion"]) || isset($permisos["ventas"])) : ?>
                 <li class="submenu">
-                    <?php ob_start(); ?>
-                    <a href="javascript:void(0);"><img src="vistas/assets/img/icons/sales1.svg" alt="img"><span>Ventas</span> <span class="menu-arrow"></span></a>
+                    <a href="javascript:void(0);"><i class="fas fa-cash-register"></i><span>Ventas</span> <span class="menu-arrow"></span></a>
                     <ul>
-                        <?php if (in_array('cotizacion', explode(',', $modulos))) : $section_ventas = true; ?>
-                            <li><a href="cotizacion">Cotizaciones</a></li>
+                        <?php if (isset($permisos["cotizacion"])) : ?>
+                        <li><a href="cotizacion"><i class="fas fa-file-invoice-dollar"></i> Cotizaciones</a></li>
                         <?php endif; ?>
-                        <?php if (in_array('ventas', explode(',', $modulos))) : $section_ventas = true; ?>
-                            <li><a href="ventas">Punto de venta</a></li>
+                        
+                        <?php if (isset($permisos["ventas"])) : ?>
+                        <li><a href="ventas"><i class="fas fa-shopping-cart"></i> Punto de Venta</a></li>
                         <?php endif; ?>
                     </ul>
                 </li>
-                <?php
-                $show_section_ventas = ob_get_clean();
-                if($section_ventas){
-                    echo $show_section_ventas;
-                }
-                ?>
-
-                <!-- CAJA -->
-                <?php
-                $section_caja = false;
-                ?>
+                <?php endif; ?>
+                
+                <!-- Gestión de Caja -->
+                <?php if (isset($permisos["caja_general"]) || isset($permisos["arqueos_caja"]) || 
+                      isset($permisos["gastos_ingresos"]) || isset($permisos["reportes_caja"])) : ?>
                 <li class="submenu">
-                    <?php ob_start(); ?>
-                    <a href="javascript:void(0);">
-                        <i class="fas fa-cash-register" style="color: #808080;"></i><span>Caja</span> <span class="menu-arrow"></span>
-                    </a>
+                    <a href="javascript:void(0);"><i class="fas fa-cash-register"></i><span>Caja</span> <span class="menu-arrow"></span></a>
                     <ul>
-                        <?php if (in_array('caja_general', explode(',', $modulos))) : $section_caja = true; ?>
-                            <li><a href="cajaGeneral">Apertura & Cierre</a></li>
+                        <?php if (isset($permisos["caja_general"])) : ?>
+                        <li><a href="cajaGeneral"><i class="fas fa-door-open"></i> Apertura/Cierre</a></li>
                         <?php endif; ?>
-                        <?php if (in_array('arqueos_caja', explode(',', $modulos))) : $section_caja = true; ?>
-                            <li><a href="arqueosCaja">Arqueo de caja</a></li>
+                        
+                        <?php if (isset($permisos["arqueos_caja"])) : ?>
+                        <li><a href="arqueosCaja"><i class="fas fa-calculator"></i> Arqueos</a></li>
                         <?php endif; ?>
-                        <?php if (in_array('gastos_ingresos', explode(',', $modulos))) : $section_caja = true; ?>
-                            <li><a href="gastosIngresos">Gastos/Ingresos extras</a></li>
+                        
+                        <?php if (isset($permisos["gastos_ingresos"])) : ?>
+                        <li><a href="gastosIngresos"><i class="fas fa-exchange-alt"></i> Gastos/Ingresos</a></li>
                         <?php endif; ?>
-                        <?php if (in_array('reportes_caja', explode(',', $modulos))) : $section_caja = true; ?>
-                            <li><a href="reportesCaja">Reportes Gastos/Ingresos</a></li>
-                        <?php endif; ?>
-                        <?php if (in_array('reporte_ventas', explode(',', $modulos))) : $section_caja = true; ?>
-                            <li><a href="reporteVentas">Reportes de ventas</a></li>
-                        <?php endif; ?>
-                        <?php if (in_array('reporte_compras', explode(',', $modulos))) : $section_caja = true; ?>
-                            <li><a href="reporteCompras">Reportes de compras</a></li>
+                        
+                        <?php if (isset($permisos["reportes_caja"])) : ?>
+                        <li><a href="reportesCaja"><i class="fas fa-chart-bar"></i> Reportes Caja</a></li>
                         <?php endif; ?>
                     </ul>
                 </li>
-                <?php
-                $show_section_caja = ob_get_clean();
-                if($section_caja){
-                    echo $show_section_caja;
-                }
-                ?>
+                <?php endif; ?>
                 
                 <!-- Trabajadores -->
-                <?php
-                $section_trabajadores = false;
-                ?>
+                <?php if (isset($permisos["trabajador"]) || isset($permisos["contrato_trabajador"]) || 
+                      isset($permisos["pago_trabajador"]) || isset($permisos["vacaciones"]) || 
+                      isset($permisos["asistencia"])) : ?>
                 <li class="submenu">
-                    <?php ob_start(); ?>
-                    <a href="javascript:void(0);"><img src="vistas/assets/img/icons/users1.svg" alt="img"><span>Trabajadores</span> <span class="menu-arrow"></span></a>
+                    <a href="javascript:void(0);"><i class="fas fa-user-tie"></i><span>Trabajadores</span> <span class="menu-arrow"></span></a>
                     <ul>
-                        <?php if (in_array('trabajador', explode(',', $modulos))) : $section_trabajadores = true; ?>
-                            <li><a href="trabajador">Trabajadores</a></li>
+                        <?php if (isset($permisos["trabajador"])) : ?>
+                        <li><a href="trabajador"><i class="fas fa-users"></i> Trabajadores</a></li>
                         <?php endif; ?>
-                        <?php if (in_array('contrato_trabajador', explode(',', $modulos))) : $section_trabajadores = true; ?>
-                            <li><a href="contratoTrabajador">Contrato trabajador</a></li>
+                        
+                        <?php if (isset($permisos["contrato_trabajador"])) : ?>
+                        <li><a href="contratoTrabajador"><i class="fas fa-file-signature"></i> Contratos</a></li>
                         <?php endif; ?>
-                        <?php if (in_array('pago_trabajador', explode(',', $modulos))) : $section_trabajadores = true; ?>
-                            <li><a href="pagoTrabajador">Pagos trabajador</a></li>
+                        
+                        <?php if (isset($permisos["pago_trabajador"])) : ?>
+                        <li><a href="pagoTrabajador"><i class="fas fa-money-bill-wave"></i> Pagos</a></li>
                         <?php endif; ?>
-                        <?php if (in_array('vacaciones', explode(',', $modulos))) : $section_trabajadores = true; ?>
-                            <li><a href="vacaciones">Vacaciones</a></li>
+                        
+                        <?php if (isset($permisos["vacaciones"])) : ?>
+                        <li><a href="vacaciones"><i class="fas fa-umbrella-beach"></i> Vacaciones</a></li>
                         <?php endif; ?>
-                        <?php if (in_array('asistencia', explode(',', $modulos))) : $section_trabajadores = true; ?>
-                            <li><a href="asistencia">Asistencia</a></li>
+                        
+                        <?php if (isset($permisos["asistencia"])) : ?>
+                        <li><a href="asistencia"><i class="fas fa-calendar-check"></i> Asistencias</a></li>
                         <?php endif; ?>
-                    </ul>
-                </li>
-                <?php
-                $show_section_trabajadores = ob_get_clean();
-                if($section_trabajadores){
-                    echo $show_section_trabajadores;
-                }
-                ?>
-
-                <!-- REPORTES -->
-                <?php
-                $section_reportes = false;
-                ?>
-                <li class="submenu">
-                    <?php ob_start(); ?>
-                    <a href="javascript:void(0);">
-                        <img src="vistas/assets/img/icons/time.svg" alt="img">
-                        <span>Reportes</span> <span class="menu-arrow"></span>
-                    </a>
-                    <ul>
-                        <?php if (in_array('reporte_sucursales', explode(',', $modulos))) : $section_reportes = true; ?>
-                            <li><a href="reporteSucursales">Sucursales</a></li>
-                        <?php endif; ?>
-                        <?php if (in_array('reporte_usuarios', explode(',', $modulos))) : $section_reportes = true; ?>
-                            <li><a href="reporteUsuarios">Usuarios</a></li>
-                        <?php endif; ?>
-                        <?php if (in_array('reporte_roles', explode(',', $modulos))) : $section_reportes = true; ?>
-                            <li><a href="reporteRoles">Roles</a></li>
-                        <?php endif; ?>
-                        <?php if (in_array('reporte_proveedores', explode(',', $modulos))) : $section_reportes = true; ?>
-                            <li><a href="reporteProveedores">Proveedores</a></li>
-                        <?php endif; ?>
-                        <?php if (in_array('reporte_clientes', explode(',', $modulos))) : $section_reportes = true; ?>
-                            <li><a href="reporteClientes">Clientes</a></li>
-                        <?php endif; ?>
-                        <?php if (in_array('reporte_productos', explode(',', $modulos))) : $section_reportes = true; ?>
-                            <li><a href="reporteProductos">Productos</a></li>
-                        <?php endif; ?>
-                        <?php if (in_array('reporte_compras', explode(',', $modulos))) : $section_reportes = true; ?>
-                            <li><a href="reporteCompras">Compras</a></li>
-                        <?php endif; ?>
-                        <?php if (in_array('reporte_ventas', explode(',', $modulos))) : $section_reportes = true; ?>
-                            <li><a href="reporteVentas">Ventas</a></li>
-                        <?php endif; ?>
-                        <?php if (in_array('reporte_trabajadores', explode(',', $modulos))) : $section_reportes = true; ?>
-                            <li><a href="reporteTrabajadores">Trabajadores</a></li>
-                        <?php endif; ?>
-                        <?php if (in_array('reporte_pagos_trabajador', explode(',', $modulos))) : $section_reportes = true; ?>
-                            <li><a href="reportePagosTrabajador">Pagos trabajador</a></li>
-                        <?php endif; ?>
-                        <?php if (in_array('reporte_asistencia', explode(',', $modulos))) : $section_reportes = true; ?>
-                            <li><a href="reporteAsistencia">Asistencia</a></li>
-                        <?php endif; ?>
-                    </ul>
-                </li>
-                <?php
-                $show_section_reportes = ob_get_clean();
-                if($section_reportes){
-                    echo $show_section_reportes;
-                }
-                ?>
-
-                <!-- Reportes -->
-
-                <?php if (in_array('configuracion', explode(',', $modulos))) : ?>
-                <li class="submenu">
-                    <a href="javascript:void(0);"><img src="vistas/assets/img/icons/settings.svg" alt="img"><span>Ajustes</span> <span class="menu-arrow"></span></a>
-                    <ul>
-                        <li><a href="configuracionSistema">Config sistema</a></li>
-                        <li><a href="configuracionTicket">Config. comprobante</a></li>
-                        <li><a href="configuracionCorreo">Config. correo</a></li>
-                        <li><a href="numFolio">Config Número y Folios</a></li>
                     </ul>
                 </li>
                 <?php endif; ?>
-
-                <!-- Ajustes -->
-
+                
+                <!-- Reportes -->
+                <?php if (isset($permisos["reporte_sucursales"]) || isset($permisos["reporte_usuarios"]) || 
+                      isset($permisos["reporte_roles"]) || isset($permisos["reporte_proveedores"]) || 
+                      isset($permisos["reporte_clientes"]) || isset($permisos["reporte_productos"]) || 
+                      isset($permisos["reporte_compras"]) || isset($permisos["reporte_ventas"]) || 
+                      isset($permisos["reporte_trabajadores"]) || isset($permisos["reporte_pagos_trabajador"]) || 
+                      isset($permisos["reporte_asistencia"])) : ?>
+                <li class="submenu">
+                    <a href="javascript:void(0);"><i class="fas fa-chart-bar"></i><span>Reportes</span> <span class="menu-arrow"></span></a>
+                    <ul>
+                        <?php if (isset($permisos["reporte_sucursales"])) : ?>
+                        <li><a href="reporteSucursales"><i class="fas fa-store"></i> Sucursales</a></li>
+                        <?php endif; ?>
+                        
+                        <?php if (isset($permisos["reporte_usuarios"])) : ?>
+                        <li><a href="reporteUsuarios"><i class="fas fa-users-cog"></i> Usuarios</a></li>
+                        <?php endif; ?>
+                        
+                        <?php if (isset($permisos["reporte_roles"])) : ?>
+                        <li><a href="reporteRoles"><i class="fas fa-user-tag"></i> Roles</a></li>
+                        <?php endif; ?>
+                        
+                        <?php if (isset($permisos["reporte_proveedores"])) : ?>
+                        <li><a href="reporteProveedores"><i class="fas fa-truck"></i> Proveedores</a></li>
+                        <?php endif; ?>
+                        
+                        <?php if (isset($permisos["reporte_clientes"])) : ?>
+                        <li><a href="reporteClientes"><i class="fas fa-user-friends"></i> Clientes</a></li>
+                        <?php endif; ?>
+                        
+                        <?php if (isset($permisos["reporte_productos"])) : ?>
+                        <li><a href="reporteProductos"><i class="fas fa-box-open"></i> Productos</a></li>
+                        <?php endif; ?>
+                        
+                        <?php if (isset($permisos["reporte_compras"])) : ?>
+                        <li><a href="reporteCompras"><i class="fas fa-shopping-basket"></i> Compras</a></li>
+                        <?php endif; ?>
+                        
+                        <?php if (isset($permisos["reporte_ventas"])) : ?>
+                        <li><a href="reporteVentas"><i class="fas fa-cash-register"></i> Ventas</a></li>
+                        <?php endif; ?>
+                        
+                        <?php if (isset($permisos["reporte_trabajadores"])) : ?>
+                        <li><a href="reporteTrabajadores"><i class="fas fa-user-tie"></i> Trabajadores</a></li>
+                        <?php endif; ?>
+                        
+                        <?php if (isset($permisos["reporte_pagos_trabajador"])) : ?>
+                        <li><a href="reportePagosTrabajador"><i class="fas fa-money-bill-wave"></i> Pagos Trabajadores</a></li>
+                        <?php endif; ?>
+                        
+                        <?php if (isset($permisos["reporte_asistencia"])) : ?>
+                        <li><a href="reporteAsistencia"><i class="fas fa-calendar-check"></i> Asistencias</a></li>
+                        <?php endif; ?>
+                    </ul>
+                </li>
+                <?php endif; ?>
+                
+                <!-- Configuración -->
+                <?php if (isset($permisos["configuracion"])) : ?>
+                <li class="submenu">
+                    <a href="javascript:void(0);"><i class="fas fa-cog"></i><span>Configuración</span> <span class="menu-arrow"></span></a>
+                    <ul>
+                        <li><a href="configuracionSistema"><i class="fas fa-sliders-h"></i> Sistema</a></li>
+                        <li><a href="configuracionTicket"><i class="fas fa-ticket-alt"></i> Comprobantes</a></li>
+                        <li><a href="configuracionCorreo"><i class="fas fa-envelope"></i> Correo</a></li>
+                        <li><a href="numFolio"><i class="fas fa-list-ol"></i> Folios</a></li>
+                    </ul>
+                </li>
+                <?php endif; ?>
             </ul>
         </div>
     </div>

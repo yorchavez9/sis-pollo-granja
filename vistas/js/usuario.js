@@ -100,7 +100,8 @@ $(document).ready(function () {
       correo: $("#correo").val(),
       usuario: $("#usuario").val(),
       contrasena: $("#contrasena").val(),
-      imagen: $("#imagen_usuario").get(0).files[0]
+      imagen: $("#imagen_usuario").get(0).files[0],
+      action: "crear"
     };
 
     // Función de validación genérica con nombre específico
@@ -142,7 +143,7 @@ $(document).ready(function () {
         success: (respuesta) => {
  
           const res = JSON.parse(respuesta);
-          if (res.status === "ok") {
+          if (res.status) {
             $("#nuevoUsuario")[0].reset();
             $(".vistaPreviaImagenUsuario").attr("src", "");
             $("#modalNuevoUsuario").modal("hide");
@@ -178,60 +179,59 @@ $(document).ready(function () {
   =========================== */
   function mostrarUsuarios() {
     $.ajax({
-      url: "ajax/Usuario.ajax.php",
+      url: "ajax/usuario.ajax.php",
       type: "GET",
       dataType: "json",
-      success: function (usuarios) {
-        var tbody = $("#dataUsuarios");
-        tbody.empty();
+      success: function (response) {
+        if (response.status && response.data.length > 0) {
+          var tbody = $("#dataUsuarios");
+          tbody.empty();
 
-        if (usuarios.length > 0) {
-          usuarios.forEach(function (usuario) {
-            // Validar si imagen_usuario existe y es una cadena
+          response.data.forEach(function (usuario) {
             usuario.imagen_usuario = usuario.imagen_usuario
               ? usuario.imagen_usuario.substring(3)
               : "vistas/img/usuarios/default.png";
 
             var fila = `
-                    <tr>
-                        <td>
-                            <a href="javascript:void(0);" class="product-img"">
-                                <img src="${usuario.imagen_usuario}" alt="${usuario.nombre_usuario}">
-                            </a>
-                        </td>
-                        <td>${usuario.nombre_sucursal}</td>
-                        <td>${usuario.nombre_usuario}</td>
-                        <td>${usuario.usuario}</td>
-                        <td>${usuario.telefono}</td>
-                        <td>${usuario.correo}</td>
-                        <td>
-                            ${usuario.estado_usuario != 0 ? '<button class="btn bg-lightgreen badges btn-sm rounded btnActivar" idUsuario="' + usuario.id_usuario + '" estadoUsuario="0">Activado</button>'
-                : '<button class="btn bg-lightred badges btn-sm rounded btnActivar" idUsuario="' + usuario.id_usuario + '" estadoUsuario="1">Desactivado</button>'}
-                        </td>
-                        <td>
-                            <a href="#" class="me-3 btnEditarUsuario" idUsuario="${usuario.id_usuario}" data-bs-toggle="modal" data-bs-target="#modalEditarUsuario">
-                                <i class="text-warning fas fa-edit fa-lg"></i>
-                            </a>
-                            <a href="#" class="me-3 btnVerUsuario" idUsuario="${usuario.id_usuario}" data-bs-toggle="modal" data-bs-target="#modalVerUsuario">
-                                <i class="text-primary fa fa-eye fa-lg"></i>
-                            </a>
-                            <a href="#" class="me-3 confirm-text btnEliminarUsuario" idUsuario="${usuario.id_usuario}" fotoUsuario="${usuario.imagen_usuario}">
-                                <i class="fa fa-trash fa-lg" style="color: #F52E2F"></i>
-                            </a>
-                        </td>
-                    </tr>`;
+              <tr>
+                  <td>
+                      <a href="javascript:void(0);" class="product-img">
+                          <img src="${usuario.imagen_usuario}" alt="${usuario.nombre_usuario}">
+                      </a>
+                  </td>
+                  <td>${usuario.nombre_sucursal}</td>
+                  <td>${usuario.nombre_usuario}</td>
+                  <td>${usuario.usuario}</td>
+                  <td>${usuario.telefono}</td>
+                  <td>${usuario.correo}</td>
+                  <td>
+                      ${usuario.estado != 0 
+                        ? '<button class="btn bg-lightgreen badges btn-sm rounded btnActivar" idUsuario="' + usuario.id_usuario + '" estadoUsuario="0">Activado</button>'
+                        : '<button class="btn bg-lightred badges btn-sm rounded btnActivar" idUsuario="' + usuario.id_usuario + '" estadoUsuario="1">Desactivado</button>'}
+                  </td>
+                  <td>
+                      <a href="#" class="me-3 btnEditarUsuario" idUsuario="${usuario.id_usuario}" data-bs-toggle="modal" data-bs-target="#modalEditarUsuario">
+                          <i class="text-warning fas fa-edit fa-lg"></i>
+                      </a>
+                      <a href="#" class="me-3 btnVerUsuario" idUsuario="${usuario.id_usuario}" data-bs-toggle="modal" data-bs-target="#modalVerUsuario">
+                          <i class="text-primary fa fa-eye fa-lg"></i>
+                      </a>
+                      <a href="#" class="me-3 confirm-text btnEliminarUsuario" idUsuario="${usuario.id_usuario}" fotoUsuario="${usuario.imagen_usuario}">
+                          <i class="fa fa-trash fa-lg" style="color: #F52E2F"></i>
+                      </a>
+                  </td>
+              </tr>`;
 
             tbody.append(fila);
           });
 
           $('#tabla_usuarios').DataTable();
         } else {
-          // Mostrar mensaje si no hay registros
-          tbody.append(`
-                    <tr>
-                        <td colspan="8" class="text-center">No se encontraron usuarios registrados.</td>
-                    </tr>
-                `);
+          $("#dataUsuarios").html(`
+            <tr>
+                <td colspan="8" class="text-center">No se encontraron usuarios registrados.</td>
+            </tr>
+          `);
         }
       },
       error: function (xhr, status, error) {
@@ -590,14 +590,14 @@ $(document).ready(function () {
 
   function mostrarReporteUsuarios() {
     $.ajax({
-      url: "ajax/Usuario.ajax.php",
+      url: "ajax/usuario.ajax.php",
       type: "GET",
       dataType: "json",
       success: function (usuarios) {
  
         var tbody = $("#data_usuarios_reporte");
         tbody.empty();
-        usuarios.forEach(function (usuario, index) {
+        usuarios.data.forEach(function (usuario, index) {
           usuario.imagen_usuario = usuario.imagen_usuario
             ? usuario.imagen_usuario.substring(3)
             : "vistas/img/usuarios/default.jpeg";

@@ -7,12 +7,12 @@ $(document).ready(function () {
                 headers: { 'Accept': 'application/json' },
                 credentials: 'include'
             });
-
+            
             if (!response.ok) throw new Error('Error en la respuesta del servidor');
-
+            
             const data = await response.json();
             return data.status === false ? null : data;
-
+            
         } catch (error) {
             console.error('Error al obtener sesión:', error);
             return null;
@@ -63,11 +63,10 @@ $(document).ready(function () {
 
             // Cargar roles
             const rolesResponse = await fetchData("ajax/rol.ajax.php");
-            if (rolesResponse?.status) {
-                rolesDisponibles = rolesResponse.data;
-                llenarSelectRoles("#id_rol_permiso");
-                llenarSelectRoles("#edit_rol_permiso");
-            }
+            rolesDisponibles = rolesResponse;
+            llenarSelectRoles("#id_rol_permiso");
+            llenarSelectRoles("#edit_rol_permiso");
+            
 
             // Cargar módulos
             const modulosResponse = await fetchData("ajax/modulo.ajax.php?estado=1");
@@ -99,7 +98,7 @@ $(document).ready(function () {
         select.append('<option value="" disabled selected>Seleccionar rol</option>');
 
         usuariosDisponibles.forEach(rol => {
-            select.append(`<option value="${rol.id_usuario}">${rol.nombre}</option>`);
+            select.append(`<option value="${rol.id_usuario}">${rol.nombre_usuario}</option>`);
         });
     };
 
@@ -110,7 +109,7 @@ $(document).ready(function () {
         select.append('<option value="" disabled selected>Seleccionar rol</option>');
 
         rolesDisponibles.forEach(rol => {
-            select.append(`<option value="${rol.id_rol}">${rol.nombre}</option>`);
+            select.append(`<option value="${rol.id_rol}">${rol.nombre_rol}</option>`);
         });
     };
 
@@ -279,7 +278,7 @@ $(document).ready(function () {
             if (!sesion || !sesion.permisos) {
                 return;
             }
-
+            
             if (!response?.status) return;
 
             permisosActuales = response.data;
@@ -291,17 +290,17 @@ $(document).ready(function () {
             const permisosPorRol = permisosActuales.reduce((acc, permiso) => {
                 if (!acc[permiso.id_rol]) {
                     acc[permiso.id_rol] = {
-                        rol: rolesDisponibles.find(r => r.id_rol == permiso.id_rol) || { nombre: 'Desconocido' },
+                        rol: rolesDisponibles.find(r => r.id_rol == permiso.id_rol) || { id_rol: permiso.id_rol, nombre_rol: 'Desconocido' },
                         modulos: new Set(),
                         fecha: permiso.fecha_asignacion,
                         // Buscar el usuario asociado a este rol
-                        usuario: response.usuarios_roles.find(u => u.id_rol == permiso.id_rol) || {}
+                        usuario: response.usuarios_roles?.find(u => u.id_rol == permiso.id_rol) || {}
                     };
                 }
                 acc[permiso.id_rol].modulos.add(permiso.id_modulo);
                 return acc;
             }, {});
-
+            
             // Mostrar en la tabla
             Object.values(permisosPorRol).forEach((permisoRol, index) => {
                 const totalModulos = permisoRol.modulos.size || 0;
@@ -310,21 +309,21 @@ $(document).ready(function () {
                     <tr data-id-rol="${permisoRol.rol.id_rol}" data-id-usuario="${permisoRol.usuario.id_usuario || ''}">
                         <td>${index + 1}</td>
                         <td>${permisoRol.usuario.nombre_usuario || 'No asignado'}</td>
-                        <td>${permisoRol.rol.nombre}</td>
+                        <td>${permisoRol.rol.nombre_rol || 'Desconocido'}</td>
                         <td>${totalModulos} módulo(s)</td>
                         <td>${permisoRol.fecha || 'No registrada'}</td>
                         <td class="text-center">
-                            ${sesion.permisos.permisos && sesion.permisos.permisos.acciones.includes("ver")?
+                            ${sesion.permisos.permisos && sesion.permisos.permisos.acciones.includes("ver") ?
                                 `<a href="#" class="me-3 btnVerPermiso" 
                                 data-id-rol="${permisoRol.rol.id_rol}"
                                 data-id-usuario="${permisoRol.usuario.id_usuario || ''}"
                                 data-bs-toggle="modal" 
                                 data-bs-target="#modal_ver_permiso">
                                     <i class="text-primary fas fa-eye fa-lg"></i>
-                                </a>`:``}
+                                </a>` : ``}
                             
 
-                            ${sesion.permisos.permisos && sesion.permisos.permisos.acciones.includes("editar")?
+                            ${sesion.permisos.permisos && sesion.permisos.permisos.acciones.includes("editar") ?
                                 `<a href="#" class="me-3 btnEditarPermiso" 
                                 data-id-rol="${permisoRol.rol.id_rol}"
                                 data-id-usuario="${permisoRol.usuario.id_usuario || ''}"

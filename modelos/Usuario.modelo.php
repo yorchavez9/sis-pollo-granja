@@ -102,13 +102,9 @@ class ModeloUsuarios
             $stmt = Conexion::conectar()->prepare("
                 SELECT 
                     u.*, 
-                    s.nombre as nombre_sucursal, 
-                    p.nombre, 
-                    p.apellidos, 
-                    CONCAT(p.nombre, ' ', p.apellidos) as nombre_persona 
+                    s.nombre_sucursal
                 FROM $tabla u 
-                LEFT JOIN sucursales s ON u.id_sucursal = s.id_sucursal 
-                LEFT JOIN personas p ON u.id_persona = p.id_persona 
+                LEFT JOIN sucursales s ON u.id_sucursal = s.id_sucursal
                 $where
                 ORDER BY u.id_usuario DESC
             ");
@@ -235,20 +231,23 @@ class ModeloUsuarios
         try {
             $stmt = Conexion::conectar()->prepare("
                 INSERT INTO $tabla(
-                    id_sucursal, id_persona, nombre_usuario, 
-                    usuario, contrasena, imagen, estado
+                    id_sucursal, nombre_usuario, 
+                    telefono, correo, usuario, 
+                    contrasena, imagen_usuario, estado
                 ) VALUES (
-                    :id_sucursal, :id_persona, :nombre_usuario, 
-                    :usuario, :contrasena, :imagen, :estado
+                    :id_sucursal, :nombre_usuario, 
+                    :telefono, :correo, :usuario, 
+                    :contrasena, :imagen_usuario, :estado
                 )
             ");
             
             $stmt->bindParam(":id_sucursal", $datos["id_sucursal"], PDO::PARAM_INT);
-            $stmt->bindParam(":id_persona", $datos["id_persona"], PDO::PARAM_INT);
             $stmt->bindParam(":nombre_usuario", $datos["nombre_usuario"], PDO::PARAM_STR);
+            $stmt->bindParam(":telefono", $datos["telefono"], PDO::PARAM_STR);
+            $stmt->bindParam(":correo", $datos["correo"], PDO::PARAM_STR);
             $stmt->bindParam(":usuario", $datos["usuario"], PDO::PARAM_STR);
             $stmt->bindParam(":contrasena", $datos["contrasena"], PDO::PARAM_STR);
-            $stmt->bindParam(":imagen", $datos["imagen"], PDO::PARAM_STR);
+            $stmt->bindParam(":imagen_usuario", $datos["imagen_usuario"], PDO::PARAM_STR);
             $stmt->bindParam(":estado", $datos["estado"], PDO::PARAM_INT);
             
             if ($stmt->execute()) {
