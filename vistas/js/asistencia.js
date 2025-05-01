@@ -261,10 +261,6 @@ $(document).ready(function () {
 
   async function mostrarAsistencia() {
     const sesion = await obtenerSesion();
-    if (!sesion || !sesion.datos || !sesion.datos.acciones || !sesion.datos.acciones.asistencia) {
-      console.error("No se encontraron permisos para mostrar asistencias.");
-      return;
-    }
 
     $.ajax({
       url: "ajax/Asistencia.ajax.php",
@@ -282,18 +278,17 @@ $(document).ready(function () {
                         <td>${index + 1}</td>
                         <td>${asistenciaa.fecha_asistencia}</td>
                         <td class="text-center">
-                            ${(sesion.datos.acciones.asistencia.includes("editar")) ? 
+                            ${sesion.permisos.asistencia && sesion.permisos.asistencia.acciones.includes("editar")? 
                               `<a href="#" class="me-3 btnEditarAsistencia" fechaAsistencia="${asistenciaa.fecha_asistencia}" data-bs-toggle="modal" data-bs-target="#modalEditarAsistencia">
                                 <i class="text-warning fas fa-edit fa-lg"></i>
                               </a>`: ``}
-                            
 
-                            ${(sesion.datos.acciones.asistencia.includes("ver")) ? 
+                              ${sesion.permisos.asistencia && sesion.permisos.asistencia.acciones.includes("ver")? 
                               `<a href="#" class="me-3 btnVerAsistencia" fechaAsistencia="${asistenciaa.fecha_asistencia}" data-bs-toggle="modal" data-bs-target="#modalVerAsistencia">
                                 <i class="text-primary fa fa-eye fa-lg"></i>
                               </a>`: ``}
 
-                            ${(sesion.datos.acciones.asistencia.includes("eliminar")) ? 
+                              ${sesion.permisos.asistencia && sesion.permisos.asistencia.acciones.includes("eliminar")? 
                               `<a href="#" class="me-3 confirm-text btnEliminarAsistencia" fechaAsistencia="${asistenciaa.fecha_asistencia}">
                                 <i class="fa fa-trash fa-lg" style="color: #F52E2F"></i>
                               </a>`: ``}
