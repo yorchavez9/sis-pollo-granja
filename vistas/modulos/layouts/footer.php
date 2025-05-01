@@ -10,6 +10,7 @@
 <!-- ===================================
     SCRIPT DE MODULOS
     =================================== -->
+<script src="vistas/js/session.js"></script>
 <script src="vistas/js/active-menu.js"></script>
 <script src="vistas/js/conversor-moneda.js"></script>
 <script src="vistas/js/verificar_configuraciones.js" type="module"></script>
