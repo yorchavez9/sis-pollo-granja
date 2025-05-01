@@ -1,5 +1,21 @@
 $(document).ready(function () {
 
+  async function obtenerSesion() {
+    try {
+      const response = await fetch('ajax/Sesion.usuario.ajax.php', {
+        method: 'GET',
+        headers: { 'Accept': 'application/json' },
+        credentials: 'include'
+      });
+      if (!response.ok) throw new Error('Error en la respuesta del servidor');
+      const data = await response.json();
+      return data.status === false ? null : data;
+    } catch (error) {
+      console.error('Error al obtener sesión:', error);
+      return null;
+    }
+  }
+
   /*=========================================
   SELECCION DE FECHA AUTOMATICO
   ===========================================*/
@@ -240,81 +256,61 @@ $(document).ready(function () {
   MOSTRANDO USUARIOS
   =========================== */
 
-  function mostrarAsistencia() {
+  async function mostrarAsistencia() {
+    const sesion = await obtenerSesion();
+    if (!sesion || !sesion.datos || !sesion.datos.acciones || !sesion.datos.acciones.asistencia) {
+      console.error("No se encontraron permisos para mostrar asistencias.");
+      return;
+    }
 
     $.ajax({
       url: "ajax/Asistencia.ajax.php",
       type: "GET",
       dataType: "json",
       success: function (asistencias) {
-
         var tbody = $("#data_mostrar_asistencias");
-
         tbody.empty();
-
         let fechasRegistradas = [];
-
-        asistencias.forEach(function (asistencia, index) {
-
-          // Verificar si la fecha ya está registrada
-
-          if (!fechasRegistradas.includes(asistencia.fecha_asistencia)) {
-
-            fechasRegistradas.push(asistencia.fecha_asistencia);
-
-            // Construir la fila HTML
-
+        asistencias.forEach(function (asistenciaa, index) {
+          if (!fechasRegistradas.includes(asistenciaa.fecha_asistencia)) {
+            fechasRegistradas.push(asistenciaa.fecha_asistencia);
             let fila = `
                       <tr>
-
                         <td>${index + 1}</td>
-
-                        <td>${asistencia.fecha_asistencia}</td>
-                        
+                        <td>${asistenciaa.fecha_asistencia}</td>
                         <td class="text-center">
-
-                            <a href="#" class="me-3 btnEditarAsistencia" fechaAsistencia="${asistencia.fecha_asistencia}" data-bs-toggle="modal" data-bs-target="#modalEditarAsistencia">
+                            ${(sesion.datos.acciones.asistencia.includes("editar")) ? 
+                              `<a href="#" class="me-3 btnEditarAsistencia" fechaAsistencia="${asistenciaa.fecha_asistencia}" data-bs-toggle="modal" data-bs-target="#modalEditarAsistencia">
                                 <i class="text-warning fas fa-edit fa-lg"></i>
-                            </a>
+                              </a>`: ``}
+                            
 
-                            <a href="#" class="me-3 btnVerAsistencia" fechaAsistencia="${asistencia.fecha_asistencia}" data-bs-toggle="modal" data-bs-target="#modalVerAsistencia">
+                            ${(sesion.datos.acciones.asistencia.includes("ver")) ? 
+                              `<a href="#" class="me-3 btnVerAsistencia" fechaAsistencia="${asistenciaa.fecha_asistencia}" data-bs-toggle="modal" data-bs-target="#modalVerAsistencia">
                                 <i class="text-primary fa fa-eye fa-lg"></i>
-                            </a>
+                              </a>`: ``}
 
-                            <a href="#" class="me-3 confirm-text btnEliminarAsistencia" fechaAsistencia="${asistencia.fecha_asistencia}">
+                            ${(sesion.datos.acciones.asistencia.includes("eliminar")) ? 
+                              `<a href="#" class="me-3 confirm-text btnEliminarAsistencia" fechaAsistencia="${asistenciaa.fecha_asistencia}">
                                 <i class="fa fa-trash fa-lg" style="color: #F52E2F"></i>
-                            </a>
+                              </a>`: ``}
 
                         </td>
 
                       </tr>`;
-
-            // Agregar la fila al tbody
-
             tbody.append(fila);
           }
-
         });
 
-
-        // Inicializar DataTables después de cargar los datos
-
         $('#tabla_asistencia').DataTable();
-
       },
 
       error: function (xhr, status, error) {
-
         console.error("Error al recuperar los usuarios:", error);
-
         console.error(xhr);
-
         console.error(status);
-
       },
-
     });
-
   }
 
 

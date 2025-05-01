@@ -118,7 +118,9 @@ $(document).ready(function () {
                 $('#tabla_rol').DataTable();
             },
             error: function (xhr, status, error) {
-                console.error("Error al recuperar los proveedores:", error);
+                console.error("Error al recuperar roles:", error);
+                console.log(xhr);
+                console.log(status);
             },
         });
     }
@@ -145,7 +147,7 @@ $(document).ready(function () {
             dataType: "json",
             success: function (respuesta) {
                 $("#edit_id_rol").val(respuesta["id_rol"]);
-                $("#edit_nombre_rol").val(respuesta["nombre_rol"]);
+                $("#edit_nombre_rol").val(respuesta["nombre"]);
                 $("#edit_descripcion_rol").val(respuesta["descripcion"]);
 
             },

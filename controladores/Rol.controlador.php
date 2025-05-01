@@ -10,7 +10,7 @@ class ControladorRol
     {
         $tabla = "roles";
         $datos = array(
-            "nombre_rol" => $_POST["nombre_rol"],
+            "nombre" => $_POST["nombre_rol"],
             "descripcion" => $_POST["descripcion_rol"]
         );
         $respuesta = ModeloRol::mdlIngresarRol($tabla, $datos);
@@ -40,7 +40,7 @@ class ControladorRol
         $tabla = "roles";
         $datos = array(
             "id_rol" => $_POST["edit_id_rol"],
-            "nombre_rol" => $_POST["edit_nombre_rol"],
+            "nombre" => $_POST["edit_nombre_rol"],
             "descripcion" => $_POST["edit_descripcion_rol"]
         );
         $respuesta = ModeloRol::mdlEditarRol($tabla, $datos);

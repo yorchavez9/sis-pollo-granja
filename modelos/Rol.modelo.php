@@ -28,19 +28,19 @@ class ModeloRol
     =============================================*/
     static public function mdlIngresarRol($tabla, $datos)
     {
-        // Convertir nombre_rol a mayúsculas
-        $datos["nombre_rol"] = strtoupper($datos["nombre_rol"]);
+        // Convertir nombre a mayúsculas
+        $datos["nombre"] = strtoupper($datos["nombre"]);
 
         $stmt = Conexion::conectar()->prepare("INSERT INTO $tabla(
-                                                                nombre_rol, 
+                                                                nombre, 
                                                                 descripcion
                                                                 )
                                                                 VALUES (
-                                                                :nombre_rol, 
+                                                                :nombre, 
                                                                 :descripcion
                                                                 )");
 
-        $stmt->bindParam(":nombre_rol", $datos["nombre_rol"], PDO::PARAM_STR);
+        $stmt->bindParam(":nombre", $datos["nombre"], PDO::PARAM_STR);
         $stmt->bindParam(":descripcion", $datos["descripcion"], PDO::PARAM_STR);
         if ($stmt->execute()) {
             return "ok";
@@ -55,15 +55,15 @@ class ModeloRol
     =============================================*/
     static public function mdlEditarRol($tabla, $datos)
     {
-        // Convertir nombre_rol a mayúsculas
-        $datos["nombre_rol"] = strtoupper($datos["nombre_rol"]);
+        // Convertir nombre a mayúsculas
+        $datos["nombre"] = strtoupper($datos["nombre"]);
 
         $stmt = Conexion::conectar()->prepare("UPDATE $tabla SET 
-                                                            nombre_rol = :nombre_rol, 
+                                                            nombre = :nombre, 
                                                             descripcion = :descripcion
                                                             WHERE id_rol = :id_rol");
 
-        $stmt->bindParam(":nombre_rol", $datos["nombre_rol"], PDO::PARAM_STR);
+        $stmt->bindParam(":nombre", $datos["nombre"], PDO::PARAM_STR);
         $stmt->bindParam(":descripcion", $datos["descripcion"], PDO::PARAM_STR);
         $stmt->bindParam(":id_rol", $datos["id_rol"], PDO::PARAM_INT);
         if ($stmt->execute()) {

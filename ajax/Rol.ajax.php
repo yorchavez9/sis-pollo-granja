@@ -55,7 +55,7 @@ else {
     foreach ($mostrarRoles as $key => $rol) {
         $fila = array(
             'id_rol' => $rol['id_rol'],
-            'nombre_rol' => $rol['nombre_rol'],
+            'nombre_rol' => $rol['nombre'],
             'descripcion' => $rol['descripcion']
         );
         $tablaRol[] = $fila;
