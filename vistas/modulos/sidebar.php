@@ -43,8 +43,8 @@ $modulos = $_SESSION["modulos"];
                         <?php if (in_array('usuarios', explode(',', $modulos))) : $section_personas = true; ?>
                             <li><a href="usuarios">Usuarios</a></li>
                         <?php endif; ?>
-                        <?php if (in_array('establecer_roles', explode(',', $modulos))) : $section_personas = true; ?>
-                            <li><a href="establecerRoles">Establecer roles</a></li>
+                        <?php if (in_array('permisos', explode(',', $modulos))) : $section_personas = true; ?>
+                            <li><a href="permisos">Permisos</a></li>
                         <?php endif; ?>
                         <?php if (in_array('proveedores', explode(',', $modulos))) : $section_personas = true; ?>
                             <li><a href="proveedores">Proveedores</a></li>

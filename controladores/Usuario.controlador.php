@@ -1,194 +1,283 @@
 <?php
-
 class ControladorUsuarios
 {
+    /* ============================================
+    LOGIN USUARIO
+    ============================================ */
+    static public function ctrLoginUsuario()
+    {
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
 
-	static public function ctrIngresoUsuario()
-	{
-		if (isset($_POST["ingUsuario"])) {
-			if (preg_match('/^[a-zA-Z0-9]+$/', $_POST["ingUsuario"])) {
-				$encriptar = crypt($_POST["ingPassword"], '$2a$07$asxx54ahjppf45sd87a5a4dDDGsystemdev$');
-				$tablaUsuarios = "usuarios";
-				$tablaUsuarioRol = "usuario_roles";
-				$tablaRol = "roles";
-				$item = "usuario";
-				$valor = $_POST["ingUsuario"];
-				$respuesta = ModeloUsuarios::mdlMostrarUsuarioConRoles($tablaUsuarios, $tablaUsuarioRol, $tablaRol, $item, $valor);
-				if (!empty($respuesta) && $respuesta[0]["contrasena"] === $encriptar) {
-					$_SESSION["iniciarSesion"] = "ok";
-					$_SESSION["id_usuario"] = $respuesta[0]["id_usuario"];
-					$_SESSION["nombre_usuario"] = $respuesta[0]["nombre_usuario"];
-					$_SESSION["usuario"] = $respuesta[0]["usuario"];
-					$_SESSION["imagen_usuario"] = $respuesta[0]["imagen_usuario"];
-					$_SESSION["estado_usuario"] = $respuesta[0]["estado_usuario"];
-					$_SESSION["nombre_rol"] = $respuesta[0]["nombre_rol"];
-					$_SESSION["modulos"] = $respuesta[0]["modulos"];
-					$_SESSION["acciones"] = $respuesta[0]["acciones"];
-					$_SESSION["id_rol"] = $respuesta[0]["id_rol"];
-					echo '<script>window.location = "inicio";</script>';
-				} else {
-					echo '<script>
-						Swal.fire({
-							title: "Error",
-							text: "¡Usuario o contraseña incorrectos!",
-							icon: "error",
-							confirmButtonText: "Ok"
-						}).then((result) => {
-							if (result.isConfirmed) {
-								window.location = "ingreso";
-							}
-						});
-					  </script>';
-				}
-			}
-		}
-	}
+        if (!isset($_POST["ingUsuario"], $_POST["ingPassword"])) {
+            return self::jsonResponse(false, "Datos incompletos");
+        }
 
-	/*=============================================
-	REGISTRO DE USUARIO
-	=============================================*/
+        // Validar entrada
+        $usuario = trim($_POST["ingUsuario"]);
+        $password = $_POST["ingPassword"];
 
-	static public function ctrCrearUsuario()
-	{
+        if (!preg_match('/^[a-zA-Z0-9]+$/', $usuario) || 
+            !preg_match('/^[a-zA-Z0-9]+$/', $password)) {
+            return self::jsonResponse(false, "Caracteres no válidos");
+        }
 
-		/* VALIDANDO IMAGEN */
-		$ruta = "../vistas/img/usuarios/";
-		if (isset($_FILES["imagen"]["tmp_name"])) {
-			$extension = pathinfo($_FILES["imagen"]["name"], PATHINFO_EXTENSION);
-			$tipos_permitidos = array("jpg", "jpeg", "png", "gif");
-			if (in_array(strtolower($extension), $tipos_permitidos)) {
-				$nombre_imagen = date("YmdHis") . rand(1000, 9999);
-				$ruta_imagen = $ruta . $nombre_imagen . "." . $extension;
-				if (move_uploaded_file($_FILES["imagen"]["tmp_name"], $ruta_imagen)) {
-				} else {
-				}
-			} else {
-			}
-		}
+        $tabla = "usuarios";
+        $respuesta = ModeloUsuarios::mdlMostrarLoginUsuario($tabla, "usuario", $usuario);
 
-		$tabla = "usuarios";
-		$encriptar = crypt($_POST["contrasena"], '$2a$07$asxx54ahjppf45sd87a5a4dDDGsystemdev$');
-		$datos = array(
-			"id_sucursal" => $_POST["id_sucursal"],
-			"nombre_usuario" => $_POST["nombre_usuario"],
-			"telefono" => $_POST["telefono"],
-			"correo" => $_POST["correo"],
-			"usuario" => $_POST["usuario"],
-			"contrasena" => $encriptar,
-			"imagen_usuario" => empty($ruta_imagen) ? null : $ruta_imagen,
-		);
-		$respuesta = ModeloUsuarios::mdlIngresarUsuario($tabla,	$datos);
-		if ($respuesta["status"] == "ok") {
-			echo json_encode([
-				'status' => $respuesta["status"],
-				'message' => $respuesta["message"]
-			]);
-		} else {
-			echo json_encode([
-				'status' => $respuesta["status"],
-				'message' => $respuesta["message"]
-			]);
-		}
-	}
+        if (!$respuesta || $respuesta["usuario"] !== $usuario) {
+            return self::jsonResponse(false, "Error al ingresar, vuelve a intentarlo");
+        }
 
-	/*=============================================
-	MOSTRAR USUARIO
-	=============================================*/
+        // Verificar contraseña
+        if (!password_verify($password, $respuesta["contrasena"])) {
+            return self::jsonResponse(false, "Error al ingresar, vuelve a intentarlo");
+        }
 
-	static public function ctrMostrarUsuarios($item, $valor)
-	{
-		$tablaSucursal = "sucursales";
-		$tablausuario = "usuarios";
-		$respuesta = ModeloUsuarios::MdlMostrarUsuarios($tablaSucursal, $tablausuario, $item, $valor);
-		return $respuesta;
-	}
+        // Verificar estado
+        if ($respuesta["estado"] != 1) {
+            return self::jsonResponse(false, "El usuario está desactivado");
+        }
 
+        // Crear sesión
+        $_SESSION["iniciarSesion"] = "ok";
+        $datosSesion = ModeloUsuarios::mdlObtenerDatosSesion($respuesta["id_usuario"]);
+        
+        // Obtener roles y permisos del usuario
+        $roles = ModeloUsuarios::mdlObtenerRolesUsuario($respuesta["id_usuario"]);
+        $permisos = ModeloUsuarios::mdlObtenerPermisosUsuario($respuesta["id_usuario"]);
 
-	/*=============================================
-	EDITAR USUARIO
-	=============================================*/
+        $_SESSION["usuario"] = $datosSesion;
+        $_SESSION["roles"] = $roles;
+        $_SESSION["permisos"] = $permisos;
+        
 
-	static public function ctrEditarUsuario()
-	{
+        // Actualizar último login
+        $fecha = date('Y-m-d H:i:s');
+        ModeloUsuarios::mdlActualizarUsuario($tabla, "ultimo_login", $fecha, "id_usuario", $respuesta["id_usuario"]);
 
-		/* ============================
-            VALIDANDO IMAGEN
-            ============================ */
-		$ruta = "../vistas/img/usuarios/";
-		$ruta_imagen = $_POST["edit_imagenActualUsuario"];
-		if (isset($_FILES["edit_imagen"]["tmp_name"]) && !empty($_FILES["edit_imagen"]["tmp_name"])) {
-			if (file_exists($ruta_imagen)) {
-				unlink($ruta_imagen);
-			}
-			$extension = pathinfo($_FILES["edit_imagen"]["name"], PATHINFO_EXTENSION);
-			$tipos_permitidos = array("jpg", "jpeg", "png", "gif");
-			if (in_array(strtolower($extension), $tipos_permitidos)) {
-				$nombre_imagen = date("YmdHis") . rand(1000, 9999);
-				$ruta_imagen = $ruta . $nombre_imagen . "." . $extension;
-				if (move_uploaded_file($_FILES["edit_imagen"]["tmp_name"], $ruta_imagen)) {
-				} else {
-				}
-			} else {
-			}
-		}
+        return self::jsonResponse(true, "Inicio de sesión exitoso", [
+            "redirect" => "inicio",
+            "datosUsuario" => $datosSesion,
+            "roles" => $roles,
+            "permisos" => $permisos,
+            "id_usuario" => $respuesta["id_usuario"],
+        ]);
+    }
 
-		$tabla = "usuarios";
-		if ($_POST["edit_contrasena"] != "") {
-			$encriptar = crypt($_POST["edit_contrasena"], '$2a$07$asxx54ahjppf45sd87a5a4dDDGsystemdev$');
-		} else {
-			$encriptar = $_POST["edit_actualContrasena"];
-		}
+    /*=============================================
+    REGISTRO DE USUARIO
+    =============================================*/
+    static public function ctrCrearUsuario()
+    {
+        // Validar campos obligatorios
+        $camposRequeridos = ["usuario", "contrasena", "id_sucursal", "id_persona", "nombre_usuario"];
+        foreach ($camposRequeridos as $campo) {
+            if (!isset($_POST[$campo])) {
+                return self::jsonResponse(false, "El campo $campo es requerido");
+            }
+        }
 
-		$datos = array(
-			"id_usuario" => $_POST["edit_idUsuario"],
-			"id_sucursal" => $_POST["edit_idSucursal"],
-			"nombre_usuario" => $_POST["edit_nombre"],
-			"telefono" => $_POST["edit_telefono"],
-			"correo" => $_POST["edit_correo"],
-			"usuario" => $_POST["edit_usuario"],
-			"contrasena" => $encriptar,
-			"imagen_usuario" => $ruta_imagen
-		);
+        $tabla = "usuarios";
+        $usuario = trim($_POST["usuario"]);
 
-		$respuesta = ModeloUsuarios::mdlEditarUsuario($tabla, $datos);
+        // Verificar usuario existente
+        $respuesta = ModeloUsuarios::mdlMostrarUsuarios($tabla, "usuario", $usuario);
+        
+        if ($respuesta["status"] === false) {
+            return self::jsonResponse(false, $respuesta["message"]);
+        }
+        
+        if ($respuesta["exists"]) {
+            return self::jsonResponse(false, "El nombre de usuario ya está en uso");
+        }
 
-		if ($respuesta == "ok") {
+        // Procesar imagen
+        $imagen = self::procesarImagen("imagen", "../vistas/img/usuarios/");
 
-			echo json_encode("ok");
-		}
-	}
+        // Crear usuario
+        $datos = [
+            "id_sucursal" => (int)$_POST["id_sucursal"],
+            "id_persona" => (int)$_POST["id_persona"],
+            "nombre_usuario" => htmlspecialchars(trim($_POST["nombre_usuario"])),
+            "usuario" => $usuario,
+            "contrasena" => password_hash($_POST["contrasena"], PASSWORD_DEFAULT),
+            "imagen" => $imagen,
+            "estado" => 1
+        ];
 
-	/*=============================================
-	BORRAR USUARIO
-	=============================================*/
+        $respuesta = ModeloUsuarios::mdlIngresarUsuario($tabla, $datos);
+        echo $respuesta;
+    }
 
-	static public function ctrBorrarUsuario()
-	{
+    /*=============================================
+    MOSTRAR USUARIOS
+    =============================================*/
+    static public function ctrMostrarUsuarios($item, $valor)
+    {
+        $tabla = "usuarios";
+        $respuesta = ModeloUsuarios::mdlMostrarUsuarios($tabla, $item, $valor);
+        echo json_encode($respuesta);
+    }
 
-		if (isset($_POST["deleteUserId"])) {
+     /*=============================================
+    EDITAR USUARIO (Obtener datos)
+    =============================================*/
+    static public function ctrEditarUsuario()
+    {
+        $tabla = "usuarios";
+        $item = "id_usuario";
+        $valor = $_POST["id_usuario"];
+        $respuesta = ModeloUsuarios::mdlMostrarUsuarios($tabla, $item, $valor);
+        echo json_encode($respuesta);
+    }
 
-			$tabla = "usuarios";
+    /*=============================================
+    ACTUALIZAR USUARIO
+    =============================================*/
+    static public function ctrActualizarUsuario()
+    {
+        if (!isset($_POST["id_usuario"])) {
+            return self::jsonResponse(false, "ID de usuario requerido");
+        }
 
-			$datos = $_POST["deleteUserId"];
+        $tabla = "usuarios";
+        $idUsuario = (int)$_POST["id_usuario"];
 
-			if ($_POST["deleteRutaUser"] != "") {
-				// Verificar si el archivo existe y eliminarlo
-				if (file_exists($_POST["deleteRutaUser"])) {
-					unlink($_POST["deleteRutaUser"]);
-				} else {
-					// El archivo no existe
-					echo "El archivo a eliminar no existe.";
-				}
-			}
+        // Verificar usuario existente si se cambia el nombre
+        if (isset($_POST["usuario"])) {
+            $usuario = trim($_POST["usuario"]);
+            $existe = ModeloUsuarios::mdlVerificarUsuarioExistente($tabla, "usuario", $usuario, $idUsuario);
+            
+            if ($existe) {
+                return self::jsonResponse(false, "El nombre de usuario ya está en uso");
+            }
+        }
 
+        // Obtener usuario actual para manejo de imagen
+        $usuarioActual = ModeloUsuarios::mdlMostrarUsuarios($tabla, "id_usuario", $idUsuario);
+        if ($usuarioActual["status"] === false) {
+            return self::jsonResponse(false, $usuarioActual["message"]);
+        }
 
+        // Procesar imagen
+        $imagen = $usuarioActual["data"]["imagen"]; // Mantener la actual por defecto
+        if (isset($_FILES["imagen"]) && $_FILES["imagen"]["error"] == 0) {
+            // Eliminar imagen anterior si existe
+            if ($imagen && file_exists("../vistas/img/usuarios/$imagen")) {
+                unlink("../vistas/img/usuarios/$imagen");
+            }
+            $imagen = self::procesarImagen("imagen", "../vistas/img/usuarios/");
+        }
 
-			$respuesta = ModeloUsuarios::mdlBorrarUsuario($tabla, $datos);
+        // Preparar datos
+        $datos = [
+            "id_usuario" => $idUsuario,
+            "id_sucursal" => (int)$_POST["id_sucursal"],
+            "id_persona" => (int)$_POST["id_persona"],
+            "nombre_usuario" => htmlspecialchars(trim($_POST["nombre_usuario"])),
+            "usuario" => $usuario ?? $usuarioActual["data"]["usuario"],
+            "contrasena" => !empty($_POST["contrasena"]) ? password_hash($_POST["contrasena"], PASSWORD_DEFAULT) : null,
+            "imagen" => $imagen,
+            "estado" => (int)$_POST["estado"]
+        ];
 
-			if ($respuesta == "ok") {
+        $respuesta = ModeloUsuarios::mdlActualizarUsuarioU($tabla, $datos);
+        echo $respuesta;
+    }
 
-				echo json_encode("ok");
-			}
-		}
-	}
+    /*=============================================
+    CAMBIAR ESTADO DE USUARIO
+    =============================================*/
+    static public function ctrCambiarEstadoUsuario()
+    {
+        if (!isset($_POST["id_usuario"], $_POST["estado"])) {
+            return self::jsonResponse(false, "Datos incompletos");
+        }
+
+        $tabla = "usuarios";
+        $datos = [
+            "id_usuario" => (int)$_POST["id_usuario"],
+            "estado" => (int)$_POST["estado"]
+        ];
+
+        $respuesta = ModeloUsuarios::mdlCambiarEstadoUsuario($tabla, $datos);
+        echo $respuesta;
+    }
+
+    /*=============================================
+    ELIMINAR USUARIO
+    =============================================*/
+    static public function ctrBorrarUsuario()
+    {
+        if (!isset($_POST["id_usuario"])) {
+            return self::jsonResponse(false, "ID de usuario requerido");
+        }
+
+        $tabla = "usuarios";
+        $idUsuario = (int)$_POST["id_usuario"];
+
+        // Obtener usuario para eliminar imagen
+        $usuario = ModeloUsuarios::mdlMostrarUsuarios($tabla, "id_usuario", $idUsuario);
+        if ($usuario["status"] === false) {
+            return self::jsonResponse(false, $usuario["message"]);
+        }
+
+        $respuesta = ModeloUsuarios::mdlBorrarUsuario($tabla, $idUsuario);
+        echo $respuesta;
+    }
+
+    /*=============================================
+    MÉTODOS PRIVADOS AUXILIARES
+    =============================================*/
+    
+    /**
+     * Procesa la imagen subida
+     */
+    private static function procesarImagen($campo, $directorio)
+    {
+        if (!isset($_FILES[$campo]) || $_FILES[$campo]["error"] != 0) {
+            return null;
+        }
+
+        // Validar tipo de archivo
+        $permitidos = ["image/jpeg", "image/png", "image/gif"];
+        if (!in_array($_FILES[$campo]["type"], $permitidos)) {
+            return null;
+        }
+
+        // Crear directorio si no existe
+        if (!file_exists($directorio)) {
+            mkdir($directorio, 0777, true);
+        }
+
+        $nombreArchivo = time() . "_" . preg_replace('/[^a-zA-Z0-9\._-]/', '', $_FILES[$campo]["name"]);
+        $rutaTemp = $_FILES[$campo]["tmp_name"];
+        $rutaDestino = $directorio . $nombreArchivo;
+
+        if (move_uploaded_file($rutaTemp, $rutaDestino)) {
+            return $nombreArchivo;
+        }
+
+        return null;
+    }
+
+    /**
+     * Devuelve una respuesta JSON estandarizada
+     */
+    private static function jsonResponse($status, $message, $data = [])
+    {
+        $response = [
+            "status" => $status,
+            "message" => $message
+        ];
+        
+        if (!empty($data)) {
+            $response = array_merge($response, $data);
+        }
+        
+        echo json_encode($response);
+        return;
+    }
 }

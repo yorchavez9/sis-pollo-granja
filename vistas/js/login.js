@@ -1,36 +1,50 @@
 $(document).ready(function () {
-  $("#button_submit_login").click(function (event) {
-    // Previene el envío del formulario de inmediato
-    event.preventDefault();
+    // Validar formulario antes de enviar
+    $("#login_form").on("submit", function (e) {
+        e.preventDefault();
+        let usuario = $("[name='ingUsuario']").val();
+        let password = $("[name='ingPassword']").val();
 
-    let ingUsuario = $("#ingUsuario").val();
-    let ingPassword = $("#ingPassword").val();
+        if (usuario == "" || password == "") {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Usuario y contraseña son obligatorios'
+            });
+            return false;
+        }
 
-    // Limpia los mensajes de error previos
-    $("#errorIngUsuario").empty();
-    $("#errorIngPassword").empty();
-
-    let valido = true;
-
-    // Validación del campo "ingUsuario"
-    if (ingUsuario === "") {
-      $("#errorIngUsuario")
-        .text("Por favor, ingrese su correo o usuario")
-        .css("color", "red");
-      valido = false;
-    }
-
-    // Validación del campo "ingPassword"
-    if (ingPassword === "") {
-      $("#errorIngPassword")
-        .text("Por favor, ingrese su contraseña")
-        .css("color", "red");
-      valido = false;
-    }
-
-    // Si todo es válido, se envía el formulario
-    if (valido) {
-      $("#login_form").submit();
-    }
-  });
+        const datos = new FormData();
+        datos.append('ingUsuario', usuario);
+        datos.append('ingPassword', password);
+        datos.append('action', "login");
+        
+        // Enviar formulario
+        $.ajax({
+            url: "ajax/login.ajax.php",
+            type: "POST",
+            data: datos,
+            processData: false,  // Necesario para FormData
+            contentType: false,  // Necesario para FormData
+            dataType: "json",
+            success: function (respuesta) {
+                console.log(respuesta);
+                return;
+                if (respuesta.status) {
+                    window.location = respuesta.redirect;
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: respuesta.message || 'Usuario o contraseña incorrectos'
+                    });
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error(error);
+                console.log(xhr);
+                console.log(status);
+            }
+        });
+    });
 });

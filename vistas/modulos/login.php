@@ -1,23 +1,3 @@
-<?php
-$item = null;
-$valor = null;
-$images = ControladorConfiguracionSistema::ctrMostrarConfiguracionSistema($item, $valor);
-
-// Asignar valores predeterminados
-$fondo = 'vistas/img/sistema/default_login.jpg'; // Valor predeterminado si no se encuentra 'img_login'
-$icono = 'vistas/img/sistema/login-logo.png'; // Valor predeterminado si no se encuentra 'icon_login'
-
-foreach ($images as $key => $value) {
-    // Si se encuentran valores en el ciclo, asignarlos
-    if (isset($value["img_login"])) {
-        $fondo = substr($value["img_login"], 3);  // Quitar los primeros 3 caracteres
-    }
-    if (isset($value["icon_login"])) {
-        $icono = substr($value["icon_login"], 3);  // Quitar los primeros 3 caracteres
-    }
-}
-?>
-
 
 
 <div class="main-wrapper" style="min-height: 100vh; display: flex; justify-content: center; align-items: center; background-image: url('<?php echo ($fondo != '' && $fondo != null) ? $fondo : 'vistas/img/sistema/default_login.jpg'; ?>');
@@ -26,10 +6,10 @@ foreach ($images as $key => $value) {
         <div class="login-content">
             <div class="login-userset">
                 <div class="login-logo text-center">
-                    <!-- <img src="vistas/assets/img/logo.png" class="text-center" alt="img"> -->
+                   <!--  <img src="vistas/assets/img/logo.png" class="text-center" alt="img" width="50%"> -->
                 </div>
                 <div class="login-userheading text-center mb-4">
-                    <img src="<?php echo ($icono != '' && $icono != null) ? $icono : 'vistas/img/sistema/login-logo.png'; ?>" width="100" alt="">
+                    <img src="" id="login_icon" width="100" alt="">
 
                     <h3 style="margin-top: 15px; font-family: Arial, sans-serif; color: #333;">Iniciar sesión</h3>
                 </div>
@@ -67,10 +47,6 @@ foreach ($images as $key => $value) {
                         <button type="submit" id="button_submit_login" class="btn btn-login btn-primary rounded-3" style="width: 100%; padding: 10px; background-color: #007bff; color: #fff; border: none; border-radius: 5px; cursor: pointer;">Iniciar sesión</button>
                     </div>
 
-                    <?php
-                    $ingresousuario = new ControladorUsuarios();
-                    $ingresousuario->ctrIngresoUsuario();
-                    ?>
                 </form>
 
                 <div class="signinform text-center" style="margin-top: 20px;">
