@@ -1,26 +1,41 @@
 <?php
 session_start();
 
-// Verificar si la sesión está iniciada
 if (isset($_SESSION["iniciarSesion"]) && $_SESSION["iniciarSesion"] === "ok") {
-    // Preparar los datos de sesión para enviar como JSON
+    // Procesar las acciones para convertirlas a la estructura deseada
+    $accionesOriginales = is_array($_SESSION["acciones"]) ? $_SESSION["acciones"] : explode(',', $_SESSION["acciones"]);
+    $accionesOrganizadas = [];
+    
+    foreach ($accionesOriginales as $accion) {
+        // Separar el módulo de la acción (ej: "arqueos_caja: activar")
+        $partes = explode(': ', $accion);
+        if (count($partes) === 2) {
+            $modulo = $partes[0];
+            $accionNombre = $partes[1];
+            
+            if (!isset($accionesOrganizadas[$modulo])) {
+                $accionesOrganizadas[$modulo] = [];
+            }
+            
+            $accionesOrganizadas[$modulo][] = $accionNombre;
+        }
+    }
+    
     $datosSesion = [
         "id_usuario" => $_SESSION["id_usuario"],
         "nombre_usuario" => $_SESSION["nombre_usuario"],
         "usuario" => $_SESSION["usuario"],
         "imagen_usuario" => $_SESSION["imagen_usuario"],
-        "modulos" => $_SESSION["modulos"],
-        "acciones" => $_SESSION["acciones"],
+        "modulos" => is_array($_SESSION["modulos"]) ? $_SESSION["modulos"] : explode(',', $_SESSION["modulos"]),
+        "acciones" => $accionesOrganizadas
     ];
 
-    // Enviar respuesta JSON
     echo json_encode([
         "estado" => "success",
         "mensaje" => "Sesión iniciada",
         "datos" => $datosSesion
     ]);
 } else {
-    // En caso de que no haya sesión activa
     echo json_encode([
         "estado" => "error",
         "mensaje" => "No hay sesión activa"

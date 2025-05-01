@@ -3,59 +3,42 @@
 class ControladorUsuarios
 {
 
-	/*=============================================
-	INGRESO DE USUARIO
-	=============================================*/
 	static public function ctrIngresoUsuario()
 	{
 		if (isset($_POST["ingUsuario"])) {
-			// Validar que el usuario cumpla con el formato esperado
 			if (preg_match('/^[a-zA-Z0-9]+$/', $_POST["ingUsuario"])) {
-				// Encriptar la contraseña proporcionada
 				$encriptar = crypt($_POST["ingPassword"], '$2a$07$asxx54ahjppf45sd87a5a4dDDGsystemdev$');
-
-				// Tabla de usuarios, roles y módulos
 				$tablaUsuarios = "usuarios";
 				$tablaUsuarioRol = "usuario_roles";
 				$tablaRol = "roles";
-
-				// Parámetros para la consulta
-				$item = "usuario";  // El campo que estás buscando en la tabla
-				$valor = $_POST["ingUsuario"];  // El valor del campo
-
-				// Llamada al modelo para obtener los datos del usuario
+				$item = "usuario";
+				$valor = $_POST["ingUsuario"];
 				$respuesta = ModeloUsuarios::mdlMostrarUsuarioConRoles($tablaUsuarios, $tablaUsuarioRol, $tablaRol, $item, $valor);
-
-				// Verificar si el usuario existe y la contraseña es correcta
 				if (!empty($respuesta) && $respuesta[0]["contrasena"] === $encriptar) {
-					// Configurar las variables de sesión si las credenciales son correctas
 					$_SESSION["iniciarSesion"] = "ok";
 					$_SESSION["id_usuario"] = $respuesta[0]["id_usuario"];
 					$_SESSION["nombre_usuario"] = $respuesta[0]["nombre_usuario"];
 					$_SESSION["usuario"] = $respuesta[0]["usuario"];
 					$_SESSION["imagen_usuario"] = $respuesta[0]["imagen_usuario"];
-					$_SESSION["estado_usuario"] = $respuesta[0]["estado_usuario"];  // Asegúrate de tener este campo en la tabla
+					$_SESSION["estado_usuario"] = $respuesta[0]["estado_usuario"];
 					$_SESSION["nombre_rol"] = $respuesta[0]["nombre_rol"];
-					$_SESSION["modulos"] = $respuesta[0]["modulos"];  // Guardar los módulos disponibles para este usuario
-					$_SESSION["acciones"] = $respuesta[0]["acciones"];  // Guardar las acciones disponibles para este usuario
-					$_SESSION["id_rol"] = $respuesta[0]["id_rol"];  // Asegúrate de tener este campo en la tabla de roles
-
-					// Redirigir al usuario a la página principal
+					$_SESSION["modulos"] = $respuesta[0]["modulos"];
+					$_SESSION["acciones"] = $respuesta[0]["acciones"];
+					$_SESSION["id_rol"] = $respuesta[0]["id_rol"];
 					echo '<script>window.location = "inicio";</script>';
 				} else {
-					// Si las credenciales son incorrectas, mostrar mensaje de error
 					echo '<script>
-                        Swal.fire({
-                            title: "Error",
-                            text: "¡Usuario o contraseña incorrectos!",
-                            icon: "error",
-                            confirmButtonText: "Ok"
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                window.location = "ingreso";
-                            }
-                        });
-                      </script>';
+						Swal.fire({
+							title: "Error",
+							text: "¡Usuario o contraseña incorrectos!",
+							icon: "error",
+							confirmButtonText: "Ok"
+						}).then((result) => {
+							if (result.isConfirmed) {
+								window.location = "ingreso";
+							}
+						});
+					  </script>';
 				}
 			}
 		}
