@@ -1,5 +1,7 @@
 $(document).ready(function () {
 
+    
+
     async function obtenerSesion() {
         try {
             const response = await fetch('ajax/sesion.ajax.php?action=sesion', {
