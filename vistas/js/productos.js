@@ -80,6 +80,11 @@ $(document).ready(function () {
   MOSTRANDO PRODUCTO
   =========================== */
   async function mostrarProductos() {
+    let sesion = await obtenerSesion();
+    if (sesion === null) {
+        window.location.href = "login";
+        return;
+    }
     await updateRate();
     $.ajax({
         url: "ajax/Producto.ajax.php",
@@ -122,10 +127,12 @@ $(document).ready(function () {
                     <td class="text-center"><button type="button" class="btn btn-sm" style="${getButtonStyles(producto.stock_producto)}">${producto.stock_producto}</button></td>
                     <td>${producto.fecha_vencimiento ? producto.fecha_vencimiento : 'Ninguno'}</td>
                     <td>
-                        ${producto.estado_producto != 0 ?
+                    ${sesion.permisos.productos && sesion.permisos.productos.acciones.includes("estado")? 
+                      `${producto.estado_producto != 0 ?
                             '<button class="btn bg-lightgreen badges btn-sm rounded btnActivar" idProducto="' + producto.id_producto + '" estadoProducto="0">Activado</button>' :
                             '<button class="btn bg-lightred badges btn-sm rounded btnActivar" idProducto="' + producto.id_producto + '" estadoProducto="1">Desactivado</button>'
-                        }
+                      }`:``}
+                        
                     </td>
                     <td class="text-center">
                         <div class="dropdown">
@@ -133,21 +140,27 @@ $(document).ready(function () {
                                 Acciones
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <li>
+                                ${sesion.permisos.productos && sesion.permisos.productos.acciones.includes("editar")?
+                                  `<li>
                                     <a href="#" class="dropdown-item btnEditarProducto" idProducto="${producto.id_producto}" data-bs-toggle="modal" data-bs-target="#modalEditarProducto">
                                         <i class="text-warning fas fa-edit fa-lg me-2"></i> Editar
                                     </a>
-                                </li>
-                                <li>
+                                  </li>`:``}
+                                
+                                ${sesion.permisos.productos && sesion.permisos.productos.acciones.includes("ver")?
+                                  `<li>
                                     <a href="#" class="dropdown-item btnVerProducto" idProducto="${producto.id_producto}" data-bs-toggle="modal" data-bs-target="#modalVerProducto">
                                         <i class="text-primary fa fa-eye fa-lg me-2"></i> Ver
                                     </a>
-                                </li>
-                                <li>
+                                  </li>`:``}
+                                
+                                ${sesion.permisos.productos && sesion.permisos.productos.acciones.includes("eliminar")?
+                                  `<li>
                                     <a href="#" class="dropdown-item confirm-text btnDeleteProducto" idProducto="${producto.id_producto}" imagenProducto="${producto.imagen_producto}">
                                         <i class="fa fa-trash fa-lg me-2" style="color: #FF4D4D"></i> Eliminar
                                     </a>
-                                </li>
+                                  </li>`:``}
+                                
                             </ul>
                         </div>
                     </td>
