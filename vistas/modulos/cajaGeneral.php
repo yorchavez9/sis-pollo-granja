@@ -16,9 +16,15 @@
                 <a href="#" style="border-radius: 10px; background: #1B2850; color: white" class="btn me-2">
                     <i class="fa fa-clock me-2"></i> Cerrar caja automáticamente a las 12pm
                 </a>
-                <a href="#" style="border-radius: 10px;" class="btn btn-added" data-bs-toggle="modal" data-bs-target="#modal_nuevo_apertura_caja">
-                    <img src="vistas/assets/img/icons/plus.svg" alt="img" class="me-2">Aperturar caja
-                </a>
+                <?php
+                if (isset($permisos["caja_general"]) && in_array("crear", $permisos["caja_general"]["acciones"])) {
+                ?>
+                    <a href="#" style="border-radius: 10px;" class="btn btn-added" data-bs-toggle="modal" data-bs-target="#modal_nuevo_apertura_caja">
+                        <img src="vistas/assets/img/icons/plus.svg" alt="img" class="me-2">Aperturar caja
+                    </a>
+                <?php
+                }
+                ?>
             </div>
         </div>
         <div class="row col-md-12 g-4">
@@ -103,7 +109,7 @@
                                 </tr>
                             </thead>
                             <tbody id="data_resumen_venta_productos">
-                               
+
                             </tbody>
                         </table>
                     </div>

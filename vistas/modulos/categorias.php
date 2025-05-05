@@ -5,9 +5,13 @@
                 <h4>Lista de categorias</h4>
                 <h6>Administrar categorias</h6>
             </div>
+            <?php
+            if (isset($permisos["categorias"]) && in_array("crear", $permisos["categorias"]["acciones"])) {
+            ?>
             <div class="page-btn">
                 <a href="#" class="btn btn-added" data-bs-toggle="modal" data-bs-target="#modalNuevoCategoria"><img src="vistas/assets/img/icons/plus.svg" alt="img" class="me-2">Agregar categoría</a>
             </div>
+            <?php } ?>
         </div>
 
         <div class="card">

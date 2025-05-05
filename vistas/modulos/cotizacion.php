@@ -58,9 +58,15 @@ $serieNumeroComprobante = ControladorSerieNumero::ctrMostrarSerieNumero($item, $
                     <div class="">
                         <h4 class="h2" style="font-size: 25px">Crear contización <i class="fas fa-shopping-cart" style="color: #5645ED"></i></h4>
                     </div>
-                    <div class="page-btn">
-                        <a href="listaCotizaciones" class="btn btn-added"><i class="fas fa-eye me-2"></i>Ver contizaciones</a>
-                    </div>
+                    <?php
+                    if (isset($permisos["cotizacion"]) && in_array("ver", $permisos["cotizacion"]["acciones"])) {
+                    ?>
+                        <div class="page-btn">
+                            <a href="listaCotizaciones" class="btn btn-added"><i class="fas fa-eye me-2"></i>Ver contizaciones</a>
+                        </div>
+                    <?php
+                    }
+                    ?>
                 </div>
                 <div class="row">
                     <div class="col-md-12">
@@ -254,11 +260,17 @@ $serieNumeroComprobante = ControladorSerieNumero::ctrMostrarSerieNumero($item, $
                                         </div>
 
                                         <!-- SECCION DE CREAR VENTA -->
-                                        <div class="row mb-3 mt-3">
-                                            <button type="button" id="btn_crear_cotizacion" class="btn btn-block" style="background:#7367F0; color:white">
-                                                <h5><i class="fa fa-plus fa-lg text-white me-2"></i> Crear cotización</h5>
-                                            </button>
-                                        </div>
+                                        <?php
+                                        if (isset($permisos["cotizacion"]) && in_array("crear", $permisos["cotizacion"]["acciones"])) {
+                                        ?>
+                                            <div class="row mb-3 mt-3">
+                                                <button type="button" id="btn_crear_cotizacion" class="btn btn-block" style="background:#7367F0; color:white">
+                                                    <h5><i class="fa fa-plus fa-lg text-white me-2"></i> Crear cotización</h5>
+                                                </button>
+                                            </div>
+                                        <?php
+                                        }
+                                        ?>
                                     </div>
                                 </div>
                             </div>

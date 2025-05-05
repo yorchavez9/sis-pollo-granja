@@ -5,9 +5,15 @@
                 <h4>Reporte de roles</h4>
                 <h6>Genere su reporte de roles</h6>
             </div>
+            <?php
+            if (isset($permisos["reporte_roles"]) && in_array("crear", $permisos["reporte_roles"]["acciones"])) {
+            ?>
             <div class="page-btn">
                 <a href="#" class="btn btn-added reporte_roles_pdf"><i class="fas fa-file-alt me-2"></i>Generar reporte</a>
             </div>
+            <?php
+            }
+            ?>
         </div>
 
         <div class="card">

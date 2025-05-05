@@ -5,9 +5,13 @@
                 <h4>Reporte de usuarios</h4>
                 <h6>Genere su reporte de usuarios</h6>
             </div>
+            <?php
+            if (isset($permisos["reporte_usuarios"]) && in_array("crear", $permisos["reporte_usuarios"]["acciones"])) {
+            ?>
             <div class="page-btn">
                 <a href="#" class="btn btn-added reporte_usuarios_pdf"><i class="fas fa-file-alt me-2"></i>Generar reporte</a>
             </div>
+            <?php } ?>
         </div>
 
         <div class="card">

@@ -5,9 +5,15 @@
                 <h4>Lista de compras</h4>
                 <h6>Administrar compras</h6>
             </div>
+            <?php
+            if (isset($permisos["compras"]) && in_array("crear", $permisos["compras"]["acciones"])) {
+            ?>
             <div class="page-btn">
                 <a href="compras" class="btn btn-added"><img src="vistas/assets/img/icons/plus.svg" alt="img" class="me-2">Nueva compra</a>
             </div>
+            <?php
+            }
+            ?>
         </div>
 
         <div class="card">

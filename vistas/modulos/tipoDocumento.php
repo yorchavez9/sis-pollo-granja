@@ -5,9 +5,13 @@
                 <h4>Lista de tipos de documento</h4>
                 <h6>Administrar tipo de documentos</h6>
             </div>
+            <?php
+            if (isset($permisos["tipo_documento"]) && in_array("crear", $permisos["tipo_documento"]["acciones"])) {
+            ?>
             <div class="page-btn">
                 <a href="#" class="btn btn-added" data-bs-toggle="modal" data-bs-target="#modalNuevoTipoDocumento"><img src="vistas/assets/img/icons/plus.svg" alt="img" class="me-2">Agregar tipo de documento</a>
             </div>
+            <?php } ?>
         </div>
 
         <div class="card">

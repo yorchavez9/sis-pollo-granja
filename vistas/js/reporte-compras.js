@@ -183,3 +183,31 @@ $("#seccion_compras_reporte").on("click", ".reporte_compras_pdf", (e) => {
     $("#filtro_total_compra_min").val("");
     $("#filtro_total_compra_max").val("");
 });
+
+
+// Llenar select de usuarios con datos obtenidos del servidor
+const llenarSelectUsuarios = (selector) => {
+  const select = $(selector);
+  select.empty();
+  select.append('<option value="" disabled selected>Seleccionar usuario</option>');
+
+  $.ajax({
+      url: "ajax/Usuario.ajax.php",
+      type: "GET",
+      dataType: "json",
+      success: function (response) {
+          if (response.status && response.data.length > 0) {
+              response.data.forEach(usuario => {
+                  select.append(`<option value="${usuario.id_usuario}">${usuario.nombre_usuario}</option>`);
+              });
+          } else {
+              console.warn("No hay usuarios disponibles.");
+          }
+      },
+      error: function (xhr, status, error) {
+          console.error("Error al obtener usuarios:", error);
+      }
+  });
+};
+
+llenarSelectUsuarios("#id_usuario_ingreso_egreso_reporte");

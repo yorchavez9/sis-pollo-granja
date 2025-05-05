@@ -85,7 +85,7 @@ if (count($configuraciones) > 0) {
         // Dibujamos la celda de ID
         $pdf->Cell(20, 10, $key + 1, 1, 0, 'C');
         // Dibujamos la celda de Nombre
-        $pdf->Cell(50, 10, utf8_decode($rol['nombre_rol']), 1, 0, 'L');
+        $pdf->Cell(50, 10, utf8_decode($rol['nombre']), 1, 0, 'L');
 
         // Guardamos las coordenadas X y Y
         $x = $pdf->GetX();

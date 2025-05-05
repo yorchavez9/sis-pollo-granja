@@ -5,9 +5,15 @@
                 <h4>Reporte de sucursal</h4>
                 <h6>Genere su reporte</h6>
             </div>
-            <div class="page-btn">
-                <a href="#" class="btn btn-added reporte_sucursal_pdf"><i class="fas fa-file-alt me-2"></i>Generar reporte</a>
-            </div>
+            <?php
+            if (isset($permisos["reporte_sucursales"]) && in_array("crear", $permisos["reporte_sucursales"]["acciones"])) {
+            ?>
+                <div class="page-btn">
+                    <a href="#" class="btn btn-added reporte_sucursal_pdf"><i class="fas fa-file-alt me-2"></i>Generar reporte</a>
+                </div>
+            <?php
+            }
+            ?>
         </div>
 
         <div class="card">

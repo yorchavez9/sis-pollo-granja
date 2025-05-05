@@ -5,9 +5,15 @@
                 <h4>Lista de cotizaciones</h4>
                 <h6>Administrar cotizaciones</h6>
             </div>
+            <?php
+            if (isset($permisos["cotizacion"]) && in_array("crear", $permisos["cotizacion"]["acciones"])) {
+            ?>
             <div class="page-btn">
                 <a href="cotizacion" class="btn btn-added"><img src="vistas/assets/img/icons/plus.svg" alt="img" class="me-2">Nueva cotizacion</a>
             </div>
+            <?php
+            }
+            ?>
         </div>
         <input type="hidden" id="id_caja_cotizacion_save">
         <div class="card">

@@ -5,9 +5,13 @@
                 <h4>Lista de usuarios</h4>
                 <h6>Administrar usuarios</h6>
             </div>
+            <?php
+            if (isset($permisos["usuarios"]) && in_array("crear", $permisos["usuarios"]["acciones"])) {
+            ?>
             <div class="page-btn">
                 <a href="#" class="btn btn-added" data-bs-toggle="modal" data-bs-target="#modalNuevoUsuario"><img src="vistas/assets/img/icons/plus.svg" alt="img" class="me-2">Agregar usuario</a>
             </div>
+            <?php } ?>
         </div>
 
         <div class="card">

@@ -5,10 +5,15 @@
                 <h4>Reporte de asistencia de trabajadores</h4>
                 <h6>Genere su reporte de asistencias</h6>
             </div>
+            <?php
+            if (isset($permisos["reporte_asistencia"]) && in_array("crear", $permisos["reporte_asistencia"]["acciones"])) {
+            ?>
             <div class="page-btn">
                 <a href="#" class="btn btn-added reporte_asistencia_pdf"><i class="fas fa-file-pdf me-2"></i>Generar PDF</a>
-                <a href="#" class="btn btn-added reporte_asistencia_excel"><i class="fas fa-file-excel me-2"></i>Generar Excel</a>
             </div>
+            <?php
+            }
+            ?>
         </div>
 
         <div class="card">

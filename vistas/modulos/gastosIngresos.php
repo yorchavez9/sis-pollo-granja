@@ -9,9 +9,15 @@
                 <a href="cajaGeneral" id="btn_mostrar_apertura_caja" class="btn btn-added me-2">
                     <img src="vistas/assets/img/icons/plus.svg" alt="img" class="me-2">Aperturar la caja
                 </a>
-                <a href="#" class="btn btn-added" data-bs-toggle="modal" data-bs-target="#modal_nuevo_ingreso_gatos">
-                    <img src="vistas/assets/img/icons/plus.svg" alt="img" class="me-2">Agregar Gatos o Ingresos
-                </a>
+                <?php
+                if (isset($permisos["gastos_ingresos"]) && in_array("crear", $permisos["gastos_ingresos"]["acciones"])) {
+                ?>
+                    <a href="#" class="btn btn-added" data-bs-toggle="modal" data-bs-target="#modal_nuevo_ingreso_gatos">
+                        <img src="vistas/assets/img/icons/plus.svg" alt="img" class="me-2">Agregar Gatos o Ingresos
+                    </a>
+                <?php
+                }
+                ?>
             </div>
 
         </div>
@@ -180,7 +186,7 @@
                             <span class="text-danger" id="error_edit_monto_ingreso_egreso"></span>
                         </div>
                     </div>
-                    <input type="hidden" id="edit_monto_ingreso_egreso_actual" >
+                    <input type="hidden" id="edit_monto_ingreso_egreso_actual">
 
                     <div class="form-group">
                         <label for="edit_detalle_ingreso_egreso" class="form-label">Detalles</label>

@@ -5,9 +5,15 @@
                 <h4>Reporte de pago trabajadores</h4>
                 <h6>Genere su reporte de pagos de trabajadores</h6>
             </div>
+            <?php
+            if (isset($permisos["reporte_pagos_trabajador"]) && in_array("crear", $permisos["reporte_pagos_trabajador"]["acciones"])) {
+            ?>
             <div class="page-btn">
                 <a href="#" class="btn btn-added reporte_pago_trabajadores_pdf"><i class="fas fa-file-alt me-2"></i>Generar reporte</a>
             </div>
+            <?php
+            }
+            ?>
         </div>
 
         <div class="card">

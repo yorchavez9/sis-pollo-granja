@@ -5,9 +5,15 @@
                 <h4>Lista de proveedores</h4>
                 <h6>Administrar proveedores</h6>
             </div>
+            <?php
+            if (isset($permisos["proveedores"]) && in_array("crear", $permisos["proveedores"]["acciones"])) {
+            ?>
             <div class="page-btn">
                 <a href="#" class="btn btn-added" data-bs-toggle="modal" data-bs-target="#modalNuevoProveedor"><img src="vistas/assets/img/icons/plus.svg" alt="img" class="me-2">Agregar proveedor</a>
             </div>
+            <?php
+            }
+            ?>
         </div>
 
         <div class="card">

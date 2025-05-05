@@ -5,9 +5,13 @@
                 <h4>Lista de roles</h4>
                 <h6>Administrar roles</h6>
             </div>
+            <?php
+            if (isset($permisos["roles"]) && in_array("crear", $permisos["roles"]["acciones"])) {
+            ?>
             <div class="page-btn">
                 <a href="#" class="btn btn-added" data-bs-toggle="modal" data-bs-target="#modal_nuevo_rol"><img src="vistas/assets/img/icons/plus.svg" alt="img" class="me-2">Agregar rol</a>
             </div>
+            <?php } ?>
         </div>
 
         <div class="card">

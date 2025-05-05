@@ -112,7 +112,7 @@ const llenarSelectUsuarios = (selector) => {
     select.append('<option value="" disabled selected>Seleccionar usuario</option>');
 
     $.ajax({
-        url: "ajax/usuario.ajax.php",
+        url: "ajax/Usuario.ajax.php",
         type: "GET",
         dataType: "json",
         success: function (response) {
@@ -130,4 +130,4 @@ const llenarSelectUsuarios = (selector) => {
     });
 };
 
-llenarSelectUsuarios("#id_usuario_ingreso_egreso_reporte");
+llenarSelectUsuarios("#filtro_usuario_compra");

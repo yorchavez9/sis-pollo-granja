@@ -5,9 +5,15 @@
                 <h4>Reporte de ventas</h4>
                 <h6>Genere su reporte de ventas</h6>
             </div>
+            <?php
+            if (isset($permisos["reporte_ventas"]) && in_array("crear", $permisos["reporte_ventas"]["acciones"])) {
+            ?>
             <div class="page-btn">
                 <a href="#" class="btn btn-added reporte_ventas_pdf"><i class="fas fa-file-alt me-2"></i>Generar reporte</a>
             </div>
+            <?php
+            }
+            ?>
         </div>
 
         <div class="card">
@@ -18,19 +24,7 @@
                     <div class="col-md-4 mb-2">
                         <label for="filtro_usuario" class="form-label">Usuario</label>
                         <select id="filtro_usuario_venta" class="select">
-                            <option value="">Todos</option>
-                            <!-- Aquí puedes cargar los usuarios dinámicamente desde la base de datos -->
-                            <?php
-                            $item = null;
-                            $valor = null;
-                            // Supongamos que tienes una función que obtiene los usuarios
-                            $usuarios = ControladorUsuarios::ctrMostrarUsuarios($item, $valor);
-                            foreach ($usuarios as $usuario) {
-                            ?>
-                                <option value="<?php echo $usuario['id_usuario']; ?>"><?php echo $usuario['nombre_usuario']; ?></option>
-                            <?php
-                            }
-                            ?>
+                          
                         </select>
                     </div>
 

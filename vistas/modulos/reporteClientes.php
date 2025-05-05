@@ -5,9 +5,15 @@
                 <h4>Reporte de ventas por cliente</h4>
                 <h6>Genere su reporte de clientes</h6>
             </div>
+            <?php
+            if (isset($permisos["reporte_clientes"]) && in_array("crear", $permisos["reporte_clientes"]["acciones"])) {
+            ?>
             <div class="page-btn">
                 <a href="#" class="btn btn-added reporte_clientes_pdf"><i class="fas fa-file-alt me-2"></i>Generar reporte</a>
             </div>
+            <?php
+            }
+            ?>
         </div>
 
         <div class="card">

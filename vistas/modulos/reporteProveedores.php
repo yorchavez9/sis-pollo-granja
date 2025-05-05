@@ -5,9 +5,15 @@
                 <h4>Reporte de proveedores</h4>
                 <h6>Genere su reporte de proveedores</h6>
             </div>
+            <?php
+            if (isset($permisos["reporte_proveedores"]) && in_array("crear", $permisos["reporte_proveedores"]["acciones"])) {
+            ?>
             <div class="page-btn">
                 <a href="#" class="btn btn-added reporte_proveedores_pdf"><i class="fas fa-file-alt me-2"></i>Generar reporte</a>
             </div>
+            <?php
+            }
+            ?>
         </div>
 
         <div class="card">

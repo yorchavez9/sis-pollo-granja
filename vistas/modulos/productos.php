@@ -7,11 +7,15 @@
             </div>
             <div class="page-btn">
                 <div class="row">
+                <?php
+                    if (isset($permisos["productos"]) && in_array("crear", $permisos["productos"]["acciones"])) {
+                    ?>
                     <div class="col-auto">
                         <a href="#" class="btn btn-added" data-bs-toggle="modal" data-bs-target="#modalNuevoProducto">
                             <img src="vistas/assets/img/icons/plus.svg" alt="Agregar producto" class="me-2">Agregar producto
                         </a>
                     </div>
+                    <?php } ?>
                     <div class="col-auto">
                         <a href="codigoBarra" class="btn btn-added">
                             <i class="fas fa-barcode me-2"></i>Código de barra

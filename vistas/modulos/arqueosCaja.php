@@ -7,9 +7,15 @@
                     Arqueo caja
                 </h3>
             </div>
+            <?php
+            if (isset($permisos["arqueos_caja"]) && in_array("crear", $permisos["arqueos_caja"]["acciones"])) {
+            ?>
             <div class="page-btn">
                 <a href="#" class="btn btn-added" data-bs-toggle="modal" data-bs-target="#modal_nuevo_arqueo"><img src="vistas/assets/img/icons/plus.svg" alt="img" class="me-2">Nuevo arqueo</a>
             </div>
+            <?php
+            }
+            ?>
         </div>
         <div class="card">
             <div class="card-body">

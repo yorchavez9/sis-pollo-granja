@@ -55,9 +55,15 @@
                             Compras
                         </h3>
                     </div>
-                    <div class="page-btn">
-                        <a href="listaCompras" class="btn btn-added"><i class="fas fa-eye me-2"></i>Ver compras</a>
-                    </div>
+                    <?php
+                    if (isset($permisos["compras"]) && in_array("ver", $permisos["compras"]["acciones"])) {
+                    ?>
+                        <div class="page-btn">
+                            <a href="listaCompras" class="btn btn-added"><i class="fas fa-eye me-2"></i>Ver compras</a>
+                        </div>
+                    <?php
+                    }
+                    ?>
                 </div>
                 <div class="row">
                     <div class="col-md-12">
@@ -66,7 +72,7 @@
                         ======================================-->
                         <form id="form_compra_producto">
 
-                            <input type="hidden" id="id_movimiento_caja_compra" >
+                            <input type="hidden" id="id_movimiento_caja_compra">
 
                             <!-- INGRESO DE ID DEL USUARIO -->
                             <input type="hidden" id="id_usuario_egreso" value="<?php echo $_SESSION["usuario"]["id_usuario"] ?>">
@@ -263,11 +269,17 @@
                                             </div>
                                         </div> -->
                                         <!-- SECCION DE CREAR COMPRA -->
-                                        <div class="row mb-3">
-                                            <button type="button" id="btn_crear_compra" class="btn btn-block" style="background:#7367F0; color:white">
-                                                <h5><i class="fa fa-plus fa-lg text-white me-2"></i> Crear compra</h5>
-                                            </button>
-                                        </div>
+                                        <?php
+                                        if (isset($permisos["compras"]) && in_array("crear", $permisos["compras"]["acciones"])) {
+                                        ?>
+                                            <div class="row mb-3">
+                                                <button type="button" id="btn_crear_compra" class="btn btn-block" style="background:#7367F0; color:white">
+                                                    <h5><i class="fa fa-plus fa-lg text-white me-2"></i> Crear compra</h5>
+                                                </button>
+                                            </div>
+                                        <?php
+                                        }
+                                        ?>
                                     </div>
                                 </div>
                             </div>
