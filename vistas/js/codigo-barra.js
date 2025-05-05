@@ -22,7 +22,12 @@ $(document).ready(function () {
   /* ===========================
     MOSTRANDO PRODUCTO
     =========================== */
-  function mostrarProductos() {
+  async function mostrarProductos() {
+    let sesion = await obtenerSesion();
+    if (sesion === null) {
+      window.location.href = "inicio";
+      return;
+    } 
     $.ajax({
       url: "ajax/Producto.ajax.php",
       type: "GET",
@@ -40,44 +45,36 @@ $(document).ready(function () {
             producto.imagen_producto = "vistas/img/productos/default.png"; // Ruta a la imagen predeterminada
           }
 
-
-          var fila = `
-                        <tr>
-                            <td>${index + 1}</td>
-                            <td>${producto.codigo_producto}</td>
-
-                            <td class="text-center">
-                                <a href="javascript:void(0);" class="product-img">
-                                    <img src="${
-                                      producto.imagen_producto
-                                    }" alt="${producto.imagen_producto}">
-                                </a>
-                            </td>
-
-                            <td>${producto.nombre_categoria}</td>
-
-                            <td>${producto.nombre_producto}</td>
-
-                            <td class="text-center"><button type="button" class="btn btn-sm" style="${getButtonStyles(
-                              producto.stock_producto
-                            )}">${producto.stock_producto}</button></td>
-
-                            <td>${producto.fecha_vencimiento}</td>
-                            
-                            <td class="text-center">
-
-                                <button href="#" class="me- btn btn-primary btnGenerarCodigoBarra" idProducto="${
-                                  producto.id_producto
-                                }" nombreProducto="${
-            producto.nombre_producto
-          }" codigoProducto="${
-            producto.codigo_producto
-          }" data-bs-toggle="modal" data-bs-target="#modalEditarProducto">
-                                    <i class="text-white me-2 fas fa-barcode fa-lg"></i>Código de barra
-                                </button>
-
-                            </td>
-                        </tr>`;
+            var fila = `
+                      <tr>
+                        <td>${index + 1}</td>
+                        <td>${producto.codigo_producto}</td>
+                        <td class="text-center">
+                          <a href="javascript:void(0);" class="product-img">
+                            <img src="${producto.imagen_producto}" alt="${producto.imagen_producto}">
+                          </a>
+                        </td>
+                        <td>${producto.nombre_categoria}</td>
+                        <td>${producto.nombre_producto}</td>
+                        <td class="text-center">
+                          <button type="button" class="btn btn-sm" style="${getButtonStyles(producto.stock_producto)}">
+                            ${producto.stock_producto}
+                          </button>
+                        </td>
+                        <td>${producto.fecha_vencimiento ? producto.fecha_vencimiento : 'No tiene'}</td>
+                        <td class="text-center">
+                        ${sesion.permisos.codigo_barra && sesion.permisos.codigo_barra.acciones.includes("imprimir")?
+                          `<button href="#" class="me- btn btn-primary btnGenerarCodigoBarra" 
+                            idProducto="${producto.id_producto}" 
+                            nombreProducto="${producto.nombre_producto}" 
+                            codigoProducto="${producto.codigo_producto}" 
+                            data-bs-toggle="modal" 
+                            data-bs-target="#modalEditarProducto">
+                            <i class="text-white me-2 fas fa-barcode fa-lg"></i>Código de barra
+                          </button>`:``}
+                          
+                        </td>
+                      </tr>`;
 
           function getButtonStyles(stock) {
             if (stock > 20) {
