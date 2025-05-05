@@ -83,7 +83,7 @@
                 <div class="modal-body">
 
                     <!-- ID USUARIO Y MOVIMIENTO CAJA -->
-                    <input type="hidden" id="id_usuario_ingreso_egreso" value="<?php echo $_SESSION["id_usuario"] ?>">
+                    <input type="hidden" id="id_usuario_ingreso_egreso" value="<?php echo $_SESSION["usuario"]["id_usuario"] ?>">
                     <input type="hidden" id="id_movimiento_caja_ingreso_egreso" value="">
 
                     <!-- INGRESO TIPO DE PROVEEDOR -->

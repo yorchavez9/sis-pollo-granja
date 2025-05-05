@@ -1,23 +1,28 @@
 $(document).ready(function () {
 
+  function formatCurrency(value) {
+    if (!value) return "S/ 0.00";
+    return new Intl.NumberFormat('es-PE', { style: 'currency', currency: 'PEN' }).format(value);
+  }
+
   async function obtenerSesion() {
     try {
-        const response = await fetch('ajax/sesion.ajax.php?action=sesion', {
-            method: 'GET',
-            headers: { 'Accept': 'application/json' },
-            credentials: 'include'
-        });
-        
-        if (!response.ok) throw new Error('Error en la respuesta del servidor');
-        
-        const data = await response.json();
-        return data.status === false ? null : data;
-        
+      const response = await fetch('ajax/sesion.ajax.php?action=sesion', {
+        method: 'GET',
+        headers: { 'Accept': 'application/json' },
+        credentials: 'include'
+      });
+
+      if (!response.ok) throw new Error('Error en la respuesta del servidor');
+
+      const data = await response.json();
+      return data.status === false ? null : data;
+
     } catch (error) {
-        console.error('Error al obtener sesión:', error);
-        return null;
+      console.error('Error al obtener sesión:', error);
+      return null;
     }
-}
+  }
 
   /* =====================================
     CONVERTIR DE DOLARES A 
@@ -50,7 +55,7 @@ $(document).ready(function () {
       if (rate) {
         currentRate = rate;
       }
-    } catch (error) {}
+    } catch (error) { }
   }
 
   setInterval(updateRate, 60 * 60 * 1000);
@@ -131,38 +136,38 @@ $(document).ready(function () {
 
     // Validar si la caja está abierta
     if (!id_movimiento_caja || id_movimiento_caja === "") {
-        Swal.fire({
-            title: "¡Aviso!",
-            text: "Por favor aperture la caja",
-            icon: "warning",
-        });
-        isValid = false;
+      Swal.fire({
+        title: "¡Aviso!",
+        text: "Por favor aperture la caja",
+        icon: "warning",
+      });
+      isValid = false;
     }
 
     // Validar el tipo de movimiento
     if (!tipo || tipo === "") {
-        $("#error_tipo_ingreso_egreso_caja").text("Este campo es obligatorio.");
-        isValid = false;
+      $("#error_tipo_ingreso_egreso_caja").text("Este campo es obligatorio.");
+      isValid = false;
     } else {
-        $("#error_tipo_ingreso_egreso_caja").text(""); // Limpiar error
+      $("#error_tipo_ingreso_egreso_caja").text(""); // Limpiar error
     }
 
     // Validar el concepto/naturaleza del pago
     if (!concepto || concepto === "") {
-        $("#error_naturaleza_concepto_pago").text("Este campo es obligatorio.");
-        isValid = false;
+      $("#error_naturaleza_concepto_pago").text("Este campo es obligatorio.");
+      isValid = false;
     } else {
-        $("#error_naturaleza_concepto_pago").text(""); // Limpiar error
+      $("#error_naturaleza_concepto_pago").text(""); // Limpiar error
     }
 
     // Validar el monto
     if (!monto || monto <= 0) {
-        $("#error_monto_ingreso_egreso").text("Por favor ingrese un monto válido.");
-        isValid = false;
+      $("#error_monto_ingreso_egreso").text("Por favor ingrese un monto válido.");
+      isValid = false;
     } else {
-        $("#error_monto_ingreso_egreso").text(""); // Limpiar error
+      $("#error_monto_ingreso_egreso").text(""); // Limpiar error
     }
-    
+
 
     // Si el formulario es válido, envíalo
     if (isValid) {
@@ -209,6 +214,7 @@ $(document).ready(function () {
       MOSTRANDO INGRSOS O EGRESOS
       =========================== */
   async function mostrarGatosIngresos() {
+    let sesion = await obtenerSesion();
     await updateRate();
     $.ajax({
       url: "ajax/Gastos.ingreso.ajax.php",
@@ -224,9 +230,9 @@ $(document).ready(function () {
                         <td>${index + 1}</td>
                         <td>${data.fecha}</td>
                         <td>
-                          ${data.tipo === 'ingreso' 
-                            ? `<span class="p-1 rounded" style="background: #28C76F; color: white">${data.tipo}</span>` 
-                            : `<span class="p-1 rounded" style="background: #F5215C; color: white">${data.tipo}</span>`}
+                          ${data.tipo === 'ingreso'
+              ? `<span class="p-1 rounded" style="background: #28C76F; color: white">${data.tipo}</span>`
+              : `<span class="p-1 rounded" style="background: #F5215C; color: white">${data.tipo}</span>`}
                         </td>
                         <td>${data.concepto}</td>
                         <td>
@@ -235,16 +241,20 @@ $(document).ready(function () {
                         </td>
                         <td>${data.detalles}</td>
                         <td class="text-center">
-                            <a href="#" class="me-3 btnEditarGastosIngresos" idGatosIngreso="${data.id_gasto}" montoIngresoGasto="${data.monto}" data-bs-toggle="modal" data-bs-target="#modal_editar_gatos_ingresos_caja">
+                            ${sesion.permisos.gastos_ingresos && sesion.permisos.gastos_ingresos.acciones.includes("editar")?
+                              `<a href="#" class="me-3 btnEditarGastosIngresos" idGatosIngreso="${data.id_gasto}" montoIngresoGasto="${data.monto}" data-bs-toggle="modal" data-bs-target="#modal_editar_gatos_ingresos_caja">
                                 <i class="text-warning fas fa-edit fa-lg"></i>
-                            </a>
-                            <a href="#" class="me-3 confirm-text btnEliminarGastosIngresos" 
+                            </a>`:``}
+                            
+                            ${sesion.permisos.gastos_ingresos && sesion.permisos.gastos_ingresos.acciones.includes("eliminar")?
+                              `<a href="#" class="me-3 confirm-text btnEliminarGastosIngresos" 
                             idGatosIngreso="${data.id_gasto}" 
                             montoIngresoGasto="${data.monto}" 
                             tipoMovimiento="${data.tipo}" 
                             IdmovimientoCaja="${data.id_movimiento_caja}" ">
                                 <i class="text-danger fa fa-trash fa-lg"></i>
-                            </a>
+                            </a>`:``}
+                            
                         </td>
                     </tr>
                 `;
@@ -304,12 +314,12 @@ $(document).ready(function () {
     let monto_edit = $("#edit_monto_ingreso_egreso").val();
     let monto_edit_actual = $("#edit_monto_ingreso_egreso_actual").val();
 
-    if(monto_edit > monto_edit_actual){
-        monto_edit_final = monto_edit - monto_edit_actual;
-        accion_monto = 'suma';
-    }else if(monto_edit < monto_edit_actual){
-        monto_edit_final = monto_edit_actual - monto_edit;
-        accion_monto = 'resta';
+    if (monto_edit > monto_edit_actual) {
+      monto_edit_final = monto_edit - monto_edit_actual;
+      accion_monto = 'suma';
+    } else if (monto_edit < monto_edit_actual) {
+      monto_edit_final = monto_edit_actual - monto_edit;
+      accion_monto = 'resta';
     }
 
     let detalles_edit = $("#edit_detalle_ingreso_egreso").val();
@@ -348,10 +358,10 @@ $(document).ready(function () {
             mostrarIdMovimientoCaja();
           } else {
             Swal.fire({
-                title: "¡Error!",
-                text: res.message,
-                icon: "error",
-              });
+              title: "¡Error!",
+              text: res.message,
+              icon: "error",
+            });
           }
         },
       });
@@ -368,7 +378,7 @@ $(document).ready(function () {
     let idGatosIngresoDelete = $(this).attr("idGatosIngreso");
     let montoIngresoGastoDelete = $(this).attr("montoIngresoGasto");
     let tipoMovimiento = $(this).attr("tipoMovimiento");
-    
+
     const datos = new FormData();
     datos.append("IdmovimientoCaja", IdmovimientoCaja);
     datos.append("idGatosIngresoDelete", idGatosIngresoDelete);

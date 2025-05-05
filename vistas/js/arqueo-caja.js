@@ -1,5 +1,10 @@
 $(document).ready(function () {
 
+    function formatCurrency(value) {
+        if (!value) return "S/ 0.00";
+        return new Intl.NumberFormat('es-PE', { style: 'currency', currency: 'PEN' }).format(value);
+    }
+
     async function obtenerSesion() {
         try {
             const response = await fetch('ajax/sesion.ajax.php?action=sesion', {
@@ -250,7 +255,8 @@ $(document).ready(function () {
     /* ===========================
       MOSTRANDO  ARQUEO CAJA
       =========================== */
-    function mostrarArqueoCaja() {
+    async function mostrarArqueoCaja() {
+        let sesion = await obtenerSesion();
         $.ajax({
             url: "ajax/Arqueo.caja.ajax.php",
             type: "GET",
@@ -264,17 +270,21 @@ $(document).ready(function () {
                         <tr>
                             <td>${index + 1}</td>
                             <td>${data.fecha_arqueo}</td>
-                            <td>S/ ${data.monto_sistema}</td>
-                            <td>S/ ${data.monto_fisico}</td>
-                            <td>S/ ${diferencia}</td>
+                            <td>${formatCurrency(data.monto_sistema)}</td>
+                            <td>${formatCurrency(data.monto_fisico)}</td>
+                            <td>${formatCurrency(diferencia)}</td>
                             <td>${data.observaciones}</td>
                             <td class="text-center">
-                                <a href="#" class="me-3 btnEditarArqueoCaja" idArqueoCaja="${data.id_arqueo}" data-bs-toggle="modal" data-bs-target="#modal_editar_arqueo_caja">
-                                    <i class="text-warning fas fa-edit fa-lg"></i>
-                                </a>
-                                <a href="#" class="me-3 confirm-text btnEliminarArqueoCaja" idArqueoCaja="${data.id_arqueo}">
-                                    <i class="text-danger fa fa-trash fa-lg"></i>
-                                </a>
+                                ${sesion.permisos.arqueos_caja && sesion.permisos.arqueos_caja.acciones.includes("editar")?
+                                    `<a href="#" class="me-3 btnEditarArqueoCaja" idArqueoCaja="${data.id_arqueo}" data-bs-toggle="modal" data-bs-target="#modal_editar_arqueo_caja">
+                                        <i class="text-warning fas fa-edit fa-lg"></i>
+                                    </a>`:``} 
+                                
+                                ${sesion.permisos.arqueos_caja && sesion.permisos.arqueos_caja.acciones.includes("eliminar")?
+                                    `<a href="#" class="me-3 confirm-text btnEliminarArqueoCaja" idArqueoCaja="${data.id_arqueo}">
+                                        <i class="text-danger fa fa-trash fa-lg"></i>
+                                    </a>`:``} 
+                                
                             </td>
                         </tr>
                     `;

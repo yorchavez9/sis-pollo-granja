@@ -63,6 +63,11 @@ $(document).ready(function () {
 
   //MOSTRANDO EN LA TABLA LOS EGRESO O CAMPRAS 
   async function mostrarEgresos() {
+    let sesion = await obtenerSesion();
+    if (sesion === null) {
+      window.location.href = "inicio";
+      return;
+    }
     await updateRate();
     $.ajax({
       url: "ajax/Lista.compra.ajax.php",
@@ -105,29 +110,37 @@ $(document).ready(function () {
                 '<button class="btn btn-sm rounded" style="background: #FF4D4D; color:white;">Pendiente</button>'}
                             </td>
                             <td class="text-center">
-                                <a href="#" class="me-3 btnPagarCompra" 
+                                ${sesion.permisos.compras && sesion.permisos.compras.acciones.includes("crear")? 
+                                  `<a href="#" class="me-3 btnPagarCompra" 
                                   idEgreso="${egreso.id_egreso}" 
                                   totalCompraEgreso="${totalCompra}" 
                                   pagoRestanteEgreso="${formateadoPagoRestante}" 
                                   data-bs-toggle="modal" 
                                   data-bs-target="#modalPagarCompra">
                                     <i class="fas fa-money-bill-alt fa-lg" style="color: #28C76F"></i>
-                                </a>
-                                <a href="#" 
+                                </a>`:``}
+                                
+                                ${sesion.permisos.compras && sesion.permisos.compras.acciones.includes("imprimir")? 
+                                  `<a href="#" 
                                   class="me-3 btnImprimir" 
                                   idEgreso="${egreso.id_egreso}" 
                                   tipoComprobante="${egreso.tipo_comprobante}">
                                     <i class="fa fa-print fa-lg" style="color: #0084FF"></i>
-                                </a>
-                                <a href="#" class="me-3 btnDownload" 
+                                </a>`:``}
+                                
+                                ${sesion.permisos.compras && sesion.permisos.compras.acciones.includes("imprimir")? 
+                                  `<a href="#" class="me-3 btnDownload" 
                                   idEgreso="${egreso.id_egreso}" tipoComprobante="${egreso.tipo_comprobante}">
                                     <i class="fa fa-download fa-lg" style="color: #28C76F"></i>
-                                </a>
-                                <a href="#" class="me-3 confirm-text btnEliminarCompra" 
+                                </a>`:``}
+                                
+                                ${sesion.permisos.compras && sesion.permisos.compras.acciones.includes("eliminar")? 
+                                  `<a href="#" class="me-3 confirm-text btnEliminarCompra" 
                                   idEgreso="${egreso.id_egreso}" 
                                   imagenProducto="${egreso.imagen_producto}">
                                     <i class="fa fa-trash fa-lg" style="color: #FF4D4D"></i>
-                                </a>
+                                </a>`:``}
+                                
                             </td>
                         </tr>`;
             tbody.append(fila);

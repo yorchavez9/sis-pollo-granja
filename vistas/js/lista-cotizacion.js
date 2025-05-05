@@ -197,6 +197,7 @@ function formateoPrecio(numero) {
 MOSTRANDO VENTAS
 =========================================== */
 async function mostrarCotizaciones() {
+    let sesion = await obtenerSesion();
     await updateRate();
     $.ajax({
         url: "ajax/Lista.cotizacion.ajax.php",
@@ -231,6 +232,7 @@ async function mostrarCotizaciones() {
                         <td>${cotizacion.fecha_cotizacion}</td>
                         <td>${cotizacion.hora_cotizacion}</td>
                         <td class="text-center">
+                        ${sesion.permisos.cotizacion && sesion.permisos.cotizacion.acciones.includes("estado")?``:``} 
                             ${
                                 cotizacion.estado === 0
                                 ? `<button class="btn btn-sm rounded btnActivar btn-enviado" idCotizacion="${cotizacion.id_cotizacion}" estadoCotizacion="0">Enviado</button>`
@@ -247,28 +249,35 @@ async function mostrarCotizaciones() {
                                     Acciones
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="accione_lista_cortizacion">
-                                    ${cotizacion.estado === 2 ? `` 
-                                    : `<li>
-                                        <a href = "#" class="dropdown-item btnGenerarVenta" idCotizacion = "${cotizacion.id_cotizacion}">
-                                        <i class="fa fa-cart-plus fa-lg me-2" style="color: #1B2850"></i> Generar venta
-                                                </a>
-                                    </li >`}
-                                   
-                                    <li>
+                                    ${sesion.permisos.cotizacion && sesion.permisos.cotizacion.acciones.includes("crear")?
+                                        `${cotizacion.estado === 2 ? `` 
+                                        : `<li>
+                                            <a href = "#" class="dropdown-item btnGenerarVenta" idCotizacion = "${cotizacion.id_cotizacion}">
+                                            <i class="fa fa-cart-plus fa-lg me-2" style="color: #1B2850"></i> Generar venta
+                                                    </a>
+                                        </li >`}`:``} 
+                                    
+                                   ${sesion.permisos.cotizacion && sesion.permisos.cotizacion.acciones.includes("imprimir")?
+                                    `<li>
                                         <a href="#" class="dropdown-item btnImprimirComprobanteC" idCotizacion="${cotizacion.id_cotizacion}" tipo_comprobante="${cotizacion.tipo_comprobante_sn}">
                                             <i class="fa fa-print fa-lg me-2" style="color: #0084FF"></i> Imprimir
                                         </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="dropdown-item btnDescargarComprobanteC" idCotizacion="${cotizacion.id_cotizacion}" tipo_comprobante="${cotizacion.tipo_comprobante_sn}">
-                                            <i class="fa fa-download fa-lg me-2" style="color: #28C76F"></i> Descargar
-                                        </a>
-                                    </li>
-                                    <li>
+                                    </li>`:``} 
+                                    
+                                    ${sesion.permisos.cotizacion && sesion.permisos.cotizacion.acciones.includes("imprimir")?
+                                        `<li>
+                                            <a href="#" class="dropdown-item btnDescargarComprobanteC" idCotizacion="${cotizacion.id_cotizacion}" tipo_comprobante="${cotizacion.tipo_comprobante_sn}">
+                                                <i class="fa fa-download fa-lg me-2" style="color: #28C76F"></i> Descargar
+                                            </a>
+                                        </li>`:``} 
+                                    
+                                    ${sesion.permisos.cotizacion && sesion.permisos.cotizacion.acciones.includes("eliminar")?
+                                        `<li>
                                         <a href="#" class="dropdown-item confirm-text btnEliminarCotizacion" idCotizacionDelete="${cotizacion.id_cotizacion}" tipo_comprobante="${cotizacion.tipo_comprobante_sn}">
                                             <i class="fa fa-trash fa-lg me-2" style="color: #FF4D4D"></i> Eliminar
                                         </a>
-                                    </li>
+                                    </li>`:``} 
+                                    
                                 </ul>
                             </div>
                         </td>

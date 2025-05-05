@@ -69,7 +69,7 @@ $serieNumeroComprobante = ControladorSerieNumero::ctrMostrarSerieNumero($item, $
                         ======================================-->
                         <form id="form_contizacion_venta">
                             <!-- INGRESO DE ID DEL USUARIO -->
-                            <input type="hidden" id="id_usuario_cotizacion" value="<?php echo $_SESSION["id_usuario"] ?>">
+                            <input type="hidden" id="id_usuario_cotizacion" value="<?php echo $_SESSION["usuario"]["id_usuario"] ?>">
                             <div class="row">
                                 <!-- INGRESO DE CLIENTE -->
                                 <div class="col-md-4">

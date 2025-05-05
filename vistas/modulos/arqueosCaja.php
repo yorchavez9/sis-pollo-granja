@@ -80,7 +80,7 @@
 
                     <!-- Campos ocultos -->
                     <input type="hidden" id="id_movimiento_arqueo_caja">
-                    <input type="hidden" id="id_usuario_arqueo_caja" value="<?php echo $_SESSION["id_usuario"] ?>">
+                    <input type="hidden" id="id_usuario_arqueo_caja" value="<?php echo $_SESSION["usuario"]["id_usuario"] ?>">
 
                     <!-- Selección de la fecha -->
                     <div class="form-group mb-4">
@@ -155,7 +155,7 @@
                     <!-- Campos ocultos -->
                     <input type="hidden" id="edit_id_arqueo_caja">
                     <input type="hidden" id="edit_id_movimiento_arqueo_caja">
-                    <input type="hidden" id="edit_id_usuario_arqueo_caja" value="<?php echo $_SESSION["id_usuario"] ?>">
+                    <input type="hidden" id="edit_id_usuario_arqueo_caja" value="<?php echo $_SESSION["usuario"]["id_usuario"] ?>">
 
                     <!-- Selección de la fecha -->
                     <div class="form-group mb-4">

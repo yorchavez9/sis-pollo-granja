@@ -116,6 +116,7 @@ function formateoPrecio(numero) {
 MOSTRANDO VENTAS
 =========================================== */
 async function mostrarVentas() {
+  let sesion = await obtenerSesion();
   await updateRate();
   $.ajax({
     url: "ajax/Lista.venta.ajax.php",
@@ -159,26 +160,36 @@ async function mostrarVentas() {
                             }
                         </td>
                         <td class="text-center">
-                            <a href="#" class="me-3 btnPagarVenta" 
-                            idVenta="${venta.id_venta}" 
-                            totalCompraVenta="${totalventa}" 
-                            pagoRestanteVenta="${formateadoPagoRestante}" 
-                            restantePago="${restantePago}"
-                            tipoPago= "${venta.tipo_pago}">
-                                <i class="fas fa-money-bill-alt fa-lg" style="color: #28C76F"></i>
-                            </a>
-                            <a href="#" class="me-3 btnHistorialPago" idVenta="${venta.id_venta}" data-bs-toggle="modal" data-bs-target="#modal_mostrar_historial_pago">
+                            ${sesion.permisos.ventas && sesion.permisos.ventas.acciones.includes("crear")?
+                              `<a href="#" class="me-3 btnPagarVenta" 
+                              idVenta="${venta.id_venta}" 
+                              totalCompraVenta="${totalventa}" 
+                              pagoRestanteVenta="${formateadoPagoRestante}" 
+                              restantePago="${restantePago}"
+                              tipoPago= "${venta.tipo_pago}">
+                                  <i class="fas fa-money-bill-alt fa-lg" style="color: #28C76F"></i>
+                              </a>`:``} 
+                            
+                            ${sesion.permisos.ventas && sesion.permisos.ventas.acciones.includes("ver")?
+                              `<a href="#" class="me-3 btnHistorialPago" idVenta="${venta.id_venta}" data-bs-toggle="modal" data-bs-target="#modal_mostrar_historial_pago">
                                 <i class="text-primary fas fa-history fa-lg"></i>
-                            </a>
-                            <a href="#" class="me-3 btnImprimirComprobanteV" idVenta="${venta.id_venta}" tipo_comprobante="${venta.tipo_comprobante_sn}">
+                            </a>`:``} 
+                            
+                            ${sesion.permisos.ventas && sesion.permisos.ventas.acciones.includes("imprimir")?
+                              `<a href="#" class="me-3 btnImprimirComprobanteV" idVenta="${venta.id_venta}" tipo_comprobante="${venta.tipo_comprobante_sn}">
                                 <i class="fa fa-print fa-lg" style="color: #0084FF"></i>
-                            </a>
-                            <a href="#" class="me-3 btnDescargarComprobanteV" idVenta="${venta.id_venta}" tipo_comprobante="${venta.tipo_comprobante_sn}">
+                            </a>`:``} 
+                            
+                            ${sesion.permisos.ventas && sesion.permisos.ventas.acciones.includes("imprimir")?
+                              `<a href="#" class="me-3 btnDescargarComprobanteV" idVenta="${venta.id_venta}" tipo_comprobante="${venta.tipo_comprobante_sn}">
                                 <i class="fa fa-download fa-lg" style="color: #28C76F"></i>
-                            </a>
-                            <a href="#" class="me-3 confirm-text btnEliminarVenta" idVentaDelete="${venta.id_venta}">
+                            </a>`:``} 
+                            
+                            ${sesion.permisos.ventas && sesion.permisos.ventas.acciones.includes("eliminar")?
+                              `<a href="#" class="me-3 confirm-text btnEliminarVenta" idVentaDelete="${venta.id_venta}">
                                 <i class="fa fa-trash fa-lg" style="color: #FF4D4D"></i>
-                            </a>
+                            </a>`:``} 
+                            
                         </td>
                     </tr>`;
 
