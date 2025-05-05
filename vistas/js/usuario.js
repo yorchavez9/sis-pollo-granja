@@ -196,7 +196,12 @@ $(document).ready(function () {
   /* ===========================
   MOSTRANDO USUARIOS
   =========================== */
-  function mostrarUsuarios() {
+  async function mostrarUsuarios() {
+    let sesion = await obtenerSesion();
+    if (sesion === null) {
+      window.location.href = "login";
+      return;
+    }
     $.ajax({
       url: "ajax/usuario.ajax.php",
       type: "GET",
@@ -224,20 +229,27 @@ $(document).ready(function () {
                   <td>${usuario.telefono}</td>
                   <td>${usuario.correo}</td>
                   <td>
-                      ${usuario.estado != 0 
+                  ${sesion.permisos.usuarios && sesion.permisos.usuarios.acciones.includes("estado")?
+                    `${usuario.estado != 0 
                         ? '<button class="btn bg-lightgreen badges btn-sm rounded btnActivar" idUsuario="' + usuario.id_usuario + '" estadoUsuario="0">Activado</button>'
-                        : '<button class="btn bg-lightred badges btn-sm rounded btnActivar" idUsuario="' + usuario.id_usuario + '" estadoUsuario="1">Desactivado</button>'}
+                        : '<button class="btn bg-lightred badges btn-sm rounded btnActivar" idUsuario="' + usuario.id_usuario + '" estadoUsuario="1">Desactivado</button>'}`:``}
+                      
                   </td>
                   <td>
-                      <a href="#" class="me-3 btnEditarUsuario" idUsuario="${usuario.id_usuario}" data-bs-toggle="modal" data-bs-target="#modalEditarUsuario">
+                      ${sesion.permisos.usuarios && sesion.permisos.usuarios.acciones.includes("editar")? 
+                        `<a href="#" class="me-3 btnEditarUsuario" idUsuario="${usuario.id_usuario}" data-bs-toggle="modal" data-bs-target="#modalEditarUsuario">
                           <i class="text-warning fas fa-edit fa-lg"></i>
-                      </a>
-                      <a href="#" class="me-3 btnVerUsuario" idUsuario="${usuario.id_usuario}" data-bs-toggle="modal" data-bs-target="#modalVerUsuario">
+                        </a>`:``}
+                      
+                      ${sesion.permisos.usuarios && sesion.permisos.usuarios.acciones.includes("ver")? 
+                        `<a href="#" class="me-3 btnVerUsuario" idUsuario="${usuario.id_usuario}" data-bs-toggle="modal" data-bs-target="#modalVerUsuario">
                           <i class="text-primary fa fa-eye fa-lg"></i>
-                      </a>
-                      <a href="#" class="me-3 confirm-text btnEliminarUsuario" idUsuario="${usuario.id_usuario}" fotoUsuario="${usuario.imagen_usuario}">
-                          <i class="fa fa-trash fa-lg" style="color: #F52E2F"></i>
-                      </a>
+                        </a>`:``}
+                      
+                      ${sesion.permisos.usuarios && sesion.permisos.usuarios.acciones.includes("eliminar")? 
+                        `<a href="#" class="me-3 confirm-text btnEliminarUsuario" idUsuario="${usuario.id_usuario}" fotoUsuario="${usuario.imagen_usuario}">
+                            <i class="fa fa-trash fa-lg" style="color: #F52E2F"></i>
+                        </a>`:``}
                   </td>
               </tr>`;
 
