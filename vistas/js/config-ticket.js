@@ -205,7 +205,8 @@ $(document).ready(function () {
     /*=============================================
     MOSTRANDO CONFIGURACION TICKET
     =============================================*/
-    function mostrarConfiguracionTicket() {
+    async function mostrarConfiguracionTicket() {
+        let sesion = await obtenerSesion();
         $.ajax({
             url: "ajax/Configuracion.ticket.ajax.php",
             type: "GET",
@@ -249,15 +250,15 @@ $(document).ready(function () {
                               <td>${ticket.fecha_config_ticket}</td>
 
                               <td class="text-center">
-
+                                  ${sesion.permisos.configuracion && sesion.permisos.configuracion.acciones.includes("editar")?``:``}
                                   <a href="#" class="me-3 btnEditarTicket" idTicket="${ticket.id_config_ticket}" data-bs-toggle="modal" data-bs-target="#modalEditarConfiguracionTicket">
                                       <i class="text-warning fas fa-edit fa-lg"></i>
                                   </a>
-
+                                  ${sesion.permisos.configuracion && sesion.permisos.configuracion.acciones.includes("imprimir")?``:``}
                                   <a href="#" class="me-3 btn_descargar_ticket_prueba" idTicket="${ticket.id_config_ticket}" data-bs-toggle="modal">
                                       <i class="fa fa-download fa-lg" style="color: #28C76F"></i>
                                   </a>
-
+                                  ${sesion.permisos.configuracion && sesion.permisos.configuracion.acciones.includes("eliminar")?``:``}
                                   <a href="#" class="me-3 confirm-text btnEliminarTicket" idTicket="${ticket.id_config_ticket}" imagenTicket="${ticket.logo}">
                                       <i class="fa fa-trash fa-lg" style="color: #FF4D4D"></i>
                                   </a>

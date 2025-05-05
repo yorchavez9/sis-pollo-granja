@@ -116,7 +116,8 @@ $(document).ready(function () {
     /*=============================================
     MOSTRANDO CONFIGURACION value
     =============================================*/
-    function mostrarConfiguracionSistema() {
+    async function mostrarConfiguracionSistema() {
+        let sesion = await obtenerSesion();
         $.ajax({
             url: "ajax/configuracion.sistema.ajax.php",
             type: "GET",
@@ -172,10 +173,13 @@ $(document).ready(function () {
                         </td>
                         <td>${value.fecha}</td>
                         <td class="text-center">
-                            <a href="#" class="me-3 btnEditarImagenSistema" idSistema="${value.id_img}" data-bs-toggle="modal" data-bs-target="#modal_editar_configuracion_sistema">
+                            ${sesion.permisos.configuracion && sesion.permisos.configuracion.acciones.includes("editar")?
+                                ` <a href="#" class="me-3 btnEditarImagenSistema" idSistema="${value.id_img}" data-bs-toggle="modal" data-bs-target="#modal_editar_configuracion_sistema">
                                 <i class="text-warning fas fa-edit fa-lg"></i>
-                            </a>
-                            <a href="#" class="me-3 confirm-text btnEliminarImagenSistema" 
+                            </a>`:``} 
+                           
+                            ${sesion.permisos.configuracion && sesion.permisos.configuracion.acciones.includes("eliminar")?
+                                `<a href="#" class="me-3 confirm-text btnEliminarImagenSistema" 
                             idSistema="${value.id_img}" 
                             url_icon_pestana="${value.icon_pestana}"
                             url_img_sidebar="${value.img_sidebar}"
@@ -183,7 +187,8 @@ $(document).ready(function () {
                             url_img_login="${value.img_login}"
                             url_icon_login="${value.icon_login}">
                                 <i class="fa fa-trash fa-lg" style="color: #FF4D4D"></i>
-                            </a>
+                            </a>`:``} 
+                            
                         </td>
                     </tr>`;
                     tbody.append(fila);
