@@ -97,10 +97,9 @@ $(document).ready(function () {
     const llenarSelectUsuarios = (selector) => {
         const select = $(selector);
         select.empty();
-        select.append('<option value="" disabled selected>Seleccionar rol</option>');
-
-        usuariosDisponibles.forEach(rol => {
-            select.append(`<option value="${rol.id_usuario}">${rol.nombre_usuario}</option>`);
+        select.append('<option value="" disabled selected>Seleccionar usuario</option>');
+        usuariosDisponibles.forEach(usuario => {
+            select.append(`<option value="${usuario.id_usuario}">${usuario.nombre_usuario}</option>`);
         });
     };
 

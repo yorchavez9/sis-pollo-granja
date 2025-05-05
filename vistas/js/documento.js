@@ -19,9 +19,9 @@ $(document).ready(function () {
     }
 }
   
-  /*   ===========================================
-    GUARDAR DATOS DE TIPO DE DOCUMENTO
-    =========================================== */
+  /* ===========================================
+  GUARDAR DATOS DE TIPO DE DOCUMENTO
+  =========================================== */
   $("#guardar_tipo_documento").click(function () {
     var isValid = true;
 
@@ -74,10 +74,11 @@ $(document).ready(function () {
   });
 
   /* ====================================
-    MOSTRANDO DATOS TIPO DE DOCUMENTO
-    ==================================== */
-
-  function mostrarTipoDocumentos() {
+  MOSTRANDO DATOS TIPO DE DOCUMENTO
+  ==================================== */
+  async function mostrarTipoDocumentos() {
+    let sesion = await obtenerSesion();
+    console.log(sesion);
     $.ajax({
       url: "ajax/Tipo.documento.ajax.php",
       type: "GET",
@@ -95,12 +96,14 @@ $(document).ready(function () {
                           <td class="productimgname">${documentos.nombre_doc}</td>
                           <td>${documentos.fecha_doc}</td>
                           <td class="text-center">
-                              <a href="#" class="me-3 btnEditarTipoDocumento" idTipoDocumento="${documentos.id_doc}" data-bs-toggle="modal" data-bs-target="#modalEditarTipoDocumento">
+                            ${sesion.permisos.tipo_documento && sesion.permisos.tipo_documento.acciones.includes("editar")?
+                              `<a href="#" class="me-3 btnEditarTipoDocumento" idTipoDocumento="${documentos.id_doc}" data-bs-toggle="modal" data-bs-target="#modalEditarTipoDocumento">
                                   <img src="vistas/assets/img/icons/edit.svg" alt="img">
-                              </a>
-                              <a href="#" class="me-3 confirm-text btnEliminarTipoDocumento" idTipoDocumento="${documentos.id_doc}">
+                              </a>`:`` }
+                            ${sesion.permisos.tipo_documento && sesion.permisos.tipo_documento.acciones.includes("eliminar")?
+                              `<a href="#" class="me-3 confirm-text btnEliminarTipoDocumento" idTipoDocumento="${documentos.id_doc}">
                                   <img src="vistas/assets/img/icons/delete.svg" alt="img">
-                              </a>
+                              </a>`:`` }
                           </td>
                       </tr>
                   `;
