@@ -162,7 +162,8 @@ $(document).ready(function () {
   /* ===========================
   MOSTRANDO USUARIOS
   =========================== */
-  function mostrarProveedores() {
+  async function mostrarProveedores() {
+    let sesion = await obtenerSesion();
     $.ajax({
       url: "ajax/Proveedor.ajax.php",
       type: "GET",
@@ -185,18 +186,25 @@ $(document).ready(function () {
                           <td>${proveedor.telefono}</td>
                           <td>${proveedor.email}</td>
                           <td>
-                              ${proveedor.estado_persona != 0 ? '<button class="btn bg-lightgreen badges btn-sm rounded btnActivar" idProveedor="' + proveedor.id_persona + '" estadoProveedor="0">Activado</button>' : '<button class="btn bg-lightred badges btn-sm rounded btnActivar" idProveedor="' + proveedor.id_persona + '" estadoProveedor="1">Desactivado</button>'}
+                          ${sesion.permisos.proveedores && sesion.permisos.proveedores.acciones.includes("estado")?
+                            `${proveedor.estado_persona != 0 ? '<button class="btn bg-lightgreen badges btn-sm rounded btnActivar" idProveedor="' + proveedor.id_persona + '" estadoProveedor="0">Activado</button>' : '<button class="btn bg-lightred badges btn-sm rounded btnActivar" idProveedor="' + proveedor.id_persona + '" estadoProveedor="1">Desactivado</button>'}`:``}
                           </td>
                           <td class="text-center">
-                              <a href="#" class="me-3 btnEditarProveedor" idProveedor="${proveedor.id_persona}" data-bs-toggle="modal" data-bs-target="#modalEditarProveedor">
+                              ${sesion.permisos.proveedores && sesion.permisos.proveedores.acciones.includes("editar")?
+                                `<a href="#" class="me-3 btnEditarProveedor" idProveedor="${proveedor.id_persona}" data-bs-toggle="modal" data-bs-target="#modalEditarProveedor">
                                   <i class="text-warning fas fa-edit fa-lg"></i>
-                              </a>
-                              <a href="#" class="me-3 btnVerProveedor" idProveedor="${proveedor.id_persona}" data-bs-toggle="modal" data-bs-target="#modalVerProveedor">
+                                </a>`:``}
+                              
+                              ${sesion.permisos.proveedores && sesion.permisos.proveedores.acciones.includes("ver")?
+                                `<a href="#" class="me-3 btnVerProveedor" idProveedor="${proveedor.id_persona}" data-bs-toggle="modal" data-bs-target="#modalVerProveedor">
                                   <i class="text-primary fa fa-eye fa-lg"></i>
-                              </a>
-                              <a href="#" class="me-3 confirm-text btnEliminarProveedor" idProveedor="${proveedor.id_persona}">
+                                </a>`:``}
+                              
+                              ${sesion.permisos.proveedores && sesion.permisos.proveedores.acciones.includes("eliminar")?
+                                `<a href="#" class="me-3 confirm-text btnEliminarProveedor" idProveedor="${proveedor.id_persona}">
                                   <i class="text-danger fa fa-trash fa-lg"></i>
-                              </a>
+                                </a>`:``}
+                              
                           </td>
                       </tr>
                   `;
