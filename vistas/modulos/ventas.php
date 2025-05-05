@@ -79,9 +79,8 @@ $serieNumeroComprobante = ControladorSerieNumero::ctrMostrarSerieNumero($item, $
 
                             <!--  ID DE LA APERTURA DE LA CAJA -->
                             <input type="hidden" id="id_movimiento_caja_venta">
-
                             <!-- INGRESO DE ID DEL USUARIO -->
-                            <input type="hidden" id="id_usuario_venta" value="<?php echo $_SESSION["id_usuario"] ?>">
+                            <input type="hidden" id="id_usuario_venta" value="<?php echo $_SESSION["usuario"]["id_usuario"]; ?>">
                             <div class="row">
                                 <!-- INGRESO DE CLIENTE -->
                                 <div class="col-md-4">

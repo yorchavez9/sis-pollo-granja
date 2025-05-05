@@ -5,7 +5,7 @@ require "./code128.php";
 
 session_start();
 
-$nombre_usuario = $_SESSION["nombre_usuario"];
+$nombre_usuario = $_SESSION["usuario"]["nombre_usuario"];
 
 require_once "../../controladores/Cotizacion.controllador.php";
 require_once "../../modelos/Cotizacion.modelo.php";

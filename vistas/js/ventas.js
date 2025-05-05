@@ -623,6 +623,7 @@ $("#btn_crear_nueva_venta").click(function (e) {
     datos.append("pago_cuota_venta", pago_cuota_venta);
     datos.append("recibo_de_pago_venta", recibo_de_pago_venta);
     datos.append("serie_de_pago_venta", serie_de_pago_venta);
+    
     $.ajax({
       url: "ajax/ventas.ajax.php",
       method: "POST",
