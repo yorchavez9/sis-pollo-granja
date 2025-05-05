@@ -1,5 +1,10 @@
 $(document).ready(function () {
 
+  function formatCurrency(value) {
+    if (!value) return "S/ 0.00";
+    return new Intl.NumberFormat('es-PE', { style: 'currency', currency: 'PEN' }).format(value);
+}
+
   async function obtenerSesion() {
     try {
         const response = await fetch('ajax/sesion.ajax.php?action=sesion', {
@@ -175,7 +180,8 @@ $(document).ready(function () {
     MOSTRANDO USUARIOS
     =========================================*/
 
-  function mostrarContratoTrabajador() {
+  async function mostrarContratoTrabajador() {
+    let sesion = await obtenerSesion();
     $.ajax({
       url: "ajax/Contrato.trabajador.ajax.php",
       type: "GET",
@@ -189,24 +195,25 @@ $(document).ready(function () {
 
         contratos.forEach(function (trabajador) {
 
-          // Formatear el sueldo a moneda
-          var sueldoFormateado = new Intl.NumberFormat('es-PE', { style: 'currency', currency: 'PEN' }).format(trabajador.sueldo);
-
           var fila = `
           <tr>
             <td>${contador}</td>
             <td>${trabajador.nombre}</td>
             <td>${trabajador.tiempo_contrato}</td>
             <td>${trabajador.tipo_sueldo}</td>
-            <td>${sueldoFormateado}</td>
+            <td>${formatCurrency(trabajador.sueldo)}</td>
             <td>${trabajador.fecha_contrato}</td>
             <td>
-              <a href="#" class="me-3 btnEditarContrato" idContrato="${trabajador.id_contrato}" data-bs-toggle="modal" data-bs-target="#modalEditarContratoTrabajador">
-                <i class="text-warning fas fa-edit fa-lg"></i>
-              </a>
-              <a href="#" class="me-3 confirm-text btnEliminarContrato" idContrato="${trabajador.id_contrato}">
-                <i class="fa fa-trash fa-lg" style="color: #F52E2F"></i>
-              </a>
+              ${sesion.permisos.contrato_trabajador && sesion.permisos.contrato_trabajador.acciones.includes("editar")?
+                `<a href="#" class="me-3 btnEditarContrato" idContrato="${trabajador.id_contrato}" data-bs-toggle="modal" data-bs-target="#modalEditarContratoTrabajador">
+                  <i class="text-warning fas fa-edit fa-lg"></i>
+                </a>`:``} 
+              
+              ${sesion.permisos.contrato_trabajador && sesion.permisos.contrato_trabajador.acciones.includes("eliminar")?
+                `<a href="#" class="me-3 confirm-text btnEliminarContrato" idContrato="${trabajador.id_contrato}">
+                  <i class="fa fa-trash fa-lg" style="color: #F52E2F"></i>
+                </a>`:``} 
+              
             </td>
           </tr>`;
 

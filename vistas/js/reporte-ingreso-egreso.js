@@ -104,3 +104,30 @@ mostrarIngresoEgreso(datos);
     // Abrir el reporte PDF con los filtros aplicados
     window.open(url, "_blank");
 });
+
+// Llenar select de usuarios con datos obtenidos del servidor
+const llenarSelectUsuarios = (selector) => {
+    const select = $(selector);
+    select.empty();
+    select.append('<option value="" disabled selected>Seleccionar usuario</option>');
+
+    $.ajax({
+        url: "ajax/usuario.ajax.php",
+        type: "GET",
+        dataType: "json",
+        success: function (response) {
+            if (response.status && response.data.length > 0) {
+                response.data.forEach(usuario => {
+                    select.append(`<option value="${usuario.id_usuario}">${usuario.nombre_usuario}</option>`);
+                });
+            } else {
+                console.warn("No hay usuarios disponibles.");
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error("Error al obtener usuarios:", error);
+        }
+    });
+};
+
+llenarSelectUsuarios("#id_usuario_ingreso_egreso_reporte");

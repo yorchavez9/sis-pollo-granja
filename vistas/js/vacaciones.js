@@ -2,22 +2,22 @@ $(document).ready(function () {
 
   async function obtenerSesion() {
     try {
-        const response = await fetch('ajax/sesion.ajax.php?action=sesion', {
-            method: 'GET',
-            headers: { 'Accept': 'application/json' },
-            credentials: 'include'
-        });
-        
-        if (!response.ok) throw new Error('Error en la respuesta del servidor');
-        
-        const data = await response.json();
-        return data.status === false ? null : data;
-        
+      const response = await fetch('ajax/sesion.ajax.php?action=sesion', {
+        method: 'GET',
+        headers: { 'Accept': 'application/json' },
+        credentials: 'include'
+      });
+
+      if (!response.ok) throw new Error('Error en la respuesta del servidor');
+
+      const data = await response.json();
+      return data.status === false ? null : data;
+
     } catch (error) {
-        console.error('Error al obtener sesión:', error);
-        return null;
+      console.error('Error al obtener sesión:', error);
+      return null;
     }
-}
+  }
 
 
   /*=========================================
@@ -132,8 +132,8 @@ $(document).ready(function () {
   /*=========================================
   MOSTRANDO VACACIONES
   ===========================================*/
-  function mostrarVacaciones() {
-
+  async function mostrarVacaciones() {
+    let sesion = await obtenerSesion();
     $.ajax({
       url: "ajax/Vacaciones.ajax.php",
       type: "GET",
@@ -158,13 +158,13 @@ $(document).ready(function () {
 
         vacaciones.forEach(function (vacacion) {
 
-          
+
 
           let fechaInicio = vacacion.fecha_inicio;
 
           let fechaFin = vacacion.fecha_fin;
 
-          if(fechaInicio == fecha_actual && fecha_actual <= fechaFin){
+          if (fechaInicio == fecha_actual && fecha_actual <= fechaFin) {
 
             var idVacacion = vacacion.id_vacacion;
 
@@ -190,7 +190,7 @@ $(document).ready(function () {
 
             });
 
-          }else{
+          } else {
 
             var idVacacion = vacacion.id_vacacion;
 
@@ -227,23 +227,25 @@ $(document).ready(function () {
                       <td>${vacacion.nombre}</td>
                       <td>${vacacion.fecha_inicio}</td>
                       <td>${vacacion.fecha_fin}</td>
-
-  
                       <td>
-                          ${vacacion.estado_vacion != 0 ? '<button class="btn bg-lightgreen badges btn-sm rounded btnActivar" idVacacion="' + vacacion.id_vacacion + '" estadoVacacion="0">En vacaciones</button>'
-                                                        : '<button class="btn bg-lightred badges btn-sm rounded btnActivar" idVacacion="' + vacacion.id_vacacion + '" estadoVacacion="1">Desactivado</button>'
-                          }
+                      ${sesion.permisos.vacaciones && sesion.permisos.vacaciones.acciones.includes("estado") ?
+              `${vacacion.estado_vacion != 0 ? '<button class="btn bg-lightgreen badges btn-sm rounded btnActivar" idVacacion="' + vacacion.id_vacacion + '" estadoVacacion="0">En vacaciones</button>'
+                : '<button class="btn bg-lightred badges btn-sm rounded btnActivar" idVacacion="' + vacacion.id_vacacion + '" estadoVacacion="1">Desactivado</button>'
+              }` : ``} 
+                          
                       </td>
                       
                       <td class="text-center">
-
-                          <a href="#" class="me-3 btnEditarVacacion" idVacacion="${vacacion.id_vacacion}" data-bs-toggle="modal" data-bs-target="#modalEditarVacaciones">
+                          ${sesion.permisos.vacaciones && sesion.permisos.vacaciones.acciones.includes("editar") ?
+              `<a href="#" class="me-3 btnEditarVacacion" idVacacion="${vacacion.id_vacacion}" data-bs-toggle="modal" data-bs-target="#modalEditarVacaciones">
                               <i class="text-warning fas fa-edit fa-lg"></i>
-                          </a>
-
-                          <a href="#" class="me-3 confirm-text btnEliminarVacacion" idVacacion="${vacacion.id_vacacion}">
+                          </a>`: ``} 
+                          
+                          ${sesion.permisos.vacaciones && sesion.permisos.vacaciones.acciones.includes("eliminar") ?
+              `<a href="#" class="me-3 confirm-text btnEliminarVacacion" idVacacion="${vacacion.id_vacacion}">
                               <i class="fa fa-trash fa-lg" style="color: #F52E2F"></i>
-                          </a>
+                          </a>`: ``} 
+                          
 
                       </td>
 

@@ -20,20 +20,9 @@
                     <!-- ID DEL USUARIO -->
                     <div class="col-md-3">
                         <label for="filtro_categoria" class="form-label">Usuarios</label>
-                        <?php
-                        $item = null;
-                        $valor = null;
-                        $usuarios = ControladorUsuarios::ctrMostrarUsuarios($item, $valor);
-                        ?>
+                        
                         <select id="id_usuario_ingreso_egreso_reporte" class="select">
-                            <option value="">Todas</option>
-                            <?php
-                            foreach ($usuarios as $key => $value) {
-                            ?>
-                                <option value="<?php echo $value["id_usuario"] ?>"><?php echo $value["nombre_usuario"] ?></option>
-                            <?php
-                            }
-                            ?>
+                            
                         </select>
                     </div>
 

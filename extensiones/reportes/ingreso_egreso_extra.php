@@ -6,11 +6,11 @@ require_once "../../controladores/Configuracion.ticket.controlador.php";
 require_once "../../modelos/Configuracion.ticket.modelo.php";
 
 session_start();
-if (!isset($_SESSION["nombre_usuario"])) {
+if (!isset($_SESSION["usuario"])) {
     die("Acceso denegado");
 }
 
-$nombre_usuario = $_SESSION["nombre_usuario"];
+$nombre_usuario = $_SESSION["usuario"]["nombre_usuario"];
 
 $item = null;
 $valor = null;

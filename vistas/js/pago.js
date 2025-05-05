@@ -1,23 +1,28 @@
 $(document).ready(function () {
 
+  function formatCurrency(value) {
+    if (!value) return "S/ 0.00";
+    return new Intl.NumberFormat('es-PE', { style: 'currency', currency: 'PEN' }).format(value);
+  }
+
   async function obtenerSesion() {
     try {
-        const response = await fetch('ajax/sesion.ajax.php?action=sesion', {
-            method: 'GET',
-            headers: { 'Accept': 'application/json' },
-            credentials: 'include'
-        });
-        
-        if (!response.ok) throw new Error('Error en la respuesta del servidor');
-        
-        const data = await response.json();
-        return data.status === false ? null : data;
-        
+      const response = await fetch('ajax/sesion.ajax.php?action=sesion', {
+        method: 'GET',
+        headers: { 'Accept': 'application/json' },
+        credentials: 'include'
+      });
+
+      if (!response.ok) throw new Error('Error en la respuesta del servidor');
+
+      const data = await response.json();
+      return data.status === false ? null : data;
+
     } catch (error) {
-        console.error('Error al obtener sesión:', error);
-        return null;
+      console.error('Error al obtener sesión:', error);
+      return null;
     }
-}
+  }
 
   /* =====================================
   SELECIONANDO LA FECHA AUTOMATICAMENTE
@@ -118,7 +123,8 @@ $(document).ready(function () {
   MOSTRANDO PAGOS DE LOS TRABAJADORES
   =========================================*/
 
-  function mostrarPagoTrabajador() {
+  async function mostrarPagoTrabajador() {
+    let sesion = await obtenerSesion();
     $.ajax({
       url: "ajax/Pago.trabajador.ajax.php",
       type: "GET",
@@ -131,7 +137,7 @@ $(document).ready(function () {
         // Formatear la fecha en YYYY-MM-DD
 
         var fecha_actual = fechaActual.toISOString().split('T')[0];
-      
+
         var estadoPago = "";
 
         var tbody = $("#datos_pago_trabajador");
@@ -142,10 +148,10 @@ $(document).ready(function () {
 
         pagos.forEach(function (pago) {
 
-          let fecha_pago = pago.fecha_pago.substring(0,10);
+          let fecha_pago = pago.fecha_pago.substring(0, 10);
 
-          
-          
+
+
           if (fecha_pago < fecha_actual) {
 
             var idPago = pago.id_pagos;;
@@ -178,40 +184,29 @@ $(document).ready(function () {
           var fila = `
                       <tr>
                           <td>${contador}</td>
-
                           <td>${pago.nombre}</td>
-
-                          <td class="fw-bold">S/ ${formateoPrecio(pago.monto_pago)}</td>
-
+                          <td class="fw-bold">${formatCurrency(pago.monto_pago)}</td>
                           <td>${fecha_pago}</td>
-
                           <td>
-                          ${
-                            pago.estado_pago != 0
+                          ${sesion.permisos.pago_trabajador && sesion.permisos.pago_trabajador.acciones.includes("estado")?
+                            `${pago.estado_pago != 0
                               ? '<button class="btn bg-lightgreen badges btn-sm rounded btnActivar" idPago="' + pago.id_pagos + '" estadoPago="0" disabled>Pagado</button>'
                               : '<button class="btn bg-lightred badges btn-sm rounded btnActivar" idPago="' + pago.id_pagos + '" estadoPago="1">Pendiente</button>'
-                          }
-                          </td>
-                      
+                            }`:``} 
                           
-                          <td class="text-center">
-
-                              <a href="#" class="me-3 confirm-text btnEliminarPago" idPago="${pago.id_pagos}">
-
-                                <i class="fa fa-trash fa-lg" style="color: #F52E2F"></i>
-
-                              </a>
-    
                           </td>
-    
+                          <td class="text-center">
+                          ${sesion.permisos.pago_trabajador && sesion.permisos.pago_trabajador.acciones.includes("eliminar")?
+                            `<a href="#" class="me-3 confirm-text btnEliminarPago" idPago="${pago.id_pagos}">
+                                <i class="fa fa-trash fa-lg" style="color: #F52E2F"></i>
+                              </a>`:``} 
+                              
+                          </td>
                       </tr>`;
 
           // Agregar la fila al tbody
-
           tbody.append(fila);
-
           contador++;
-
         });
 
         // Inicializar DataTables después de cargar los datos
@@ -234,9 +229,9 @@ $(document).ready(function () {
 
 
 
- /*=============================================
-  ESTADO DE PAGO (PAGADO O PENDIENTE)
-  ============================================= */
+  /*=============================================
+   ESTADO DE PAGO (PAGADO O PENDIENTE)
+   ============================================= */
 
   $("#tabla_pago_trabajador").on("click", ".btnActivar", function (e) {
 
@@ -279,7 +274,7 @@ $(document).ready(function () {
 
       $(this).attr("estadoPago", 1);
 
-      
+
 
     } else {
 
@@ -288,7 +283,7 @@ $(document).ready(function () {
       $(this).attr("estadoPago", 0);
 
       $(this).prop('disabled', true);
-      
+
     }
 
   });
@@ -298,65 +293,65 @@ $(document).ready(function () {
   ELIMINAR PAGO DEL TRABAJADOR
   ==========================================*/
 
-  $("#tabla_pago_trabajador").on("click",".btnEliminarPago", function (e) {
+  $("#tabla_pago_trabajador").on("click", ".btnEliminarPago", function (e) {
 
-      e.preventDefault();
+    e.preventDefault();
 
-      var idPagoDelete = $(this).attr("idPago");
+    var idPagoDelete = $(this).attr("idPago");
 
-      var datos = new FormData();
+    var datos = new FormData();
 
-      datos.append("idPagoDelete", idPagoDelete);
+    datos.append("idPagoDelete", idPagoDelete);
 
-      Swal.fire({
-        title: "¿Está seguro de borrar el pago?",
-        text: "¡Si no lo está puede cancelar la accíón!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        cancelButtonText: "Cancelar",
-        confirmButtonText: "Si, borrar!",
-      }).then(function (result) {
+    Swal.fire({
+      title: "¿Está seguro de borrar el pago?",
+      text: "¡Si no lo está puede cancelar la accíón!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      cancelButtonText: "Cancelar",
+      confirmButtonText: "Si, borrar!",
+    }).then(function (result) {
 
-        if (result.value) {
+      if (result.value) {
 
-          $.ajax({
-            url: "ajax/Pago.trabajador.ajax.php",
-            method: "POST",
-            data: datos,
-            cache: false,
-            contentType: false,
-            processData: false,
-            success: function (respuesta) {
+        $.ajax({
+          url: "ajax/Pago.trabajador.ajax.php",
+          method: "POST",
+          data: datos,
+          cache: false,
+          contentType: false,
+          processData: false,
+          success: function (respuesta) {
 
-              var res = JSON.parse(respuesta);
+            var res = JSON.parse(respuesta);
 
-              if (res === "ok") {
+            if (res === "ok") {
 
-                Swal.fire({
-                  title: "¡Eliminado!",
-                  text: "El pago ha sido eliminado",
-                  icon: "success",
-                });
+              Swal.fire({
+                title: "¡Eliminado!",
+                text: "El pago ha sido eliminado",
+                icon: "success",
+              });
 
-                mostrarPagoTrabajador();
+              mostrarPagoTrabajador();
 
-              } else {
+            } else {
 
-                console.error("Error al eliminar los datos");
+              console.error("Error al eliminar los datos");
 
-              }
+            }
 
-            },
+          },
 
-          });
+        });
 
-        }
+      }
 
-      });
+    });
 
-    }
+  }
 
   );
 

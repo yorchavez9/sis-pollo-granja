@@ -175,8 +175,8 @@ $(document).ready(function () {
   MOSTRANDO USUARIOS
   =========================== */
 
-  function mostrarTrabajador() {
-
+  async function mostrarTrabajador() {
+    let sesion = await obtenerSesion();
     $.ajax({
       url: "ajax/Trabajador.ajax.php",
       type: "GET",
@@ -215,23 +215,25 @@ $(document).ready(function () {
                       ${trabajador.tipo_pago == null || trabajador.tipo_pago == '' ? '<span>Ninguno</span>' : trabajador.tipo_pago}
                       </td>
                       <td>
-                          ${
+                      ${sesion.permisos.trabajador && sesion.permisos.trabajador.acciones.includes("estado")?
+                        `${
                             trabajador.estado_trabajador != 0
                               ? '<button class="btn bg-lightgreen badges btn-sm rounded btnActivar" idTrabajador="' + trabajador.id_trabajador + '" estadoTrabajador="0">Activado</button>'
                               : '<button class="btn bg-lightred badges btn-sm rounded btnActivar" idTrabajador="' + trabajador.id_trabajador + '" estadoTrabajador="1">Desactivado</button>'
-                          }
+                          }`:``} 
+                          
                       </td>
                       
                       <td>
-
+                          ${sesion.permisos.trabajador && sesion.permisos.trabajador.acciones.includes("editar")?``:``} 
                           <a href="#" class="me-3 btnEditarTrabajador" idTrabajador="${trabajador.id_trabajador}" data-bs-toggle="modal" data-bs-target="#modalEditarTrabajador">
                               <i class="text-warning fas fa-edit fa-lg"></i>
                           </a>
-
+                          ${sesion.permisos.trabajador && sesion.permisos.trabajador.acciones.includes("ver")?``:``} 
                           <a href="#" class="me-3 btnVerTrabajador" idTrabajador="${trabajador.id_trabajador}" data-bs-toggle="modal" data-bs-target="#modalVerTrabajador">
                               <i class="text-primary fa fa-eye fa-lg"></i>
                           </a>
-
+                          ${sesion.permisos.trabajador && sesion.permisos.trabajador.acciones.includes("eliminar")?``:``} 
                           <a href="#" class="me-3 confirm-text btnEliminarTrabajador" idTrabajador="${trabajador.id_trabajador}" fotoTrabajador="${trabajador.foto}" cvTrabajador="${trabajador.cv}">
                               <i class="fa fa-trash fa-lg" style="color: #F52E2F"></i>
                           </a>

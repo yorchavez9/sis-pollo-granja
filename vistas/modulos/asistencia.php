@@ -1,6 +1,4 @@
-<!-- ===============================
-CONTENIDO PRINCIPAL
-=============================== -->
+<!-- Contenido Principal -->
 <div class="page-wrapper">
     <div class="content">
         <div class="page-header">
@@ -9,7 +7,9 @@ CONTENIDO PRINCIPAL
                 <h6>Administrar asistencia</h6>
             </div>
             <div class="page-btn">
-                <a href="#" class="btn btn-added" data-bs-toggle="modal" data-bs-target="#modalNuevoAsistencia"><img src="vistas/assets/img/icons/plus.svg" alt="img" class="me-2">Agregar asistencia</a>
+                <a href="#" class="btn btn-added" data-bs-toggle="modal" data-bs-target="#modalNuevoAsistencia">
+                    <img src="vistas/assets/img/icons/plus.svg" alt="img" class="me-2">Agregar asistencia
+                </a>
             </div>
         </div>
 
@@ -54,21 +54,18 @@ CONTENIDO PRINCIPAL
                             </tr>
                         </thead>
                         <tbody id="data_mostrar_asistencias">
-
+                            <!-- Datos cargados dinámicamente -->
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
-
     </div>
 </div>
 
-<!-- ===============================
-MODAL NUEVA ASISTENCIA
-=============================== -->
+<!-- Modal Nueva Asistencia -->
 <div class="modal fade" id="modalNuevoAsistencia" tabindex="-1" aria-labelledby="modalNuevoAsistenciaLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg  modal-dialog-scrollable">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Crear asistencia de trabajadores</h5>
@@ -79,15 +76,15 @@ MODAL NUEVA ASISTENCIA
                     <div class="row mb-3">
                         <div class="col-md-4">
                             <label for="fecha_asistencia" class="form-label">Fecha (<span class="text-danger">*</span>)</label>
-                            <input type="date" id="fecha_asistencia_a" class="form-control">
+                            <input type="date" id="fecha_asistencia_a" class="form-control" required>
                         </div>
                         <div class="col-md-4">
                             <label for="hora_entrada" class="form-label">Hora entrada (<span class="text-danger">*</span>)</label>
-                            <input type="time" id="hora_entrada_a" class="form-control">
+                            <input type="time" id="hora_entrada_a" class="form-control" required>
                         </div>
                         <div class="col-md-4">
                             <label for="hora-salida" class="form-label">Hora salida (<span class="text-danger">*</span>)</label>
-                            <input type="time" id="hora_salida_a" class="form-control">
+                            <input type="time" id="hora_salida_a" class="form-control" required>
                         </div>
                     </div>
 
@@ -105,28 +102,27 @@ MODAL NUEVA ASISTENCIA
                                 <?php
                                 $item = null;
                                 $valor = null;
-
                                 $trabajadores = ControladorTrabajador::ctrMostrarTrabajadoresAsistencia($item, $valor);
                                 $contador = 1;
 
                                 foreach ($trabajadores as $trabajador) {
-                                    // Verificar si la clave 'asistencia' existe
-                                    $asistencia = isset($trabajador['asistencia']) ? $trabajador['asistencia'] : '';
                                 ?>
                                     <tr>
                                         <th scope="row"><?php echo $contador ?></th>
-                                        <td><?php echo $trabajador["nombre"] ?> <input type="hidden" id="id_trabajador_asistencia" value="<?php echo $trabajador["id_trabajador"] ?>"></td>
+                                        <td><?php echo $trabajador["nombre"] ?> 
+                                            <input type="hidden" id="id_trabajador_asistencia" value="<?php echo $trabajador["id_trabajador"] ?>">
+                                        </td>
                                         <td class="text-center">
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="asistencia<?php echo $contador ?>" id="presente<?php echo $contador ?>" value="Presente" <?php if ($asistencia == 'Presente') echo 'checked' ?>>
+                                                <input class="form-check-input" type="radio" name="asistencia<?php echo $contador ?>" id="presente<?php echo $contador ?>" value="Presente" checked>
                                                 <label class="form-check-label" style="color: #28C76F" for="presente<?php echo $contador ?>">Presente</label>
                                             </div>
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="asistencia<?php echo $contador ?>" id="tarde<?php echo $contador ?>" value="Tarde" <?php if ($asistencia == 'Tarde') echo 'checked' ?>>
+                                                <input class="form-check-input" type="radio" name="asistencia<?php echo $contador ?>" id="tarde<?php echo $contador ?>" value="Tarde">
                                                 <label class="form-check-label" style="color: #FF9F43" for="tarde<?php echo $contador ?>">Tarde</label>
                                             </div>
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="asistencia<?php echo $contador ?>" id="falta<?php echo $contador ?>" value="Falta" <?php if ($asistencia == 'Falta') echo 'checked' ?>>
+                                                <input class="form-check-input" type="radio" name="asistencia<?php echo $contador ?>" id="falta<?php echo $contador ?>" value="Falta">
                                                 <label class="form-check-label" style="color: #FF4D4D" for="falta<?php echo $contador ?>">Falta</label>
                                             </div>
                                         </td>
@@ -144,18 +140,17 @@ MODAL NUEVA ASISTENCIA
                 </div>
 
                 <div class="text-end mx-4 mb-2">
-                    <button type="button" id="btn_guardar_asistencia" class="btn btn-primary mx-2"><i class="fas fa-save"></i> Guardar</button>
+                    <button type="button" id="btn_guardar_asistencia" class="btn btn-primary mx-2">
+                        <i class="fas fa-save"></i> Guardar
+                    </button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                 </div>
-
             </form>
         </div>
     </div>
 </div>
 
-<!-- ===============================
-MODAL EDITAR ASISTENCIA
-=============================== -->
+<!-- Modal Editar Asistencia -->
 <div class="modal fade" id="modalEditarAsistencia" tabindex="-1" aria-labelledby="modalEditarAsistenciaLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -164,74 +159,51 @@ MODAL EDITAR ASISTENCIA
                 <button type="button" class="close close_modal_asistencia" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
             </div>
             <form enctype="multipart/form-data" id="form_editar_asistencia">
-
                 <div class="modal-body">
-
                     <div class="row mb-3">
-
-
-                        <!-- INGRESO DE FECHA  -->
                         <div class="col-md-4">
-
                             <label for="fecha_asistencia" class="form-label">Fecha (<span class="text-danger">*</span>)</label>
-
                             <input type="date" id="edit_fecha_asistencia_a" readonly class="form-control">
-
                         </div>
-
-                        <!-- INGRESO DE HORA DE ENTRADA -->
                         <div class="col-md-4">
-
                             <label for="hora_entrada" class="form-label">Hora entrada (<span class="text-danger">*</span>)</label>
-
                             <input type="time" id="edit_hora_entrada_a" class="form-control">
-
                         </div>
-
-                        <!-- INGRESO DE HORA DE SALIDA -->
                         <div class="col-md-4">
-
                             <label for="hora-salida" class="form-label">Hora salida (<span class="text-danger">*</span>)</label>
-
                             <input type="time" id="edit_hora_salida_a" class="form-control">
-
                         </div>
-
                     </div>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th scope="col">N°</th>
-                                <th scope="col">Trabajador</th>
-                                <th scope="col" class="text-center">Estado</th>
-                                <th scope="col" class="text-center">Observación</th>
-                            </tr>
-                        </thead>
-
-                        <tbody id="edit_show_estado_asistencia">
-
-                        </tbody>
-                    </table>
-
-
-
+                    
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th scope="col">N°</th>
+                                    <th scope="col">Trabajador</th>
+                                    <th scope="col" class="text-center">Estado</th>
+                                    <th scope="col" class="text-center">Observación</th>
+                                </tr>
+                            </thead>
+                            <tbody id="edit_show_estado_asistencia">
+                                <!-- Datos cargados dinámicamente -->
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
 
                 <div class="text-end mx-4 mb-2">
-                    <button type="button" id="btn_guardar_asistencia" class="btn btn-primary mx-2">
+                    <button type="button" id="btn_actualizar_asistencia" class="btn btn-primary mx-2">
                         <i class="fas fa-sync"></i> Actualizar
                     </button>
                     <button type="button" class="btn btn-secondary close_modal_asistencia" data-bs-dismiss="modal">Cerrar</button>
                 </div>
-
             </form>
         </div>
     </div>
 </div>
 
-<!-- ===============================
-MODAL ver ASISTENCIA
-=============================== -->
+<!-- Modal Ver Asistencia -->
 <div class="modal fade" id="modalVerAsistencia" tabindex="-1" aria-labelledby="modalVerAsistenciaLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -240,66 +212,44 @@ MODAL ver ASISTENCIA
                 <button type="button" class="close close_modal_asistencia" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
             </div>
             <form enctype="multipart/form-data" id="form_ver_asistencia">
-
                 <div class="modal-body">
-
                     <div class="row mb-3">
-
-
-                        <!-- INGRESO DE FECHA  -->
                         <div class="col-md-4">
-
                             <label for="fecha_asistencia" class="form-label">Fecha (<span class="text-danger">*</span>)</label>
-
                             <input type="date" id="ver_fecha_asistencia_a" readonly class="form-control">
-
                         </div>
-
-                        <!-- INGRESO DE HORA DE ENTRADA -->
                         <div class="col-md-4">
-
                             <label for="hora_entrada" class="form-label">Hora entrada (<span class="text-danger">*</span>)</label>
-
-                            <input type="time" id="ver_hora_entrada_a" class="form-control">
-
+                            <input type="time" id="ver_hora_entrada_a" readonly class="form-control">
                         </div>
-
-                        <!-- INGRESO DE HORA DE SALIDA -->
                         <div class="col-md-4">
-
                             <label for="hora-salida" class="form-label">Hora salida (<span class="text-danger">*</span>)</label>
-
-                            <input type="time" id="ver_hora_salida_a" class="form-control">
-
+                            <input type="time" id="ver_hora_salida_a" readonly class="form-control">
                         </div>
-
                     </div>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th scope="col">N°</th>
-                                <th scope="col">Trabajador</th>
-                                <th scope="col" class="text-center">Estado</th>
-                                <th scope="col" class="text-center">Observación</th>
-                            </tr>
-                        </thead>
-
-                        <tbody id="ver_show_estado_asistencia">
-
-                        </tbody>
-                    </table>
-
-
-
+                    
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th scope="col">N°</th>
+                                    <th scope="col">Trabajador</th>
+                                    <th scope="col" class="text-center">Estado</th>
+                                    <th scope="col" class="text-center">Observación</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ver_show_estado_asistencia">
+                                <!-- Datos cargados dinámicamente -->
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
 
                 <div class="text-end mx-4 mb-2">
-
                     <button type="button" class="btn btn-secondary close_modal_asistencia" data-bs-dismiss="modal">Cerrar</button>
-
                 </div>
-
             </form>
         </div>
     </div>
 </div>
+
