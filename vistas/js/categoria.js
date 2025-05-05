@@ -92,7 +92,12 @@ $(document).ready(function () {
     /* ===========================
     MOSTRANDO CATEGORIA
     =========================== */
-    function mostrarCategorias() {
+    async function mostrarCategorias() {
+      let sesion = await obtenerSesion();
+      if (sesion === null) {
+          window.location.href = "ingreso";
+          return;
+      }
       $.ajax({
           url: "ajax/Categoria.ajax.php",
           type: "GET",
@@ -110,12 +115,16 @@ $(document).ready(function () {
                         <td>${categoria.descripcion}</td>
                         <td>${categoria.fecha}</td>
                         <td class="text-center">
-                            <a href="#" class="me-3 btnEditarCategoria" idCategoria="${categoria.id_categoria}" data-bs-toggle="modal" data-bs-target="#modalEditarCategoria">
+                            ${sesion.permisos.categorias && sesion.permisos.categorias.acciones.includes("editar")? 
+                              `<a href="#" class="me-3 btnEditarCategoria" idCategoria="${categoria.id_categoria}" data-bs-toggle="modal" data-bs-target="#modalEditarCategoria">
                                 <i class="text-warning fas fa-edit fa-lg"></i>
-                            </a>
-                            <a href="#" class="me-3 confirm-text btnEliminarCategoria" idCategoria="${categoria.id_categoria}">
+                              </a>`:``}
+                            
+                            ${sesion.permisos.categorias && sesion.permisos.categorias.acciones.includes("eliminar")? 
+                              `<a href="#" class="me-3 confirm-text btnEliminarCategoria" idCategoria="${categoria.id_categoria}">
                                 <i class="text-danger fa fa-trash fa-lg"></i>
-                            </>
+                              </a>`:``}
+                            
                         </td>a
                     </tr>
                 `;
