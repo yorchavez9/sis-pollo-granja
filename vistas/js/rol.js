@@ -106,7 +106,12 @@ $(document).ready(function () {
     /* ===========================================
     MOSTRAR ROLES
     =========================================== */
-    function mostrarRoles() {
+    async function mostrarRoles() {
+        let sesion = await obtenerSesion();
+        if (sesion === null) {
+            window.location.href = "inicio";
+            return;
+        }
         $.ajax({
             url: "ajax/Rol.ajax.php",
             type: "GET",
@@ -121,12 +126,16 @@ $(document).ready(function () {
                         <td>${rol.nombre_rol}</td>
                         <td>${rol.descripcion}</td>
                         <td class="text-center">
-                            <a href="#" class="me-3 btnEditarRol" idRol="${rol.id_rol}" data-bs-toggle="modal" data-bs-target="#modal_editar_rol">
-                                <i class="text-warning fas fa-edit fa-lg"></i>
-                            </a>
-                            <a href="#" class="me-3 confirm-text btnEliminarRol" idRol="${rol.id_rol}">
-                                <i class="text-danger fa fa-trash fa-lg"></i>
-                            </a>
+                            ${sesion.permisos.roles && sesion.permisos.roles.acciones.includes("editar")?
+                                `<a href="#" class="me-3 btnEditarRol" idRol="${rol.id_rol}" data-bs-toggle="modal" data-bs-target="#modal_editar_rol">
+                                    <i class="text-warning fas fa-edit fa-lg"></i>
+                                </a>`:``}
+                            
+                            ${sesion.permisos.roles && sesion.permisos.roles.acciones.includes("eliminar")?
+                                `<a href="#" class="me-3 confirm-text btnEliminarRol" idRol="${rol.id_rol}">
+                                    <i class="text-danger fa fa-trash fa-lg"></i>
+                                </a>`:``}
+                            
                         </td>
                     </tr>
                 `;
