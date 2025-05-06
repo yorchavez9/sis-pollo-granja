@@ -64,10 +64,7 @@ $(document).ready(function () {
   //MOSTRANDO EN LA TABLA LOS EGRESO O CAMPRAS 
   async function mostrarEgresos() {
     let sesion = await obtenerSesion();
-    if (sesion === null) {
-      window.location.href = "inicio";
-      return;
-    }
+    if(!sesion) return;
     await updateRate();
     $.ajax({
       url: "ajax/Lista.compra.ajax.php",

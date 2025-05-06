@@ -182,6 +182,7 @@ $(document).ready(function () {
 
   async function mostrarContratoTrabajador() {
     let sesion = await obtenerSesion();
+    if(!sesion) return;
     $.ajax({
       url: "ajax/Contrato.trabajador.ajax.php",
       type: "GET",

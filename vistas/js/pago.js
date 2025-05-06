@@ -125,6 +125,7 @@ $(document).ready(function () {
 
   async function mostrarPagoTrabajador() {
     let sesion = await obtenerSesion();
+    if(!sesion) return;
     $.ajax({
       url: "ajax/Pago.trabajador.ajax.php",
       type: "GET",

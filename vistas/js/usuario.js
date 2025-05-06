@@ -169,10 +169,7 @@ $(document).ready(function () {
   =========================== */
   async function mostrarUsuarios() {
     let sesion = await obtenerSesion();
-    if (sesion === null) {
-      window.location.href = "login";
-      return;
-    }
+    if(!sesion) return;
     $.ajax({
       url: "ajax/usuario.ajax.php",
       type: "GET",

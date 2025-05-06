@@ -24,10 +24,7 @@ $(document).ready(function () {
     =========================== */
   async function mostrarProductos() {
     let sesion = await obtenerSesion();
-    if (sesion === null) {
-      window.location.href = "inicio";
-      return;
-    } 
+    if(!sesion) return;
     $.ajax({
       url: "ajax/Producto.ajax.php",
       type: "GET",

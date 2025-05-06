@@ -134,6 +134,7 @@ $(document).ready(function () {
   ===========================================*/
   async function mostrarVacaciones() {
     let sesion = await obtenerSesion();
+    if(!sesion) return;
     $.ajax({
       url: "ajax/Vacaciones.ajax.php",
       type: "GET",

@@ -177,6 +177,7 @@ $(document).ready(function () {
 
   async function mostrarTrabajador() {
     let sesion = await obtenerSesion();
+    if(!sesion) return;
     $.ajax({
       url: "ajax/Trabajador.ajax.php",
       type: "GET",

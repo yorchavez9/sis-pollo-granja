@@ -94,10 +94,7 @@ $(document).ready(function () {
     =========================== */
     async function mostrarCategorias() {
       let sesion = await obtenerSesion();
-      if (sesion === null) {
-          window.location.href = "ingreso";
-          return;
-      }
+      if(!sesion) return;
       $.ajax({
           url: "ajax/Categoria.ajax.php",
           type: "GET",

@@ -164,6 +164,7 @@ $(document).ready(function () {
   =========================== */
   async function mostrarProveedores() {
     let sesion = await obtenerSesion();
+    if(!sesion) return;
     $.ajax({
       url: "ajax/Proveedor.ajax.php",
       type: "GET",

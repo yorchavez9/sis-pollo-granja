@@ -117,6 +117,7 @@ MOSTRANDO VENTAS
 =========================================== */
 async function mostrarVentas() {
   let sesion = await obtenerSesion();
+  if(!sesion) return;
   await updateRate();
   $.ajax({
     url: "ajax/Lista.venta.ajax.php",

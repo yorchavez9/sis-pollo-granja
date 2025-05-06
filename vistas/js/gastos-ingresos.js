@@ -215,6 +215,7 @@ $(document).ready(function () {
       =========================== */
   async function mostrarGatosIngresos() {
     let sesion = await obtenerSesion();
+    if(!sesion) return;
     await updateRate();
     $.ajax({
       url: "ajax/Gastos.ingreso.ajax.php",

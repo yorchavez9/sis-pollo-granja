@@ -108,10 +108,7 @@ $(document).ready(function () {
     =========================================== */
     async function mostrarRoles() {
         let sesion = await obtenerSesion();
-        if (sesion === null) {
-            window.location.href = "inicio";
-            return;
-        }
+        if(!sesion) return;
         $.ajax({
             url: "ajax/Rol.ajax.php",
             type: "GET",

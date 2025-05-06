@@ -34,7 +34,7 @@ $(document).ready(function() {
   // Mostrar lista de asistencias
   async function mostrarAsistencia() {
       const sesion = await obtenerSesion();
-      
+      if(!sesion) return;
       $.ajax({
           url: "ajax/Asistencia.ajax.php",
           type: "GET",

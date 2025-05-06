@@ -207,6 +207,7 @@ $(document).ready(function () {
     =============================================*/
     async function mostrarConfiguracionTicket() {
         let sesion = await obtenerSesion();
+        if(!sesion) return;
         $.ajax({
             url: "ajax/Configuracion.ticket.ajax.php",
             type: "GET",

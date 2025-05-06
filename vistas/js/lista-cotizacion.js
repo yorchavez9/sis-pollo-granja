@@ -198,6 +198,7 @@ MOSTRANDO VENTAS
 =========================================== */
 async function mostrarCotizaciones() {
     let sesion = await obtenerSesion();
+    if(!sesion) return;
     await updateRate();
     $.ajax({
         url: "ajax/Lista.cotizacion.ajax.php",

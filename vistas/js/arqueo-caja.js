@@ -257,6 +257,7 @@ $(document).ready(function () {
       =========================== */
     async function mostrarArqueoCaja() {
         let sesion = await obtenerSesion();
+        if(!sesion) return;
         $.ajax({
             url: "ajax/Arqueo.caja.ajax.php",
             type: "GET",

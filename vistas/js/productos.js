@@ -81,10 +81,7 @@ $(document).ready(function () {
   =========================== */
   async function mostrarProductos() {
     let sesion = await obtenerSesion();
-    if (sesion === null) {
-        window.location.href = "login";
-        return;
-    }
+    if(!sesion) return;
     await updateRate();
     $.ajax({
         url: "ajax/Producto.ajax.php",

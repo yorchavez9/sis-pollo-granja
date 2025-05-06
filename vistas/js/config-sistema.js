@@ -118,6 +118,7 @@ $(document).ready(function () {
     =============================================*/
     async function mostrarConfiguracionSistema() {
         let sesion = await obtenerSesion();
+        if(!sesion) return;
         $.ajax({
             url: "ajax/configuracion.sistema.ajax.php",
             type: "GET",

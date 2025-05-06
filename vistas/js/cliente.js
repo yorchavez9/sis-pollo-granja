@@ -144,6 +144,7 @@ MOSTRANDO CLIENTES
 =========================== */
 async function mostrarClientes() {
   let sesion = await obtenerSesion();
+  if(!sesion) return; // Si no hay sesión, salir de la función
   $.ajax({
     url: "ajax/Cliente.ajax.php",
     type: "GET",

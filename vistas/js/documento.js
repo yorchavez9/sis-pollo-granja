@@ -78,6 +78,7 @@ $(document).ready(function () {
   ==================================== */
   async function mostrarTipoDocumentos() {
     let sesion = await obtenerSesion();
+    if(!sesion) return;
     $.ajax({
       url: "ajax/Tipo.documento.ajax.php",
       type: "GET",
