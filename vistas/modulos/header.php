@@ -161,8 +161,8 @@
         <li class="nav-item dropdown has-arrow main-drop">
             <a href="javascript:void(0);" class="dropdown-toggle nav-link userset" data-bs-toggle="dropdown">
                 <span class="user-img">
-                    <?php if (!empty($_SESSION["imagen_usuario"])): ?>
-                        <img src="<?php echo substr($_SESSION["imagen_usuario"], 3); ?>" alt="">
+                    <?php if (!empty($_SESSION["usuario"]["imagen_usuario"])): ?>
+                        <img src="<?php echo substr($_SESSION["usuario"]["imagen_usuario"], 3); ?>" alt="">
                     <?php else: ?>
                         <img src="vistas/img/usuarios/default.jpeg" alt="Usuario sin imagen">
                     <?php endif; ?>
@@ -173,17 +173,17 @@
             <div class="dropdown-menu menu-drop-user">
                 <div class="profilename">
                     <div class="profileset">
-                        <span class="user-img"><img src="<?php echo substr($_SESSION["imagen_usuario"], 3) ?>" alt="">
+                        <span class="user-img"><img src="<?php echo substr($_SESSION["usuario"]["imagen_usuario"], 3) ?>" alt="">
                             <span class="status online"></span></span>
                         <div class="profilesets">
                             <h6> <?php
-                                    $nombreUsuario = explode(" ", $_SESSION["nombre_usuario"]);
+                                    $nombreUsuario = explode(" ", $_SESSION["usuario"]["nombre_usuario"]);
                                     echo $nombreUsuario[0];
                                     ?>
                             </h6>
                             <h5>
                                 <?php
-                                echo $_SESSION["nombre_rol"];
+                                echo $_SESSION["roles"][1];
                                 ?>
                             </h5>
 

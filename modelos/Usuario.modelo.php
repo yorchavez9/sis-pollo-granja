@@ -58,21 +58,18 @@ class ModeloUsuarios
         }
     }
     
-    
     /* =============================================
     OBTENER DATOS COMPLETOS DEL USUARIO PARA SESIÓN
     ============================================= */
     static public function mdlObtenerDatosSesion($idUsuario)
     {
         try {
-            // Obtener datos básicos del usuario
             $usuario = self::mdlMostrarLoginUsuario("usuarios", "id_usuario", $idUsuario);
             
             if (!$usuario) {
                 return false;
             }
             
-            // Obtener roles y permisos (simplificado para el ejemplo)
             $datosSesion = [
                 "id_usuario" => $usuario["id_usuario"],
                 "nombre_usuario" => $usuario["nombre_usuario"],
@@ -134,7 +131,6 @@ class ModeloUsuarios
         }
     }
 
-
     /* ==============================================
     OBTENER ROLES DEL USUARIO
     ============================================== */
@@ -151,7 +147,6 @@ class ModeloUsuarios
         $stmt->close();
         $stmt = null;
     }
-
 
     /* ==============================================
     OBTENER PERMISOS DEL USUARIO
@@ -192,8 +187,6 @@ class ModeloUsuarios
         $stmt->close();
         $stmt = null;
     }
-
-
 
     /* =============================================
     VERIFICAR USUARIO EXISTENTE
@@ -280,54 +273,65 @@ class ModeloUsuarios
     static public function mdlActualizarUsuarioU($tabla, $datos)
     {
         try {
-            // Construir consulta dinámica
-            $sql = "UPDATE $tabla SET 
-                id_sucursal = :id_sucursal,
-                id_persona = :id_persona,
-                nombre_usuario = :nombre_usuario,
-                usuario = :usuario";
-            
+            $sql = "UPDATE $tabla SET ";
+            $params = [];
+
+            if (isset($datos["id_sucursal"])) {
+                $sql .= "id_sucursal = :id_sucursal, ";
+                $params[":id_sucursal"] = $datos["id_sucursal"];
+            }
+
+            if (isset($datos["nombre_usuario"])) {
+                $sql .= "nombre_usuario = :nombre_usuario, ";
+                $params[":nombre_usuario"] = $datos["nombre_usuario"];
+            }
+
+            if (isset($datos["telefono"])) {
+                $sql .= "telefono = :telefono, ";
+                $params[":telefono"] = $datos["telefono"];
+            }
+
+            if (isset($datos["correo"])) {
+                $sql .= "correo = :correo, ";
+                $params[":correo"] = $datos["correo"];
+            }
+
+            if (isset($datos["usuario"])) {
+                $sql .= "usuario = :usuario, ";
+                $params[":usuario"] = $datos["usuario"];
+            }
+
             if (!empty($datos["contrasena"])) {
-                $sql .= ", contrasena = :contrasena";
+                $sql .= "contrasena = :contrasena, ";
+                $params[":contrasena"] = $datos["contrasena"];
             }
-            
-            if (!empty($datos["imagen"])) {
-                $sql .= ", imagen = :imagen";
+
+            if (!empty($datos["imagen_usuario"])) {
+                $sql .= "imagen_usuario = :imagen_usuario, ";
+                $params[":imagen_usuario"] = $datos["imagen_usuario"];
             }
-            
-            $sql .= ", estado = :estado WHERE id_usuario = :id_usuario";
-            
+
+            $sql = rtrim($sql, ", ") . " WHERE id_usuario = :id_usuario";
+            $params[":id_usuario"] = $datos["id_usuario"];
+
             $stmt = Conexion::conectar()->prepare($sql);
-            
-            // Bind parameters
-            $stmt->bindParam(":id_sucursal", $datos["id_sucursal"], PDO::PARAM_INT);
-            $stmt->bindParam(":id_persona", $datos["id_persona"], PDO::PARAM_INT);
-            $stmt->bindParam(":nombre_usuario", $datos["nombre_usuario"], PDO::PARAM_STR);
-            $stmt->bindParam(":usuario", $datos["usuario"], PDO::PARAM_STR);
-            
-            if (!empty($datos["contrasena"])) {
-                $stmt->bindParam(":contrasena", $datos["contrasena"], PDO::PARAM_STR);
+
+            foreach ($params as $key => $value) {
+                $stmt->bindValue($key, $value);
             }
-            
-            if (!empty($datos["imagen"])) {
-                $stmt->bindParam(":imagen", $datos["imagen"], PDO::PARAM_STR);
-            }
-            
-            $stmt->bindParam(":estado", $datos["estado"], PDO::PARAM_INT);
-            $stmt->bindParam(":id_usuario", $datos["id_usuario"], PDO::PARAM_INT);
-            
+
             if ($stmt->execute()) {
                 return json_encode([
                     "status" => true,
                     "message" => "Usuario actualizado con éxito"
                 ]);
             }
-            
+
             return json_encode([
                 "status" => false,
                 "message" => "Error al actualizar el usuario"
             ]);
-            
+
         } catch (PDOException $e) {
             error_log("Error en mdlActualizarUsuarioU: " . $e->getMessage());
             return json_encode([
@@ -383,7 +387,6 @@ class ModeloUsuarios
     static public function mdlBorrarUsuario($tabla, $idUsuario)
     {
         try {
-            // Obtener información del usuario para eliminar su imagen
             $usuario = self::mdlMostrarUsuarios($tabla, "id_usuario", $idUsuario);
             
             if ($usuario["status"] === false) {
@@ -398,13 +401,6 @@ class ModeloUsuarios
             $stmt->bindParam(":id_usuario", $idUsuario, PDO::PARAM_INT);
             
             if ($stmt->execute()) {
-                // Eliminar imagen si existe
-                if (!empty($usuario["data"]["imagen"])) {
-                    $rutaImagen = "vistas/img/usuarios/" . $usuario["data"]["imagen"];
-                    if (file_exists($rutaImagen)) {
-                        unlink($rutaImagen);
-                    }
-                }
                 
                 return json_encode([
                     "status" => true,

@@ -1,5 +1,4 @@
 <?php
-
 require_once "../modelos/Usuario.modelo.php";
 require_once "../controladores/Usuario.controlador.php";
 
@@ -14,6 +13,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 break;
             case 'editar':
                 ControladorUsuarios::ctrEditarUsuario();
+                break;
+            case 'ver':
+                ControladorUsuarios::ctrVerUsuario();
                 break;
             case 'actualizar':
                 ControladorUsuarios::ctrActualizarUsuario();
@@ -31,7 +33,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         echo json_encode(["status" => false, "message" => "No se especificó acción"]);
     }
 } elseif ($_SERVER["REQUEST_METHOD"] === "GET") {
-    // Mostrar todos los usuarios o filtrar por parámetros GET
     $item = null;
     $valor = null;
     ControladorUsuarios::ctrMostrarUsuarios($item, $valor);
