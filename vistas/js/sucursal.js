@@ -110,7 +110,9 @@ $(document).ready(function () {
     /* ===========================
     MOSTRANDO CATEGORIA
     =========================== */
-    function mostrarSucursal() {
+    async function mostrarSucursal() {
+        let sesion = await obtenerSesion();
+        if(!sesion) return;
         $.ajax({
             url: "ajax/Sucursal.ajax.php",
             type: "GET",
@@ -126,17 +128,23 @@ $(document).ready(function () {
                         <td>${sucursal.direccion}</td>
                         <td>${sucursal.telefono}</td>
                         <td>
-                            ${sucursal.estado != 0 ? '<button class="btn bg-lightgreen badges btn-sm rounded btnActivar" idSucursal="' + sucursal.id_sucursal + '" estadoSucursal="0">Activado</button>'
+                        ${sesion.permisos.sucursales && sesion.permisos.sucursales.acciones.includes("estado") ?
+                            `${sucursal.estado != 0 ? '<button class="btn bg-lightgreen badges btn-sm rounded btnActivar" idSucursal="' + sucursal.id_sucursal + '" estadoSucursal="0">Activado</button>'
                             : '<button class="btn bg-lightred badges btn-sm rounded btnActivar" idSucursal="' + sucursal.id_sucursal + '" estadoSucursal="1">Desactivado</button>'
-                            }
+                            }`:``}
+                            
                         </td>
                         <td class="text-center">
-                            <a href="#" class="me-3 btnEditarSucursal" idSucursal="${sucursal.id_sucursal}" data-bs-toggle="modal" data-bs-target="#modal_editar_sucursal">
-                                <i class="text-warning fas fa-edit fa-lg"></i>
-                            </a>
-                            <a href="#" class="me-3 confirm-text btnEliminarSucursal" idSucursal="${sucursal.id_sucursal}">
-                                <i class="text-danger fa fa-trash fa-lg"></i>
-                            </a>
+                            ${sesion.permisos.sucursales && sesion.permisos.sucursales.acciones.includes("editar") ? 
+                                `<a href="#" class="me-3 btnEditarSucursal" idSucursal="${sucursal.id_sucursal}" data-bs-toggle="modal" data-bs-target="#modal_editar_sucursal">
+                                    <i class="text-warning fas fa-edit fa-lg"></i>
+                                </a>`:``}
+                            
+                            ${sesion.permisos.sucursales && sesion.permisos.sucursales.acciones.includes("eliminar") ? 
+                                `<a href="#" class="me-3 confirm-text btnEliminarSucursal" idSucursal="${sucursal.id_sucursal}">
+                                    <i class="text-danger fa fa-trash fa-lg"></i>
+                                </a>`:``}
+                            
                         </td>
                     </tr>
                 `;

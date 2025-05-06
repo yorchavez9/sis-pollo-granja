@@ -13,6 +13,13 @@ $permisos = $_SESSION["permisos"] ?? [];
                 </li>
                 <?php endif; ?>
                 
+                <!-- Sucursales -->
+                <?php if (isset($permisos["sucursales"])) : ?>
+                <li>
+                    <a href="sucursales"><i class="fas fa-store"></i><span>Sucursales</span></a>
+                </li>
+                <?php endif; ?>
+                
                 <!-- Personas - Solo mostrar si tiene al menos un permiso -->
                 <?php if (isset($permisos["tipo_documento"]) || isset($permisos["proveedores"]) || isset($permisos["clientes"])) : ?>
                 <li class="submenu">

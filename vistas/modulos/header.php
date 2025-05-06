@@ -162,7 +162,7 @@
             <a href="javascript:void(0);" class="dropdown-toggle nav-link userset" data-bs-toggle="dropdown">
                 <span class="user-img">
                     <?php if (!empty($_SESSION["usuario"]["imagen_usuario"])): ?>
-                        <img src="<?php echo substr($_SESSION["usuario"]["imagen_usuario"], 3); ?>" alt="">
+                        <img src="<?php echo "vistas/img/usuarios/".$_SESSION["usuario"]["imagen_usuario"]; ?>" alt="">
                     <?php else: ?>
                         <img src="vistas/img/usuarios/default.jpeg" alt="Usuario sin imagen">
                     <?php endif; ?>
@@ -173,7 +173,7 @@
             <div class="dropdown-menu menu-drop-user">
                 <div class="profilename">
                     <div class="profileset">
-                        <span class="user-img"><img src="<?php echo substr($_SESSION["usuario"]["imagen_usuario"], 3) ?>" alt="">
+                        <span class="user-img"><img src="<?php echo "vistas/img/usuarios/".$_SESSION["usuario"]["imagen_usuario"]; ?>" alt="">
                             <span class="status online"></span></span>
                         <div class="profilesets">
                             <h6> <?php

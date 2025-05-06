@@ -5,9 +5,15 @@
                 <h4>Lista de sucursales</h4>
                 <h6>Administrar sucursal</h6>
             </div>
+            <?php
+            if (isset($permisos["sucursales"]) && in_array("crear", $permisos["sucursales"]["acciones"])) {
+            ?>
             <div class="page-btn">
                 <a href="#" class="btn btn-added" data-bs-toggle="modal" data-bs-target="#modal_nuevo_sucursal"><img src="vistas/assets/img/icons/plus.svg" alt="img" class="me-2">Agregar sucursal</a>
             </div>
+            <?php
+            }
+            ?>
         </div>
 
         <div class="card">

@@ -548,16 +548,23 @@ $(document).ready(function () {
 
         try {
             // Buscar información del usuario
-            const usuario = usuariosDisponibles.find(r => r.id_usuario == idUsuario) || { nombre: 'Desconocido' };
-            // Buscar información del rol
-            const rol = rolesDisponibles.find(r => r.id_rol == idRol) || { nombre: 'Desconocido' };
+            const usuario = usuariosDisponibles.find(r => r.id_usuario == idUsuario);
+            if (!usuario) {
+                console.warn(`Usuario con ID ${idUsuario} no encontrado`);
+                usuario = { nombre: 'Desconocido' };
+            }
+
+            const rol = rolesDisponibles.find(r => r.id_rol == idRol);
+            if (!rol) {
+                console.warn(`Rol con ID ${idRol} no encontrado`);
+                rol = { nombre: 'Desconocido' };
+            }
 
             // Obtener permisos para este rol
             const permisosRol = permisosActuales.filter(p => p.id_rol == idRol);
-
             // Llenar datos en el modal de visualización
-            $("#view_usuario").val(usuario.nombre);
-            $("#view_rol").val(rol.nombre);
+            $("#view_usuario").val(usuario.nombre_usuario);
+            $("#view_rol").val(rol.nombre_rol);
 
             // Generar vista de módulos y acciones
             generarVistaModulosAcciones("#view_contenedor_modulos_acciones", permisosRol);
