@@ -55,7 +55,7 @@ $(document).ready(function () {
     const cargarDatosIniciales = async () => {
         try {
             // Cargar usuarios
-            const usuariosResponse = await fetchData("ajax/usuario.ajax.php");
+            const usuariosResponse = await fetchData("ajax/Usuario.ajax.php");
 
             if (usuariosResponse?.status) {
                 usuariosDisponibles = usuariosResponse.data;

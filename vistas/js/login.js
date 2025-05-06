@@ -23,7 +23,7 @@ $(document).ready(function () {
         
         // Enviar formulario
         $.ajax({
-            url: "ajax/login.ajax.php",
+            url: "ajax/Login.ajax.php",
             type: "POST",
             data: datos,
             processData: false,  // Necesario para FormData
