@@ -1,5 +1,8 @@
 import { mostrarClientesSelect } from "./ventas.js";
 
+/* ======================================
+OBTENIENDO LA SESSION DEL USUARIO
+====================================== */
 async function obtenerSesion() {
   try {
       const response = await fetch('ajax/sesion.ajax.php?action=sesion', {
