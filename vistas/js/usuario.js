@@ -233,6 +233,8 @@ $(document).ready(function () {
       },
       error: function (xhr, status, error) {
         console.error("Error al recuperar los usuarios:", error);
+        console.log(xhr);
+        console.log(status);
       },
     });
   }
