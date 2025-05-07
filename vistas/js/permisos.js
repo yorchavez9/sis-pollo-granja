@@ -64,7 +64,7 @@ $(document).ready(function () {
             }
 
             // Cargar roles
-            const rolesResponse = await fetchData("ajax/rol.ajax.php");
+            const rolesResponse = await fetchData("ajax/Rol.ajax.php");
             rolesDisponibles = rolesResponse;
             llenarSelectRoles("#id_rol_permiso");
             llenarSelectRoles("#edit_rol_permiso");
