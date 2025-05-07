@@ -72,7 +72,7 @@ $totalProveedores = ControladorProveedores::ctrMostrarTotalProveedores($item, $v
                 welcomeSection.style.display = 'none';
                 }, 2000); // Wait for the fade-out transition to complete
             }
-            }, 300000); // 300000ms = 5 minutes
+            }, 5000); // 300000ms = 5 minutes
         </script>
         <div class="row">
             <div class="col-lg-3 col-sm-6 col-12">
