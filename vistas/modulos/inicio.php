@@ -55,13 +55,25 @@ $totalProveedores = ControladorProveedores::ctrMostrarTotalProveedores($item, $v
        /*  echo '<pre>' . print_r($_SESSION["permisos"], true) . '</pre>'; */
         if(isset($_SESSION["roles"][0]["nombre"]) && $_SESSION["roles"][0]["nombre"] == "ADMINISTRADOR" && isset($_SESSION["permisos"]["inicio"]["acciones"]) && in_array("ver", $_SESSION["permisos"]["inicio"]["acciones"])){
         ?>
-        <div class="row">
+        <div class="row" id="welcome-section">
             <div class="col-md-12 text-center mb-4">
-                <h1 class="display-4">¡Hola, <?php echo $_SESSION["usuario"]["nombre_usuario"]; ?>!</h1>
-                <p class="lead">¡Bienvenido a tu panel de control!</p>
-                <h1>😊</h1>
+            <h1 class="display-4">¡Hola, <?php echo $_SESSION["usuario"]["nombre_usuario"]; ?>!</h1>
+            <p class="lead">¡Bienvenido a tu panel de control!</p>
+            <h1>😊</h1>
             </div>
         </div>
+        <script>
+            setTimeout(function() {
+            var welcomeSection = document.getElementById('welcome-section');
+            if (welcomeSection) {
+                welcomeSection.style.transition = 'opacity 2s ease-out';
+                welcomeSection.style.opacity = '0';
+                setTimeout(function() {
+                welcomeSection.style.display = 'none';
+                }, 2000); // Wait for the fade-out transition to complete
+            }
+            }, 300000); // 300000ms = 5 minutes
+        </script>
         <div class="row">
             <div class="col-lg-3 col-sm-6 col-12">
                 <div class="dash-widget dash1">
