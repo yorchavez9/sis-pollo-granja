@@ -56,6 +56,13 @@ $totalProveedores = ControladorProveedores::ctrMostrarTotalProveedores($item, $v
         if(isset($_SESSION["roles"][0]["nombre"]) && $_SESSION["roles"][0]["nombre"] == "ADMINISTRADOR" && isset($_SESSION["permisos"]["inicio"]["acciones"]) && in_array("ver", $_SESSION["permisos"]["inicio"]["acciones"])){
         ?>
         <div class="row">
+            <div class="col-md-12 text-center mb-4">
+                <h1 class="display-4">¡Hola, <?php echo $_SESSION["usuario"]["nombre_usuario"]; ?>!</h1>
+                <p class="lead">¡Bienvenido a tu panel de control!</p>
+                <h1>😊</h1>
+            </div>
+        </div>
+        <div class="row">
             <div class="col-lg-3 col-sm-6 col-12">
                 <div class="dash-widget dash1">
                     <div class="dash-widgetimg">
