@@ -175,6 +175,7 @@ $(document).ready(function () {
       type: "GET",
       dataType: "json",
       success: function (response) {
+        console.log(response);
         if (response.status && response.data.length > 0) {
           var tbody = $("#dataUsuarios");
           tbody.empty();
