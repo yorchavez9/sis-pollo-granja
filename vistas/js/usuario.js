@@ -171,7 +171,7 @@ $(document).ready(function () {
     let sesion = await obtenerSesion();
     if(!sesion) return;
     $.ajax({
-      url: "ajax/usuario.ajax.php",
+      url: "ajax/Usuario.ajax.php",
       type: "GET",
       dataType: "json",
       success: function (response) {
