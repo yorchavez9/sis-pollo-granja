@@ -515,12 +515,6 @@ $(document).ready(function () {
             const idRol = $("#edit_rol_permiso").val();
             const permisos = obtenerPermisosSeleccionados('#edit_contenedor_modulos_acciones');
 
-            // Validar que hay permisos seleccionados
-            if (permisos.length === 0) {
-                Swal.fire("Error", "Debe seleccionar al menos un permiso", "error");
-                return;
-            }
-
             const formData = new FormData();
             formData.append('id_usuario', idUsuario);
             formData.append('id_rol', idRol);
@@ -530,15 +524,15 @@ $(document).ready(function () {
             const response = await fetchData("ajax/permiso.ajax.php", "POST", formData);
 
             if (response?.status) {
-                Swal.fire("¡Correcto!", response.message || "Permisos actualizados correctamente", "success");
+                Swal.fire("¡Correcto!", response.message || "Rol y permisos actualizados", "success");
                 $("#modal_editar_permiso").modal("hide");
                 await mostrarPermisos(); // Refrescar la tabla
             } else {
-                Swal.fire("Error", response?.message || "Error al actualizar los permisos", "error");
+                Swal.fire("Error", response?.message || "Error al actualizar", "error");
             }
         } catch (error) {
-            console.error("Error al actualizar permiso:", error);
-            Swal.fire("Error", "Ocurrió un error al actualizar el permiso", "error");
+            console.error("Error:", error);
+            Swal.fire("Error", "No se pudo completar la actualización", "error");
         }
     });
 

@@ -99,61 +99,50 @@ class ModeloPermiso
     =============================================*/
     static public function mdlActualizarPermiso($idUsuario, $idRol, $permisos)
     {
-        // Validar parámetros de entrada
-        if (!is_numeric($idUsuario) || !is_numeric($idRol)) {
-            return json_encode([
-                "status" => false,
-                "message" => "IDs inválidos"
-            ]);
-        }
-
-        $conexion = null;
         try {
             $conexion = Conexion::conectar();
             $conexion->beginTransaction();
 
-            // 1. ACTUALIZAR RELACIÓN USUARIO-ROL
-            $stmtUsuarioRol = $conexion->prepare(
+            // 1. Actualizar el rol del usuario
+            $stmtActualizarRol = $conexion->prepare(
                 "UPDATE usuario_roles SET 
                 id_rol = :id_rol,
                 fecha_asignacion = NOW()
-            WHERE id_usuario = :id_usuario"
+             WHERE id_usuario = :id_usuario"
             );
+            $stmtActualizarRol->bindParam(":id_usuario", $idUsuario, PDO::PARAM_INT);
+            $stmtActualizarRol->bindParam(":id_rol", $idRol, PDO::PARAM_INT);
 
-            $stmtUsuarioRol->bindParam(":id_usuario", $idUsuario, PDO::PARAM_INT);
-            $stmtUsuarioRol->bindParam(":id_rol", $idRol, PDO::PARAM_INT);
-
-            if (!$stmtUsuarioRol->execute()) {
-                throw new Exception("Error al actualizar usuario_roles");
+            if (!$stmtActualizarRol->execute()) {
+                throw new Exception("Error al actualizar el rol del usuario");
             }
 
-            // 2. ELIMINAR PERMISOS EXISTENTES DEL USUARIO Y ROL
-            $stmtEliminar = $conexion->prepare(
+            // 2. Eliminar todos los permisos anteriores del usuario
+            $stmtEliminarPermisos = $conexion->prepare(
                 "DELETE FROM permisos 
-            WHERE id_usuario = :id_usuario AND id_rol = :id_rol"
+             WHERE id_usuario = :id_usuario"
             );
-            $stmtEliminar->bindParam(":id_usuario", $idUsuario, PDO::PARAM_INT);
-            $stmtEliminar->bindParam(":id_rol", $idRol, PDO::PARAM_INT);
+            $stmtEliminarPermisos->bindParam(":id_usuario", $idUsuario, PDO::PARAM_INT);
 
-            if (!$stmtEliminar->execute()) {
+            if (!$stmtEliminarPermisos->execute()) {
                 throw new Exception("Error al eliminar permisos anteriores");
             }
 
-            // 3. INSERTAR NUEVOS PERMISOS
-            if (is_array($permisos) && !empty($permisos)) {
-                $stmtInsertar = $conexion->prepare(
+            // 3. Insertar los nuevos permisos
+            if (!empty($permisos)) {
+                $stmtInsertarPermiso = $conexion->prepare(
                     "INSERT INTO permisos 
                 (id_usuario, id_rol, id_modulo, id_accion, fecha_asignacion) 
                 VALUES (:id_usuario, :id_rol, :id_modulo, :id_accion, NOW())"
                 );
 
                 foreach ($permisos as $permiso) {
-                    $stmtInsertar->bindParam(":id_usuario", $idUsuario, PDO::PARAM_INT);
-                    $stmtInsertar->bindParam(":id_rol", $idRol, PDO::PARAM_INT);
-                    $stmtInsertar->bindParam(":id_modulo", $permiso['id_modulo'], PDO::PARAM_INT);
-                    $stmtInsertar->bindParam(":id_accion", $permiso['id_accion'], PDO::PARAM_INT);
+                    $stmtInsertarPermiso->bindParam(":id_usuario", $idUsuario, PDO::PARAM_INT);
+                    $stmtInsertarPermiso->bindParam(":id_rol", $idRol, PDO::PARAM_INT);
+                    $stmtInsertarPermiso->bindParam(":id_modulo", $permiso['id_modulo'], PDO::PARAM_INT);
+                    $stmtInsertarPermiso->bindParam(":id_accion", $permiso['id_accion'], PDO::PARAM_INT);
 
-                    if (!$stmtInsertar->execute()) {
+                    if (!$stmtInsertarPermiso->execute()) {
                         throw new Exception("Error al insertar permiso");
                     }
                 }
@@ -163,12 +152,7 @@ class ModeloPermiso
 
             return json_encode([
                 "status" => true,
-                "message" => "Permisos actualizados correctamente",
-                "data" => [
-                    "id_usuario" => $idUsuario,
-                    "id_rol" => $idRol,
-                    "permisos_actualizados" => count($permisos)
-                ]
+                "message" => "Rol y permisos actualizados correctamente"
             ]);
         } catch (Exception $e) {
             if ($conexion) {

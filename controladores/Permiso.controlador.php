@@ -35,11 +35,11 @@ class ControladorPermiso
     =============================================*/
     static public function ctrActualizarPermiso()
     {
-        if ( isset($_POST['id_usuario']) && isset($_POST['id_rol']) && isset($_POST['permisos'])) {
+        if (isset($_POST['id_usuario'], $_POST['id_rol'], $_POST['permisos'])) {
             $idUsuario = $_POST['id_usuario'];
             $idRol = $_POST['id_rol'];
             $permisos = json_decode($_POST['permisos'], true);
-            
+
             $respuesta = ModeloPermiso::mdlActualizarPermiso($idUsuario, $idRol, $permisos);
             echo $respuesta;
         } else {
