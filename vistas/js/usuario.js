@@ -175,7 +175,7 @@ $(document).ready(function () {
       type: "GET",
       dataType: "json",
       success: function (response) {
-        console.log(response);
+        /* console.log(response); */
         if (response.status && response.data.length > 0) {
           var tbody = $("#dataUsuarios");
           tbody.empty();
@@ -470,7 +470,7 @@ $(document).ready(function () {
         contentType: false,
         processData: false,
         success: function (respuesta) {
-          console.log(respuesta);
+         /*  console.log(respuesta); */
           try {
             var res = JSON.parse(respuesta);
             if (res.status) {

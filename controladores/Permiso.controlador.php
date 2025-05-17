@@ -55,10 +55,10 @@ class ControladorPermiso
     =============================================*/
     static public function ctrEliminarPermiso()
     {
-        if (isset($_POST['id_rol'])) {
-            $idRol = $_POST['id_rol'];
+        if (isset($_POST['id_usuario'])) {
+            $idUsuario = $_POST['id_usuario'];
             
-            $respuesta = ModeloPermiso::mdlEliminarPermiso($idRol);
+            $respuesta = ModeloPermiso::mdlEliminarPermiso($idUsuario);
             echo $respuesta;
         } else {
             echo json_encode([

@@ -1,6 +1,6 @@
 $(document).ready(function () {
 
-    
+
 
     async function obtenerSesion() {
         try {
@@ -9,12 +9,12 @@ $(document).ready(function () {
                 headers: { 'Accept': 'application/json' },
                 credentials: 'include'
             });
-            
+
             if (!response.ok) throw new Error('Error en la respuesta del servidor');
-            
+
             const data = await response.json();
             return data.status === false ? null : data;
-            
+
         } catch (error) {
             console.error('Error al obtener sesión:', error);
             return null;
@@ -68,7 +68,7 @@ $(document).ready(function () {
             rolesDisponibles = rolesResponse;
             llenarSelectRoles("#id_rol_permiso");
             llenarSelectRoles("#edit_rol_permiso");
-            
+
 
             // Cargar módulos
             const modulosResponse = await fetchData("ajax/modulo.ajax.php?estado=1");
@@ -279,7 +279,7 @@ $(document).ready(function () {
             if (!sesion || !sesion.permisos) {
                 return;
             }
-            
+
             if (!response?.status) return;
 
             permisosActuales = response.data;
@@ -287,65 +287,72 @@ $(document).ready(function () {
             const tbody = tabla.find("tbody");
             tbody.empty();
 
-            // Agrupar permisos por rol
-            const permisosPorRol = permisosActuales.reduce((acc, permiso) => {
-                if (!acc[permiso.id_rol]) {
-                    acc[permiso.id_rol] = {
-                        rol: rolesDisponibles.find(r => r.id_rol == permiso.id_rol) || { id_rol: permiso.id_rol, nombre_rol: 'Desconocido' },
+            // Agrupar permisos por usuario y rol
+            const permisosPorUsuarioRol = permisosActuales.reduce((acc, permiso) => {
+                const key = `${permiso.id_usuario}_${permiso.id_rol}`;
+
+                if (!acc[key]) {
+                    acc[key] = {
+                        usuario: usuariosDisponibles.find(u => u.id_usuario == permiso.id_usuario) || {
+                            id_usuario: permiso.id_usuario,
+                            nombre_usuario: 'Desconocido'
+                        },
+                        rol: rolesDisponibles.find(r => r.id_rol == permiso.id_rol) || {
+                            id_rol: permiso.id_rol,
+                            nombre_rol: 'Desconocido'
+                        },
                         modulos: new Set(),
-                        fecha: permiso.fecha_asignacion,
-                        // Buscar el usuario asociado a este rol
-                        usuario: response.usuarios_roles?.find(u => u.id_rol == permiso.id_rol) || {}
+                        fecha: permiso.fecha_asignacion
                     };
                 }
-                acc[permiso.id_rol].modulos.add(permiso.id_modulo);
+                acc[key].modulos.add(permiso.id_modulo);
                 return acc;
             }, {});
-            
+
             // Mostrar en la tabla
-            Object.values(permisosPorRol).forEach((permisoRol, index) => {
-                const totalModulos = permisoRol.modulos.size || 0;
+            let index = 1;
+            Object.values(permisosPorUsuarioRol).forEach((permisoUsuarioRol) => {
+                const totalModulos = permisoUsuarioRol.modulos.size || 0;
 
                 const fila = `
-                    <tr data-id-rol="${permisoRol.rol.id_rol}" data-id-usuario="${permisoRol.usuario.id_usuario || ''}">
-                        <td>${index + 1}</td>
-                        <td>${permisoRol.usuario.nombre_usuario || 'No asignado'}</td>
-                        <td>${permisoRol.rol.nombre_rol || 'Desconocido'}</td>
-                        <td>${totalModulos} módulo(s)</td>
-                        <td>${permisoRol.fecha || 'No registrada'}</td>
-                        <td class="text-center">
-                            ${sesion.permisos.permisos && sesion.permisos.permisos.acciones.includes("ver") ?
-                                `<a href="#" class="me-3 btnVerPermiso" 
-                                data-id-rol="${permisoRol.rol.id_rol}"
-                                data-id-usuario="${permisoRol.usuario.id_usuario || ''}"
-                                data-bs-toggle="modal" 
-                                data-bs-target="#modal_ver_permiso">
-                                    <i class="text-primary fas fa-eye fa-lg"></i>
-                                </a>` : ``}
-                            
+                <tr data-id-rol="${permisoUsuarioRol.rol.id_rol}" data-id-usuario="${permisoUsuarioRol.usuario.id_usuario || ''}">
+                    <td>${index++}</td>
+                    <td>${permisoUsuarioRol.usuario.nombre_usuario || 'No asignado'}</td>
+                    <td>${permisoUsuarioRol.rol.nombre_rol || 'Desconocido'}</td>
+                    <td>${totalModulos} módulo(s)</td>
+                    <td>${permisoUsuarioRol.fecha || 'No registrada'}</td>
+                    <td class="text-center">
+                        ${sesion.permisos.permisos && sesion.permisos.permisos.acciones.includes("ver") ?
+                        `<a href="#" class="me-3 btnVerPermiso" 
+                            data-id-rol="${permisoUsuarioRol.rol.id_rol}"
+                            data-id-usuario="${permisoUsuarioRol.usuario.id_usuario || ''}"
+                            data-bs-toggle="modal" 
+                            data-bs-target="#modal_ver_permiso">
+                                <i class="text-primary fas fa-eye fa-lg"></i>
+                            </a>` : ``}
+                        
 
-                            ${sesion.permisos.permisos && sesion.permisos.permisos.acciones.includes("editar") ?
-                                `<a href="#" class="me-3 btnEditarPermiso" 
-                                data-id-rol="${permisoRol.rol.id_rol}"
-                                data-id-usuario="${permisoRol.usuario.id_usuario || ''}"
-                                data-bs-toggle="modal" 
-                                data-bs-target="#modal_editar_permiso">
-                                    <i class="text-warning fas fa-edit fa-lg"></i>
-                                </a>`:``}
-                            
+                        ${sesion.permisos.permisos && sesion.permisos.permisos.acciones.includes("editar") ?
+                        `<a href="#" class="me-3 btnEditarPermiso" 
+                            data-id-rol="${permisoUsuarioRol.rol.id_rol}"
+                            data-id-usuario="${permisoUsuarioRol.usuario.id_usuario || ''}"
+                            data-bs-toggle="modal" 
+                            data-bs-target="#modal_editar_permiso">
+                                <i class="text-warning fas fa-edit fa-lg"></i>
+                            </a>`: ``}
+                        
 
-                            ${sesion.permisos.permisos && sesion.permisos.permisos.acciones.includes("eliminar")?
-                                `<a href="#" class="me-3 btnEliminarPermiso" 
-                                data-id-rol="${permisoRol.rol.id_rol}"
-                                data-id-usuario="${permisoRol.usuario.id_usuario || ''}">
-                                    <i class="text-danger fa fa-trash fa-lg"></i>
-                                </a>`:``}
-                            
-                        </td>
-                    </tr>`;
+                        ${sesion.permisos.permisos && sesion.permisos.permisos.acciones.includes("eliminar") ?
+                        `<a href="#" class="me-3 btnEliminarPermiso" 
+                            data-id-rol="${permisoUsuarioRol.rol.id_rol}"
+                            data-id-usuario="${permisoUsuarioRol.usuario.id_usuario || ''}">
+                                <i class="text-danger fa fa-trash fa-lg"></i>
+                            </a>`: ``}
+                        
+                    </td>
+                </tr>`;
                 tbody.append(fila);
             });
-
 
             // Inicializar DataTable si no está inicializado
             if ($.fn.DataTable.isDataTable(tabla)) {
@@ -476,21 +483,19 @@ $(document).ready(function () {
         const idRol = $(this).data('id-rol');
 
         try {
-            // Buscar información del usuario
-            const usuario = usuariosDisponibles.find(r => r.id_usuario == idUsuario) || { nombre: 'Desconocido' };
-            // Buscar información del rol
-            const rol = rolesDisponibles.find(r => r.id_rol == idRol) || { nombre: 'Desconocido' };
+            // Buscar información del usuario y rol
+            const usuario = usuariosDisponibles.find(u => u.id_usuario == idUsuario) || { nombre_usuario: 'Desconocido' };
+            const rol = rolesDisponibles.find(r => r.id_rol == idRol) || { nombre_rol: 'Desconocido' };
 
+            // Obtener permisos actuales para este usuario y rol
+            const permisosRol = permisosActuales.filter(p => p.id_rol == idRol && p.id_usuario == idUsuario);
 
-            // Obtener permisos para este rol
-            const permisosRol = permisosActuales.filter(p => p.id_rol == idRol);
-
-            // Llenar datos en el modal de edición
+            // Llenar datos en el modal
             $("#edit_id_permiso").val(idRol);
-            $("#edit_id_usuario_permiso").val(usuario.id_usuario);
-            $("#edit_rol_permiso").val(rol.id_rol);
+            $("#edit_id_usuario_permiso").val(idUsuario).trigger('change');
+            $("#edit_rol_permiso").val(idRol).trigger('change');
 
-            // Generar módulos y acciones con los permisos actuales
+            // Generar checkboxes con los permisos actuales
             generarModulosAcciones("#edit_contenedor_modulos_acciones", permisosRol);
 
         } catch (error) {
@@ -507,8 +512,14 @@ $(document).ready(function () {
 
         try {
             const idUsuario = $("#edit_id_usuario_permiso").val();
-            const idRol = $("#edit_id_permiso").val();
+            const idRol = $("#edit_rol_permiso").val();
             const permisos = obtenerPermisosSeleccionados('#edit_contenedor_modulos_acciones');
+
+            // Validar que hay permisos seleccionados
+            if (permisos.length === 0) {
+                Swal.fire("Error", "Debe seleccionar al menos un permiso", "error");
+                return;
+            }
 
             const formData = new FormData();
             formData.append('id_usuario', idUsuario);
@@ -521,10 +532,7 @@ $(document).ready(function () {
             if (response?.status) {
                 Swal.fire("¡Correcto!", response.message || "Permisos actualizados correctamente", "success");
                 $("#modal_editar_permiso").modal("hide");
-                if ($.fn.DataTable.isDataTable("#tabla_permisos")) {
-                    $("#tabla_permisos").DataTable().destroy();
-                }
-                await mostrarPermisos();
+                await mostrarPermisos(); // Refrescar la tabla
             } else {
                 Swal.fire("Error", response?.message || "Error al actualizar los permisos", "error");
             }
@@ -656,7 +664,7 @@ $(document).ready(function () {
     $("#tabla_permisos").on("click", ".btnEliminarPermiso", async function (e) {
         e.preventDefault();
 
-        const idRol = $(this).data('id-rol');
+        const idUsuario = $(this).data('id-usuario');
 
         Swal.fire({
             title: "¿Está seguro?",
@@ -671,7 +679,7 @@ $(document).ready(function () {
             if (result.isConfirmed) {
                 try {
                     const formData = new FormData();
-                    formData.append('id_rol', idRol);
+                    formData.append('id_usuario', idUsuario);
                     formData.append('action', 'eliminar');
 
                     const response = await fetchData("ajax/permiso.ajax.php", "POST", formData);

@@ -19,6 +19,6 @@ async function obtenerSesion() {
 
 obtenerSesion().then(datos => {
     if (datos) {
-        console.log('Sesión obtenida:', datos);
+        /* console.log('Sesión obtenida:', datos); */
     }
 });
