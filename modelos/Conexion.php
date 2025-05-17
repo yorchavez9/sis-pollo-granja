@@ -5,9 +5,9 @@ class Conexion
 	{
 		/* try {
 			$link = new PDO(
-				"mysql:host=127.0.0.1;port=3308;dbname=sis_granja_pollo",
+				"mysql:host=127.0.0.1;port=3308;dbname=base_datos_pollo",
 				"root",
-				"Marzo199972243561myc"
+				""
 			);
 			$link->exec("set names utf8");
 			return $link;

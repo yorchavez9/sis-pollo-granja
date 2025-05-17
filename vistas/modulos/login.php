@@ -3,7 +3,7 @@ $fondo_login = ControladorConfiguracionSistema::ctrMostrarConfiguracionSistema($
 
 // Extraer datos del array
 $nombre = $fondo_login[0]['nombre'] ?? 'Nombre por defecto';
-$img_login = (!empty($fondo_login[0]['img_login'])) ? substr($fondo_login[0]['img_login'], 3) : 'vistas/img/sistema/default_login.jpg';
+$img_login = (!empty($fondo_login[0]['img_login'])) ? substr($fondo_login[0]['img_login'], 3) : 'vistas/img/sistema/default_login.png';
 $icon_login = (!empty($fondo_login[0]['icon_login'])) ? substr($fondo_login[0]['icon_login'], 3) : 'vistas/img/sistema/logo-small.png';
 
 ?>
