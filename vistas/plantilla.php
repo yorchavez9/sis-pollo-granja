@@ -2,7 +2,28 @@
 session_start();
 
 include "modulos/layouts/head.php";
-if (isset($_SESSION["iniciarSesion"]) && $_SESSION["iniciarSesion"] == "ok" && isset($_SESSION["roles"][0]["nombre"]) && $_SESSION["roles"][0]["nombre"] == "ADMINISTRADOR") {
+$rolesPermitidos = [
+    "ADMINISTRADOR",
+    "GERENTE",
+    "SUPERVISOR",
+    "VENDEDOR",
+    "TRANSPORTISTA",
+    "INVENTARIO",
+    "CAJERO",
+    "ALMACENERO",
+    "AUXILIAR",
+    "CONTADOR",
+    "SOPORTE",
+    "MARKETING",
+    "CLIENTE",
+    "PROVEEDOR"
+];
+
+if (
+    isset($_SESSION["iniciarSesion"]) && $_SESSION["iniciarSesion"] == "ok" &&
+    isset($_SESSION["roles"][0]["nombre"]) &&
+    in_array($_SESSION["roles"][0]["nombre"], $rolesPermitidos)
+) {
 ?>
     <?php echo '<div class="main-wrapper">'; ?>
     <div id="section_verficar_configuraciones">
