@@ -5,7 +5,7 @@ class Conexion
 	{
 		/* try {
 			$link = new PDO(
-				"mysql:host=127.0.0.1;port=3308;dbname=base_datos_pollo",
+				"mysql:host=127.0.0.1;port=3308;dbname=base_datos_pollos",
 				"root",
 				""
 			);

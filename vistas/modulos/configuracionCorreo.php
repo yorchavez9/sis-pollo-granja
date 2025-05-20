@@ -97,7 +97,7 @@ MODAL NUEVA CONFIGURACION DEL CORREO
 
                     <!-- INGRESO ID DEL USUARIO -->
                     <div class="form-group">
-                        <input type="hidden" id="id_usuario_config_correo" value="<?php echo $_SESSION["id_usuario"] ?>">
+                        <input type="hidden" id="id_usuario_config_correo" value="<?php echo $_SESSION["usuario"]["id_usuario"] ?>">
                     </div>
 
                     <!-- INGRESO EL SMTP -->

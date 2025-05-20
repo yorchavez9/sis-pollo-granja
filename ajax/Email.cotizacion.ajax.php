@@ -74,7 +74,7 @@ if (!isset($_POST['documento']) || !isset($_POST['id_cotizacion']) || !isset($_P
         // Contenido del correo
         $mail->isHTML(true); // Establecer el formato del correo en HTML
         $mail->Subject = 'Cotización Adjunta';
-        $template = file_get_contents('plantillas/correo_cotizacion.html');   
+        $template = file_get_contents('../extensiones/plantillas/correo_cotizacion.html');   
                                              
         $body = str_replace(
             ['{{id_cotizacion}}', '{{fecha_cotizacion}}', '{{total_cotizacion}}','{{numero_telefono}}', '{{direccion_negocio}}'],
