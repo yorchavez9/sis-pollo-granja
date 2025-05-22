@@ -1,7 +1,7 @@
 $(document).ready(function() {
     // Inicializar Select2
     $('.js-example-basic-single').select2({
-        placeholder: "Seleccione un trabajador",
+        placeholder: "Seleccione",
         allowClear: true,
         width: '100%'
     });

@@ -75,7 +75,7 @@
                         <thead>
                             <tr>
                                 <th>N°</th>
-                                <th>Proveedor</th>
+                                <th>Cliente</th>
                                 <th>Usuario</th>
                                 <th>Fecha </th>
                                 <th>Tipo Comprobante</th>

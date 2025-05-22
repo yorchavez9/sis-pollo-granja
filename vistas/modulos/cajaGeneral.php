@@ -159,7 +159,7 @@
 
                     <!-- ID DEL USUARIO -->
                     <div class="form-group">
-                        <input type="hidden" name="id_usuario_caja" value="<?php echo $_SESSION["id_usuario"] ?>" id="id_usuario_caja">
+                        <input type="hidden" name="id_usuario_caja" value="<?php echo $_SESSION["usuario"]["id_usuario"] ?>" id="id_usuario_caja">
                     </div>
 
                     <!-- MONTO INICIAL -->

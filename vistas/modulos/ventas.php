@@ -93,7 +93,7 @@ $serieNumeroComprobante = ControladorSerieNumero::ctrMostrarSerieNumero($item, $
                                     <div class="form-group">
                                         <label for="id_cliente" class="form-label">Seleccione el cliente(<span class="text-danger">*</span>):</label>
                                         <select name="id_cliente_venta" id="id_cliente_venta" class="js-example-basic-single select2">
-                                            <option value="">Seleccione un cliente</option>
+                                            <option value="" selected>Seleccione un cliente</option>
                                         </select>
                                         <small id="error_cliente_venta"></small>
                                     </div>
