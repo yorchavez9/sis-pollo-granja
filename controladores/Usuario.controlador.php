@@ -111,6 +111,16 @@ class ControladorUsuarios
     }
 
     /*=============================================
+    MOSTRAR USUARIOS
+    =============================================*/
+    static public function ctrMostrarUsuariosReporte($item, $valor)
+    {
+        $tabla = "usuarios";
+        $respuesta = ModeloUsuarios::mdlMostrarUsuarios($tabla, $item, $valor);
+        return $respuesta;
+    }
+
+    /*=============================================
     EDITAR USUARIO (Obtener datos)
     =============================================*/
     static public function ctrEditarUsuario()
