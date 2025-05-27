@@ -16,10 +16,27 @@ function mostrarIdMovimientoCaja() {
             encontrado = true;
           }
         });
+        
+        if (!encontrado) {
+          Swal.fire({
+            title: "¡Alerta!",
+            text: "La caja del día no está abierta o no existe",
+            icon: "warning",
+            confirmButtonText: "Aceptar"
+          })
+        }
+      } else {
+         Swal.fire({
+            title: "¡Alerta!",
+            text: "La caja del día no está abierta o no existe",
+            icon: "warning",
+            confirmButtonText: "Aceptar"
+          })
       }
     },
     error: function (xhr, status, error) {
-      console.error("Error al recuperar los proveedores:", error);
+      console.error("Error al verificar el estado de la caja:", error);
+      alert("Error al verificar el estado de la caja");
     },
   });
 }
@@ -28,42 +45,42 @@ mostrarIdMovimientoCaja();
 
 
 
-  /* =====================================
-    CONVERTIR DE DOLARES A 
-    ===================================== */
-    let currentRate = 0;
+/* =====================================
+  CONVERTIR DE DOLARES A 
+  ===================================== */
+let currentRate = 0;
 
-    async function getExchangeRate(){
-      try {
-        const response = await fetch('https://api.exchangerate-api.com/v4/latest/PEN');
-        const data = await response.json();
-        return data.rates.USD;
-      } catch (error) {
-        console.error('Error obteniendo tasas', error);
-        try {
-          const response = await fetch('https://open.er-api.com/v6/latest/PEN');
-          const data = await response.json();
-          return data.rates.USD;
-        } catch (error2) {
-          console.log("Error en API de respaldo:", error2);
-          return null;
-        }
-      }
+async function getExchangeRate() {
+  try {
+    const response = await fetch('https://api.exchangerate-api.com/v4/latest/PEN');
+    const data = await response.json();
+    return data.rates.USD;
+  } catch (error) {
+    console.error('Error obteniendo tasas', error);
+    try {
+      const response = await fetch('https://open.er-api.com/v6/latest/PEN');
+      const data = await response.json();
+      return data.rates.USD;
+    } catch (error2) {
+      console.log("Error en API de respaldo:", error2);
+      return null;
     }
+  }
+}
 
-    async function updateRate() {
-      try {
-        const rate = await getExchangeRate();
-        if (rate) {
-          currentRate = rate; // Asigna la tasa de cambio al valor global
-          document.getElementById("error_moneda").textContent = "";
-        }
-      } catch (error) {
-      /*  console.error("Error al actualizar la tasa:", error); */
-      }
+async function updateRate() {
+  try {
+    const rate = await getExchangeRate();
+    if (rate) {
+      currentRate = rate; // Asigna la tasa de cambio al valor global
+      document.getElementById("error_moneda").textContent = "";
     }
+  } catch (error) {
+    /*  console.error("Error al actualizar la tasa:", error); */
+  }
+}
 
-    setInterval(updateRate, 60 * 60 * 1000);
+setInterval(updateRate, 60 * 60 * 1000);
 
 
 
@@ -125,7 +142,7 @@ function mostrarSerieNumero() {
 
     if (!tipoComprobante || tipoComprobante === "") {
       console.warn("No se ha seleccionado ningún tipo de comprobante.");
-      $("#serie_venta").val(""); 
+      $("#serie_venta").val("");
       $("#numero_venta").val("");
       return;
     }
@@ -311,12 +328,12 @@ $("#tabla_add_producto_venta").on("click touchstart", ".btnAddProductoVenta", fu
     processData: false,
     dataType: "json",
     success: function (respuesta) {
-      if(respuesta.imagen_producto){
+      if (respuesta.imagen_producto) {
         respuesta.imagen_producto = respuesta.imagen_producto.substring(3);
-      }else{
+      } else {
         respuesta.imagen_producto = "vistas/img/productos/default.png";
       }
-      
+
       // Crear una nueva fila
       let nuevaFila = `
         <tr>
@@ -449,7 +466,7 @@ async function calcularTotal(igv_venta) {
   let total = subtotalTotal + igv;
   total = isNaN(total) ? 0 : total;
   var precioBolivares = currentRate > 0 ? (total * currentRate).toFixed(2) : "N/A";
-  
+
   $("#subtotal_venta").text(formateoPrecio(subtotalTotal.toFixed(2)));
   $("#igv_venta_show").text(formateoPrecio(igv.toFixed(2)));
   $("#total_precio_venta").text(formateoPrecio(total.toFixed(2)));
@@ -555,7 +572,7 @@ $("#btn_crear_nueva_venta").click(function (e) {
   const subtotal = $("#subtotal_venta").text().replace(/,/g, "");
   const igv = $("#igv_venta_show").text().replace(/,/g, "");
   const total = $("#total_precio_venta").text().replace(/,/g, "");
-  
+
   let tipo_pago = $("input[name='forma_pago_v']:checked").val();
   let metodos_pago_venta = $("#metodos_pago_venta").val();
   let pago_cuota_venta = $("#pago_cuota_venta").val();
@@ -581,7 +598,7 @@ $("#btn_crear_nueva_venta").click(function (e) {
     estado_pago = "pendiente";
   }
   let tipo_movimiento = "ingreso";
- 
+
   if (isValid) {
 
     const datos = new FormData();
@@ -605,7 +622,7 @@ $("#btn_crear_nueva_venta").click(function (e) {
     datos.append("pago_cuota_venta", pago_cuota_venta);
     datos.append("recibo_de_pago_venta", recibo_de_pago_venta);
     datos.append("serie_de_pago_venta", serie_de_pago_venta);
-    
+
     $.ajax({
       url: "ajax/ventas.ajax.php",
       method: "POST",
@@ -614,6 +631,7 @@ $("#btn_crear_nueva_venta").click(function (e) {
       contentType: false,
       processData: false,
       success: function (respuesta) {
+        console.log(respuesta);
         const res = JSON.parse(respuesta);
         $("#form_venta_producto")[0].reset();
         $("#detalle_venta_producto").empty();
