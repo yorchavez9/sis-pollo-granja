@@ -46,10 +46,12 @@ class PDF extends FPDF
     private $razonSocial;
     private $tasaCambio;
     private $filtros;
-    private $colorPrimario = [41, 128, 185]; // Azul moderno
-    private $colorSecundario = [52, 73, 94]; // Gris azulado
-    private $colorAccento = [231, 76, 60]; // Rojo para saldos
-    private $colorExito = [39, 174, 96]; // Verde para pagado
+    public $colorPrimario = [41, 128, 185];
+    public $colorSecundario = [52, 73, 94];
+    public $colorAccento = [231, 76, 60];
+    public $colorExito = [39, 174, 96];
+    public $colorFondo = [250, 250, 252];
+    public $colorBorde = [225, 228, 232];
 
     function __construct($config, $nombreUsuario, $razonSocial, $tasaCambio, $filtros)
     {
@@ -60,8 +62,8 @@ class PDF extends FPDF
         $this->tasaCambio = $tasaCambio;
         $this->filtros = $filtros;
         
-        $this->SetMargins(8, 8, 8);
-        $this->SetAutoPageBreak(true, 12);
+        $this->SetMargins(10, 10, 10);
+        $this->SetAutoPageBreak(true, 15);
     }
 
     // Función para crear degradado horizontal
@@ -81,50 +83,60 @@ class PDF extends FPDF
 
     function Header()
     {
-        // Fondo moderno para el header
-        $this->LinearGradient(0, 0, 297, 45, $this->colorPrimario, [52, 152, 219]);
+        // Fondo moderno para el header con sombra
+        $this->SetFillColor($this->colorFondo[0], $this->colorFondo[1], $this->colorFondo[2]);
+        $this->Rect(0, 0, 297, 50, 'F');
         
-        // Logo con marco elegante
+        // Barra superior con degradado
+        $this->LinearGradient(0, 0, 297, 12, $this->colorPrimario, [52, 152, 219]);
+        
+        // Logo con marco circular
         if (file_exists("../../uploads/" . $this->config['logo'])) {
             $this->SetFillColor(255, 255, 255);
-            $this->RoundedRect(245, 6, 40, 32, 2, 'F');
-            $this->Image("../../uploads/" . $this->config['logo'], 248, 8, 34);
+            $this->RoundedRect(245, 8, 40, 40, 20, 'F');
+            $this->Image("../../uploads/" . $this->config['logo'], 248, 11, 34, 34);
         }
         
         // Información de empresa con estilo moderno
-        $this->SetTextColor(255, 255, 255);
-        $this->SetFont('Arial', 'B', 18);
-        $this->SetXY(15, 10);
+        $this->SetTextColor($this->colorSecundario[0], $this->colorSecundario[1], $this->colorSecundario[2]);
+        $this->SetFont('Arial', 'B', 16);
+        $this->SetXY(15, 15);
         $this->Cell(0, 8, utf8_decode($this->config['nombre_empresa']), 0, 1, 'L');
         
-        $this->SetFont('Arial', '', 9);
-        $this->SetXY(15, 20);
+        $this->SetFont('Helvetica', '', 9);
+        $this->SetXY(15, 23);
         $info_empresa = 'RUC: ' . $this->config['ruc'] . '  -  ' . 
                        utf8_decode($this->config['direccion']) . '  -  ' .
                        'Tel: ' . $this->config['telefono'];
         $this->Cell(0, 5, $info_empresa, 0, 1, 'L');
         
         // Título principal con diseño moderno
-        $this->SetY(50);
-        $this->SetTextColor($this->colorSecundario[0], $this->colorSecundario[1], $this->colorSecundario[2]);
-        $this->SetFont('Arial', 'B', 20);
+        $this->SetY(45);
+        $this->SetTextColor($this->colorPrimario[0], $this->colorPrimario[1], $this->colorPrimario[2]);
+        $this->SetFont('Arial', 'B', 18);
         $this->Cell(0, 10, 'REPORTE DE VENTAS POR CLIENTE', 0, 1, 'C');
         
-        // Línea decorativa
+        // Línea decorativa con puntos
+        $this->SetDrawColor(200, 200, 200);
+        $this->SetLineWidth(0.3);
+        $this->Line(50, 57, 247, 57);
         $this->SetDrawColor($this->colorPrimario[0], $this->colorPrimario[1], $this->colorPrimario[2]);
-        $this->SetLineWidth(0.8);
-        $this->Line(50, 62, 247, 62);
+        $this->SetLineWidth(0.5);
+        $this->Line(50, 58, 247, 58);
         
-        // Información del cliente con estilo
-        $this->SetY(68);
+        // Información del cliente con estilo de tarjeta
+        $this->SetY(65);
         if (!empty($this->razonSocial)) {
-            $this->SetFillColor(248, 249, 250);
-            $this->RoundedRect(15, 68, 267, 8, 1, 'F');
+            $this->SetFillColor(245, 247, 250);
+            $this->RoundedRect(15, 65, 267, 10, 2, 'F');
+            $this->SetDrawColor($this->colorBorde[0], $this->colorBorde[1], $this->colorBorde[2]);
+            $this->RoundedRect(15, 65, 267, 10, 2, 'D');
+            
             $this->SetTextColor($this->colorSecundario[0], $this->colorSecundario[1], $this->colorSecundario[2]);
             $this->SetFont('Arial', 'B', 11);
-            $this->SetXY(20, 70);
+            $this->SetXY(20, 67);
             $this->Cell(0, 6, 'CLIENTE: ' . utf8_decode($this->razonSocial), 0, 1, 'L');
-            $this->SetY(78);
+            $this->SetY(77);
         }
         
         // Panel de filtros con diseño moderno
@@ -141,16 +153,19 @@ class PDF extends FPDF
         
         if (!empty($filtrosAplicados)) {
             $y_current = $this->GetY();
-            $this->SetFillColor(236, 240, 241);
+            $this->SetFillColor(240, 242, 245);
             $this->RoundedRect(15, $y_current, 200, 6, 1, 'F');
-            $this->SetTextColor(127, 140, 141);
+            $this->SetDrawColor($this->colorBorde[0], $this->colorBorde[1], $this->colorBorde[2]);
+            $this->RoundedRect(15, $y_current, 200, 6, 1, 'D');
+            
+            $this->SetTextColor(120, 134, 156);
             $this->SetFont('Arial', '', 8);
             $this->SetXY(20, $y_current + 1);
             $this->Cell(0, 4, 'FILTROS: ' . implode(' • ', $filtrosAplicados), 0, 0, 'L');
             $this->SetY($y_current + 8);
         }
         
-        // Información de generación
+        // Información de generación con estilo minimalista
         $y_current = $this->GetY();
         $this->SetTextColor(149, 165, 166);
         $this->SetFont('Arial', 'I', 8);
@@ -159,14 +174,17 @@ class PDF extends FPDF
         $this->SetXY(220, $y_current + 4);
         $this->Cell(0, 4, date('d/m/Y H:i'), 0, 1, 'R');
         
-        $this->Ln(8);
+        $this->Ln(10);
     }
 
     function Footer()
     {
-        // Footer moderno con degradado
+        // Footer moderno con borde superior
         $this->SetY(-15);
-        $this->LinearGradient(0, -15, 297, 15, [236, 240, 241], [189, 195, 199]);
+        $this->SetFillColor(245, 247, 250);
+        $this->Rect(0, -15, 297, 15, 'F');
+        $this->SetDrawColor($this->colorBorde[0], $this->colorBorde[1], $this->colorBorde[2]);
+        $this->Line(10, -15, 287, -15);
         
         $this->SetTextColor($this->colorSecundario[0], $this->colorSecundario[1], $this->colorSecundario[2]);
         $this->SetFont('Arial', 'I', 9);
@@ -198,14 +216,17 @@ if (count($configuraciones) > 0) {
     ];
     
     // Header de tabla con diseño moderno
-    $pdf->SetFont('Arial', 'B', 9);
+    $pdf->SetFont('Helvetica', 'B', 9);
     
-    // Degradado para header
+    // Fondo para header de tabla
     $y_pos = $pdf->GetY();
-    $pdf->LinearGradient(15, $y_pos, 267, 8, [52, 152, 219], [41, 128, 185]);
+    $pdf->SetFillColor(240, 242, 245);
+    $pdf->Rect(10, $y_pos, 277, 8, 'F');
+    $pdf->SetDrawColor($pdf->colorBorde[0], $pdf->colorBorde[1], $pdf->colorBorde[2]);
+    $pdf->Rect(10, $y_pos, 277, 8, 'D');
     
-    $pdf->SetTextColor(255, 255, 255);
-    $pdf->SetXY(15, $y_pos);
+    $pdf->SetTextColor($pdf->colorSecundario[0], $pdf->colorSecundario[1], $pdf->colorSecundario[2]);
+    $pdf->SetXY(10, $y_pos);
     
     $headers = [
         'Fecha', 'Producto', 'Javas', 'Aves', 'P.Prom', 
@@ -215,7 +236,7 @@ if (count($configuraciones) > 0) {
     
     foreach ($headers as $i => $header) {
         $width = array_values($anchos)[$i];
-        $pdf->Cell($width, 8, $header, 1, 0, 'C');
+        $pdf->Cell($width, 8, $header, 0, 0, 'C');
     }
     $pdf->Ln();
     
@@ -229,19 +250,21 @@ if (count($configuraciones) > 0) {
     $subtotalSaldo = 0;
     $rowColor = true;
     
-    $pdf->SetFont('Arial', '', 8);
+    $pdf->SetFont('Helvetica', '', 8);
     
     foreach ($ventas as $index => $venta) {
         // Verificar si cambió de venta para subtotal
         if ($currentVentaId !== null && $currentVentaId != $venta['id_venta']) {
             // Subtotal con estilo moderno
             $y_pos = $pdf->GetY();
-            $pdf->SetFillColor(250, 250, 250);
-            $pdf->Rect(15, $y_pos, 267, 6, 'F');
+            $pdf->SetFillColor(245, 247, 250);
+            $pdf->Rect(10, $y_pos, 277, 6, 'F');
+            $pdf->SetDrawColor($pdf->colorBorde[0], $pdf->colorBorde[1], $pdf->colorBorde[2]);
+            $pdf->Rect(10, $y_pos, 277, 6, 'D');
             
-            $pdf->SetFont('Arial', 'B', 8);
+            $pdf->SetFont('Helvetica', 'B', 8);
             $pdf->SetTextColor(93, 109, 126);
-            $pdf->SetXY(15, $y_pos);
+            $pdf->SetXY(10, $y_pos);
             
             $pdf->Cell($anchos['fecha'] + $anchos['producto'] + $anchos['javas'] + $anchos['aves'] + 
                       $anchos['prom'] + $anchos['bruto'] + $anchos['tara'] + $anchos['neto'] + 
@@ -252,7 +275,7 @@ if (count($configuraciones) > 0) {
             
             // Reiniciar subtotales
             $subtotalVenta = $subtotalPagado = $subtotalSaldo = 0;
-            $pdf->SetFont('Arial', '', 8);
+            $pdf->SetFont('Helvetica', '', 8);
         }
         
         $currentVentaId = $venta['id_venta'];
@@ -268,13 +291,13 @@ if (count($configuraciones) > 0) {
         // Alternar colores de fila para mejor legibilidad
         $y_pos = $pdf->GetY();
         if ($rowColor) {
-            $pdf->SetFillColor(249, 250, 251);
-            $pdf->Rect(15, $y_pos, 267, 5, 'F');
+            $pdf->SetFillColor(250, 252, 255);
+            $pdf->Rect(10, $y_pos, 277, 5, 'F');
         }
         $rowColor = !$rowColor;
         
         $pdf->SetTextColor(52, 73, 94);
-        $pdf->SetXY(15, $y_pos);
+        $pdf->SetXY(10, $y_pos);
         
         // Datos de la fila
         $pdf->Cell($anchos['fecha'], 5, date('d/m/Y', strtotime($venta['fecha_venta'])), 0, 0, 'C');
@@ -302,12 +325,14 @@ if (count($configuraciones) > 0) {
     // Último subtotal
     if (!empty($ventas)) {
         $y_pos = $pdf->GetY();
-        $pdf->SetFillColor(250, 250, 250);
-        $pdf->Rect(15, $y_pos, 267, 6, 'F');
+        $pdf->SetFillColor(245, 247, 250);
+        $pdf->Rect(10, $y_pos, 277, 6, 'F');
+        $pdf->SetDrawColor($pdf->colorBorde[0], $pdf->colorBorde[1], $pdf->colorBorde[2]);
+        $pdf->Rect(10, $y_pos, 277, 6, 'D');
         
-        $pdf->SetFont('Arial', 'B', 8);
+        $pdf->SetFont('Helvetica', 'B', 8);
         $pdf->SetTextColor(93, 109, 126);
-        $pdf->SetXY(15, $y_pos);
+        $pdf->SetXY(10, $y_pos);
         
         $pdf->Cell($anchos['fecha'] + $anchos['producto'] + $anchos['javas'] + $anchos['aves'] + 
                   $anchos['prom'] + $anchos['bruto'] + $anchos['tara'] + $anchos['neto'] + 
@@ -318,13 +343,17 @@ if (count($configuraciones) > 0) {
     }
     
     // Total general con diseño premium
-    $pdf->Ln(3);
+    $pdf->Ln(5);
     $y_pos = $pdf->GetY();
-    $pdf->LinearGradient(15, $y_pos, 267, 10, [41, 128, 185], [52, 152, 219]);
     
-    $pdf->SetFont('Arial', 'B', 10);
-    $pdf->SetTextColor(255, 255, 255);
-    $pdf->SetXY(15, $y_pos + 1);
+    // Fondo con degradado suave
+    $pdf->LinearGradient(10, $y_pos, 277, 10, [240, 242, 245], [230, 233, 237]);
+    $pdf->SetDrawColor($pdf->colorPrimario[0], $pdf->colorPrimario[1], $pdf->colorPrimario[2]);
+    $pdf->Rect(10, $y_pos, 277, 10, 'D');
+    
+    $pdf->SetFont('Helvetica', 'B', 10);
+    $pdf->SetTextColor($pdf->colorPrimario[0], $pdf->colorPrimario[1], $pdf->colorPrimario[2]);
+    $pdf->SetXY(10, $y_pos + 1);
     
     $pdf->Cell($anchos['fecha'] + $anchos['producto'] + $anchos['javas'] + $anchos['aves'] + 
               $anchos['prom'] + $anchos['bruto'] + $anchos['tara'] + $anchos['neto'] + 
@@ -333,36 +362,55 @@ if (count($configuraciones) > 0) {
     $pdf->Cell($anchos['pago'], 8, 'S/ ' . number_format($totalPagado, 2), 0, 0, 'R');
     $pdf->Cell($anchos['saldo'], 8, 'S/ ' . number_format($totalSaldo, 2), 0, 1, 'R');
     
-    // Panel de conversión a dólares (si aplica)
+    // Panel de conversión a dólares (modificado para mostrar en soles primero)
     if (!empty($filtros['tasa_cambio']) && is_numeric($filtros['tasa_cambio']) && $filtros['tasa_cambio'] > 0) {
-        $pdf->Ln(5);
+        $pdf->Ln(8);
         $y_pos = $pdf->GetY();
         
-        $pdf->SetFillColor(236, 240, 241);
-        $pdf->RoundedRect(15, $y_pos, 267, 20, 2, 'F');
+        // Panel con sombra sutil
+        $pdf->SetFillColor(248, 249, 252);
+        $pdf->RoundedRect(10, $y_pos, 277, 22, 2, 'F');
+        $pdf->SetDrawColor($pdf->colorBorde[0], $pdf->colorBorde[1], $pdf->colorBorde[2]);
+        $pdf->RoundedRect(10, $y_pos, 277, 22, 2, 'D');
         
-        $pdf->SetTextColor(52, 73, 94);
-        $pdf->SetFont('Arial', 'B', 11);
-        $pdf->SetXY(20, $y_pos + 3);
-        $pdf->Cell(0, 6, 'EQUIVALENTE EN '.utf8_decode('DÓLARES USD').' (Tasa: ' . number_format($filtros['tasa_cambio'], 4) . ')', 0, 1);
+        // Título del panel
+        $pdf->SetTextColor($pdf->colorPrimario[0], $pdf->colorPrimario[1], $pdf->colorPrimario[2]);
+        $pdf->SetFont('Helvetica', 'B', 11);
+        $pdf->SetXY(15, $y_pos + 3);
+        $pdf->Cell(0, 6, utf8_decode('CONVERSIÓN MONETARIA (Tasa: ' . number_format($filtros['tasa_cambio'], 4) . ')'), 0, 1);
         
-        $pdf->SetFont('Arial', '', 9);
-        $pdf->SetXY(25, $y_pos + 10);
-        $pdf->Cell(80, 5, 'Total Ventas: USD ' . number_format($totalGeneral * $filtros['tasa_cambio'], 2), 0, 0);
-        $pdf->Cell(80, 5, 'Total Pagado: USD ' . number_format($totalPagado * $filtros['tasa_cambio'], 2), 0, 0);
-        $pdf->Cell(0, 5, 'Saldo Pendiente: USD ' . number_format($totalSaldo * $filtros['tasa_cambio'], 2), 0, 1);
+        // Línea divisoria
+        $pdf->SetDrawColor(220, 223, 228);
+        $pdf->Line(15, $y_pos + 10, 282, $y_pos + 10);
+        
+        // Montos en Soles (primero)
+        $pdf->SetFont('Helvetica', 'B', 9);
+        $pdf->SetTextColor(70, 85, 100);
+        $pdf->SetXY(15, $y_pos + 12);
+        $pdf->Cell(0, 5, 'MONTOS EN SOLES (S/):', 0, 1);
+        
+        $pdf->SetFont('Helvetica', '', 9);
+        $pdf->SetXY(25, $y_pos + 17);
+        $pdf->Cell(85, 5, 'Total Ventas: S/ ' . number_format($totalGeneral, 2), 0, 0);
+        $pdf->Cell(85, 5, 'Total Pagado: S/ ' . number_format($totalPagado, 2), 0, 0);
+        $pdf->Cell(0, 5, 'Saldo Pendiente: S/ ' . number_format($totalSaldo, 2), 0, 1);
+        
     }
     
-    // Nota final con estilo
-    $pdf->Ln(8);
+    // Nota final con estilo moderno
+    $pdf->Ln(10);
     $y_pos = $pdf->GetY();
-    $pdf->SetFillColor(255, 248, 220);
-    $pdf->RoundedRect(15, $y_pos, 267, 8, 1, 'F');
     
-    $pdf->SetTextColor(138, 109, 59);
-    $pdf->SetFont('Arial', 'I', 8);
-    $pdf->SetXY(20, $y_pos + 2);
-    $pdf->Cell(0, 4, utf8_decode('📊 Este documento es un reporte informativo generado el ') . date('d/m/Y H:i') . utf8_decode(' • Los montos están expresados en Soles (S/)'), 0, 1);
+    $pdf->SetFillColor(240, 242, 245);
+    $pdf->RoundedRect(10, $y_pos, 277, 8, 1, 'F');
+    $pdf->SetDrawColor($pdf->colorBorde[0], $pdf->colorBorde[1], $pdf->colorBorde[2]);
+    $pdf->RoundedRect(10, $y_pos, 277, 8, 1, 'D');
+    
+    $pdf->SetTextColor(120, 134, 156);
+    $pdf->SetFont('Helvetica', 'I', 8);
+    $pdf->SetXY(15, $y_pos + 2);
+    $pdf->Cell(0, 4, utf8_decode('📊 Reporte generado el ') . date('d/m/Y H:i') . 
+               utf8_decode(' • Todos los montos están expresados en Soles (S/)'), 0, 1);
     
     $pdf->Output('Reporte_Ventas_Cliente_' . date('Ymd_His') . '.pdf', 'I');
 } else {
