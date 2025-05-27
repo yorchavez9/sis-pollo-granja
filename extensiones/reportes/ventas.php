@@ -104,12 +104,13 @@ if (count($configuraciones) > 0) {
     // Encabezado
     $pdf->Cell(8 * $scalingFactor, 10, utf8_decode('N°'), 1, 0, 'C', true);
     $pdf->Cell(15 * $scalingFactor, 10, 'Fecha', 1, 0, 'C', true);
-    $pdf->Cell(45 * $scalingFactor, 10, 'Usuario', 1, 0, 'C', true);
+    $pdf->Cell(25 * $scalingFactor, 10, 'Usuario', 1, 0, 'C', true);
     $pdf->Cell(35 * $scalingFactor, 10, utf8_decode('Cliente'), 1, 0, 'C', true);
     $pdf->Cell(20 * $scalingFactor, 10, 'Comprobante', 1, 0, 'C', true);
     $pdf->Cell(15 * $scalingFactor, 10, utf8_decode('Serie N°'), 1, 0, 'C', true);
     $pdf->Cell(20 * $scalingFactor, 10, 'Total compra', 1, 0, 'C', true);
-    $pdf->Cell(20 * $scalingFactor, 10, 'Total pago', 1, 0, 'C', true);
+    $pdf->Cell(20 * $scalingFactor, 10, 'Saldo restante', 1, 0, 'C', true);
+    $pdf->Cell(20 * $scalingFactor, 10, 'Total pagado', 1, 0, 'C', true);
     $pdf->Cell(20 * $scalingFactor, 10, 'Estado pago', 1, 1, 'C', true); // Aquí se hace el salto de línea con `1`
 
     // Contenido de la tabla
@@ -117,15 +118,17 @@ if (count($configuraciones) > 0) {
 
     foreach ($ventas as $key => $venta) {
         $estado = ($venta['estado_pago'] == 'completado') ? 'Completado' : 'Pendiente';
+        $saldo_restante = ($venta['total_venta'] - $venta['total_pago']);
 
         // Ajuste del ancho dinámico según el factor de escala
         $pdf->Cell(8 * $scalingFactor, 10, $key+1, 1, 0, 'C');
         $pdf->Cell(15 * $scalingFactor, 10, $venta['fecha_venta'], 1, 0, 'C');
-        $pdf->Cell(45 * $scalingFactor, 10, utf8_decode($venta['nombre_usuario']), 1, 0, 'L');
+        $pdf->Cell(25 * $scalingFactor, 10, utf8_decode($venta['nombre_usuario']), 1, 0, 'L');
         $pdf->Cell(35 * $scalingFactor, 10, utf8_decode($venta['razon_social']), 1, 0, 'L');
         $pdf->Cell(20 * $scalingFactor, 10, utf8_decode($venta['tipo_comprobante_sn']), 1, 0, 'L');
         $pdf->Cell(15 * $scalingFactor, 10, utf8_decode($venta['serie_prefijo'] . '-' . $venta["num_comprobante"]), 1, 0, 'C');
         $pdf->Cell(20 * $scalingFactor, 10, 'S/ ' . number_format($venta['total_venta'], 2), 1, 0, 'R');
+        $pdf->Cell(20 * $scalingFactor, 10, 'S/ ' . number_format($saldo_restante, 2), 1, 0, 'R');
         $pdf->Cell(20 * $scalingFactor, 10, 'S/ ' . number_format($venta['total_pago'], 2), 1, 0, 'R');
         $pdf->Cell(20 * $scalingFactor, 10, $estado, 1, 1, 'C'); // Salto de línea
     }
