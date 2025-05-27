@@ -249,38 +249,51 @@ if (count($configuraciones) > 0) {
     $subtotalPagado = 0;
     $subtotalSaldo = 0;
     $rowColor = true;
+    $ventasProcesadas = []; // Array para controlar ventas ya procesadas
     
     $pdf->SetFont('Helvetica', '', 8);
     
-    foreach ($ventas as $index => $venta) {
-        // Verificar si cambió de venta para subtotal
-        if ($currentVentaId !== null && $currentVentaId != $venta['id_venta']) {
-            // Subtotal con estilo moderno
-            $y_pos = $pdf->GetY();
-            $pdf->SetFillColor(245, 247, 250);
-            $pdf->Rect(10, $y_pos, 277, 6, 'F');
-            $pdf->SetDrawColor($pdf->colorBorde[0], $pdf->colorBorde[1], $pdf->colorBorde[2]);
-            $pdf->Rect(10, $y_pos, 277, 6, 'D');
-            
-            $pdf->SetFont('Helvetica', 'B', 8);
-            $pdf->SetTextColor(93, 109, 126);
-            $pdf->SetXY(10, $y_pos);
-            
-            $pdf->Cell($anchos['fecha'] + $anchos['producto'] + $anchos['javas'] + $anchos['aves'] + 
-                      $anchos['prom'] + $anchos['bruto'] + $anchos['tara'] + $anchos['neto'] + 
-                      $anchos['precio'], 6, 'SUBTOTAL', 0, 0, 'R');
-            $pdf->Cell($anchos['total'], 6, 'S/ ' . number_format($subtotalVenta, 2), 0, 0, 'R');
-            $pdf->Cell($anchos['pago'], 6, 'S/ ' . number_format($subtotalPagado, 2), 0, 0, 'R');
-            $pdf->Cell($anchos['saldo'], 6, 'S/ ' . number_format($subtotalSaldo, 2), 0, 1, 'R');
-            
-            // Reiniciar subtotales
-            $subtotalVenta = $subtotalPagado = $subtotalSaldo = 0;
-            $pdf->SetFont('Helvetica', '', 8);
-        }
+    // Variables para totales
+$totalGeneral = 0;
+$totalPagado = 0;
+$totalSaldo = 0;
+$currentVentaId = null;
+$subtotalVenta = 0;
+$subtotalPagado = 0;
+$subtotalSaldo = 0;
+$rowColor = true;
+$ventasProcesadas = []; // Array para controlar ventas ya procesadas
+
+$pdf->SetFont('Helvetica', '', 8);
+
+foreach ($ventas as $index => $venta) {
+    // Verificar si cambió de venta para subtotal
+    if ($currentVentaId !== null && $currentVentaId != $venta['id_venta']) {
+        // Subtotal con estilo moderno
+        $y_pos = $pdf->GetY();
+        $pdf->SetFillColor(245, 247, 250);
+        $pdf->Rect(10, $y_pos, 277, 6, 'F');
+        $pdf->SetDrawColor($pdf->colorBorde[0], $pdf->colorBorde[1], $pdf->colorBorde[2]);
+        $pdf->Rect(10, $y_pos, 277, 6, 'D');
         
-        $currentVentaId = $venta['id_venta'];
+        $pdf->SetFont('Helvetica', 'B', 8);
+        $pdf->SetTextColor(93, 109, 126);
+        $pdf->SetXY(10, $y_pos);
         
-        // Acumular totales
+        $pdf->Cell($anchos['fecha'] + $anchos['producto'] + $anchos['javas'] + $anchos['aves'] + 
+                  $anchos['prom'] + $anchos['bruto'] + $anchos['tara'] + $anchos['neto'] + 
+                  $anchos['precio'], 6, 'SUBTOTAL', 0, 0, 'R');
+        $pdf->Cell($anchos['total'], 6, 'S/ ' . number_format($subtotalVenta, 2), 0, 0, 'R');
+        $pdf->Cell($anchos['pago'], 6, 'S/ ' . number_format($subtotalPagado, 2), 0, 0, 'R');
+        $pdf->Cell($anchos['saldo'], 6, 'S/ ' . number_format($subtotalSaldo, 2), 0, 1, 'R');
+        
+        // Reiniciar subtotales
+        $subtotalVenta = $subtotalPagado = $subtotalSaldo = 0;
+        $pdf->SetFont('Helvetica', '', 8);
+    }
+    
+    // Solo sumar los totales si no hemos procesado esta venta antes
+    if (!in_array($venta['id_venta'], $ventasProcesadas)) {
         $subtotalVenta += $venta['total_venta'];
         $subtotalPagado += $venta['total_pago'];
         $subtotalSaldo += $venta['saldo'];
@@ -288,40 +301,45 @@ if (count($configuraciones) > 0) {
         $totalPagado += $venta['total_pago'];
         $totalSaldo += $venta['saldo'];
         
-        // Alternar colores de fila para mejor legibilidad
-        $y_pos = $pdf->GetY();
-        if ($rowColor) {
-            $pdf->SetFillColor(250, 252, 255);
-            $pdf->Rect(10, $y_pos, 277, 5, 'F');
-        }
-        $rowColor = !$rowColor;
-        
-        $pdf->SetTextColor(52, 73, 94);
-        $pdf->SetXY(10, $y_pos);
-        
-        // Datos de la fila
-        $pdf->Cell($anchos['fecha'], 5, date('d/m/Y', strtotime($venta['fecha_venta'])), 0, 0, 'C');
-        $pdf->Cell($anchos['producto'], 5, utf8_decode(substr($venta['nombre_producto'], 0, 28)), 0, 0, 'L');
-        $pdf->Cell($anchos['javas'], 5, $venta['numero_javas'], 0, 0, 'C');
-        $pdf->Cell($anchos['aves'], 5, $venta['numero_aves'], 0, 0, 'C');
-        $pdf->Cell($anchos['prom'], 5, $venta['peso_promedio'], 0, 0, 'C');
-        $pdf->Cell($anchos['bruto'], 5, $venta['peso_bruto'], 0, 0, 'C');
-        $pdf->Cell($anchos['tara'], 5, $venta['peso_tara'], 0, 0, 'C');
-        $pdf->Cell($anchos['neto'], 5, $venta['peso_neto'], 0, 0, 'C');
-        $pdf->Cell($anchos['precio'], 5, 'S/ ' . number_format($venta['precio_venta'], 2), 0, 0, 'R');
-        $pdf->Cell($anchos['total'], 5, 'S/ ' . number_format($venta['total_venta'], 2), 0, 0, 'R');
-        $pdf->Cell($anchos['pago'], 5, 'S/ ' . number_format($venta['total_pago'], 2), 0, 0, 'R');
-        
-        // Saldo con color según estado
-        if ($venta['saldo'] > 0) {
-            $pdf->SetTextColor(231, 76, 60); // Rojo para pendientes
-        } else {
-            $pdf->SetTextColor(39, 174, 96); // Verde para pagado
-        }
-        $pdf->Cell($anchos['saldo'], 5, 'S/ ' . number_format($venta['saldo'], 2), 0, 1, 'R');
-        $pdf->SetTextColor(52, 73, 94);
+        // Marcar venta como procesada
+        $ventasProcesadas[] = $venta['id_venta'];
     }
     
+    $currentVentaId = $venta['id_venta'];
+    
+    // Resto del código para mostrar los detalles del producto...
+    // Alternar colores de fila para mejor legibilidad
+    $y_pos = $pdf->GetY();
+    if ($rowColor) {
+        $pdf->SetFillColor(250, 252, 255);
+        $pdf->Rect(10, $y_pos, 277, 5, 'F');
+    }
+    $rowColor = !$rowColor;
+    
+    $pdf->SetTextColor(52, 73, 94);
+    $pdf->SetXY(10, $y_pos);
+    
+    // Datos de la fila
+    $pdf->Cell($anchos['fecha'], 5, date('d/m/Y', strtotime($venta['fecha_venta'])), 0, 0, 'C');
+    $pdf->Cell($anchos['producto'], 5, utf8_decode(substr($venta['nombre_producto'], 0, 28)), 0, 0, 'L');
+    $pdf->Cell($anchos['javas'], 5, $venta['numero_javas'], 0, 0, 'C');
+    $pdf->Cell($anchos['aves'], 5, $venta['numero_aves'], 0, 0, 'C');
+    $pdf->Cell($anchos['prom'], 5, $venta['peso_promedio'], 0, 0, 'C');
+    $pdf->Cell($anchos['bruto'], 5, $venta['peso_bruto'], 0, 0, 'C');
+    $pdf->Cell($anchos['tara'], 5, $venta['peso_tara'], 0, 0, 'C');
+    $pdf->Cell($anchos['neto'], 5, $venta['peso_neto'], 0, 0, 'C');
+    $pdf->Cell($anchos['precio'], 5, 'S/ ' . number_format($venta['precio_venta'], 2), 0, 0, 'R');
+    
+    // Mostrar el total por producto (precio * cantidad)
+    $totalProducto = $venta['precio_venta'] * $venta['peso_neto']; // Ajusta según tu lógica de cálculo
+    $pdf->Cell($anchos['total'], 5, 'S/ ' . number_format($totalProducto, 2), 0, 0, 'R');
+    
+    // Para pagado y saldo, muestra el valor proporcional o deja en blanco para productos individuales
+    $pdf->Cell($anchos['pago'], 5, '', 0, 0, 'R');
+    $pdf->Cell($anchos['saldo'], 5, '', 0, 1, 'R');
+    $pdf->SetTextColor(52, 73, 94);
+}
+
     // Último subtotal
     if (!empty($ventas)) {
         $y_pos = $pdf->GetY();
