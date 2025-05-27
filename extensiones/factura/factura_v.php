@@ -1,5 +1,6 @@
 <?php
 require_once '../vendor/autoload.php';
+
 use Dompdf\Dompdf;
 use Dompdf\Options;
 
@@ -16,11 +17,13 @@ require_once "../../modelos/Producto.modelo.php";
 require_once "../../controladores/Configuracion.ticket.controlador.php";
 require_once "../../modelos/Configuracion.ticket.modelo.php";
 
-function formatearPrecio($precio) {
+function formatearPrecio($precio)
+{
     return number_format($precio, 2, '.', ',');
 }
 
-function getExchangeRate() {
+function getExchangeRate()
+{
     $primaryUrl = 'https://api.exchangerate-api.com/v4/latest/PEN';
     $backupUrl = 'https://open.er-api.com/v6/latest/PEN';
 
@@ -77,8 +80,8 @@ foreach ($configuracion as $key => $value) {
 // Calcular totales
 $totalCompra = 0;
 foreach ($respuesta_dv as $producto) {
-    $totalCompra += ($producto['peso_neto'] == 0) 
-        ? $producto['numero_aves'] * $producto['precio_venta'] 
+    $totalCompra += ($producto['peso_neto'] == 0)
+        ? $producto['numero_aves'] * $producto['precio_venta']
         : $producto['peso_neto'] * $producto['precio_venta'];
 }
 $impuestoTotal = $totalCompra * ($impuesto / 100);
@@ -115,21 +118,21 @@ $html = '
 </head>
 <body>
     <div class="header">
-        <img class="logo" src="data:image/png;base64,'.base64_encode(file_get_contents('../'.$logo)).'" />
-        <div class="empresa-nombre">'.$nombreEmpresa.'</div>
+        <img class="logo" src="data:image/png;base64,' . base64_encode(file_get_contents('../' . $logo)) . '" />
+        <div class="empresa-nombre">' . $nombreEmpresa . '</div>
     </div>
 
     <div class="factura-title">FACTURA</div>
-    <div class="factura-info">Factura N° '.$seriePrefijo.'-'.$serieNumero.'</div>
-    <div class="factura-info">Fecha: '.date("d/m/Y", strtotime($fechaVenta)).'</div>
-    <div class="factura-info">Hora: '.$horaVenta.'</div>
+    <div class="factura-info">Factura N° ' . $seriePrefijo . '-' . $serieNumero . '</div>
+    <div class="factura-info">Fecha: ' . date("d/m/Y", strtotime($fechaVenta)) . '</div>
+    <div class="factura-info">Hora: ' . $horaVenta . '</div>
 
     <div class="cliente-info">
-        <div><strong>Cliente:</strong> '.$respuesta["razon_social"].'</div>
-        <div><strong>Documento:</strong> '.$respuesta["numero_documento"].'</div>
-        <div><strong>Dirección:</strong> '.$respuesta["direccion"].'</div>
-        <div><strong>Teléfono:</strong> '.$respuesta["telefono"].'</div>
-        <div><strong>Correo:</strong> '.$respuesta["email"].'</div>
+        <div><strong>Cliente:</strong> ' . $respuesta["razon_social"] . '</div>
+        <div><strong>Documento:</strong> ' . $respuesta["numero_documento"] . '</div>
+        <div><strong>Dirección:</strong> ' . $respuesta["direccion"] . '</div>
+        <div><strong>Teléfono:</strong> ' . $respuesta["telefono"] . '</div>
+        <div><strong>Correo:</strong> ' . $respuesta["email"] . '</div>
     </div>
 
     <table>
@@ -150,24 +153,26 @@ $html = '
         <tbody>';
 
 // Productos
-usort($respuesta_dv, function($a, $b) { return strcmp($a['nombre_producto'], $b['nombre_producto']); });
+usort($respuesta_dv, function ($a, $b) {
+    return strcmp($a['nombre_producto'], $b['nombre_producto']);
+});
 foreach ($respuesta_dv as $producto) {
-    $totalProducto = ($producto['peso_neto'] == 0) 
-        ? $producto['numero_aves'] * $producto['precio_venta'] 
+    $totalProducto = ($producto['peso_neto'] == 0)
+        ? $producto['numero_aves'] * $producto['precio_venta']
         : $producto['peso_neto'] * $producto['precio_venta'];
 
     $html .= '
             <tr>
-                <td class="text-left">'.$producto['nombre_producto'].'</td>
-                <td>'.intval($producto['numero_javas']).'</td>
-                <td>'.$producto['numero_aves'].'</td>
-                <td>'.$producto['peso_promedio'].'</td>
-                <td>'.$producto['peso_bruto'].'</td>
-                <td>'.$producto['peso_tara'].'</td>
-                <td>'.$producto['peso_merma'].'</td>
-                <td>'.$producto['peso_neto'].'</td>
-                <td>S/ '.number_format($producto['precio_venta'], 2).'</td>
-                <td>S/ '.number_format($totalProducto, 2).'</td>
+                <td class="text-left">' . $producto['nombre_producto'] . '</td>
+                <td>' . intval($producto['numero_javas']) . '</td>
+                <td>' . $producto['numero_aves'] . '</td>
+                <td>' . $producto['peso_promedio'] . '</td>
+                <td>' . $producto['peso_bruto'] . '</td>
+                <td>' . $producto['peso_tara'] . '</td>
+                <td>' . $producto['peso_merma'] . '</td>
+                <td>' . $producto['peso_neto'] . '</td>
+                <td>S/ ' . number_format($producto['precio_venta'], 2) . '</td>
+                <td>S/ ' . number_format($totalProducto, 2) . '</td>
             </tr>';
 }
 
@@ -176,27 +181,50 @@ $html .= '
     </table>
 
     <div class="totals">
-        <div class="text-right"><strong>Subtotal:</strong> S/ '.number_format($totalCompra, 2).'</div>
-        <div class="text-right">USD '.number_format($subTotalVES, 2).'</div>
-        <div class="text-right"><strong>Impuesto ('.intval($impuesto).'%):</strong> S/ '.number_format($impuestoTotal, 2).'</div>
-        <div class="text-right">USD '.number_format($impuestoTotalVES, 2).'</div>
+        <div class="text-right"><strong>Subtotal:</strong> S/ ' . number_format($totalCompra, 2) . '</div>
+        <div class="text-right">USD ' . number_format($subTotalVES, 2) . '</div>
+        <div class="text-right"><strong>Impuesto (' . intval($impuesto) . '%):</strong> S/ ' . number_format($impuestoTotal, 2) . '</div>
+        <div class="text-right">USD ' . number_format($impuestoTotalVES, 2) . '</div>
         <div class="text-right" style="border-top: 1px solid #000; border-bottom: 1px solid #000; padding: 3px 0;">
-            <strong>Total:</strong> S/ '.number_format($totalConImpuesto, 2).'
+            <strong>Total:</strong> S/ ' . number_format($totalConImpuesto, 2) . '
         </div>
         <div class="text-right" style="border-bottom: 1px solid #000; padding: 3px 0;">
-            USD '.number_format($TotalVES, 2).'
-        </div>
-    </div>
+            USD ' . number_format($TotalVES, 2) . '
+        </div>';
 
-    <div class="footer">
-        <div style="font-weight: bold; margin-bottom: 10px;">Gracias por su preferencia</div>
-        <div style="margin-bottom: 15px;">'.$mensaje.'</div>
-        <div>'.$nombreEmpresa.' | RUC:'.$ruc.'</div>
-        <div>'.$direccion.' | Tel:'.$telefono.'</div>
-        <div>Correo:'.$correo.'</div>
-    </div>
-</body>
-</html>';
+        // Mostrar saldo restante solo si es crédito
+        if ($respuesta["tipo_pago"] == "credito") {
+            $saldoRestante = $totalConImpuesto - $respuesta["total_pago"];
+            $totalPagado = 0;
+            $textoPagado = '';
+            if ($respuesta["pago_delante"] == $respuesta["total_pago"]) {
+                $totalPagado = $respuesta["pago_delante"];
+                $textoPagado = 'Pago inicial:';
+            } else {
+                $totalPagado = $respuesta["total_pago"];
+                $textoPagado = 'Total pagado:';
+            }
+            $html .= '
+                        <div class="text-right" style="margin-top: 10px;">
+                            <strong>'.$textoPagado.'</strong> S/ ' . number_format($totalPagado, 2) . '
+                        </div>
+                        <div class="text-right" style="font-weight: bold; color: #d9534f;">
+                            <strong>Saldo pendiente:</strong> S/ ' . number_format($saldoRestante, 2) . '
+                        </div>';
+        }
+
+        $html .= '
+            </div>
+
+            <div class="footer">
+                <div style="font-weight: bold; margin-bottom: 10px;">Gracias por su preferencia</div>
+                <div style="margin-bottom: 15px;">' . $mensaje . '</div>
+                <div>' . $nombreEmpresa . ' | RUC:' . $ruc . '</div>
+                <div>' . $direccion . ' | Tel:' . $telefono . '</div>
+                <div>Correo:' . $correo . '</div>
+            </div>
+        </body>
+        </html>';
 
 // Configurar Dompdf
 $options = new Options();
@@ -209,8 +237,7 @@ $dompdf->render();
 
 // Salida del PDF
 if (isset($_GET['accion']) && $_GET['accion'] === 'descargar') {
-    $dompdf->stream("factura_".$serieNumero.".pdf", array("Attachment" => true));
+    $dompdf->stream("factura_" . $serieNumero . ".pdf", array("Attachment" => true));
 } else {
-    $dompdf->stream("factura_".$serieNumero.".pdf", array("Attachment" => false));
+    $dompdf->stream("factura_" . $serieNumero . ".pdf", array("Attachment" => false));
 }
-?>

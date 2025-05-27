@@ -31,6 +31,7 @@ class ModeloVenta
 						v.sub_total,
 						v.igv, 
 						v.total_pago, 
+						v.pago_delante, 
 						v.fecha_venta, 
 						v.hora_venta, 
 						v.estado_pago

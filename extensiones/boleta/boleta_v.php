@@ -177,27 +177,50 @@ $html .= '
     </table>
 
     <div class="totals">
-        <div class="text-right"><strong>Subtotal:</strong> S/ '.number_format($totalCompra, 2).'</div>
-        <div class="text-right">USD '.number_format($subTotalVES, 2).'</div>
-        <div class="text-right"><strong>Impuesto ('.intval($impuesto).'%):</strong> S/ '.number_format($impuestoTotal, 2).'</div>
-        <div class="text-right">USD '.number_format($impuestoTotalVES, 2).'</div>
+        <div class="text-right"><strong>Subtotal:</strong> S/ ' . number_format($totalCompra, 2) . '</div>
+        <div class="text-right">USD ' . number_format($subTotalVES, 2) . '</div>
+        <div class="text-right"><strong>Impuesto (' . intval($impuesto) . '%):</strong> S/ ' . number_format($impuestoTotal, 2) . '</div>
+        <div class="text-right">USD ' . number_format($impuestoTotalVES, 2) . '</div>
         <div class="text-right" style="border-top: 1px solid #000; border-bottom: 1px solid #000; padding: 3px 0;">
-            <strong>Total:</strong> S/ '.number_format($totalConImpuesto, 2).'
+            <strong>Total:</strong> S/ ' . number_format($totalConImpuesto, 2) . '
         </div>
         <div class="text-right" style="border-bottom: 1px solid #000; padding: 3px 0;">
-            USD '.number_format($TotalVES, 2).'
-        </div>
-    </div>
+            USD ' . number_format($TotalVES, 2) . '
+        </div>';
 
-    <div class="footer">
-        <div style="font-weight: bold; margin-bottom: 10px;">Gracias por su preferencia</div>
-        <div style="margin-bottom: 15px;">'.$mensaje.'</div>
-        <div>'.$nombreEmpresa.' | RUC:'.$ruc.'</div>
-        <div>'.$direccion.' | Tel:'.$telefono.'</div>
-        <div>Correo:'.$correo.'</div>
-    </div>
-</body>
-</html>';
+        // Mostrar saldo restante solo si es crédito
+        if ($respuesta["tipo_pago"] == "credito") {
+            $saldoRestante = $totalConImpuesto - $respuesta["total_pago"];
+            $totalPagado = 0;
+            $textoPagado = '';
+            if ($respuesta["pago_delante"] == $respuesta["total_pago"]) {
+                $totalPagado = $respuesta["pago_delante"];
+                $textoPagado = 'Pago inicial:';
+            } else {
+                $totalPagado = $respuesta["total_pago"];
+                $textoPagado = 'Total pagado:';
+            }
+            $html .= '
+                        <div class="text-right" style="margin-top: 10px;">
+                            <strong>'.$textoPagado.'</strong> S/ ' . number_format($totalPagado, 2) . '
+                        </div>
+                        <div class="text-right" style="font-weight: bold; color: #d9534f;">
+                            <strong>Saldo pendiente:</strong> S/ ' . number_format($saldoRestante, 2) . '
+                        </div>';
+        }
+
+        $html .= '
+            </div>
+
+            <div class="footer">
+                <div style="font-weight: bold; margin-bottom: 10px;">Gracias por su preferencia</div>
+                <div style="margin-bottom: 15px;">' . $mensaje . '</div>
+                <div>' . $nombreEmpresa . ' | RUC:' . $ruc . '</div>
+                <div>' . $direccion . ' | Tel:' . $telefono . '</div>
+                <div>Correo:' . $correo . '</div>
+            </div>
+        </body>
+        </html>';
 
 // Configurar Dompdf
 $options = new Options();

@@ -30,22 +30,22 @@ function formatearPrecio($precio)
 }
 
 function getExchangeRate() {
-    $primaryUrl = 'https://api.exchangerate-api.com/v4/latest/USD';
-    $backupUrl = 'https://open.er-api.com/v6/latest/USD';
+    $primaryUrl = 'https://api.exchangerate-api.com/v4/latest/PEN';
+    $backupUrl = 'https://open.er-api.com/v6/latest/PEN';
 
     $response = file_get_contents($primaryUrl);
     if ($response !== false) {
         $data = json_decode($response, true);
-        if (isset($data['rates']['VES'])) {
-            return $data['rates']['VES'];
+        if (isset($data['rates']['USD'])) {
+            return $data['rates']['USD'];
         }
     }
 
     $responseBackup = file_get_contents($backupUrl);
     if ($responseBackup !== false) {
         $dataBackup = json_decode($responseBackup, true);
-        if (isset($dataBackup['rates']['VES'])) {
-            return $dataBackup['rates']['VES'];
+        if (isset($dataBackup['rates']['USD'])) {
+            return $dataBackup['rates']['USD'];
         }
     }
 
@@ -170,8 +170,34 @@ foreach ($tickets as $ticket) {
     $pdf->Cell(32, 5, iconv("UTF-8", "ISO-8859-1", "S/ " . formatearPrecio($respuesta["total_venta"]) . ""), 0, 0, 'R');
     
     $pdf->Ln(5);
-
     $pdf->Cell(72, 5, iconv("UTF-8", "ISO-8859-1", "USD " . formatearPrecio($total_bolivares) . ""), 0, 0, 'R');
+
+    // Mostrar saldo restante solo si es crédito
+    if ($respuesta["tipo_pago"] == "credito") {
+        $saldoRestante = $respuesta["total_venta"] - $respuesta["total_pago"];
+        $totalPagado = 0;
+        $textoPagado = '';
+        if ($respuesta["pago_delante"] == $respuesta["total_pago"]) {
+            $totalPagado = $respuesta["pago_delante"];
+            $textoPagado = 'Pago inicial:';
+        } else {
+            $totalPagado = $respuesta["total_pago"];
+            $textoPagado = 'Total pagado:';
+        }
+        
+        $pdf->Ln(5);
+        $pdf->Cell(72, 5, iconv("UTF-8", "ISO-8859-1", "------------------------------------------------------"), 0, 0, 'C');
+        $pdf->Ln(5);
+        
+        $pdf->Cell(18, 5, iconv("UTF-8", "ISO-8859-1", ""), 0, 0, 'C');
+        $pdf->Cell(22, 5, iconv("UTF-8", "ISO-8859-1", $textoPagado), 0, 0, 'R');
+        $pdf->Cell(32, 5, iconv("UTF-8", "ISO-8859-1", "S/ " . formatearPrecio($totalPagado) . ""), 0, 0, 'R');
+        
+        $pdf->Ln(5);
+        $pdf->Cell(18, 5, iconv("UTF-8", "ISO-8859-1", ""), 0, 0, 'C');
+        $pdf->Cell(22, 5, iconv("UTF-8", "ISO-8859-1", "Saldo pendiente:"), 0, 0, 'R');
+        $pdf->Cell(32, 5, iconv("UTF-8", "ISO-8859-1", "S/ " . formatearPrecio($saldoRestante) . ""), 0, 0, 'R');
+    }
 
     $pdf->Ln(10);
     $pdf->Cell(0, 5, iconv("UTF-8", "ISO-8859-1", "-------------------------------------------------------------------"), 0, 0, 'C');
