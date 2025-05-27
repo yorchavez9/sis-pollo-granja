@@ -35,13 +35,24 @@ elseif (isset($_POST["id_usuario_caja"])) {
 }
 
 //ACTUALIZAR CAJA GENERAL
-elseif(isset($_POST["id_movimiento_update"])){
+elseif (isset($_POST["id_movimiento_update"])) {
     $cierreCaja = new ControladorCajaGeneral();
     $cierreCaja->ctrEditarCajaGeneral();
 }
 
+
+elseif(isset($_POST["action"]) && $_POST["action"] == "reabrir_caja"){
+    $datos = array(
+        "id_movimiento" => $_POST["id_caja_update"],
+        "estado" => $_POST["estado_update"]
+    );
+    
+    $respuesta = ControladorCajaGeneral::ctrReabrirCajaGeneral($datos);
+    echo json_encode($respuesta);
+}
+
 //MOSTRAR CAJA GENERAL
-else{
+else {
     $item = null;
     $valor = null;
     $showCajaGeneral = ControladorCajaGeneral::ctrMostrarCajaGeneal($item, $valor);
@@ -61,8 +72,6 @@ else{
         );
         $tablaCajaGeneral[] = $fila;
     }
-    
+
     echo json_encode($tablaCajaGeneral);
 }
-
-

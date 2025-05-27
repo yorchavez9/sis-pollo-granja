@@ -1,12 +1,12 @@
 $(document).ready(function () {
 
 
-   /* =====================================
-  CONVERTIR DE DOLARES A 
-  ===================================== */
+  /* =====================================
+ CONVERTIR DE DOLARES A 
+ ===================================== */
   let currentRate = 0;
 
-  async function getExchangeRate(){
+  async function getExchangeRate() {
     try {
       const response = await fetch('https://api.exchangerate-api.com/v4/latest/PEN');
       const data = await response.json();
@@ -32,7 +32,7 @@ $(document).ready(function () {
         document.getElementById("error_moneda").textContent = "";
       }
     } catch (error) {
-     /*  console.error("Error al actualizar la tasa:", error); */
+      /*  console.error("Error al actualizar la tasa:", error); */
     }
   }
 
@@ -40,20 +40,20 @@ $(document).ready(function () {
 
   // Función para cambiar la moneda
   async function cambiarModena() {
-    await updateRate(); 
+    await updateRate();
     let valor_apertura_caja = $("#monto_inicial_caja").val();
-    let precioBolivares = currentRate > 0 && !isNaN(parseFloat(valor_apertura_caja)) && valor_apertura_caja !== "" 
-      ? (parseFloat(valor_apertura_caja) * currentRate).toFixed(2) 
+    let precioBolivares = currentRate > 0 && !isNaN(parseFloat(valor_apertura_caja)) && valor_apertura_caja !== ""
+      ? (parseFloat(valor_apertura_caja) * currentRate).toFixed(2)
       : "0.00";
     $("#value_valor_bolivares_caja").text("USD " + precioBolivares);
   }
-  
-  $("#monto_inicial_caja").on("input", function() {
-    cambiarModena(); 
+
+  $("#monto_inicial_caja").on("input", function () {
+    cambiarModena();
   });
-  
+
   cambiarModena();
-  
+
 
   /* ===========================================
     SELECIONADO LA FECHA AUTOMÁTICO
@@ -161,6 +161,15 @@ $(document).ready(function () {
                           <td class="text-center">S/ ${item.egresos}</td>
                           <td class="text-center">S/ ${item.monto_inicial}</td>
                           <td class="text-center">S/ ${item.monto_final}</td>
+                          <td class="text-center">
+                              <div class="btn-group">
+                                  <button class="btn btn-sm btn-info btnReabrirCaja" 
+                                          data-id="${item.id_movimiento}"
+                                          title="Reabrir esta caja">
+                                      <i class="fas fa-lock-open"></i>
+                                  </button>
+                              </div>
+                          </td>
                       </tr>
                   `;
 
@@ -176,6 +185,59 @@ $(document).ready(function () {
       },
     });
   }
+
+
+  // Evento para reabrir caja cerrada
+  // Evento para reabrir caja cerrada
+$(document).on("click", ".btnReabrirCaja", function() {
+    const idCaja = $(this).data("id");
+    
+    Swal.fire({
+        title: '¿Reabrir esta caja?',
+        text: "Esta acción cambiará el estado de la caja a 'abierto'",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, reabrir',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: "ajax/Caja.general.ajax.php",
+                type: "POST",
+                data: {
+                    id_caja_update: idCaja,
+                    estado_update: "abierto",
+                    action: "reabrir_caja"
+                },
+                dataType: "json",
+                success: function(respuesta) {
+                    if (respuesta.status) {
+                        Swal.fire({
+                            title: '¡Éxito!',
+                            text: respuesta.message,
+                            icon: 'success'
+                        });
+                        mostrarCajaGeneral();
+                        mostrarCajaGeneralApertura();
+                    } else {
+                        Swal.fire({
+                            title: 'Error',
+                            text: respuesta.message,
+                            icon: 'error'
+                        });
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.log(xhr);
+                    console.log(status);
+                    console.log(error);
+                }
+            });
+        }
+    });
+});
 
   /* ===========================
     MOSTRANDO CAJA GENRAL APERTURA
@@ -226,7 +288,7 @@ $(document).ready(function () {
           });
           let flag = false;
 
-          const fechaActual = new Date().toLocaleDateString("en-CA", {timeZone: "America/Lima",});
+          const fechaActual = new Date().toLocaleDateString("en-CA", { timeZone: "America/Lima", });
           const fechaCierre = datosCaja.fecha_cierre.trim().split(" ")[0];
           if (fechaCierre === fechaActual) {
             setInterval(() => {
@@ -279,12 +341,12 @@ $(document).ready(function () {
                   <td class="text-center">S/ ${data.ganancia_total}</td>
               </tr>
           `;
-            tbody.append(fila);
+          tbody.append(fila);
         });
 
         // Inicializar DataTables después de cargar los datos
         $('#tabla_resumen_venta_productos').DataTable();
-    },
+      },
       error: function (xhr, status, error) {
         console.error("Error al obtener datos de caja:", error);
         console.log(xhr);

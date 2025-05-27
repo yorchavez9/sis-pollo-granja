@@ -118,12 +118,12 @@ $permisos = $_SESSION["permisos"] ?? [];
                 <li class="submenu">
                     <a href="javascript:void(0);"><i class="fas fa-cash-register"></i><span>Caja</span> <span class="menu-arrow"></span></a>
                     <ul>
-                        <?php if (isset($permisos["caja_general"])) : ?>
-                        <li><a href="cajaGeneral"><i class="fas fa-door-open"></i> Apertura/Cierre</a></li>
-                        <?php endif; ?>
-                        
                         <?php if (isset($permisos["arqueos_caja"])) : ?>
                         <li><a href="arqueosCaja"><i class="fas fa-calculator"></i> Arqueos</a></li>
+                        <?php endif; ?>
+
+                        <?php if (isset($permisos["caja_general"])) : ?>
+                        <li><a href="cajaGeneral"><i class="fas fa-door-open"></i> Apertura/Cierre</a></li>
                         <?php endif; ?>
                         
                         <?php if (isset($permisos["gastos_ingresos"])) : ?>

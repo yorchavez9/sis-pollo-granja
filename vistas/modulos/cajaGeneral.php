@@ -132,6 +132,7 @@
                                 <th class="text-center">Egresos</th>
                                 <th class="text-center">Saldo Inicial</th>
                                 <th class="text-center">total en caja Cerrada</th>
+                                <th class="text-center">Eliminar</th>
                             </tr>
                         </thead>
                         <tbody id="data_list_caja">
