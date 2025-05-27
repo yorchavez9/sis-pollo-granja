@@ -1,8 +1,28 @@
 
 import { mostrarVentas } from "./lista-ventas.js";
 
+ async function obtenerSesion() {
+    try {
+        const response = await fetch('ajax/sesion.ajax.php?action=sesion', {
+            method: 'GET',
+            headers: { 'Accept': 'application/json' },
+            credentials: 'include'
+        });
+        
+        if (!response.ok) throw new Error('Error en la respuesta del servidor');
+        
+        const data = await response.json();
+        return data.status === false ? null : data;
+        
+    } catch (error) {
+        console.error('Error al obtener sesión:', error);
+        return null;
+    }
+}
 
-function mostrarIdMovimientoCaja() {
+async function mostrarIdMovimientoCaja() {
+   let sesion = await obtenerSesion();
+    if(!sesion) return;
   $.ajax({
     url: "ajax/Verificar.estado.caja.ajax.php",
     type: "GET",
@@ -18,20 +38,28 @@ function mostrarIdMovimientoCaja() {
         });
         
         if (!encontrado) {
-          Swal.fire({
+          if(!sesion){
+            return;
+          }else{
+            Swal.fire({
             title: "¡Alerta!",
             text: "La caja del día no está abierta o no existe",
             icon: "warning",
             confirmButtonText: "Aceptar"
           })
+          }
         }
       } else {
-         Swal.fire({
+         if(!sesion){
+            return;
+          }else{
+            Swal.fire({
             title: "¡Alerta!",
             text: "La caja del día no está abierta o no existe",
             icon: "warning",
             confirmButtonText: "Aceptar"
           })
+          }
       }
     },
     error: function (xhr, status, error) {
