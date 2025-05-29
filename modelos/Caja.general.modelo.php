@@ -61,7 +61,7 @@ class ModeloCajaGeneral
 	static public function mdlIngresarCajaGeneral($tabla, $datos)
 	{
 		$conexion = Conexion::conectar();
-		$stmtVerificar = $conexion->prepare("SELECT COUNT(*) AS conteo FROM $tabla WHERE fecha_apertura = :fecha_apertura");
+		/* $stmtVerificar = $conexion->prepare("SELECT COUNT(*) AS conteo FROM $tabla WHERE fecha_apertura = :fecha_apertura");
 		$stmtVerificar->bindParam(":fecha_apertura", $datos["fecha_apertura"], PDO::PARAM_STR);
 		$stmtVerificar->execute();
 		$resultado = $stmtVerificar->fetch(PDO::FETCH_ASSOC);
@@ -71,7 +71,7 @@ class ModeloCajaGeneral
 				"status" => false,
 				"message" => "Ya existe un registro de caja para esta fecha."
 			];
-		}
+		} */
 
 		$stmt = $conexion->prepare("INSERT INTO $tabla(
                                         id_usuario, 

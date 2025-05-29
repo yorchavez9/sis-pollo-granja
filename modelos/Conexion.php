@@ -16,7 +16,7 @@ class Conexion
 		} */
 		try {
 			$link = new PDO(
-				"mysql:host=localhost;dbname=bd_sistema_pollos",
+				"mysql:host=localhost;dbname=db_sistema_pollos",
 				"root",
 				""
 			);
