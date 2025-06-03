@@ -1,7 +1,8 @@
 <?php
-require_once '../vendor/autoload.php';
-use Dompdf\Dompdf;
-use Dompdf\Options;
+
+// Incluyendo librerías necesarias
+/* require "./code128.php"; */
+require '../ticket/code128.php';
 
 session_start();
 
@@ -16,7 +17,16 @@ require_once "../../modelos/Producto.modelo.php";
 require_once "../../controladores/Configuracion.ticket.controlador.php";
 require_once "../../modelos/Configuracion.ticket.modelo.php";
 
-function formatearPrecio($precio) {
+$pdf = new PDF_Code128('P', 'mm', array(80, 258));
+$pdf->SetMargins(4, 10, 4);
+$pdf->AddPage();
+
+/* ========================================
+FORMATEAR PRECIOS
+======================================== */
+
+function formatearPrecio($precio)
+{
     return number_format($precio, 2, '.', ',');
 }
 
@@ -51,190 +61,157 @@ $item = "id_venta";
 $valor = $_GET["id_venta"];
 
 $respuesta = ControladorVenta::ctrMostrarListaVentas($item, $valor);
-$serieNumero = $respuesta["num_comprobante"];
-$seriePrefijo = $respuesta["serie_prefijo"];
-$horaVenta = $respuesta["hora_venta"];
-$respuesta_dv = ControladorVenta::ctrMostrarDetalleVenta($item, $valor);
-$fechaVenta = $respuesta["fecha_venta"];
-$impuesto = $respuesta["impuesto"];
-$horaFormateada = date("h:i A", strtotime($fechaVenta));
 
+$respuesta_de = ControladorVenta::ctrMostrarDetalleVenta($item, $valor);
+$fechaVenta = date("d/m/Y", strtotime($respuesta["fecha_venta"]));
+$serie_comprobante = $respuesta["serie_prefijo"];
+$numero_comprobante = $respuesta["num_comprobante"];
 $itemConfig = null;
 $valorConfig = null;
 
-// Obtener configuración de la empresa
-$configuracion = ControladorConfiguracionTicket::ctrMostrarConfiguracionTicket($itemConfig, $valorConfig);
-foreach ($configuracion as $key => $value) {
-    $nombreEmpresa = $value['nombre_empresa'];
-    $ruc = $value['ruc'];
-    $telefono = $value['telefono'];
-    $correo = $value['correo'];
-    $direccion = $value['direccion'];
-    $logo = $value['logo'];
-    $mensaje = $value['mensaje'];
-}
+$tickets = ControladorConfiguracionTicket::ctrMostrarConfiguracionTicket($itemConfig, $valorConfig);
 
-// Calcular totales
-$totalCompra = 0;
-foreach ($respuesta_dv as $producto) {
-    $totalProducto = ($producto['peso_neto'] == 0) 
-        ? $producto['numero_aves'] * $producto['precio_venta'] 
-        : $producto['peso_neto'] * $producto['precio_venta'];
-    $totalCompra += $totalProducto;
-}
-$impuestoTotal = $totalCompra * ($impuesto / 100);
-$totalConImpuesto = $totalCompra + $impuestoTotal;
+foreach ($tickets as $ticket) {
 
-// Conversión a USD
-$subTotalVES = $totalCompra * $currentRate;
-$impuestoTotalVES = $impuestoTotal * $currentRate;
-$TotalVES = $totalConImpuesto * $currentRate;
+    // Encabezado y datos de la empresa
+    $pdf->SetFont('Arial', 'B', 10);
+    $pdf->SetTextColor(0, 0, 0);
+    $pdf->MultiCell(0, 5, iconv("UTF-8", "ISO-8859-1", strtoupper($ticket["nombre_empresa"])), 0, 'C', false);
+    $pdf->SetFont('Arial', '', 9);
+    $pdf->MultiCell(0, 5, iconv("UTF-8", "ISO-8859-1", "RUC: " . $ticket["ruc"] . ""), 0, 'C', false);
+    $pdf->MultiCell(0, 5, iconv("UTF-8", "ISO-8859-1", "Dirección: " . $ticket["direccion"] . ""), 0, 'C', false);
+    $pdf->MultiCell(0, 5, iconv("UTF-8", "ISO-8859-1", "Teléfono: " . $ticket["telefono"] . ""), 0, 'C', false);
+    $pdf->MultiCell(0, 5, iconv("UTF-8", "ISO-8859-1", "Email: " . $ticket["correo"] . ""), 0, 'C', false);
 
-// HTML para el PDF
-$html = '
-<!DOCTYPE html>
-<html>
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <style>
-        body { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 10pt; margin: 0; padding: 10px; color: #333; }
-        .header { margin-bottom: 15px; }
-        .factura-title { font-size: 18pt; font-weight: bold; margin-bottom: 5px; color: #007BFF; }
-        .factura-info { font-size: 10pt; margin-bottom: 3px; }
-        .logo { float: right; width: 30mm; height: auto; }
-        .empresa-nombre { font-size: 14pt; font-weight: bold; text-align: center; margin-top: 5px; color: #007BFF; }
-        .cliente-info { margin: 15px 0; }
-        table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
-        th { background-color: #007BFF; color: #fff; font-weight: bold; text-align: center; padding: 5px; border: 1px solid #ddd; }
-        td { padding: 5px; border: 1px solid #ddd; text-align: center; }
-        .text-left { text-align: left; }
-        .text-right { text-align: right; }
-        .totals { margin-top: 20px; }
-        .footer { margin-top: 80px; text-align: center; font-size: 9pt; color: #777; }
-        .page-number { font-style: italic; font-size: 8pt; text-align: center; margin-top: 10px; }
-    </style>
-</head>
-<body>
-    <div class="header">
-        <img class="logo" src="data:image/png;base64,'.base64_encode(file_get_contents('../'.$logo)).'" />
-        <div class="empresa-nombre">'.$nombreEmpresa.'</div>
-    </div>
+    $pdf->Ln(1);
+    $pdf->Cell(0, 5, iconv("UTF-8", "ISO-8859-1", "------------------------------------------------------"), 0, 0, 'C');
+    $pdf->Ln(5);
 
-    <div class="factura-title">BOLETA</div>
-    <div class="factura-info">Boleta N° '.$seriePrefijo.'-'.$serieNumero.'</div>
-    <div class="factura-info">Fecha: '.date("d/m/Y", strtotime($fechaVenta)).'</div>
-    <div class="factura-info">Hora: '.$horaVenta.'</div>
+    $pdf->MultiCell(0, 5, iconv("UTF-8", "ISO-8859-1", "Fecha: " . $fechaVenta . " " . $respuesta["hora_venta"]), 0, 'C', false);
+    $pdf->MultiCell(0, 5, iconv("UTF-8", "ISO-8859-1", "Emitido por: " . $nombre_usuario . ""), 0, 'C', false);
+    $pdf->SetFont('Arial', 'B', 10);
+    $pdf->MultiCell(0, 5, iconv("UTF-8", "ISO-8859-1", strtoupper("Boleta N°: " . $respuesta["serie_prefijo"] .'-'. $respuesta["num_comprobante"] ."")), 0, 'C', false);
+    $pdf->SetFont('Arial', '', 9);
 
-    <div class="cliente-info">
-        <div><strong>Cliente:</strong> '.$respuesta["razon_social"].'</div>
-        <div><strong>Documento:</strong> '.$respuesta["numero_documento"].'</div>
-        <div><strong>Dirección:</strong> '.$respuesta["direccion"].'</div>
-        <div><strong>Teléfono:</strong> '.$respuesta["telefono"].'</div>
-        <div><strong>Correo:</strong> '.$respuesta["email"].'</div>
-    </div>
+    $pdf->Ln(1);
+    $pdf->Cell(0, 5, iconv("UTF-8", "ISO-8859-1", "------------------------------------------------------"), 0, 0, 'C');
+    $pdf->Ln(5);
 
-    <table>
-        <thead>
-            <tr>
-                <th>Prod.</th>
-                <th>Javas</th>
-                <th>Uni.</th>
-                <th>Peso Prom.</th>
-                <th>Peso Br.</th>
-                <th>Peso Tara</th>
-                <th>Merma</th>
-                <th>Peso Neto</th>
-                <th>P. Venta</th>
-                <th>Total</th>
-            </tr>
-        </thead>
-        <tbody>';
+    $pdf->MultiCell(0, 5, iconv("UTF-8", "ISO-8859-1", "Cliente: " . $respuesta["razon_social"] . ""), 0, 'C', false);
+    $pdf->MultiCell(0, 5, iconv("UTF-8", "ISO-8859-1", "Documento: " . $respuesta["numero_documento"] . ""), 0, 'C', false);
+    $pdf->MultiCell(0, 5, iconv("UTF-8", "ISO-8859-1", "Teléfono: " . $respuesta["telefono"] . ""), 0, 'C', false);
+    $pdf->MultiCell(0, 5, iconv("UTF-8", "ISO-8859-1", "Dirección: " . $respuesta["direccion"] . ""), 0, 'C', false);
 
-// Productos
-usort($respuesta_dv, function($a, $b) { return strcmp($a['nombre_producto'], $b['nombre_producto']); });
-foreach ($respuesta_dv as $producto) {
-    $totalProducto = ($producto['peso_neto'] == 0) 
-        ? $producto['numero_aves'] * $producto['precio_venta'] 
-        : $producto['peso_neto'] * $producto['precio_venta'];
+    $pdf->Ln(1);
+    $pdf->Cell(0, 5, iconv("UTF-8", "ISO-8859-1", "-------------------------------------------------------------------"), 0, 0, 'C');
+    $pdf->Ln(3);
 
-    $html .= '
-            <tr>
-                <td class="text-left">'.$producto['nombre_producto'].'</td>
-                <td>'.intval($producto['numero_javas']).'</td>
-                <td>'.$producto['numero_aves'].'</td>
-                <td>'.$producto['peso_promedio'].'</td>
-                <td>'.$producto['peso_bruto'].'</td>
-                <td>'.$producto['peso_tara'].'</td>
-                <td>'.$producto['peso_merma'].'</td>
-                <td>'.$producto['peso_neto'].'</td>
-                <td>S/ '.number_format($producto['precio_venta'], 2).'</td>
-                <td>S/ '.number_format($totalProducto, 2).'</td>
-            </tr>';
-}
+    // Tabla de productos
+    $pdf->Cell(15, 5, iconv("UTF-8", "ISO-8859-1", "Javas"), 0, 0, 'L');
+    $pdf->Cell(15, 5, iconv("UTF-8", "ISO-8859-1", "Uni."), 0, 0, 'L');
+    $pdf->Cell(14, 5, iconv("UTF-8", "ISO-8859-1", "Peso"), 0, 0, 'L');
+    $pdf->Cell(10, 5, iconv("UTF-8", "ISO-8859-1", "Precio"), 0, 0, 'L');
+    $pdf->Cell(15, 5, iconv("UTF-8", "ISO-8859-1", "Total"), 0, 0, 'R');
 
-$html .= '
-        </tbody>
-    </table>
+    $pdf->Ln(3);
+    $pdf->Cell(72, 5, iconv("UTF-8", "ISO-8859-1", "-------------------------------------------------------------------"), 0, 0, 'C');
+    $pdf->Ln(3);
 
-    <div class="totals">
-        <div class="text-right"><strong>Subtotal:</strong> S/ ' . number_format($totalCompra, 2) . '</div>
-        <div class="text-right">USD ' . number_format($subTotalVES, 2) . '</div>
-        <div class="text-right"><strong>Impuesto (' . intval($impuesto) . '%):</strong> S/ ' . number_format($impuestoTotal, 2) . '</div>
-        <div class="text-right">USD ' . number_format($impuestoTotalVES, 2) . '</div>
-        <div class="text-right" style="border-top: 1px solid #000; border-bottom: 1px solid #000; padding: 3px 0;">
-            <strong>Total:</strong> S/ ' . number_format($totalConImpuesto, 2) . '
-        </div>
-        <div class="text-right" style="border-bottom: 1px solid #000; padding: 3px 0;">
-            USD ' . number_format($TotalVES, 2) . '
-        </div>';
+    /* Detalles de la tabla */
 
-        // Mostrar saldo restante solo si es crédito
-        if ($respuesta["tipo_pago"] == "credito") {
-            $saldoRestante = $totalConImpuesto - $respuesta["total_pago"];
-            $totalPagado = 0;
-            $textoPagado = '';
-            if ($respuesta["pago_delante"] == $respuesta["total_pago"]) {
-                $totalPagado = $respuesta["pago_delante"];
-                $textoPagado = 'Pago inicial:';
-            } else {
-                $totalPagado = $respuesta["total_pago"];
-                $textoPagado = 'Total pagado:';
-            }
-            $html .= '
-                        <div class="text-right" style="margin-top: 10px;">
-                            <strong>'.$textoPagado.'</strong> S/ ' . number_format($totalPagado, 2) . '
-                        </div>
-                        <div class="text-right" style="font-weight: bold; color: #d9534f;">
-                            <strong>Saldo pendiente:</strong> S/ ' . number_format($saldoRestante, 2) . '
-                        </div>';
+    $subtotal = 0;
+
+    foreach ($respuesta_de as $value) {
+        $totalPrecioProducto = $value["peso_neto"] * $value["precio_venta"];
+        $subtotal += $totalPrecioProducto;
+
+        $pdf->MultiCell(0, 2, iconv("UTF-8", "ISO-8859-1", ""), 0, 'C'); // Si no necesitas esta línea, puedes eliminarla
+
+        $pdf->MultiCell(0, 4, iconv("UTF-8", "ISO-8859-1", "" . $value["nombre_producto"] . ""), 0, 'C', false); // Esto puede quedarse si necesitas el nombre del producto
+
+        // Ajustando los tamaños de las celdas
+        $pdf->Cell(5, 4, iconv("UTF-8", "ISO-8859-1", "" . $value["numero_javas"] . ""), 0, 0, 'C');
+        $pdf->Cell(15, 4, iconv("UTF-8", "ISO-8859-1", "" . $value["numero_aves"] . ""), 0, 0, 'C');
+        $pdf->Cell(18, 4, iconv("UTF-8", "ISO-8859-1", "" . $value["peso_neto"] . ""), 0, 0, 'C');
+        $pdf->Cell(14, 4, iconv("UTF-8", "ISO-8859-1", "S/ " . formatearPrecio($value["precio_venta"]) . ""), 0, 0, 'C');
+        $pdf->Cell(24, 4, iconv("UTF-8", "ISO-8859-1", "S/ " . formatearPrecio($totalPrecioProducto) . ""), 0, 0, 'C');
+
+        $pdf->Ln(5);
+    }
+
+    $sub_total_bolivares = $respuesta["sub_total"] * $currentRate;
+    $impuesto_bolivares = $respuesta["igv"] * $currentRate;
+    $total_bolivares = $respuesta["total_venta"] * $currentRate;
+
+
+    /* Fin detalles de la tabla */
+
+    $pdf->Cell(72, 5, iconv("UTF-8", "ISO-8859-1", "-------------------------------------------------------------------"), 0, 0, 'C');
+
+    $pdf->Ln(5);
+
+    $pdf->Cell(18, 5, iconv("UTF-8", "ISO-8859-1", ""), 0, 0, 'C');
+    $pdf->Cell(22, 5, iconv("UTF-8", "ISO-8859-1", "SUBTOTAL"), 0, 0, 'R');
+    $pdf->Cell(32, 5, iconv("UTF-8", "ISO-8859-1", " S/ " . formatearPrecio($respuesta["sub_total"]) . ""), 0, 0, 'R');
+    
+    $pdf->Ln(5);
+    $pdf->Cell(72, 5, iconv("UTF-8", "ISO-8859-1", "$ " . formatearPrecio($sub_total_bolivares) . ""), 0, 0, 'R');
+    $pdf->Ln(5);
+
+    $pdf->Cell(18, 5, iconv("UTF-8", "ISO-8859-1", ""), 0, 0, 'C');
+    $pdf->Cell(22, 5, iconv("UTF-8", "ISO-8859-1", "IVG (" . intval($respuesta["impuesto"]) . " %):"), 0, 0, 'R');
+    $pdf->Cell(32, 5, iconv("UTF-8", "ISO-8859-1", "S/ " . formatearPrecio($respuesta["igv"]) . ""), 0, 0, 'R');
+    
+    $pdf->Ln(5);
+    $pdf->Cell(72, 5, iconv("UTF-8", "ISO-8859-1", "$ " . formatearPrecio($impuesto_bolivares) . ""), 0, 0, 'R');
+    $pdf->Ln(5);
+    
+    $pdf->Cell(18, 5, iconv("UTF-8", "ISO-8859-1", ""), 0, 0, 'C');
+    $pdf->Cell(22, 5, iconv("UTF-8", "ISO-8859-1", "TOTAL A PAGAR"), 0, 0, 'R');
+    $pdf->Cell(32, 5, iconv("UTF-8", "ISO-8859-1", "S/ " . formatearPrecio($respuesta["total_venta"]) . ""), 0, 0, 'R');
+    
+    $pdf->Ln(5);
+    $pdf->Cell(72, 5, iconv("UTF-8", "ISO-8859-1", "$ " . formatearPrecio($total_bolivares) . ""), 0, 0, 'R');
+
+    // Mostrar saldo restante solo si es crédito
+    if ($respuesta["tipo_pago"] == "credito") {
+        $saldoRestante = $respuesta["total_venta"] - $respuesta["total_pago"];
+        $totalPagado = 0;
+        $textoPagado = '';
+        if ($respuesta["pago_delante"] == $respuesta["total_pago"]) {
+            $totalPagado = $respuesta["pago_delante"];
+            $textoPagado = 'Pago inicial:';
+        } else {
+            $totalPagado = $respuesta["total_pago"];
+            $textoPagado = 'Total pagado:';
         }
+        
+        $pdf->Ln(5);
+        $pdf->Cell(72, 5, iconv("UTF-8", "ISO-8859-1", "------------------------------------------------------"), 0, 0, 'C');
+        $pdf->Ln(5);
+        
+        $pdf->Cell(18, 5, iconv("UTF-8", "ISO-8859-1", ""), 0, 0, 'C');
+        $pdf->Cell(22, 5, iconv("UTF-8", "ISO-8859-1", $textoPagado), 0, 0, 'R');
+        $pdf->Cell(32, 5, iconv("UTF-8", "ISO-8859-1", "S/ " . formatearPrecio($totalPagado) . ""), 0, 0, 'R');
+        
+        $pdf->Ln(5);
+        $pdf->Cell(18, 5, iconv("UTF-8", "ISO-8859-1", ""), 0, 0, 'C');
+        $pdf->Cell(22, 5, iconv("UTF-8", "ISO-8859-1", "Saldo pendiente:"), 0, 0, 'R');
+        $pdf->Cell(32, 5, iconv("UTF-8", "ISO-8859-1", "S/ " . formatearPrecio($saldoRestante) . ""), 0, 0, 'R');
+    }
 
-        $html .= '
-            </div>
+    $pdf->Ln(10);
+    $pdf->Cell(0, 5, iconv("UTF-8", "ISO-8859-1", "-------------------------------------------------------------------"), 0, 0, 'C');
 
-            <div class="footer">
-                <div style="font-weight: bold; margin-bottom: 10px;">Gracias por su preferencia</div>
-                <div style="margin-bottom: 15px;">' . $mensaje . '</div>
-                <div>' . $nombreEmpresa . ' | RUC:' . $ruc . '</div>
-                <div>' . $direccion . ' | Tel:' . $telefono . '</div>
-                <div>Correo:' . $correo . '</div>
-            </div>
-        </body>
-        </html>';
-
-// Configurar Dompdf
-$options = new Options();
-$options->set('isRemoteEnabled', true);
-$dompdf = new Dompdf($options);
-
-$dompdf->loadHtml($html);
-$dompdf->setPaper('A4', 'portrait');
-$dompdf->render();
-
-// Salida del PDF
-if (isset($_GET['accion']) && $_GET['accion'] === 'descargar') {
-    $dompdf->stream("boleta_".$serieNumero.".pdf", array("Attachment" => true));
-} else {
-    $dompdf->stream("boleta_".$serieNumero.".pdf", array("Attachment" => false));
+    $pdf->Ln(5);
+    $pdf->Cell(0, 5, iconv("UTF-8", "ISO-8859-1", $ticket["mensaje"]), 0, 0, 'C');
 }
-?>
+
+// Generando el PDF
+if (isset($_GET['accion']) && $_GET['accion'] === 'descargar') {
+    // Descargar el PDF
+    $pdf->Output('D', 'boleta' . $numero_comprobante . '_v.pdf'); // 'D' fuerza la descarga con el nombre 'boleta.pdf'
+} else {
+    // Mostrar el PDF en el navegador (imprimir)
+    $pdf->Output(); // Muestra el archivo en el navegador
+}
