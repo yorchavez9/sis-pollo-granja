@@ -34,7 +34,7 @@ foreach ($tickets as $ticket) {
 
     // Fecha, Cajero y Número de ticket (Este dato lo puedes ajustar según sea necesario)
     $pdf->MultiCell(0, 5, iconv("UTF-8", "ISO-8859-1", "Fecha: " . date("d/m/Y")), 0, 'C', false);
-    $pdf->MultiCell(0, 5, iconv("UTF-8", "ISO-8859-1", "Emisor: " . $_SESSION["nombre_usuario"]), 0, 'C', false);
+    $pdf->MultiCell(0, 5, iconv("UTF-8", "ISO-8859-1", "Emisor: " . $_SESSION["usuario"]["nombre_usuario"]), 0, 'C', false);
     $pdf->SetFont('Arial', 'B', 10);
     $pdf->MultiCell(0, 5, iconv("UTF-8", "ISO-8859-1", strtoupper("Ticket Nro: " . "12345")), 0, 'C', false);
     $pdf->SetFont('Arial', '', 9);
