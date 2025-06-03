@@ -185,7 +185,7 @@ $(document).ready(function () {
                           </td>
                           <td>${proveedor.direccion}</td>
                           <td>${proveedor.telefono}</td>
-                          <td>${proveedor.email}</td>
+                          <td>${proveedor.email ? proveedor.email : "sin correo o email"}</td>
                           <td>
                           ${sesion.permisos.proveedores && sesion.permisos.proveedores.acciones.includes("estado")?
                             `${proveedor.estado_persona != 0 ? '<button class="btn bg-lightgreen badges btn-sm rounded btnActivar" idProveedor="' + proveedor.id_persona + '" estadoProveedor="0">Activado</button>' : '<button class="btn bg-lightred badges btn-sm rounded btnActivar" idProveedor="' + proveedor.id_persona + '" estadoProveedor="1">Desactivado</button>'}`:``}
