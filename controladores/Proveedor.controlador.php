@@ -25,7 +25,7 @@ class ControladorProveedores
 			"ciudad" => $_POST["ciudad"],
 			"codigo_postal" => $_POST["codigo_postal"],
 			"telefono" => $_POST["telefono"],
-			"email" => $_POST["email"],
+			"email" => !empty($_POST["email"]) ? $_POST["email"] : null,
 			"sitio_web" => $_POST["sitio_web"],
 			"tipo_banco" => $_POST["tipo_banco"],
 			"numero_cuenta" => $_POST["numero_cuenta"]
