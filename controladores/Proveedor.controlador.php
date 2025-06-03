@@ -90,7 +90,7 @@ class ControladorProveedores
 				"ciudad" => $_POST["edit_ciudad"],
 				"codigo_postal" => $_POST["edit_codigo_postal"],
 				"telefono" => $_POST["edit_telefono"],
-				"email" => $_POST["edit_email"],
+				"email" => !empty($_POST["edit_email"]) ? $_POST["edit_email"] : null,
 				"sitio_web" => $_POST["edit_sitio_web"],
 				"tipo_banco" => $_POST["edit_tipo_banco"],
 				"numero_cuenta" => $_POST["edit_numero_cuenta"]
