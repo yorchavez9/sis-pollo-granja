@@ -229,7 +229,7 @@ $permisos = $_SESSION["permisos"] ?? [];
                 <li class="submenu">
                     <a href="javascript:void(0);"><i class="fas fa-cog"></i><span>Configuración</span> <span class="menu-arrow"></span></a>
                     <ul>
-                        <li><a href="configuracionSistema"><i class="fas fa-sliders-h"></i> Sistema</a></li>
+                        <li><a href="configuracionSistema"><i class="fas fa-sliders-h"></i> Config. Sistema</a></li>
                         <li><a href="configuracionTicket"><i class="fas fa-ticket-alt"></i> Config. comprobante</a></li>
                         <li><a href="configuracionCorreo"><i class="fas fa-envelope"></i> Correo</a></li>
                         <li><a href="numFolio"><i class="fas fa-list-ol"></i> Folios</a></li>
