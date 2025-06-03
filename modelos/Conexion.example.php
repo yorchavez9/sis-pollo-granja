@@ -6,9 +6,9 @@ class Conexion
 
 		try {
 			$link = new PDO(
-				"mysql:host=localhost;dbname=db_sistema_pollos",
-				"root",
-				""
+				"mysql:host=localhost;dbname=", // Espeficar el nombre de la base de datos
+				"root", // Usuario de la base de datos
+				"" // Contraseña del usuario de la base de datos
 			);
 			$link->exec("set names utf8");
 			return $link;
