@@ -190,13 +190,14 @@ $(document).ready(function () {
         }else{
           respuesta.imagen_producto = "vistas/img/productos/default.png"; // Ruta a la imagen predeterminada
         }
-
+        
+        let uniqueId = Date.now(); 
         // Crear nueva fila con datos del producto
         const nuevaFila = `
-        <tr>
+        <tr id="fila-${uniqueId}">
           <input type="hidden" class="id_producto_egreso" value="${respuesta.id_producto}">
           <th class="text-center align-middle d-none d-md-table-cell">
-            <a href="#" class="me-3 confirm-text btnEliminarAddProducto" idAddProducto="${respuesta.id_producto}" fotoUsuario="${respuesta.imagen_producto}">
+            <a href="#" class="me-3 confirm-text btnEliminarAddProducto" data-unique-id="${uniqueId}">
               <i class="fa fa-trash fa-lg" style="color: #F1666D"></i>
             </a>
           </th>
@@ -294,15 +295,13 @@ $(document).ready(function () {
   // ELIMINAR EL PRODUCTO AGREGADO A LA TABLA DETALLE
   $(document).on("click touchstart", ".btnEliminarAddProducto", function (e) {
     e.preventDefault();
-    let idProductoEliminar = $(this).attr("idAddProducto");
-    $("#detalle_egreso_producto").find("tr").each(function () {
-      let idProducto = $(this).find(".btnEliminarAddProducto").attr("idAddProducto");
-      if (idProducto === idProductoEliminar) {
-        $(this).remove();
-        calcularTotal();
-        return false;
-      }
-    });
+    let uniqueId = $(this).attr("data-unique-id");
+
+    // Elimina la fila específica usando el ID único
+    $(`#fila-${uniqueId}`).remove();
+
+    // Recalcula el total después de eliminar
+    calcularTotal();
   });
 
   //FORMATEO DE PRECIOS

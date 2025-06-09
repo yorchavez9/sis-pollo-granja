@@ -362,12 +362,13 @@ $("#tabla_add_producto_venta").on("click touchstart", ".btnAddProductoVenta", fu
         respuesta.imagen_producto = "vistas/img/productos/default.png";
       }
 
+      let uniqueId = Date.now();
       // Crear una nueva fila
       let nuevaFila = `
-        <tr>
+        <tr id="fila-${uniqueId}">
           <input type="hidden" class="id_producto" value="${respuesta.id_producto}">
           <th class="text-center align-middle d-none d-md-table-cell">
-            <a href="#" class="me-3 confirm-text btnEliminarAddProductoVenta" idAddProducto="${respuesta.id_producto}">
+            <a href="#" class="me-3 confirm-text btnEliminarAddProductoVenta" data-unique-id="${uniqueId}">
               <i class="fa fa-trash fa-lg" style="color: #F1666D"></i>
             </a>
           </th>
@@ -504,24 +505,18 @@ async function calcularTotal(igv_venta) {
 /*=============================================
 ELIMINANDO EL PRODUCTO AGREGADO AL DETALLE VENT.
 =============================================*/
+/*=============================================
+ELIMINANDO EL PRODUCTO AGREGADO AL DETALLE VENT.
+=============================================*/
 $(document).on("click touchstart", ".btnEliminarAddProductoVenta", function (e) {
   e.preventDefault();
-  var idProductoEliminar = $(this).attr("idAddProducto");
-
-  // Encuentra la fila que corresponde al producto a eliminar y elimínala
-  $("#detalle_venta_producto")
-    .find("tr")
-    .each(function () {
-      var idProducto = $(this)
-        .find(".btnEliminarAddProductoVenta")
-        .attr("idAddProducto");
-      if (idProducto == idProductoEliminar) {
-        $(this).remove();
-        // Una vez eliminada la fila, recalcular el total
-        calcularTotal();
-        return false; // Termina el bucle una vez que se ha encontrado y eliminado la fila
-      }
-    });
+  let uniqueId = $(this).attr("data-unique-id");
+  
+  // Elimina la fila específica usando el ID único
+  $(`#fila-${uniqueId}`).remove();
+  
+  // Recalcula el total después de eliminar
+  calcularTotal();
 });
 
 
