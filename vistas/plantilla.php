@@ -16,7 +16,9 @@ $rolesPermitidos = [
     "SOPORTE",
     "MARKETING",
     "CLIENTE",
-    "PROVEEDOR"
+    "PROVEEDOR",
+    "COMPRADOR",
+    "RECEPCIONISTA"
 ];
 
 if (
