@@ -46,6 +46,7 @@ class PDF extends FPDF
     private $razonSocial;
     private $tasaCambio;
     private $filtros;
+    private $isFirstPage = true;
     public $colorPrimario = [41, 128, 185];
     public $colorSecundario = [52, 73, 94];
     public $colorAccento = [231, 76, 60];
@@ -62,8 +63,9 @@ class PDF extends FPDF
         $this->tasaCambio = $tasaCambio;
         $this->filtros = $filtros;
         
-        $this->SetMargins(10, 10, 10);
+        $this->SetMargins(10, $this->isFirstPage ? 10 : 25, 10);
         $this->SetAutoPageBreak(true, 15);
+        $this->SetFont('Helvetica', '', 10);
     }
 
     // Función para crear degradado horizontal
@@ -83,98 +85,129 @@ class PDF extends FPDF
 
     function Header()
     {
-        // Fondo moderno para el header con sombra
-        $this->SetFillColor($this->colorFondo[0], $this->colorFondo[1], $this->colorFondo[2]);
-        $this->Rect(0, 0, 297, 50, 'F');
-        
-        // Barra superior con degradado
-        $this->LinearGradient(0, 0, 297, 12, $this->colorPrimario, [52, 152, 219]);
-        
-        // Logo con marco circular
-        if (file_exists("../../uploads/" . $this->config['logo'])) {
-            $this->SetFillColor(255, 255, 255);
-            $this->RoundedRect(245, 8, 40, 40, 20, 'F');
-            $this->Image("../../uploads/" . $this->config['logo'], 248, 11, 34, 34);
-        }
-        
-        // Información de empresa con estilo moderno
-        $this->SetTextColor($this->colorSecundario[0], $this->colorSecundario[1], $this->colorSecundario[2]);
-        $this->SetFont('Arial', 'B', 16);
-        $this->SetXY(15, 15);
-        $this->Cell(0, 8, ($this->config['nombre_empresa']), 0, 1, 'L');
-        
-        $this->SetFont('Helvetica', '', 9);
-        $this->SetXY(15, 23);
-        $info_empresa = 'RUC: ' . $this->config['ruc'] . '  -  ' . 
-                       ($this->config['direccion']) . '  -  ' .
-                       'Tel: ' . $this->config['telefono'];
-        $this->Cell(0, 5, $info_empresa, 0, 1, 'L');
-        
-        // Título principal con diseño moderno
-        $this->SetY(45);
-        $this->SetTextColor($this->colorPrimario[0], $this->colorPrimario[1], $this->colorPrimario[2]);
-        $this->SetFont('Arial', 'B', 18);
-        $this->Cell(0, 10, 'REPORTE DE VENTAS POR CLIENTE', 0, 1, 'C');
-        
-        // Línea decorativa con puntos
-        $this->SetDrawColor(200, 200, 200);
-        $this->SetLineWidth(0.3);
-        $this->Line(50, 57, 247, 57);
-        $this->SetDrawColor($this->colorPrimario[0], $this->colorPrimario[1], $this->colorPrimario[2]);
-        $this->SetLineWidth(0.5);
-        $this->Line(50, 58, 247, 58);
-        
-        // Información del cliente con estilo de tarjeta
-        $this->SetY(65);
-        if (!empty($this->razonSocial)) {
-            $this->SetFillColor(245, 247, 250);
-            $this->RoundedRect(15, 65, 267, 10, 2, 'F');
-            $this->SetDrawColor($this->colorBorde[0], $this->colorBorde[1], $this->colorBorde[2]);
-            $this->RoundedRect(15, 65, 267, 10, 2, 'D');
+        if ($this->isFirstPage) {
+            // Header completo para la primera página
+            // Fondo moderno para el header con sombra
+            $this->SetFillColor($this->colorFondo[0], $this->colorFondo[1], $this->colorFondo[2]);
+            $this->Rect(0, 0, 297, 45, 'F');
             
+            // Barra superior con degradado
+            $this->LinearGradient(0, 0, 297, 10, $this->colorPrimario, [52, 152, 219]);
+            
+            // Logo con marco circular más pequeño
+            if (file_exists("../../uploads/" . $this->config['logo'])) {
+                $this->SetFillColor(255, 255, 255);
+                $this->RoundedRect(263, 12, 18, 18, 9, 'F');
+                $this->Image("../../uploads/" . $this->config['logo'], 265, 14, 14, 14);
+            }
+            
+            // Información de empresa con estilo moderno
             $this->SetTextColor($this->colorSecundario[0], $this->colorSecundario[1], $this->colorSecundario[2]);
-            $this->SetFont('Arial', 'B', 11);
-            $this->SetXY(20, 67);
-            $this->Cell(0, 6, 'CLIENTE: ' . ($this->razonSocial), 0, 1, 'L');
-            $this->SetY(77);
-        }
-        
-        // Panel de filtros con diseño moderno
-        $filtrosAplicados = [];
-        if (!empty($this->filtros['fecha_desde']) && !empty($this->filtros['fecha_hasta'])) {
-            $filtrosAplicados[] = 'Periodo: ' . $this->filtros['fecha_desde'] . ' - ' . $this->filtros['fecha_hasta'];
-        }
-        if (!empty($this->filtros['tipo_venta'])) {
-            $filtrosAplicados[] = 'Tipo: ' . ($this->filtros['tipo_venta'] == 'credito' ? 'Crédito' : 'Contado');
-        }
-        if (!empty($this->filtros['estado_pago'])) {
-            $filtrosAplicados[] = 'Estado: ' . ($this->filtros['estado_pago'] == 'completado' ? 'Pagado' : 'Pendiente');
-        }
-        
-        if (!empty($filtrosAplicados)) {
-            $y_current = $this->GetY();
-            $this->SetFillColor(240, 242, 245);
-            $this->RoundedRect(15, $y_current, 200, 6, 1, 'F');
-            $this->SetDrawColor($this->colorBorde[0], $this->colorBorde[1], $this->colorBorde[2]);
-            $this->RoundedRect(15, $y_current, 200, 6, 1, 'D');
+            $this->SetFont('Helvetica', 'B', 14);
+            $this->SetXY(15, 12);
+            $this->Cell(0, 7, ($this->config['nombre_empresa']), 0, 1, 'L');
             
-            $this->SetTextColor(120, 134, 156);
-            $this->SetFont('Arial', '', 8);
-            $this->SetXY(20, $y_current + 1);
-            $this->Cell(0, 4, 'FILTROS: ' . implode(' • ', $filtrosAplicados), 0, 0, 'L');
-            $this->SetY($y_current + 8);
+            $this->SetFont('Helvetica', '', 9);
+            $this->SetXY(15, 20);
+            $info_empresa = 'RUC: ' . $this->config['ruc'] . '  |  ' . 
+                           ($this->config['direccion']) . '  |  ' .
+                           'Tel: ' . $this->config['telefono'];
+            $this->Cell(0, 5, $info_empresa, 0, 1, 'L');
+            
+            // Título principal con diseño moderno
+            $this->SetY(38);
+            $this->SetTextColor($this->colorPrimario[0], $this->colorPrimario[1], $this->colorPrimario[2]);
+            $this->SetFont('Helvetica', 'B', 16);
+            $this->SetFont('Helvetica', 'B', 13);
+            $this->Cell(0, 8, 'REPORTE DE VENTAS POR CLIENTE', 0, 1, 'C');
+            $this->SetFont('Helvetica', 'B', 16); // Restaurar tamaño original
+            
+            // Línea decorativa
+            $this->SetDrawColor($this->colorPrimario[0], $this->colorPrimario[1], $this->colorPrimario[2]);
+            $this->SetLineWidth(0.5);
+            $this->Line(50, 48, 247, 48);
+            
+            // Información del cliente con estilo de tarjeta
+            $this->SetY(55);
+            if (!empty($this->razonSocial)) {
+                $this->SetFillColor(245, 247, 250);
+                $this->RoundedRect(15, 55, 267, 8, 2, 'F');
+                $this->SetDrawColor($this->colorBorde[0], $this->colorBorde[1], $this->colorBorde[2]);
+                $this->RoundedRect(15, 55, 267, 8, 2, 'D');
+                
+                $this->SetTextColor($this->colorSecundario[0], $this->colorSecundario[1], $this->colorSecundario[2]);
+                $this->SetFont('Helvetica', 'B', 10);
+                $this->SetXY(20, 57);
+                $this->Cell(0, 5, 'CLIENTE: ' . ($this->razonSocial), 0, 1, 'L');
+                $this->SetY(65);
+            }
+            
+            // Panel de filtros con diseño moderno
+            $filtrosAplicados = [];
+            if (!empty($this->filtros['fecha_desde']) && !empty($this->filtros['fecha_hasta'])) {
+                $filtrosAplicados[] = 'Periodo: ' . $this->filtros['fecha_desde'] . ' - ' . $this->filtros['fecha_hasta'];
+            }
+            if (!empty($this->filtros['tipo_venta'])) {
+                $filtrosAplicados[] = 'Tipo: ' . ($this->filtros['tipo_venta'] == 'credito' ? 'Crédito' : 'Contado');
+            }
+            if (!empty($this->filtros['estado_pago'])) {
+                $filtrosAplicados[] = 'Estado: ' . ($this->filtros['estado_pago'] == 'completado' ? 'Pagado' : 'Pendiente');
+            }
+            
+            if (!empty($filtrosAplicados)) {
+                $y_current = $this->GetY();
+                $this->SetFillColor(240, 242, 245);
+                $this->RoundedRect(15, $y_current, 200, 6, 1, 'F');
+                $this->SetDrawColor($this->colorBorde[0], $this->colorBorde[1], $this->colorBorde[2]);
+                $this->RoundedRect(15, $y_current, 200, 6, 1, 'D');
+                
+                $this->SetTextColor(120, 134, 156);
+                $this->SetFont('Helvetica', '', 8);
+                $this->SetXY(20, $y_current + 1);
+                $this->Cell(0, 4, 'FILTROS: ' . implode(' • ', $filtrosAplicados), 0, 0, 'L');
+                $this->SetY($y_current + 8);
+            }
+            
+            // Información de generación con estilo minimalista
+            $y_current = $this->GetY();
+            $this->SetTextColor(149, 165, 166);
+            $this->SetFont('Helvetica', 'I', 8);
+            $this->SetXY(220, $y_current);
+            $this->Cell(0, 4, 'Generado por: ' . $this->nombreUsuario, 0, 1, 'R');
+            $this->SetXY(220, $y_current + 4);
+            $this->Cell(0, 4, date('d/m/Y H:i'), 0, 1, 'R');
+            
+            $this->Ln(8);
+            
+            // Marcar que ya no es la primera página
+            $this->isFirstPage = false;
+            $this->SetMargins(10, 25, 10); // Cambiar márgenes para páginas siguientes
+        } else {
+            // Header simplificado para páginas siguientes
+            $this->SetFillColor(245, 247, 250);
+            $this->Rect(0, 0, 297, 20, 'F');
+            
+            // Línea decorativa
+            $this->SetDrawColor($this->colorPrimario[0], $this->colorPrimario[1], $this->colorPrimario[2]);
+            $this->SetLineWidth(0.5);
+            $this->Line(10, 19, 287, 19);
+            
+            // Título simplificado
+            $this->SetTextColor($this->colorPrimario[0], $this->colorPrimario[1], $this->colorPrimario[2]);
+            $this->SetFont('Helvetica', 'B', 12);
+            $this->SetXY(10, 8);
+            $this->Cell(0, 5, 'REPORTE DE VENTAS POR CLIENTE - Continuación', 0, 1, 'L');
+            
+            // Información del cliente (si existe)
+            if (!empty($this->razonSocial)) {
+                $this->SetTextColor($this->colorSecundario[0], $this->colorSecundario[1], $this->colorSecundario[2]);
+                $this->SetFont('Helvetica', '', 9);
+                $this->SetXY(10, 13);
+                $this->Cell(0, 5, 'Cliente: ' . ($this->razonSocial), 0, 1, 'L');
+            }
+            
+            $this->SetY(25); // Posicionar después del header simplificado
         }
-        
-        // Información de generación con estilo minimalista
-        $y_current = $this->GetY();
-        $this->SetTextColor(149, 165, 166);
-        $this->SetFont('Arial', 'I', 8);
-        $this->SetXY(220, $y_current);
-        $this->Cell(0, 4, 'Generado por: ' . $this->nombreUsuario, 0, 1, 'R');
-        $this->SetXY(220, $y_current + 4);
-        $this->Cell(0, 4, date('d/m/Y H:i'), 0, 1, 'R');
-        
-        $this->Ln(10);
     }
 
     function Footer()
@@ -187,8 +220,17 @@ class PDF extends FPDF
         $this->Line(10, -15, 287, -15);
         
         $this->SetTextColor($this->colorSecundario[0], $this->colorSecundario[1], $this->colorSecundario[2]);
-        $this->SetFont('Arial', 'I', 9);
+        $this->SetFont('Helvetica', 'I', 9);
         $this->Cell(0, 15, ('Página ') . $this->PageNo() . ' de {nb}', 0, 0, 'C');
+    }
+    
+    // Sobrescribir AddPage para resetear isFirstPage
+    function AddPage($orientation = '', $size = '', $rotation = 0) {
+        parent::AddPage($orientation, $size, $rotation);
+        // Después de la primera página, cambiar márgenes
+        if ($this->PageNo() > 1) {
+            $this->SetMargins(10, 25, 10);
+        }
     }
 }
 
@@ -201,18 +243,18 @@ if (count($configuraciones) > 0) {
     
     // Anchos optimizados para diseño moderno
     $anchos = [
-        'fecha' => 22,
-        'producto' => 48,
-        'javas' => 16,
-        'aves' => 16,
-        'prom' => 16,
-        'bruto' => 16,
-        'tara' => 16,
-        'neto' => 16,
+        'fecha' => 20,
+        'producto' => 45,
+        'javas' => 15,
+        'aves' => 15,
+        'prom' => 18,
+        'bruto' => 18,
+        'tara' => 18,
+        'neto' => 18,
         'precio' => 22,
-        'total' => 24,
-        'pago' => 24,
-        'saldo' => 24
+        'total' => 22,
+        'pago' => 22,
+        'saldo' => 22
     ];
     
     // Header de tabla con diseño moderno
@@ -230,7 +272,7 @@ if (count($configuraciones) > 0) {
     
     $headers = [
         'Fecha', 'Producto', 'Javas', 'Aves', 'P.Prom', 
-        'P.Bruto', 'P.Tara', 'P.Neto', 'Precio Unit.', 
+        'P.Bruto', 'P.Tara', 'P.Neto', 'P.Unit.', 
         'Total', 'Pagado', 'Saldo'
     ];
     
@@ -249,96 +291,82 @@ if (count($configuraciones) > 0) {
     $subtotalPagado = 0;
     $subtotalSaldo = 0;
     $rowColor = true;
-    $ventasProcesadas = []; // Array para controlar ventas ya procesadas
+    $ventasProcesadas = [];
     
     $pdf->SetFont('Helvetica', '', 8);
     
-    // Variables para totales
-$totalGeneral = 0;
-$totalPagado = 0;
-$totalSaldo = 0;
-$currentVentaId = null;
-$subtotalVenta = 0;
-$subtotalPagado = 0;
-$subtotalSaldo = 0;
-$rowColor = true;
-$ventasProcesadas = []; // Array para controlar ventas ya procesadas
-
-$pdf->SetFont('Helvetica', '', 8);
-
-foreach ($ventas as $index => $venta) {
-    // Verificar si cambió de venta para subtotal
-    if ($currentVentaId !== null && $currentVentaId != $venta['id_venta']) {
-        // Subtotal con estilo moderno
-        $y_pos = $pdf->GetY();
-        $pdf->SetFillColor(245, 247, 250);
-        $pdf->Rect(10, $y_pos, 277, 6, 'F');
-        $pdf->SetDrawColor($pdf->colorBorde[0], $pdf->colorBorde[1], $pdf->colorBorde[2]);
-        $pdf->Rect(10, $y_pos, 277, 6, 'D');
+    foreach ($ventas as $index => $venta) {
+        // Verificar si cambió de venta para subtotal
+        if ($currentVentaId !== null && $currentVentaId != $venta['id_venta']) {
+            // Subtotal con estilo moderno
+            $y_pos = $pdf->GetY();
+            $pdf->SetFillColor(245, 247, 250);
+            $pdf->Rect(10, $y_pos, 277, 6, 'F');
+            $pdf->SetDrawColor($pdf->colorBorde[0], $pdf->colorBorde[1], $pdf->colorBorde[2]);
+            $pdf->Rect(10, $y_pos, 277, 6, 'D');
+            
+            $pdf->SetFont('Helvetica', 'B', 8);
+            $pdf->SetTextColor(93, 109, 126);
+            $pdf->SetXY(10, $y_pos);
+            
+            $pdf->Cell($anchos['fecha'] + $anchos['producto'] + $anchos['javas'] + $anchos['aves'] + 
+                      $anchos['prom'] + $anchos['bruto'] + $anchos['tara'] + $anchos['neto'] + 
+                      $anchos['precio'], 6, 'SUBTOTAL', 0, 0, 'R');
+            $pdf->Cell($anchos['total'], 6, 'S/ ' . number_format($subtotalVenta, 2), 0, 0, 'R');
+            $pdf->Cell($anchos['pago'], 6, 'S/ ' . number_format($subtotalPagado, 2), 0, 0, 'R');
+            $pdf->Cell($anchos['saldo'], 6, 'S/ ' . number_format($subtotalSaldo, 2), 0, 1, 'R');
+            
+            // Reiniciar subtotales
+            $subtotalVenta = $subtotalPagado = $subtotalSaldo = 0;
+            $pdf->SetFont('Helvetica', '', 8);
+        }
         
-        $pdf->SetFont('Helvetica', 'B', 8);
-        $pdf->SetTextColor(93, 109, 126);
+        // Solo sumar los totales si no hemos procesado esta venta antes
+        if (!in_array($venta['id_venta'], $ventasProcesadas)) {
+            $subtotalVenta += $venta['total_venta'];
+            $subtotalPagado += $venta['total_pago'];
+            $subtotalSaldo += $venta['saldo'];
+            $totalGeneral += $venta['total_venta'];
+            $totalPagado += $venta['total_pago'];
+            $totalSaldo += $venta['saldo'];
+            
+            // Marcar venta como procesada
+            $ventasProcesadas[] = $venta['id_venta'];
+        }
+        
+        $currentVentaId = $venta['id_venta'];
+        
+        // Alternar colores de fila para mejor legibilidad
+        $y_pos = $pdf->GetY();
+        if ($rowColor) {
+            $pdf->SetFillColor(250, 252, 255);
+            $pdf->Rect(10, $y_pos, 277, 5, 'F');
+        }
+        $rowColor = !$rowColor;
+        
+        $pdf->SetTextColor(52, 73, 94);
         $pdf->SetXY(10, $y_pos);
         
-        $pdf->Cell($anchos['fecha'] + $anchos['producto'] + $anchos['javas'] + $anchos['aves'] + 
-                  $anchos['prom'] + $anchos['bruto'] + $anchos['tara'] + $anchos['neto'] + 
-                  $anchos['precio'], 6, 'SUBTOTAL', 0, 0, 'R');
-        $pdf->Cell($anchos['total'], 6, 'S/ ' . number_format($subtotalVenta, 2), 0, 0, 'R');
-        $pdf->Cell($anchos['pago'], 6, 'S/ ' . number_format($subtotalPagado, 2), 0, 0, 'R');
-        $pdf->Cell($anchos['saldo'], 6, 'S/ ' . number_format($subtotalSaldo, 2), 0, 1, 'R');
+        // Datos de la fila
+        $pdf->Cell($anchos['fecha'], 5, date('d/m/Y', strtotime($venta['fecha_venta'])), 0, 0, 'C');
+        $pdf->Cell($anchos['producto'], 5, (substr($venta['nombre_producto'], 0, 25)), 0, 0, 'L');
+        $pdf->Cell($anchos['javas'], 5, $venta['numero_javas'], 0, 0, 'C');
+        $pdf->Cell($anchos['aves'], 5, $venta['numero_aves'], 0, 0, 'C');
+        $pdf->Cell($anchos['prom'], 5, number_format($venta['peso_promedio'], 2), 0, 0, 'R');
+        $pdf->Cell($anchos['bruto'], 5, number_format($venta['peso_bruto'], 2), 0, 0, 'R');
+        $pdf->Cell($anchos['tara'], 5, number_format($venta['peso_tara'], 2), 0, 0, 'R');
+        $pdf->Cell($anchos['neto'], 5, number_format($venta['peso_neto'], 2), 0, 0, 'R');
+        $pdf->Cell($anchos['precio'], 5, 'S/ ' . number_format($venta['precio_venta'], 2), 0, 0, 'R');
         
-        // Reiniciar subtotales
-        $subtotalVenta = $subtotalPagado = $subtotalSaldo = 0;
-        $pdf->SetFont('Helvetica', '', 8);
-    }
-    
-    // Solo sumar los totales si no hemos procesado esta venta antes
-    if (!in_array($venta['id_venta'], $ventasProcesadas)) {
-        $subtotalVenta += $venta['total_venta'];
-        $subtotalPagado += $venta['total_pago'];
-        $subtotalSaldo += $venta['saldo'];
-        $totalGeneral += $venta['total_venta'];
-        $totalPagado += $venta['total_pago'];
-        $totalSaldo += $venta['saldo'];
+        // Calcular y mostrar el total por producto
+        $totalProducto = $venta['precio_venta'] * $venta['peso_neto'];
+        $pdf->Cell($anchos['total'], 5, 'S/ ' . number_format($totalProducto, 2), 0, 0, 'R');
         
-        // Marcar venta como procesada
-        $ventasProcesadas[] = $venta['id_venta'];
+        // Para pagado y saldo, muestra el valor proporcional o deja en blanco para productos individuales
+        $pdf->Cell($anchos['pago'], 5, '', 0, 0, 'R');
+        $pdf->Cell($anchos['saldo'], 5, '', 0, 1, 'R');
+        $pdf->SetTextColor(52, 73, 94);
     }
-    
-    $currentVentaId = $venta['id_venta'];
-    
-    // Resto del código para mostrar los detalles del producto...
-    // Alternar colores de fila para mejor legibilidad
-    $y_pos = $pdf->GetY();
-    if ($rowColor) {
-        $pdf->SetFillColor(250, 252, 255);
-        $pdf->Rect(10, $y_pos, 277, 5, 'F');
-    }
-    $rowColor = !$rowColor;
-    
-    $pdf->SetTextColor(52, 73, 94);
-    $pdf->SetXY(10, $y_pos);
-    
-    // Datos de la fila
-    $pdf->Cell($anchos['fecha'], 5, date('d/m/Y', strtotime($venta['fecha_venta'])), 0, 0, 'C');
-    $pdf->Cell($anchos['producto'], 5, (substr($venta['nombre_producto'], 0, 28)), 0, 0, 'L');
-    $pdf->Cell($anchos['javas'], 5, $venta['numero_javas'], 0, 0, 'C');
-    $pdf->Cell($anchos['aves'], 5, $venta['numero_aves'], 0, 0, 'C');
-    $pdf->Cell($anchos['prom'], 5, $venta['peso_promedio'], 0, 0, 'C');
-    $pdf->Cell($anchos['bruto'], 5, $venta['peso_bruto'], 0, 0, 'C');
-    $pdf->Cell($anchos['tara'], 5, $venta['peso_tara'], 0, 0, 'C');
-    $pdf->Cell($anchos['neto'], 5, $venta['peso_neto'], 0, 0, 'C');
-    $pdf->Cell($anchos['precio'], 5, 'S/ ' . number_format($venta['precio_venta'], 2), 0, 0, 'R');
-    
-    // Mostrar el total por producto (precio * cantidad)
-    $totalProducto = $venta['precio_venta'] * $venta['peso_neto']; // Ajusta según tu lógica de cálculo
-    $pdf->Cell($anchos['total'], 5, 'S/ ' . number_format($totalProducto, 2), 0, 0, 'R');
-    
-    // Para pagado y saldo, muestra el valor proporcional o deja en blanco para productos individuales
-    $pdf->Cell($anchos['pago'], 5, '', 0, 0, 'R');
-    $pdf->Cell($anchos['saldo'], 5, '', 0, 1, 'R');
-    $pdf->SetTextColor(52, 73, 94);
-}
 
     // Último subtotal
     if (!empty($ventas)) {
@@ -380,7 +408,7 @@ foreach ($ventas as $index => $venta) {
     $pdf->Cell($anchos['pago'], 8, 'S/ ' . number_format($totalPagado, 2), 0, 0, 'R');
     $pdf->Cell($anchos['saldo'], 8, 'S/ ' . number_format($totalSaldo, 2), 0, 1, 'R');
     
-    // Panel de conversión a dólares (modificado para mostrar en soles primero)
+    // Panel de conversión a dólares
     if (!empty($filtros['tasa_cambio']) && is_numeric($filtros['tasa_cambio']) && $filtros['tasa_cambio'] > 0) {
         $pdf->Ln(8);
         $y_pos = $pdf->GetY();
@@ -393,7 +421,7 @@ foreach ($ventas as $index => $venta) {
         
         // Título del panel
         $pdf->SetTextColor($pdf->colorPrimario[0], $pdf->colorPrimario[1], $pdf->colorPrimario[2]);
-        $pdf->SetFont('Helvetica', 'B', 11);
+        $pdf->SetFont('Helvetica', 'B', 10);
         $pdf->SetXY(15, $y_pos + 3);
         $pdf->Cell(0, 6, ('CONVERSIÓN MONETARIA (Tasa: ' . number_format($filtros['tasa_cambio'], 4) . ')'), 0, 1);
         
@@ -401,7 +429,7 @@ foreach ($ventas as $index => $venta) {
         $pdf->SetDrawColor(220, 223, 228);
         $pdf->Line(15, $y_pos + 10, 282, $y_pos + 10);
         
-        // Montos en Soles (primero)
+        // Montos en Soles
         $pdf->SetFont('Helvetica', 'B', 9);
         $pdf->SetTextColor(70, 85, 100);
         $pdf->SetXY(15, $y_pos + 12);
@@ -412,7 +440,6 @@ foreach ($ventas as $index => $venta) {
         $pdf->Cell(85, 5, 'Total Ventas: S/ ' . number_format($totalGeneral, 2), 0, 0);
         $pdf->Cell(85, 5, 'Total Pagado: S/ ' . number_format($totalPagado, 2), 0, 0);
         $pdf->Cell(0, 5, 'Saldo Pendiente: S/ ' . number_format($totalSaldo, 2), 0, 1);
-        
     }
     
     // Nota final con estilo moderno

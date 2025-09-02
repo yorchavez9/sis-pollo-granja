@@ -76,6 +76,7 @@ class ModeloCliente
 					v.id_venta,
 					dv.id_venta,
 					v.fecha_venta,
+					v.hora_venta,
 					p.razon_social,
 					pd.nombre_producto,
 					dv.numero_javas,
