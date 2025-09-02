@@ -43,7 +43,7 @@ class PDF extends FPDF
         $this->SetY(-15);
         $this->SetFont('Arial', 'I', 8);
         // Número de página
-        $this->Cell(0, 10, utf8_decode('Página ') . $this->PageNo() . ' de {nb}', 0, 0, 'C');
+        $this->Cell(0, 10, ('Página ') . $this->PageNo() . ' de {nb}', 0, 0, 'C');
     }
 }
 
@@ -75,7 +75,7 @@ if (count($configuraciones) > 0) {
             $pdf->Image("../../uploads/" . $configuracion['logo'], 250, 8, 30); // Logo a la derecha
         }
         // Nombre de la empresa
-        $pdf->Cell(0, 10, utf8_decode($configuracion['nombre_empresa']), 0, 1, 'L'); // Nombre a la izquierda
+        $pdf->Cell(0, 10, ($configuracion['nombre_empresa']), 0, 1, 'L'); // Nombre a la izquierda
         $pdf->Ln(10);
 
         // Información adicional
@@ -117,8 +117,8 @@ $scaledWidths = array_map(fn($width) => $width * $scalingFactor, $relativeWidths
 
 // Encabezado de la tabla
 $pdf->SetFont('Arial', 'B', 10);
-$pdf->Cell($scaledWidths[0], 10, utf8_decode('N°'), 1, 0, 'C', true);
-$pdf->Cell($scaledWidths[1], 10, utf8_decode('Fecha'), 1, 0, 'C', true);
+$pdf->Cell($scaledWidths[0], 10, ('N°'), 1, 0, 'C', true);
+$pdf->Cell($scaledWidths[1], 10, ('Fecha'), 1, 0, 'C', true);
 $pdf->Cell($scaledWidths[2], 10, 'Tipo', 1, 0, 'C', true);
 $pdf->Cell($scaledWidths[3], 10, 'Concepto', 1, 0, 'C', true);
 $pdf->Cell($scaledWidths[4], 10, 'Monto', 1, 0, 'C', true);
@@ -128,11 +128,11 @@ $pdf->Cell($scaledWidths[5], 10, 'Detalles', 1, 1, 'C', true);
 $pdf->SetFont('Arial', '', 10);
 foreach ($respuesta as $key => $data) {
     $pdf->Cell($scaledWidths[0], 10, $key + 1, 1, 0, 'C');
-    $pdf->Cell($scaledWidths[1], 10, utf8_decode($data['fecha']), 1, 0, 'L');
-    $pdf->Cell($scaledWidths[2], 10, utf8_decode($data['tipo']), 1, 0, 'L');
+    $pdf->Cell($scaledWidths[1], 10, ($data['fecha']), 1, 0, 'L');
+    $pdf->Cell($scaledWidths[2], 10, ($data['tipo']), 1, 0, 'L');
     $pdf->Cell($scaledWidths[3], 10, $data['concepto'], 1, 0, 'C');
     $pdf->Cell($scaledWidths[4], 10, 'S/ ' . number_format($data['monto'], 2), 1, 0, 'C');
-    $pdf->Cell($scaledWidths[5], 10, utf8_decode($data['detalles']), 1, 1, 'C'); // Última celda pasa a la siguiente línea
+    $pdf->Cell($scaledWidths[5], 10, ($data['detalles']), 1, 1, 'C'); // Última celda pasa a la siguiente línea
 }
 
 

@@ -46,7 +46,7 @@ class PDF extends FPDF
         $this->SetY(-15);
         $this->SetFont('Arial', 'I', 8);
         // Número de página
-        $this->Cell(0, 10, utf8_decode('Página ') . $this->PageNo() . ' de {nb}', 0, 0, 'C');
+        $this->Cell(0, 10, ('Página ') . $this->PageNo() . ' de {nb}', 0, 0, 'C');
     }
 }
 
@@ -78,7 +78,7 @@ if (count($configuraciones) > 0) {
             $pdf->Image("../../uploads/" . $configuracion['logo'], 250, 8, 30); // Logo a la derecha
         }
         // Nombre de la empresa
-        $pdf->Cell(0, 10, utf8_decode($configuracion['nombre_empresa']), 0, 1, 'L'); // Nombre a la izquierda
+        $pdf->Cell(0, 10, ($configuracion['nombre_empresa']), 0, 1, 'L'); // Nombre a la izquierda
         $pdf->Ln(10);
 
         // Información adicional
@@ -102,12 +102,12 @@ if (count($configuraciones) > 0) {
     $scalingFactor = $totalWidth / $totalCellsWidth;
 
     // Encabezado
-    $pdf->Cell(8 * $scalingFactor, 10, utf8_decode('N°'), 1, 0, 'C', true);
+    $pdf->Cell(8 * $scalingFactor, 10, ('N°'), 1, 0, 'C', true);
     $pdf->Cell(15 * $scalingFactor, 10, 'Fecha', 1, 0, 'C', true);
     $pdf->Cell(45 * $scalingFactor, 10, 'Usuario', 1, 0, 'C', true);
-    $pdf->Cell(35 * $scalingFactor, 10, utf8_decode('Proveedor'), 1, 0, 'C', true);
+    $pdf->Cell(35 * $scalingFactor, 10, ('Proveedor'), 1, 0, 'C', true);
     $pdf->Cell(20 * $scalingFactor, 10, 'Comprobante', 1, 0, 'C', true);
-    $pdf->Cell(15 * $scalingFactor, 10, utf8_decode('Serie N°'), 1, 0, 'C', true);
+    $pdf->Cell(15 * $scalingFactor, 10, ('Serie N°'), 1, 0, 'C', true);
     $pdf->Cell(20 * $scalingFactor, 10, 'Total compra', 1, 0, 'C', true);
     $pdf->Cell(20 * $scalingFactor, 10, 'Total pago', 1, 0, 'C', true);
     $pdf->Cell(20 * $scalingFactor, 10, 'Estado pago', 1, 1, 'C', true); // Aquí se hace el salto de línea con `1`
@@ -120,10 +120,10 @@ if (count($configuraciones) > 0) {
         // Ajuste del ancho dinámico según el factor de escala
         $pdf->Cell(8 * $scalingFactor, 10, $key + 1, 1, 0, 'C');
         $pdf->Cell(15 * $scalingFactor, 10, $producto['fecha_egre'], 1, 0, 'C');
-        $pdf->Cell(45 * $scalingFactor, 10, utf8_decode($producto['nombre_usuario']), 1, 0, 'L');
-        $pdf->Cell(35 * $scalingFactor, 10, utf8_decode($producto['razon_social']), 1, 0, 'L');
-        $pdf->Cell(20 * $scalingFactor, 10, utf8_decode($producto['tipo_comprobante']), 1, 0, 'L');
-        $pdf->Cell(15 * $scalingFactor, 10, utf8_decode($producto['serie_comprobante'] . '-' . $producto["num_comprobante"]), 1, 0, 'C');
+        $pdf->Cell(45 * $scalingFactor, 10, ($producto['nombre_usuario']), 1, 0, 'L');
+        $pdf->Cell(35 * $scalingFactor, 10, ($producto['razon_social']), 1, 0, 'L');
+        $pdf->Cell(20 * $scalingFactor, 10, ($producto['tipo_comprobante']), 1, 0, 'L');
+        $pdf->Cell(15 * $scalingFactor, 10, ($producto['serie_comprobante'] . '-' . $producto["num_comprobante"]), 1, 0, 'C');
         $pdf->Cell(20 * $scalingFactor, 10, 'S/ ' . number_format($producto['total_compra'], 2), 1, 0, 'R');
         $pdf->Cell(20 * $scalingFactor, 10, 'S/ ' . number_format($producto['total_pago'], 2), 1, 0, 'R');
         $pdf->Cell(20 * $scalingFactor, 10, $estado, 1, 1, 'C'); // Salto de línea

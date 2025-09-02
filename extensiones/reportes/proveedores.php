@@ -32,7 +32,7 @@ class PDF extends FPDF
         $this->SetY(-15);
         $this->SetFont('Arial', 'I', 8);
         // Número de página
-        $this->Cell(0, 10, utf8_decode('Página ') . $this->PageNo() . ' de {nb}', 0, 0, 'C');
+        $this->Cell(0, 10, ('Página ') . $this->PageNo() . ' de {nb}', 0, 0, 'C');
     }
 }
 
@@ -64,7 +64,7 @@ if (count($configuraciones) > 0) {
             $pdf->Image("../../uploads/" . $configuracion['logo'], 250, 8, 30); // Logo a la derecha
         }
         // Nombre de la empresa
-        $pdf->Cell(0, 10, utf8_decode($configuracion['nombre_empresa']), 0, 1, 'L'); // Nombre a la izquierda
+        $pdf->Cell(0, 10, ($configuracion['nombre_empresa']), 0, 1, 'L'); // Nombre a la izquierda
         $pdf->Ln(10);
 
         // Información adicional
@@ -89,10 +89,10 @@ if (count($configuraciones) > 0) {
 
     // Aplicar el factor de escala a cada celda del encabezado
     $pdf->Cell(8 * $scalingFactor, 10, 'ID', 1, 0, 'C', true);
-    $pdf->Cell(100 * $scalingFactor, 10, utf8_decode('Razón Social'), 1, 0, 'C', true);
+    $pdf->Cell(100 * $scalingFactor, 10, ('Razón Social'), 1, 0, 'C', true);
     $pdf->Cell(30 * $scalingFactor, 10, 'Direccion', 1, 0, 'C', true);
     $pdf->Cell(40 * $scalingFactor, 10, 'Documento', 1, 0, 'C', true);
-    $pdf->Cell(40 * $scalingFactor, 10, utf8_decode('Teléfono'), 1, 0, 'C', true);
+    $pdf->Cell(40 * $scalingFactor, 10, ('Teléfono'), 1, 0, 'C', true);
     $pdf->Cell(70 * $scalingFactor, 10, 'Correo', 1, 0, 'C', true);
     $pdf->Cell(30 * $scalingFactor, 10, 'Estado', 1, 1, 'C', true);
 
@@ -100,11 +100,11 @@ if (count($configuraciones) > 0) {
     $pdf->SetFont('Arial', '', 10);
     foreach ($proveedores as $key => $proveedor) {
         $pdf->Cell(8 * $scalingFactor, 10, $key + 1, 1, 0, 'C');
-        $pdf->Cell(100 * $scalingFactor, 10, utf8_decode($proveedor['razon_social']), 1, 0, 'L');
+        $pdf->Cell(100 * $scalingFactor, 10, ($proveedor['razon_social']), 1, 0, 'L');
         $pdf->Cell(30 * $scalingFactor, 10, $proveedor['direccion'], 1, 0, 'C');
         $pdf->Cell(40 * $scalingFactor, 10, $proveedor['numero_documento'], 1, 0, 'C');
         $pdf->Cell(40 * $scalingFactor, 10, $proveedor['telefono'], 1, 0, 'C');
-        $pdf->Cell(70 * $scalingFactor, 10, utf8_decode($proveedor['email']), 1, 0, 'L');
+        $pdf->Cell(70 * $scalingFactor, 10, ($proveedor['email']), 1, 0, 'L');
         $pdf->Cell(30 * $scalingFactor, 10, $proveedor['estado_persona'] ? 'Activo' : 'Inactivo', 1, 1, 'C');
     }
 

@@ -43,7 +43,7 @@ class PDF extends FPDF
         $this->SetY(-10);
         $this->SetFont('Arial', 'I', 8);
         // Número de página
-        $this->Cell(0, 10, utf8_decode('Página ') . $this->PageNo() . ' de {nb}', 0, 0, 'C');
+        $this->Cell(0, 10, ('Página ') . $this->PageNo() . ' de {nb}', 0, 0, 'C');
     }
 }
 
@@ -75,7 +75,7 @@ if (count($configuraciones) > 0) {
             $pdf->Image("../../uploads/" . $configuracion['logo'], 250, 8, 30); // Logo a la derecha
         }
         // Nombre de la empresa
-        $pdf->Cell(0, 10, utf8_decode($configuracion['nombre_empresa']), 0, 1, 'L'); // Nombre a la izquierda
+        $pdf->Cell(0, 10, ($configuracion['nombre_empresa']), 0, 1, 'L'); // Nombre a la izquierda
         $pdf->Ln(10);
 
         // Información adicional
@@ -99,13 +99,13 @@ if (count($configuraciones) > 0) {
     $scalingFactor = $totalWidth / $totalCellsWidth;
 
     // Encabezado de la tabla
-    $pdf->Cell(8 * $scalingFactor, 10, utf8_decode('N°'), 1, 0, 'C', true);
-    $pdf->Cell(50 * $scalingFactor, 10, utf8_decode('Nombre'), 1, 0, 'C', true);
-    $pdf->Cell(35 * $scalingFactor, 10, utf8_decode('Fecha'), 1, 0, 'C', true);
-    $pdf->Cell(20 * $scalingFactor, 10, utf8_decode('Hora Entrada'), 1, 0, 'C', true);
-    $pdf->Cell(20 * $scalingFactor, 10, utf8_decode('Hora Salida'), 1, 0, 'C', true);
-    $pdf->Cell(20 * $scalingFactor, 10, utf8_decode('Estado'), 1, 0, 'C', true);
-    $pdf->Cell(40 * $scalingFactor, 10, utf8_decode('Observaciones'), 1, 1, 'C', true); // Salto de línea aquí
+    $pdf->Cell(8 * $scalingFactor, 10, ('N°'), 1, 0, 'C', true);
+    $pdf->Cell(50 * $scalingFactor, 10, ('Nombre'), 1, 0, 'C', true);
+    $pdf->Cell(35 * $scalingFactor, 10, ('Fecha'), 1, 0, 'C', true);
+    $pdf->Cell(20 * $scalingFactor, 10, ('Hora Entrada'), 1, 0, 'C', true);
+    $pdf->Cell(20 * $scalingFactor, 10, ('Hora Salida'), 1, 0, 'C', true);
+    $pdf->Cell(20 * $scalingFactor, 10, ('Estado'), 1, 0, 'C', true);
+    $pdf->Cell(40 * $scalingFactor, 10, ('Observaciones'), 1, 1, 'C', true); // Salto de línea aquí
 
     // Configuración para el contenido
     $pdf->SetFont('Arial', '', 10);
@@ -126,12 +126,12 @@ if (count($configuraciones) > 0) {
 
         // Agregar contenido a la tabla
         $pdf->Cell(8 * $scalingFactor, 10, $key + 1, 1, 0, 'C'); // Número
-        $pdf->Cell(50 * $scalingFactor, 10, utf8_decode($venta['nombre']), 1, 0, 'L'); // Nombre
+        $pdf->Cell(50 * $scalingFactor, 10, ($venta['nombre']), 1, 0, 'L'); // Nombre
         $pdf->Cell(35 * $scalingFactor, 10, $fecha_formateada, 1, 0, 'C'); // Fecha formateada
         $pdf->Cell(20 * $scalingFactor, 10, $hora_entrada_formateada, 1, 0, 'C'); // Hora entrada formateada
         $pdf->Cell(20 * $scalingFactor, 10, $hora_salida_formateada, 1, 0, 'C'); // Hora salida formateada
-        $pdf->Cell(20 * $scalingFactor, 10, utf8_decode($venta['estado']), 1, 0, 'C'); // Estado
-        $pdf->Cell(40 * $scalingFactor, 10, utf8_decode($venta['observaciones']), 1, 1, 'L'); // Observaciones con salto
+        $pdf->Cell(20 * $scalingFactor, 10, ($venta['estado']), 1, 0, 'C'); // Estado
+        $pdf->Cell(40 * $scalingFactor, 10, ($venta['observaciones']), 1, 1, 'L'); // Observaciones con salto
     }
 
 

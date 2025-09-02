@@ -45,7 +45,7 @@ class PDF extends FPDF
         $this->SetY(-15);
         $this->SetFont('Arial', 'I', 8);
         // Número de página
-        $this->Cell(0, 10, utf8_decode('Página ') . $this->PageNo() . ' de {nb}', 0, 0, 'C');
+        $this->Cell(0, 10, ('Página ') . $this->PageNo() . ' de {nb}', 0, 0, 'C');
     }
 }
 
@@ -77,7 +77,7 @@ if (count($configuraciones) > 0) {
             $pdf->Image("../../uploads/" . $configuracion['logo'], 250, 8, 30); // Logo a la derecha
         }
         // Nombre de la empresa
-        $pdf->Cell(0, 10, utf8_decode($configuracion['nombre_empresa']), 0, 1, 'L'); // Nombre a la izquierda
+        $pdf->Cell(0, 10, ($configuracion['nombre_empresa']), 0, 1, 'L'); // Nombre a la izquierda
         $pdf->Ln(10);
 
         // Información adicional
@@ -101,8 +101,8 @@ if (count($configuraciones) > 0) {
     $scalingFactor = $totalWidth / $totalCellsWidth; // Factor de escala
 
     // Aplicar el factor de escala a cada celda del encabezado
-    $pdf->Cell(10 * $scalingFactor, 10, utf8_decode('N°'), 1, 0, 'C', true);
-    $pdf->Cell(35 * $scalingFactor, 10, utf8_decode('Categoría'), 1, 0, 'C', true);
+    $pdf->Cell(10 * $scalingFactor, 10, ('N°'), 1, 0, 'C', true);
+    $pdf->Cell(35 * $scalingFactor, 10, ('Categoría'), 1, 0, 'C', true);
     $pdf->Cell(50 * $scalingFactor, 10, 'Nombre', 1, 0, 'C', true);
     $pdf->Cell(25 * $scalingFactor, 10, 'Precio', 1, 0, 'C', true);
     $pdf->Cell(20 * $scalingFactor, 10, 'Stock', 1, 0, 'C', true);
@@ -116,12 +116,12 @@ if (count($configuraciones) > 0) {
         $estado = ($producto['estado_producto'] == 1) ? 'Activo' : 'Inactivo';
 
         $pdf->Cell(10 * $scalingFactor, 10, $key +1, 1, 0, 'C');
-        $pdf->Cell(35 * $scalingFactor, 10, utf8_decode($producto['nombre_categoria']), 1, 0, 'L');
-        $pdf->Cell(50 * $scalingFactor, 10, utf8_decode($producto['nombre_producto']), 1, 0, 'L');
+        $pdf->Cell(35 * $scalingFactor, 10, ($producto['nombre_categoria']), 1, 0, 'L');
+        $pdf->Cell(50 * $scalingFactor, 10, ($producto['nombre_producto']), 1, 0, 'L');
         $pdf->Cell(25 * $scalingFactor, 10, 'S/ '.number_format($producto['precio_producto'], 2), 1, 0, 'C'); // Formato de precio
         $pdf->Cell(20 * $scalingFactor, 10, $producto['stock_producto'], 1, 0, 'C');
         $pdf->Cell(30 * $scalingFactor, 10, $producto['fecha_vencimiento'], 1, 0, 'C');
-        $pdf->Cell(30 * $scalingFactor, 10, utf8_decode($estado), 1, 1, 'C');
+        $pdf->Cell(30 * $scalingFactor, 10, ($estado), 1, 1, 'C');
     }
 
 

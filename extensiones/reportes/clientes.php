@@ -101,12 +101,12 @@ class PDF extends FPDF
         $this->SetTextColor($this->colorSecundario[0], $this->colorSecundario[1], $this->colorSecundario[2]);
         $this->SetFont('Arial', 'B', 16);
         $this->SetXY(15, 15);
-        $this->Cell(0, 8, utf8_decode($this->config['nombre_empresa']), 0, 1, 'L');
+        $this->Cell(0, 8, ($this->config['nombre_empresa']), 0, 1, 'L');
         
         $this->SetFont('Helvetica', '', 9);
         $this->SetXY(15, 23);
         $info_empresa = 'RUC: ' . $this->config['ruc'] . '  -  ' . 
-                       utf8_decode($this->config['direccion']) . '  -  ' .
+                       ($this->config['direccion']) . '  -  ' .
                        'Tel: ' . $this->config['telefono'];
         $this->Cell(0, 5, $info_empresa, 0, 1, 'L');
         
@@ -135,7 +135,7 @@ class PDF extends FPDF
             $this->SetTextColor($this->colorSecundario[0], $this->colorSecundario[1], $this->colorSecundario[2]);
             $this->SetFont('Arial', 'B', 11);
             $this->SetXY(20, 67);
-            $this->Cell(0, 6, 'CLIENTE: ' . utf8_decode($this->razonSocial), 0, 1, 'L');
+            $this->Cell(0, 6, 'CLIENTE: ' . ($this->razonSocial), 0, 1, 'L');
             $this->SetY(77);
         }
         
@@ -188,7 +188,7 @@ class PDF extends FPDF
         
         $this->SetTextColor($this->colorSecundario[0], $this->colorSecundario[1], $this->colorSecundario[2]);
         $this->SetFont('Arial', 'I', 9);
-        $this->Cell(0, 15, utf8_decode('Página ') . $this->PageNo() . ' de {nb}', 0, 0, 'C');
+        $this->Cell(0, 15, ('Página ') . $this->PageNo() . ' de {nb}', 0, 0, 'C');
     }
 }
 
@@ -321,7 +321,7 @@ foreach ($ventas as $index => $venta) {
     
     // Datos de la fila
     $pdf->Cell($anchos['fecha'], 5, date('d/m/Y', strtotime($venta['fecha_venta'])), 0, 0, 'C');
-    $pdf->Cell($anchos['producto'], 5, utf8_decode(substr($venta['nombre_producto'], 0, 28)), 0, 0, 'L');
+    $pdf->Cell($anchos['producto'], 5, (substr($venta['nombre_producto'], 0, 28)), 0, 0, 'L');
     $pdf->Cell($anchos['javas'], 5, $venta['numero_javas'], 0, 0, 'C');
     $pdf->Cell($anchos['aves'], 5, $venta['numero_aves'], 0, 0, 'C');
     $pdf->Cell($anchos['prom'], 5, $venta['peso_promedio'], 0, 0, 'C');
@@ -395,7 +395,7 @@ foreach ($ventas as $index => $venta) {
         $pdf->SetTextColor($pdf->colorPrimario[0], $pdf->colorPrimario[1], $pdf->colorPrimario[2]);
         $pdf->SetFont('Helvetica', 'B', 11);
         $pdf->SetXY(15, $y_pos + 3);
-        $pdf->Cell(0, 6, utf8_decode('CONVERSIÓN MONETARIA (Tasa: ' . number_format($filtros['tasa_cambio'], 4) . ')'), 0, 1);
+        $pdf->Cell(0, 6, ('CONVERSIÓN MONETARIA (Tasa: ' . number_format($filtros['tasa_cambio'], 4) . ')'), 0, 1);
         
         // Línea divisoria
         $pdf->SetDrawColor(220, 223, 228);
@@ -427,8 +427,8 @@ foreach ($ventas as $index => $venta) {
     $pdf->SetTextColor(120, 134, 156);
     $pdf->SetFont('Helvetica', 'I', 8);
     $pdf->SetXY(15, $y_pos + 2);
-    $pdf->Cell(0, 4, utf8_decode('📊 Reporte generado el ') . date('d/m/Y H:i') . 
-               utf8_decode(' • Todos los montos están expresados en Soles (S/)'), 0, 1);
+    $pdf->Cell(0, 4, ('📊 Reporte generado el ') . date('d/m/Y H:i') . 
+               (' • Todos los montos están expresados en Soles (S/)'), 0, 1);
     
     $pdf->Output('Reporte_Ventas_Cliente_' . date('Ymd_His') . '.pdf', 'I');
 } else {

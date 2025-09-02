@@ -46,7 +46,7 @@ class PDF extends FPDF
         $this->SetY(-15);
         $this->SetFont('Arial', 'I', 8);
         // Número de página
-        $this->Cell(0, 10, utf8_decode('Página ') . $this->PageNo() . ' de {nb}', 0, 0, 'C');
+        $this->Cell(0, 10, ('Página ') . $this->PageNo() . ' de {nb}', 0, 0, 'C');
     }
 }
 
@@ -78,7 +78,7 @@ if (count($configuraciones) > 0) {
             $pdf->Image("../../uploads/" . $configuracion['logo'], 250, 8, 30); // Logo a la derecha
         }
         // Nombre de la empresa
-        $pdf->Cell(0, 10, utf8_decode($configuracion['nombre_empresa']), 0, 1, 'L'); // Nombre a la izquierda
+        $pdf->Cell(0, 10, ($configuracion['nombre_empresa']), 0, 1, 'L'); // Nombre a la izquierda
         $pdf->Ln(10);
 
         // Información adicional
@@ -102,12 +102,12 @@ if (count($configuraciones) > 0) {
     $scalingFactor = $totalWidth / $totalCellsWidth;
 
     // Encabezado
-    $pdf->Cell(8 * $scalingFactor, 10, utf8_decode('N°'), 1, 0, 'C', true);
+    $pdf->Cell(8 * $scalingFactor, 10, ('N°'), 1, 0, 'C', true);
     $pdf->Cell(15 * $scalingFactor, 10, 'Fecha', 1, 0, 'C', true);
     $pdf->Cell(25 * $scalingFactor, 10, 'Usuario', 1, 0, 'C', true);
-    $pdf->Cell(35 * $scalingFactor, 10, utf8_decode('Cliente'), 1, 0, 'C', true);
+    $pdf->Cell(35 * $scalingFactor, 10, ('Cliente'), 1, 0, 'C', true);
     $pdf->Cell(20 * $scalingFactor, 10, 'Comprobante', 1, 0, 'C', true);
-    $pdf->Cell(15 * $scalingFactor, 10, utf8_decode('Serie N°'), 1, 0, 'C', true);
+    $pdf->Cell(15 * $scalingFactor, 10, ('Serie N°'), 1, 0, 'C', true);
     $pdf->Cell(20 * $scalingFactor, 10, 'Total compra', 1, 0, 'C', true);
     $pdf->Cell(20 * $scalingFactor, 10, 'Saldo restante', 1, 0, 'C', true);
     $pdf->Cell(20 * $scalingFactor, 10, 'Total pagado', 1, 0, 'C', true);
@@ -123,10 +123,10 @@ if (count($configuraciones) > 0) {
         // Ajuste del ancho dinámico según el factor de escala
         $pdf->Cell(8 * $scalingFactor, 10, $key+1, 1, 0, 'C');
         $pdf->Cell(15 * $scalingFactor, 10, $venta['fecha_venta'], 1, 0, 'C');
-        $pdf->Cell(25 * $scalingFactor, 10, utf8_decode($venta['nombre_usuario']), 1, 0, 'L');
-        $pdf->Cell(35 * $scalingFactor, 10, utf8_decode($venta['razon_social']), 1, 0, 'L');
-        $pdf->Cell(20 * $scalingFactor, 10, utf8_decode($venta['tipo_comprobante_sn']), 1, 0, 'L');
-        $pdf->Cell(15 * $scalingFactor, 10, utf8_decode($venta['serie_prefijo'] . '-' . $venta["num_comprobante"]), 1, 0, 'C');
+        $pdf->Cell(25 * $scalingFactor, 10, ($venta['nombre_usuario']), 1, 0, 'L');
+        $pdf->Cell(35 * $scalingFactor, 10, ($venta['razon_social']), 1, 0, 'L');
+        $pdf->Cell(20 * $scalingFactor, 10, ($venta['tipo_comprobante_sn']), 1, 0, 'L');
+        $pdf->Cell(15 * $scalingFactor, 10, ($venta['serie_prefijo'] . '-' . $venta["num_comprobante"]), 1, 0, 'C');
         $pdf->Cell(20 * $scalingFactor, 10, 'S/ ' . number_format($venta['total_venta'], 2), 1, 0, 'R');
         $pdf->Cell(20 * $scalingFactor, 10, 'S/ ' . number_format($saldo_restante, 2), 1, 0, 'R');
         $pdf->Cell(20 * $scalingFactor, 10, 'S/ ' . number_format($venta['total_pago'], 2), 1, 0, 'R');

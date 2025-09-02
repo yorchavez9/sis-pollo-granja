@@ -33,7 +33,7 @@ class PDF extends FPDF
         $this->SetY(-15);
         $this->SetFont('Arial', 'I', 8);
         // Número de página
-        $this->Cell(0, 10, utf8_decode('Página ') . $this->PageNo() . ' de {nb}', 0, 0, 'C');
+        $this->Cell(0, 10, ('Página ') . $this->PageNo() . ' de {nb}', 0, 0, 'C');
     }
 }
 
@@ -53,7 +53,7 @@ if (count($configuraciones) > 0) {
             $pdf->Image("../../uploads/" . $configuracion['logo'], 170, 8, 30); // Logo a la derecha
         }
         // Nombre de la empresa
-        $pdf->Cell(0, 10, utf8_decode($configuracion['nombre_empresa']), 0, 1, 'L'); // Nombre a la izquierda
+        $pdf->Cell(0, 10, ($configuracion['nombre_empresa']), 0, 1, 'L'); // Nombre a la izquierda
         $pdf->Ln(10);
 
         // Información adicional
@@ -72,7 +72,7 @@ if (count($configuraciones) > 0) {
     $pdf->SetFillColor(200, 220, 255);
     $pdf->Cell(20, 10, 'ID', 1, 0, 'C', true);
     $pdf->Cell(50, 10, 'Nombre', 1, 0, 'C', true);
-    $pdf->Cell(110, 10, utf8_decode('Descripción'), 1, 1, 'C', true);
+    $pdf->Cell(110, 10, ('Descripción'), 1, 1, 'C', true);
 
     // Contenido de la tabla
     $pdf->SetFont('Arial', '', 10);
@@ -85,7 +85,7 @@ if (count($configuraciones) > 0) {
         // Dibujamos la celda de ID
         $pdf->Cell(20, 10, $key + 1, 1, 0, 'C');
         // Dibujamos la celda de Nombre
-        $pdf->Cell(50, 10, utf8_decode($rol['nombre']), 1, 0, 'L');
+        $pdf->Cell(50, 10, ($rol['nombre']), 1, 0, 'L');
 
         // Guardamos las coordenadas X y Y
         $x = $pdf->GetX();
@@ -93,7 +93,7 @@ if (count($configuraciones) > 0) {
 
         // Usamos MultiCell para la descripción
         $pdf->SetXY($x, $y); // Colocamos el cursor en la misma posición para la descripción
-        $pdf->MultiCell(110, 10, utf8_decode($rol['descripcion']), 1, 'L');
+        $pdf->MultiCell(110, 10, ($rol['descripcion']), 1, 'L');
 
         // Calculamos la altura ocupada por MultiCell
         $height = $pdf->GetY() - $y;

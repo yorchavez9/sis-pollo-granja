@@ -32,7 +32,7 @@ class PDF extends FPDF
         $this->SetY(-15);
         $this->SetFont('Arial', 'I', 8);
         // Número de página
-        $this->Cell(0, 10, utf8_decode('Página ') . $this->PageNo() . ' de {nb}', 0, 0, 'C');
+        $this->Cell(0, 10, ('Página ') . $this->PageNo() . ' de {nb}', 0, 0, 'C');
     }
 }
 
@@ -64,7 +64,7 @@ if (count($configuraciones) > 0) {
             $pdf->Image("../../uploads/" . $configuracion['logo'], 250, 8, 30); // Logo a la derecha
         }
         // Nombre de la empresa
-        $pdf->Cell(0, 10, utf8_decode($configuracion['nombre_empresa']), 0, 1, 'L'); // Nombre a la izquierda
+        $pdf->Cell(0, 10, ($configuracion['nombre_empresa']), 0, 1, 'L'); // Nombre a la izquierda
         $pdf->Ln(10);
 
         // Información adicional
@@ -90,13 +90,13 @@ if (count($configuraciones) > 0) {
     // Configuración del encabezado de la tabla
     $pdf->SetFont('Arial', 'B', 10);
     $pdf->SetFillColor(200, 220, 255);
-    $pdf->Cell(8 * $scalingFactor, 10, utf8_decode('N°'), 1, 0, 'C', true);
+    $pdf->Cell(8 * $scalingFactor, 10, ('N°'), 1, 0, 'C', true);
     $pdf->Cell(30 * $scalingFactor, 10, 'Nombre', 1, 0, 'C', true);
-    $pdf->Cell(20 * $scalingFactor, 10, utf8_decode('N° documento'), 1, 0, 'C', true);
-    $pdf->Cell(20 * $scalingFactor, 10, utf8_decode('Teléfono'), 1, 0, 'C', true);
+    $pdf->Cell(20 * $scalingFactor, 10, ('N° documento'), 1, 0, 'C', true);
+    $pdf->Cell(20 * $scalingFactor, 10, ('Teléfono'), 1, 0, 'C', true);
     $pdf->Cell(40 * $scalingFactor, 10, 'Correo', 1, 0, 'C', true);
-    $pdf->Cell(15 * $scalingFactor, 10, utf8_decode('Tipo pago'), 1, 0, 'C', true);
-    $pdf->Cell(25 * $scalingFactor, 10, utf8_decode('Número cuenta'), 1, 0, 'C', true);
+    $pdf->Cell(15 * $scalingFactor, 10, ('Tipo pago'), 1, 0, 'C', true);
+    $pdf->Cell(25 * $scalingFactor, 10, ('Número cuenta'), 1, 0, 'C', true);
     $pdf->Cell(20 * $scalingFactor, 10, 'Estado', 1, 1, 'C', true);
 
     // Contenido de la tabla
@@ -104,10 +104,10 @@ if (count($configuraciones) > 0) {
 
     foreach ($trabajadores as $key => $usuario) {
         $pdf->Cell(8 * $scalingFactor, 10, $key + 1, 1, 0, 'C');
-        $pdf->Cell(30 * $scalingFactor, 10, utf8_decode($usuario['nombre']), 1, 0, 'L');
-        $pdf->Cell(20 * $scalingFactor, 10, utf8_decode($usuario['num_documento']), 1, 0, 'L');
+        $pdf->Cell(30 * $scalingFactor, 10, ($usuario['nombre']), 1, 0, 'L');
+        $pdf->Cell(20 * $scalingFactor, 10, ($usuario['num_documento']), 1, 0, 'L');
         $pdf->Cell(20 * $scalingFactor, 10, $usuario['telefono'], 1, 0, 'C');
-        $pdf->Cell(40 * $scalingFactor, 10, utf8_decode($usuario['correo']), 1, 0, 'L');
+        $pdf->Cell(40 * $scalingFactor, 10, ($usuario['correo']), 1, 0, 'L');
         $pdf->Cell(15 * $scalingFactor, 10, $usuario['tipo_pago'], 1, 0, 'C');
         $pdf->Cell(25 * $scalingFactor, 10, $usuario['num_cuenta'], 1, 0, 'C');
         $pdf->Cell(20 * $scalingFactor, 10, $usuario['estado_trabajador'] ? 'Activo' : 'Inactivo', 1, 1, 'C');

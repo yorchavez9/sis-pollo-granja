@@ -42,7 +42,7 @@ class PDF extends FPDF
         $this->SetY(-15);
         $this->SetFont('Arial', 'I', 8);
         // Número de página
-        $this->Cell(0, 10, utf8_decode('Página ') . $this->PageNo() . ' de {nb}', 0, 0, 'C');
+        $this->Cell(0, 10, ('Página ') . $this->PageNo() . ' de {nb}', 0, 0, 'C');
     }
 }
 
@@ -74,7 +74,7 @@ if (count($configuraciones) > 0) {
             $pdf->Image("../../uploads/" . $configuracion['logo'], 250, 8, 30); // Logo a la derecha
         }
         // Nombre de la empresa
-        $pdf->Cell(0, 10, utf8_decode($configuracion['nombre_empresa']), 0, 1, 'L'); // Nombre a la izquierda
+        $pdf->Cell(0, 10, ($configuracion['nombre_empresa']), 0, 1, 'L'); // Nombre a la izquierda
         $pdf->Ln(10);
 
         // Información adicional
@@ -97,8 +97,8 @@ if (count($configuraciones) > 0) {
     $totalCellsWidth = 10 + 35 + 50 + 25 + 30; // Suma de los anchos de las columnas
     $scalingFactor = $totalWidth / $totalCellsWidth; // Factor de escala
 
-    $pdf->Cell(10 * $scalingFactor, 10, utf8_decode('N°'), 1, 0, 'C', true);
-    $pdf->Cell(35 * $scalingFactor, 10, utf8_decode('Nombre'), 1, 0, 'C', true);
+    $pdf->Cell(10 * $scalingFactor, 10, ('N°'), 1, 0, 'C', true);
+    $pdf->Cell(35 * $scalingFactor, 10, ('Nombre'), 1, 0, 'C', true);
     $pdf->Cell(50 * $scalingFactor, 10, 'Fecha de Pago', 1, 0, 'C', true);
     $pdf->Cell(25 * $scalingFactor, 10, 'Monto', 1, 0, 'C', true);
     $pdf->Cell(30 * $scalingFactor, 10, 'Estado', 1, 1, 'C', true);
@@ -111,10 +111,10 @@ if (count($configuraciones) > 0) {
 
         // Formato de las filas
         $pdf->Cell(10 * $scalingFactor, 10, $key + 1, 1, 0, 'C'); // Número
-        $pdf->Cell(35 * $scalingFactor, 10, utf8_decode($pago['nombre']), 1, 0, 'L'); // Nombre
-        $pdf->Cell(50 * $scalingFactor, 10, utf8_decode($pago['fecha_pago']), 1, 0, 'C'); // Fecha de Pago
+        $pdf->Cell(35 * $scalingFactor, 10, ($pago['nombre']), 1, 0, 'L'); // Nombre
+        $pdf->Cell(50 * $scalingFactor, 10, ($pago['fecha_pago']), 1, 0, 'C'); // Fecha de Pago
         $pdf->Cell(25 * $scalingFactor, 10, 'S/ ' . number_format($pago['monto_pago'], 2), 1, 0, 'R'); // Monto formateado
-        $pdf->Cell(30 * $scalingFactor, 10, utf8_decode($estado), 1, 1, 'C'); // Estado
+        $pdf->Cell(30 * $scalingFactor, 10, ($estado), 1, 1, 'C'); // Estado
     }
 
 

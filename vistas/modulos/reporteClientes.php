@@ -76,7 +76,7 @@
                     </div>
                     <div class="col-md-1 d-flex align-items-end">
                         <button id="btn_refrescar_venta_cliente" class="btn btn-secondary w-100" onclick="location.reload();">
-                            <i class="fas fa-sync-alt me-1"></i> Refrescar
+                            <i class="fas fa-sync-alt me-1"></i>
                         </button>
                     </div>
                 </div>

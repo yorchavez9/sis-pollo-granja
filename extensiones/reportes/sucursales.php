@@ -32,7 +32,7 @@ class PDF extends FPDF
         $this->SetY(-15);
         $this->SetFont('Arial', 'I', 8);
         // Número de página
-        $this->Cell(0, 10, utf8_decode('Página ') . $this->PageNo() . ' de {nb}', 0, 0, 'C');
+        $this->Cell(0, 10, ('Página ') . $this->PageNo() . ' de {nb}', 0, 0, 'C');
     }
 }
 
@@ -53,7 +53,7 @@ if (count($configuraciones) > 0) {
             $pdf->Image("../../uploads/" . $configuracion['logo'], 170, 8, 30); // Logo a la derecha
         }
         // Nombre de la empresa
-        $pdf->Cell(0, 10, utf8_decode($configuracion['nombre_empresa']), 0, 1, 'L'); // Nombre a la izquierda
+        $pdf->Cell(0, 10, ($configuracion['nombre_empresa']), 0, 1, 'L'); // Nombre a la izquierda
         $pdf->Ln(10);
 
         // Información adicional
@@ -72,7 +72,7 @@ if (count($configuraciones) > 0) {
     $pdf->SetFillColor(200, 220, 255);
     $pdf->Cell(20, 10, 'ID', 1, 0, 'C', true);
     $pdf->Cell(50, 10, 'Nombre', 1, 0, 'C', true);
-    $pdf->Cell(70, 10, utf8_decode('Dirección'), 1, 0, 'C', true);
+    $pdf->Cell(70, 10, ('Dirección'), 1, 0, 'C', true);
     $pdf->Cell(30, 10, 'Telefono', 1, 0, 'C', true);
     $pdf->Cell(20, 10, 'Estado', 1, 1, 'C', true);
 
@@ -80,8 +80,8 @@ if (count($configuraciones) > 0) {
     $pdf->SetFont('Arial', '', 10);
     foreach ($sucursales as $key => $sucursal) {
         $pdf->Cell(20, 10, $key + 1, 1, 0, 'C');
-        $pdf->Cell(50, 10, utf8_decode($sucursal['nombre_sucursal']), 1, 0, 'L');
-        $pdf->Cell(70, 10, utf8_decode($sucursal['direccion']), 1, 0, 'L');
+        $pdf->Cell(50, 10, ($sucursal['nombre_sucursal']), 1, 0, 'L');
+        $pdf->Cell(70, 10, ($sucursal['direccion']), 1, 0, 'L');
         $pdf->Cell(30, 10, $sucursal['telefono'], 1, 0, 'C');
         $pdf->Cell(20, 10, $sucursal['estado'] ? 'Activo' : 'Inactivo', 1, 1, 'C');
     }
