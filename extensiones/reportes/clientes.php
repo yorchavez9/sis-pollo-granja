@@ -244,6 +244,7 @@ if (count($configuraciones) > 0) {
     // Anchos optimizados para diseño moderno
     $anchos = [
         'fecha' => 20,
+        'hora' => 20,
         'producto' => 45,
         'javas' => 15,
         'aves' => 15,
@@ -271,7 +272,7 @@ if (count($configuraciones) > 0) {
     $pdf->SetXY(10, $y_pos);
     
     $headers = [
-        'Fecha', 'Producto', 'Javas', 'Aves', 'P.Prom', 
+        'Fecha', 'Hora', 'Producto', 'Javas', 'Aves', 'P.Prom', 
         'P.Bruto', 'P.Tara', 'P.Neto', 'P.Unit.', 
         'Total', 'Pagado', 'Saldo'
     ];
@@ -309,7 +310,7 @@ if (count($configuraciones) > 0) {
             $pdf->SetTextColor(93, 109, 126);
             $pdf->SetXY(10, $y_pos);
             
-            $pdf->Cell($anchos['fecha'] + $anchos['producto'] + $anchos['javas'] + $anchos['aves'] + 
+            $pdf->Cell($anchos['fecha'] + $anchos['hora'] + $anchos['producto'] + $anchos['javas'] + $anchos['aves'] + 
                       $anchos['prom'] + $anchos['bruto'] + $anchos['tara'] + $anchos['neto'] + 
                       $anchos['precio'], 6, 'SUBTOTAL', 0, 0, 'R');
             $pdf->Cell($anchos['total'], 6, 'S/ ' . number_format($subtotalVenta, 2), 0, 0, 'R');
@@ -349,6 +350,7 @@ if (count($configuraciones) > 0) {
         
         // Datos de la fila
         $pdf->Cell($anchos['fecha'], 5, date('d/m/Y', strtotime($venta['fecha_venta'])), 0, 0, 'C');
+        $pdf->Cell($anchos['hora'], 5, $venta['hora_venta'], 0, 0, 'C');
         $pdf->Cell($anchos['producto'], 5, (substr($venta['nombre_producto'], 0, 25)), 0, 0, 'L');
         $pdf->Cell($anchos['javas'], 5, $venta['numero_javas'], 0, 0, 'C');
         $pdf->Cell($anchos['aves'], 5, $venta['numero_aves'], 0, 0, 'C');
