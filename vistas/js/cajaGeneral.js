@@ -1,5 +1,30 @@
 $(document).ready(function () {
 
+  /* =====================================
+ FORMATEAR FECHA Y HORA HUMANA
+ ===================================== */
+  function formatearFechaHumana(fechaString) {
+    const fecha = new Date(fechaString);
+    
+    // Formatear fecha
+    const fechaFormateada = fecha.toLocaleDateString("es-PE", {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      timeZone: "America/Lima"
+    });
+    
+    // Formatear hora
+    const horaFormateada = fecha.toLocaleTimeString("es-PE", {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: true,
+      timeZone: "America/Lima"
+    });
+    
+    return `${fechaFormateada} - ${horaFormateada}`;
+  }
 
   /* =====================================
  CONVERTIR DE DOLARES A 
@@ -156,7 +181,7 @@ $(document).ready(function () {
             fila = `
                       <tr>
                           <td class="text-center">${index + 1}</td>
-                          <td class="text-center">${item.fecha_cierre}</td>
+                          <td class="text-center">${formatearFechaHumana(item.fecha_cierre)}</td>
                           <td class="text-center">S/ ${item.ingresos}</td>
                           <td class="text-center">S/ ${item.egresos}</td>
                           <td class="text-center">S/ ${item.monto_inicial}</td>
@@ -446,12 +471,34 @@ $(document).on("click", ".btnReabrirCaja", function() {
       ingresos_update: ingresos, // Ingresos acumulados del día
       monto_inicial_update: monto_inicial,
       monto_final_update: monto_final_calculado,
-      fecha_cierre_update: new Date()
-        .toISOString()
-        .slice(0, 19)
-        .replace("T", " "),
+      fecha_cierre_update: (() => {
+        const peruDate = new Date().toLocaleString("es-PE", {
+          timeZone: "America/Lima",
+          year: 'numeric',
+          month: '2-digit', 
+          day: '2-digit',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          hour12: false
+        });
+        console.log("Fecha original:", peruDate); // Debug
+        const fechaFormateada = peruDate.replace(/(\d{2})\/(\d{2})\/(\d{4}), (\d{2}:\d{2}:\d{2})/, '$3-$2-$1 $4');
+        console.log("Fecha formateada para envio:", fechaFormateada); // Debug
+        return fechaFormateada;
+      })(),
       estado_update: "cerrado",
     };
+
+    console.log("=== DATOS COMPLETOS PARA CERRAR CAJA ===");
+    console.log("ID Movimiento:", id_movimiento);
+    console.log("ID Usuario:", id_usuario);
+    console.log("Egresos:", egresos);
+    console.log("Ingresos:", ingresos);
+    console.log("Monto inicial:", monto_inicial);
+    console.log("Monto final calculado:", monto_final_calculado);
+    console.log("Objeto completo datosCaja:", datosCaja);
+    console.log("==========================================");
 
     $.ajax({
       url: "ajax/Caja.general.ajax.php",
@@ -459,14 +506,19 @@ $(document).on("click", ".btnReabrirCaja", function() {
       data: datosCaja,
       dataType: "json",
       success: function (respuesta) {
+        console.log("=== RESPUESTA DEL SERVIDOR ===");
+        console.log("Respuesta completa:", respuesta);
+        console.log("===============================");
+        
         if (respuesta.status === true) {
+          console.log("✅ Caja cerrada exitosamente");
           $("#total_ingresos_caja").text("0.00");
           $("#total_egresos_caja").text("0.00");
           $("#total_saldo_inicial_caja").text("0.00");
           $("#monto_totol_caja").text("0.00");
           mostrarCajaGeneral();
         } else {
-          console.log(respuesta.message);
+          console.log("❌ Error al cerrar caja:", respuesta.message);
         }
       },
       error: function (xhr, status, error) {

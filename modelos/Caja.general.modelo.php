@@ -1,5 +1,8 @@
 <?php
 
+// Configurar zona horaria de Perú
+date_default_timezone_set('America/Lima');
+
 require_once "Conexion.php";
 
 class ModeloCajaGeneral
@@ -109,7 +112,22 @@ class ModeloCajaGeneral
 	=============================================*/
 	static public function mdlEditarCajaGeneral($tabla, $datos)
 	{
-		$stmt = Conexion::conectar()->prepare("UPDATE $tabla SET 
+		// Debug: Verificar la fecha recibida
+		$log_file = __DIR__ . "/../debug_caja.log";
+		$log_content = "\n=== MODELO CAJA GENERAL ===\n";
+		$log_content .= "Fecha recibida en modelo: " . $datos["fecha_cierre"] . "\n";
+		
+		$conexion = Conexion::conectar();
+		
+		// Verificar zona horaria de MySQL
+		$stmt_tz = $conexion->prepare("SELECT @@session.time_zone as tz, NOW() as mysql_now");
+		$stmt_tz->execute();
+		$tz_info = $stmt_tz->fetch();
+		$log_content .= "Zona horaria MySQL: " . $tz_info['tz'] . "\n";
+		$log_content .= "NOW() de MySQL: " . $tz_info['mysql_now'] . "\n";
+		file_put_contents($log_file, $log_content, FILE_APPEND);
+		
+		$stmt = $conexion->prepare("UPDATE $tabla SET 
 																id_usuario  = :id_usuario, 
 																tipo_movimiento  = :tipo_movimiento, 
 																egresos = :egresos,
@@ -129,7 +147,19 @@ class ModeloCajaGeneral
 		$stmt->bindParam(":fecha_cierre", $datos["fecha_cierre"], PDO::PARAM_STR);
 		$stmt->bindParam(":estado", $datos["estado"], PDO::PARAM_STR);
 		$stmt->bindParam(":id_movimiento", $datos["id_movimiento"], PDO::PARAM_INT);
+		
+		$log_content = "\nEjecutando UPDATE con fecha_cierre = " . $datos["fecha_cierre"] . "\n";
+		file_put_contents($log_file, $log_content, FILE_APPEND);
+		
 		if ($stmt->execute()) {
+			// Verificar qué se guardó realmente
+			$stmt_check = $conexion->prepare("SELECT fecha_cierre FROM $tabla WHERE id_movimiento = :id_movimiento");
+			$stmt_check->bindParam(":id_movimiento", $datos["id_movimiento"], PDO::PARAM_INT);
+			$stmt_check->execute();
+			$result = $stmt_check->fetch();
+			$log_content = "Fecha guardada en DB: " . $result['fecha_cierre'] . "\n";
+			$log_content .= "===========================\n";
+			file_put_contents($log_file, $log_content, FILE_APPEND);
 			return [
 				"status" => true,
 				"message" => "La caja se cerró exitosamente"

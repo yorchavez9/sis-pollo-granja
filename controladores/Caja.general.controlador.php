@@ -63,6 +63,16 @@ class ControladorCajaGeneral
 	=============================================*/
 	static public function ctrEditarCajaGeneral()
 	{
+		// Debug: Ver qué datos llegan desde JavaScript
+		$log_file = __DIR__ . "/../debug_caja.log";
+		$log_content = "\n=== DATOS RECIBIDOS EN CONTROLADOR ===\n";
+		$log_content .= "Fecha y hora: " . date('Y-m-d H:i:s') . "\n";
+		$log_content .= "fecha_cierre_update: " . $_POST["fecha_cierre_update"] . "\n";
+		$log_content .= "Fecha actual PHP: " . date('Y-m-d H:i:s') . "\n";
+		$log_content .= "Zona horaria PHP: " . date_default_timezone_get() . "\n";
+		$log_content .= "====================================\n";
+		file_put_contents($log_file, $log_content, FILE_APPEND);
+		
 		$tabla = "movimientos_caja";
 		$datos = array(
 			"id_movimiento" => $_POST["id_movimiento_update"],
