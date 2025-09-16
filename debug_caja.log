@@ -1,0 +1,32 @@
+
+=== DATOS RECIBIDOS EN CONTROLADOR ===
+Fecha y hora: 2025-09-13 10:29:21
+fecha_cierre_update: 2025-09-13 10:29:21
+Fecha actual PHP: 2025-09-13 10:29:21
+Zona horaria PHP: America/Lima
+====================================
+
+=== MODELO CAJA GENERAL ===
+Fecha recibida en modelo: 2025-09-13 10:29:21
+Zona horaria MySQL: -05:00
+NOW() de MySQL: 2025-09-13 10:29:21
+
+Ejecutando UPDATE con fecha_cierre = 2025-09-13 10:29:21
+Fecha guardada en DB: 2025-09-13 10:29:21
+===========================
+
+=== DATOS RECIBIDOS EN CONTROLADOR ===
+Fecha y hora: 2025-09-13 12:12:00
+fecha_cierre_update: 2025-09-13 12:12:00
+Fecha actual PHP: 2025-09-13 12:12:00
+Zona horaria PHP: America/Lima
+====================================
+
+=== MODELO CAJA GENERAL ===
+Fecha recibida en modelo: 2025-09-13 12:12:00
+Zona horaria MySQL: -05:00
+NOW() de MySQL: 2025-09-13 12:12:01
+
+Ejecutando UPDATE con fecha_cierre = 2025-09-13 12:12:00
+Fecha guardada en DB: 2025-09-13 12:12:00
+===========================

@@ -472,19 +472,20 @@ $(document).on("click", ".btnReabrirCaja", function() {
       monto_inicial_update: monto_inicial,
       monto_final_update: monto_final_calculado,
       fecha_cierre_update: (() => {
-        const peruDate = new Date().toLocaleString("es-PE", {
-          timeZone: "America/Lima",
-          year: 'numeric',
-          month: '2-digit', 
-          day: '2-digit',
-          hour: '2-digit',
-          minute: '2-digit',
-          second: '2-digit',
-          hour12: false
-        });
-        console.log("Fecha original:", peruDate); // Debug
-        const fechaFormateada = peruDate.replace(/(\d{2})\/(\d{2})\/(\d{4}), (\d{2}:\d{2}:\d{2})/, '$3-$2-$1 $4');
-        console.log("Fecha formateada para envio:", fechaFormateada); // Debug
+        // Obtener UTC y restar 5 horas para Perú (UTC-5)
+        const utc = new Date();
+        const peruTime = new Date(utc.getTime() - (5 * 60 * 60 * 1000));
+        
+        const year = peruTime.getUTCFullYear();
+        const month = String(peruTime.getUTCMonth() + 1).padStart(2, '0');
+        const day = String(peruTime.getUTCDate()).padStart(2, '0');
+        const hours = String(peruTime.getUTCHours()).padStart(2, '0');
+        const minutes = String(peruTime.getUTCMinutes()).padStart(2, '0');
+        const seconds = String(peruTime.getUTCSeconds()).padStart(2, '0');
+        
+        const fechaFormateada = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+        console.log("Hora UTC actual:", utc.toISOString());
+        console.log("Hora de Perú calculada:", fechaFormateada);
         return fechaFormateada;
       })(),
       estado_update: "cerrado",
