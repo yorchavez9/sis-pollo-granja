@@ -1,5 +1,9 @@
 $(document).ready(function () {
 
+  // Variables globales para el control de cierre automático
+  let intervaloCierreAutomatico = null;
+  let cierreAutomaticoEjecutado = false;
+
   /* =====================================
  FORMATEAR FECHA Y HORA HUMANA
  ===================================== */
@@ -311,29 +315,10 @@ $(document).on("click", ".btnReabrirCaja", function() {
               $("#monto_totol_caja").text(caja_total.toFixed(2));
             }
           });
-          let flag = false;
 
-          const fechaActual = new Date().toLocaleDateString("en-CA", { timeZone: "America/Lima", });
-          const fechaCierre = datosCaja.fecha_cierre.trim().split(" ")[0];
-          if (fechaCierre === fechaActual) {
-            setInterval(() => {
-              const now = new Date();
-              const hour = now.getHours();
-              const minute = now.getMinutes();
-              if (hour === 0 && minute === 0 && !flag) {
-                flag = true;
-                guardarAperturaCaja(
-                  datosCaja.id_movimiento,
-                  datosCaja.id_usuario,
-                  datosCaja.ingresos,
-                  datosCaja.egresos,
-                  datosCaja.monto_inicial,
-                  datosCaja.monto_final
-                );
-              }
-            }, 1000);
-          } else {
-            /* console.log("La fecha de cierre no es hoy."); */
+          // Configurar cierre automático solo si hay una caja abierta
+          if (datosCaja.id_movimiento) {
+            configurarCierreAutomatico(datosCaja);
           }
         } else {
           console.log("No hay datos disponibles.");
@@ -344,6 +329,122 @@ $(document).on("click", ".btnReabrirCaja", function() {
       },
     });
   }
+
+  /* =====================================
+    FUNCIÓN PARA CONFIGURAR CIERRE AUTOMÁTICO
+    ===================================== */
+  function configurarCierreAutomatico(datosCaja) {
+    // Limpiar intervalo anterior si existe
+    if (intervaloCierreAutomatico) {
+      clearInterval(intervaloCierreAutomatico);
+      intervaloCierreAutomatico = null;
+    }
+
+    // Resetear flag si es un nuevo día
+    const fechaActual = new Date().toLocaleDateString("en-CA", { timeZone: "America/Lima" });
+    const fechaCierre = datosCaja.fecha_cierre.trim().split(" ")[0];
+    
+    if (fechaCierre !== fechaActual) {
+      cierreAutomaticoEjecutado = false;
+    }
+
+    // Solo configurar si la fecha de cierre es hoy y no se ha ejecutado
+    if (fechaCierre === fechaActual && !cierreAutomaticoEjecutado) {
+      console.log("⏰ Configurando cierre automático para medianoche");
+      
+      intervaloCierreAutomatico = setInterval(() => {
+        const now = new Date();
+        const horaLima = new Date(now.toLocaleString("en-US", { timeZone: "America/Lima" }));
+        const hora = horaLima.getHours();
+        const minuto = horaLima.getMinutes();
+        const segundo = horaLima.getSeconds();
+        
+        console.log(`🕐 Verificando hora: ${hora}:${minuto}:${segundo}`);
+        
+        // Ejecutar cierre automático a las 07:01 AM (para prueba)
+        if (hora === 23 && minuto === 55 && !cierreAutomaticoEjecutado) {
+          cierreAutomaticoEjecutado = true;
+          console.log("🔐 Ejecutando cierre automático de caja");
+          
+          guardarAperturaCaja(
+            datosCaja.id_movimiento,
+            datosCaja.id_usuario,
+            datosCaja.ingresos,
+            datosCaja.egresos,
+            datosCaja.monto_inicial,
+            datosCaja.monto_final
+          );
+          
+          // Limpiar el intervalo después de ejecutar
+          clearInterval(intervaloCierreAutomatico);
+          intervaloCierreAutomatico = null;
+        }
+      }, 30000); // Verificar cada 30 segundos para mayor confiabilidad
+    } else if (cierreAutomaticoEjecutado) {
+      console.log("✅ Cierre automático ya ejecutado para hoy");
+    } else {
+      console.log("📅 La fecha de cierre no corresponde al día actual");
+    }
+  }
+
+  /* =====================================
+    FUNCIÓN DE PRUEBA PARA SIMULAR CIERRE AUTOMÁTICO
+    (Solo para testing - quitar en producción)
+    ===================================== */
+  window.simularCierreAutomatico = function() {
+    console.log("🧪 INICIANDO SIMULACIÓN DE CIERRE AUTOMÁTICO");
+    
+    $.ajax({
+      url: "ajax/Caja.general.ajax.php",
+      type: "GET",
+      dataType: "json",
+      success: function (respuesta) {
+        if (respuesta && respuesta.length > 0) {
+          let datosCaja = null;
+          
+          // Buscar la caja abierta
+          respuesta.forEach(function (item) {
+            if (item.estado === "abierto") {
+              datosCaja = {
+                id_movimiento: item.id_movimiento,
+                id_usuario: item.id_usuario,
+                ingresos: parseFloat(item.ingresos) || 0.0,
+                egresos: parseFloat(item.egresos) || 0.0,
+                monto_inicial: parseFloat(item.monto_inicial) || 0.0,
+                monto_final: parseFloat(item.monto_final) || 0.0,
+                fecha_cierre: item.fecha_cierre,
+              };
+            }
+          });
+          
+          if (datosCaja) {
+            console.log("💰 Datos de caja encontrados:", datosCaja);
+            console.log("🔄 Ejecutando cierre automático simulado...");
+            
+            // Simular el cierre automático
+            setTimeout(() => {
+              console.log("🔐 CERRANDO CAJA AUTOMÁTICAMENTE (SIMULACIÓN)");
+              guardarAperturaCaja(
+                datosCaja.id_movimiento,
+                datosCaja.id_usuario,
+                datosCaja.ingresos,
+                datosCaja.egresos,
+                datosCaja.monto_inicial,
+                datosCaja.monto_final
+              );
+            }, 2000); // Esperar 2 segundos antes de cerrar
+          } else {
+            console.log("❌ No se encontró ninguna caja abierta para cerrar");
+          }
+        } else {
+          console.log("❌ No hay datos de caja disponibles");
+        }
+      },
+      error: function (xhr, status, error) {
+        console.error("❌ Error al obtener datos de caja:", error);
+      }
+    });
+  };
 
   /* ===========================
     MOSTRANDO CAJA GENRAL APERTURA
