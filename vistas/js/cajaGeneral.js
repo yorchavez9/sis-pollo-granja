@@ -362,7 +362,7 @@ $(document).on("click", ".btnReabrirCaja", function() {
         console.log(`🕐 Verificando hora: ${hora}:${minuto}:${segundo}`);
         
         // Ejecutar cierre automático a las 07:01 AM (para prueba)
-        if (hora === 20 && minuto === 12 && !cierreAutomaticoEjecutado) {
+        if (hora === 23 && minuto === 50 && !cierreAutomaticoEjecutado) {
           cierreAutomaticoEjecutado = true;
           console.log("🔐 Ejecutando cierre automático de caja");
           
