@@ -39,7 +39,7 @@ async function updateExchangeRate() {
         const rate = await getExchangeRate();
         if (rate) {
             currentRate = rate;
-            console.log('Tasa de cambio actualizada:', currentRate);
+            /* console.log('Tasa de cambio actualizada:', currentRate); */
         } else {
             console.warn('No se pudo obtener la tasa de cambio');
         }

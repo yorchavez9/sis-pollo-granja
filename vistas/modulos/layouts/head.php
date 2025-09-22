@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-<?php date_default_timezone_set('America/Lima'); ?>
 <head>
     <meta charset="utf-8">
     <meta charset="utf-8">
@@ -29,7 +28,7 @@
         <link rel="shortcut icon" type="image/x-icon" href="vistas/img/sistema/favicon.png">
     <?php
     }
-    date_default_timezone_set('America/Lima');
+
     ?>
 
 
@@ -43,6 +42,65 @@
     <link rel="stylesheet" href="vistas/assets/bootstrap-icons/font/bootstrap-icons.min.css">
     <script src="vistas/assets/js/jquery-3.6.0.min.js"></script>
 
+    <!-- Configuración global de zona horaria peruana para JavaScript -->
+    <script>
+    (function() {
+        // Override del constructor Date para usar siempre America/Lima (GMT-5)
+        const OriginalDate = Date;
+
+        window.Date = function(...args) {
+            if (args.length === 0) {
+                // new Date() sin argumentos - usar hora de Lima
+                const ahora = new OriginalDate();
+                const utc = ahora.getTime() + (ahora.getTimezoneOffset() * 60000);
+                const fechaLima = new OriginalDate(utc + (-5 * 3600000)); // GMT-5 para Lima
+
+                // Override toISOString para que devuelva la fecha de Lima en formato ISO
+                fechaLima.toISOString = function() {
+                    const year = this.getFullYear();
+                    const month = String(this.getMonth() + 1).padStart(2, '0');
+                    const day = String(this.getDate()).padStart(2, '0');
+                    const hours = String(this.getHours()).padStart(2, '0');
+                    const minutes = String(this.getMinutes()).padStart(2, '0');
+                    const seconds = String(this.getSeconds()).padStart(2, '0');
+                    const ms = String(this.getMilliseconds()).padStart(3, '0');
+                    return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}.${ms}Z`;
+                };
+
+                return fechaLima;
+            } else {
+                // new Date() con argumentos - comportamiento normal
+                return new OriginalDate(...args);
+            }
+        };
+
+        // Copiar métodos estáticos
+        Object.setPrototypeOf(window.Date, OriginalDate);
+        Object.defineProperty(window.Date, 'prototype', {
+            value: OriginalDate.prototype,
+            writable: false
+        });
+
+        // Métodos estáticos importantes
+        window.Date.now = OriginalDate.now;
+        window.Date.parse = OriginalDate.parse;
+        window.Date.UTC = OriginalDate.UTC;
+
+        // Función helper para obtener fecha de Lima en formato YYYY-MM-DD
+        window.getFechaLimaISO = function() {
+            const ahora = new OriginalDate();
+            const utc = ahora.getTime() + (ahora.getTimezoneOffset() * 60000);
+            const fechaLima = new OriginalDate(utc + (-5 * 3600000));
+            return fechaLima.toISOString().split('T')[0];
+        };
+
+        // Mostrar confirmación en consola
+        console.log('✅ Zona horaria JavaScript configurada a Lima, Perú (GMT-5)');
+        console.log('📅 Fecha/Hora actual:', new Date().toLocaleString('es-PE'));
+        console.log('📅 Fecha ISO Lima:', new Date().toISOString().split('T')[0]);
+    })();
+    </script>
+
     <link rel="stylesheet" href="vistas/assets/sweetalert2/dist/sweetalert2.min.css">
     <script src="vistas/assets/sweetalert2/dist/sweetalert2.min.js"></script>
 
@@ -53,7 +111,7 @@
 </head>
 
 <body>
-    <?php date_default_timezone_set('America/Lima');?>
+<?php echo date("d/m/Y"); ?>
 
     <!-- <div id="global-loader">
         <div class="whirly-loader"> </div>
