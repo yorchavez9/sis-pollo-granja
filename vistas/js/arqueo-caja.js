@@ -199,14 +199,12 @@ $(document).ready(function () {
         $("#error_value_monto_fisico_arqueo_caja").text("");
 
 
-        if (monto_sistema <= 0) {
-            isValid = false;
-            $("#error_value_monto_sistema_arqueo_caja").text("El monto del sistema debe ser mayor a 0.");
-        }
+        // Removed validation for monto_sistema to allow negative values
+        // The system can have negative amounts in certain business scenarios
 
-        if (monto_fisico <= 0) {
+        if (monto_fisico < 0) {
             isValid = false;
-            $("#error_value_monto_fisico_arqueo_caja").text("El monto físico debe ser mayor a 0.");
+            $("#error_value_monto_fisico_arqueo_caja").text("El monto físico no puede ser negativo.");
         }
 
         if (isValid) {
