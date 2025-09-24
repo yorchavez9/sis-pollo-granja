@@ -348,8 +348,8 @@ $(document).on("click", ".btnReabrirCaja", function() {
       cierreAutomaticoEjecutado = false;
     }
 
-    // Solo configurar si la fecha de cierre es hoy y no se ha ejecutado
-    if (fechaCierre === fechaActual && !cierreAutomaticoEjecutado) {
+    // Configurar cierre automático independientemente de la fecha
+    if (!cierreAutomaticoEjecutado) {
       console.log("⏰ Configurando cierre automático para medianoche");
       
       intervaloCierreAutomatico = setInterval(() => {
@@ -382,8 +382,6 @@ $(document).on("click", ".btnReabrirCaja", function() {
       }, 30000); // Verificar cada 30 segundos para mayor confiabilidad
     } else if (cierreAutomaticoEjecutado) {
       console.log("✅ Cierre automático ya ejecutado para hoy");
-    } else {
-      console.log("📅 La fecha de cierre no corresponde al día actual");
     }
   }
 
@@ -516,23 +514,16 @@ $(document).on("click", ".btnReabrirCaja", function() {
             }
           });
 
-          // Validar la fecha de cierre y realizar el cierre
-          const fechaActual = new Date().toLocaleDateString("en-CA", { timeZone: "America/Lima" });
-          const fechaCierre = datosCaja.fecha_cierre.trim().split(" ")[0];
-
-          if (fechaCierre === fechaActual) {
-            guardarAperturaCaja(
-              datosCaja.id_movimiento,
-              datosCaja.id_usuario,
-              datosCaja.ingresos,
-              datosCaja.egresos,
-              datosCaja.monto_inicial,
-              datosCaja.monto_final
-            );
-            console.log("La caja ha sido cerrada exitosamente.");
-          } else {
-            console.log("La fecha de cierre no corresponde al día actual.");
-          }
+          // Realizar el cierre sin validar fecha - permitir cierre desde cualquier fecha
+          guardarAperturaCaja(
+            datosCaja.id_movimiento,
+            datosCaja.id_usuario,
+            datosCaja.ingresos,
+            datosCaja.egresos,
+            datosCaja.monto_inicial,
+            datosCaja.monto_final
+          );
+          console.log("La caja ha sido cerrada exitosamente.");
         } else {
           console.log("No hay datos disponibles para cerrar la caja.");
         }
